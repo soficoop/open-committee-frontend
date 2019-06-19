@@ -1,14 +1,14 @@
 <template>
-  <v-app>
+  <v-app class="secondary">
     <Navigation></Navigation>
-    <v-content class="pa-3">
+    <v-content>
       <Home></Home>
     </v-content>
   </v-app>
 </template>
 
 <script>
-import Home from "./components/Home";
+import Home from "./views/Home";
 import Navigation from "./components/Navigation";
 
 export default {

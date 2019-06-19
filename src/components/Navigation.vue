@@ -1,7 +1,7 @@
 <template>
   <v-navigation-drawer app right floating class="grey lighten-4">
     <v-layout column fill-height>
-      <h1 class="display-1 align-self-center my-5">ועדה פתוחה</h1>
+      <h1 class="display-1 align-self-center my-5 py-5">ועדה פתוחה</h1>
       <v-list nav>
         <v-list-item-group color="primary">
           <v-list-item v-for="(item, i) in navItems" :key="i">
@@ -25,7 +25,7 @@ export default {
       { icon: "mdi-account-circle", text: "הרשמה / התחברות" },
       { icon: "mdi-bell", text: "ההתראות שלי" },
       { icon: "mdi-school", text: "מהן ועדות התכנון" },
-      { icon: "mdi-magnify", text: "מהן ועדות התכנון" }
+      { icon: "mdi-magnify", text: "חיפוש" }
     ]
   })
 };

@@ -1,13 +1,28 @@
 <template>
-  <HelloWorld />
+  <v-container fill-height>
+    <v-layout wrap align-content-space-around>
+      <v-flex xs12>
+        <h1 class="display-2 font-weight-bold primary--text my-5">
+          ברוכים הבאים למערכת ועדה פתוחה
+        </h1>
+        <p>
+          המערכת שלנו מנגישה לציבור דיונים בנושאי תכנון ובנייה בועדות התכנון
+          בישראל, ומזמינה אתכם להגיב ולנהל דיון, יחד עם נציגי הארגונים הירוקים
+          בועדות השונות.
+        </p>
+      </v-flex>
+      <v-flex xs12>
+        <UpcomingMeetings></UpcomingMeetings>
+      </v-flex>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>
-import HelloWorld from "../components/HelloWorld";
-
+import UpcomingMeetings from "../components/UpcomingMeetings";
 export default {
-  components: {
-    HelloWorld
-  }
+  name: "Home",
+  components: { UpcomingMeetings },
+  data: () => ({})
 };
 </script>
