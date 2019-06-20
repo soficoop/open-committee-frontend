@@ -1,5 +1,5 @@
 <template>
-  <v-app class="secondary">
+  <v-app class="background">
     <Navigation></Navigation>
     <v-content>
       <Home></Home>

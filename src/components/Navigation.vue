@@ -5,8 +5,8 @@
       <v-list nav>
         <v-list-item-group color="primary">
           <v-list-item v-for="(item, i) in navItems" :key="i">
-            <v-list-item-icon class="ma-3">
-              <v-icon v-text="item.icon"></v-icon>
+            <v-list-item-icon class="mx-3">
+              <v-icon v-text="item.icon" color="secondary"></v-icon>
             </v-list-item-icon>
             <v-list-item-content>
               <v-list-item-title v-text="item.text"></v-list-item-title>
