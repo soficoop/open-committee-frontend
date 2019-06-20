@@ -1,7 +1,12 @@
 <template>
   <v-navigation-drawer app right floating class="grey lighten-4">
-    <v-layout column fill-height>
-      <h1 class="display-1 align-self-center my-5 py-5">ועדה פתוחה</h1>
+    <v-layout column fill-height py-5>
+      <v-img
+        src="/img/logo@2x.png"
+        contain
+        class="ma-3"
+        max-height="200px"
+      ></v-img>
       <v-list nav>
         <v-list-item-group color="primary">
           <v-list-item v-for="(item, i) in navItems" :key="i">
@@ -18,15 +23,16 @@
   </v-navigation-drawer>
 </template>
 <script>
-export default {
-  name: "Navigation",
-  data: () => ({
-    navItems: [
-      { icon: "mdi-account-circle", text: "הרשמה / התחברות" },
-      { icon: "mdi-bell", text: "ההתראות שלי" },
-      { icon: "mdi-school", text: "מהן ועדות התכנון" },
-      { icon: "mdi-magnify", text: "חיפוש" }
-    ]
-  })
-};
+import Component from "vue-class-component";
+import Vue from "vue";
+
+@Component
+export default class Navigation extends Vue {
+  navItems = [
+    { icon: "mdi-account-circle", text: "הרשמה / התחברות" },
+    { icon: "mdi-bell", text: "ההתראות שלי" },
+    { icon: "mdi-school", text: "מהן ועדות התכנון" },
+    { icon: "mdi-magnify", text: "חיפוש" }
+  ];
+}
 </script>

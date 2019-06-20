@@ -10,19 +10,13 @@
 <script>
 import Home from "./views/Home";
 import Navigation from "./components/Navigation";
-
-export default {
-  name: "App",
+import Component from "vue-class-component";
+import Vue from "vue";
+@Component({
   components: {
     Home,
     Navigation
-  },
-  data: () => ({
-    navItems: [
-      { icon: "mdi-account-circle", text: "הרשמה / התחברות" },
-      { icon: "mdi-bell", text: "ההתראות שלי" },
-      { icon: "mdi-school", text: "מהן ועדות התכנון" }
-    ]
-  })
-};
+  }
+})
+export default class App extends Vue {}
 </script>

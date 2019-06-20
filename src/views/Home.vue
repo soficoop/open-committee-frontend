@@ -20,9 +20,10 @@
 
 <script>
 import UpcomingMeetings from "../components/UpcomingMeetings";
-export default {
-  name: "Home",
-  components: { UpcomingMeetings },
-  data: () => ({})
-};
+import Component from "vue-class-component";
+import Vue from "vue";
+@Component({
+  components: { UpcomingMeetings }
+})
+export default class Home extends Vue {}
 </script>
