@@ -8,7 +8,7 @@
     "lint": "vue-cli-service lint",
     "test:e2e": "vue-cli-service test:e2e",
     "test:unit": "vue-cli-service test:unit",
-    "graphql:codegen": "graphql-codegen --config src/graphql/codegen.yml"
+    "graphql:codegen": "graphql-codegen --config graphql/codegen.yml"
   },
   "dependencies": {
     "core-js": "^2.6.5",
