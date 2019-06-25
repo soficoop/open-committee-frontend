@@ -2,7 +2,7 @@
   <v-app class="background">
     <Navigation></Navigation>
     <v-content>
-      <Home></Home>
+      <router-view></router-view>
     </v-content>
   </v-app>
 </template>
@@ -18,5 +18,9 @@ import Vue from "vue";
     Navigation
   }
 })
-export default class App extends Vue {}
+export default class App extends Vue {
+  mounted() {
+    this.$store.dispatch("fetchUpcomingMeetings");
+  }
+}
 </script>
