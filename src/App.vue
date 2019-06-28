@@ -6,21 +6,32 @@
     </v-content>
   </v-app>
 </template>
+<style>
+body.using-mouse :focus {
+  outline: none;
+}
+</style>
 
 <script>
-import Home from "./views/Home";
 import Navigation from "./components/Navigation";
 import Component from "vue-class-component";
 import Vue from "vue";
+import { ActionTypes } from "./constants";
+
 @Component({
   components: {
-    Home,
     Navigation
   }
 })
 export default class App extends Vue {
   mounted() {
-    this.$store.dispatch("fetchUpcomingMeetings");
+    this.$store.dispatch(ActionTypes.FETCH_UPCOMING_MEETINGS);
+    document.addEventListener("mousedown", () =>
+      document.body.classList.add("using-mouse")
+    );
+    document.addEventListener("keydown", () =>
+      document.body.classList.remove("using-mouse")
+    );
   }
 }
 </script>

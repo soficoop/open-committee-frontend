@@ -1,6 +1,8 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import createPersistedState from "vuex-persistedstate";
 import { request } from "graphql-request";
+import { MutationTypes, ActionTypes } from "./constants";
 
 Vue.use(Vuex);
 
@@ -8,28 +10,39 @@ const apiEndpoint =
   process.env.VUE_APP_API_ENDPOINT || "http://localhost:1337/graphql";
 
 export default new Vuex.Store({
-  state: { upcomingMeetigs: [] },
+  state: { upcomingMeetigs: [], selectedMeeting: null },
   mutations: {
-    SET_UPCOMING_MEETINGS(state, payload) {
+    [MutationTypes.SET_UPCOMING_MEETINGS](state, payload) {
       state.upcomingMeetigs = payload;
+    },
+    [MutationTypes.SET_SELECTED_MEETING](state, payload) {
+      state.selectedMeeting = payload;
     }
   },
   getters: {
     upcomingMeetings(state) {
       return state.upcomingMeetigs;
+    },
+    selectedMeeting(state) {
+      return state.selectedMeeting;
     }
   },
   actions: {
-    async fetchUpcomingMeetings(context) {
+    async [ActionTypes.FETCH_UPCOMING_MEETINGS](context) {
       const res = await request(
         apiEndpoint,
         `query {
-          meetings(where: {date_gt: "${new Date()}"}){
+          meetings(where: {date_gt: "${new Date()}"} sort: "date"){
             _id
             sid
             date
             committee {
               sid
+            }
+            plans {
+              _id
+              sid
+              status
             }
           }
         }`
@@ -37,7 +50,11 @@ export default new Vuex.Store({
       for (const meetings of res.meetings) {
         meetings.date = new Date(meetings.date);
       }
-      context.commit("SET_UPCOMING_MEETINGS", res.meetings);
+      context.commit(MutationTypes.SET_UPCOMING_MEETINGS, res.meetings);
+    },
+    [ActionTypes.SET_MEETING](context, meeting) {
+      context.commit(MutationTypes.SET_SELECTED_MEETING, meeting);
     }
-  }
+  },
+  plugins: [createPersistedState()]
 });

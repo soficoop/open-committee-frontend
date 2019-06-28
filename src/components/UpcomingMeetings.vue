@@ -1,17 +1,31 @@
 <template>
   <v-layout column>
-    <h2 class="display-1 primary--text font-weight-bold my-3">
+    <h2 class="display-1 primary--text font-weight-bold my-3" tabindex="0">
       הישיבות הקרובות במערכת
     </h2>
-    <v-card v-for="(item, i) in upcomingMeetings" :key="i" class="ma-1" hover>
-      <v-card-title>
-        <v-layout>
-          <h3 class="title text-truncate">{{ item.committee.sid }}</h3>
-          <v-spacer class="mx-3"></v-spacer>
-          <h3 class="body-1">{{ item.date.toLocaleDateString("he") }}</h3>
-        </v-layout>
-      </v-card-title>
-    </v-card>
+    <v-flex>
+      <v-progress-circular indeterminate v-if="isLoading"></v-progress-circular>
+      <v-card
+        v-else
+        v-for="(item, i) in upcomingMeetings"
+        :key="i"
+        class="ma-1"
+        hover
+        :to="'meeting/' + item.sid"
+      >
+        <v-card-title>
+          <v-layout>
+            <h3 class="title text-truncate" v-if="item.committee" tabindex="0">
+              {{ item.committee.sid }}
+            </h3>
+            <v-spacer class="mx-3"></v-spacer>
+            <h3 class="body-1" tabindex="0" v-if="item.date instanceof Date">
+              {{ item.date.toLocaleDateString("he") }}
+            </h3>
+          </v-layout>
+        </v-card-title>
+      </v-card>
+    </v-flex>
   </v-layout>
 </template>
 
@@ -23,6 +37,9 @@ import Vue from "vue";
 export default class UpcomingMeetings extends Vue {
   get upcomingMeetings() {
     return this.$store.getters.upcomingMeetings;
+  }
+  get isLoading() {
+    return this.upcomingMeetings == null || this.upcomingMeetings.length == 0;
   }
 }
 </script>
