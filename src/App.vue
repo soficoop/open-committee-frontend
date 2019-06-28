@@ -2,7 +2,9 @@
   <v-app class="background">
     <Navigation></Navigation>
     <v-content>
-      <router-view></router-view>
+      <v-container fill-height>
+        <router-view></router-view>
+      </v-container>
     </v-content>
   </v-app>
 </template>
@@ -16,7 +18,8 @@ body.using-mouse :focus {
 import Navigation from "./components/Navigation";
 import Component from "vue-class-component";
 import Vue from "vue";
-import { ActionTypes } from "./constants";
+import { ActionTypes } from "./helpers/constants";
+import { Action } from "vuex-class";
 
 @Component({
   components: {
@@ -24,8 +27,10 @@ import { ActionTypes } from "./constants";
   }
 })
 export default class App extends Vue {
+  @Action(ActionTypes.FETCH_UPCOMING_MEETINGS) fetchUpcomingMeetings;
   mounted() {
-    this.$store.dispatch(ActionTypes.FETCH_UPCOMING_MEETINGS);
+    this.fetchUpcomingMeetings();
+    // prevent tabindex accessibility feature from hurting ux
     document.addEventListener("mousedown", () =>
       document.body.classList.add("using-mouse")
     );

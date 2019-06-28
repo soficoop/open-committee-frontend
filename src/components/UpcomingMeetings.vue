@@ -11,7 +11,7 @@
         :key="i"
         class="ma-1"
         hover
-        :to="'meeting/' + item._id"
+        :to="'meeting/' + item.id"
       >
         <v-card-title>
           <v-layout>
@@ -19,7 +19,7 @@
               {{ item.committee.sid }}
             </h3>
             <v-spacer class="mx-3"></v-spacer>
-            <h3 class="body-1" tabindex="0" v-if="item.date instanceof Date">
+            <h3 class="body-1" tabindex="0" v-if="typeof item.date != 'string'">
               {{ item.date.toLocaleDateString("he") }}
             </h3>
           </v-layout>
@@ -32,11 +32,12 @@
 <script>
 import Component from "vue-class-component";
 import Vue from "vue";
+import store from "../store";
 
 @Component
 export default class UpcomingMeetings extends Vue {
   get upcomingMeetings() {
-    return this.$store.getters.upcomingMeetings;
+    return store.getters.upcomingMeetings;
   }
   get isLoading() {
     return this.upcomingMeetings == null || this.upcomingMeetings.length == 0;

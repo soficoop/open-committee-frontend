@@ -1,6 +1,6 @@
 import Vue from "vue";
 import App from "./App.vue";
-import "./registerHooks";
+import "./helpers/registerHooks";
 import router from "./router";
 import store from "./store";
 import "./registerServiceWorker";

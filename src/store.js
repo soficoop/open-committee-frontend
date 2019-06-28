@@ -1,14 +1,18 @@
+/* eslint-disable no-unused-vars */
 import Vue from "vue";
-import Vuex from "vuex";
+import Vuex, { Store } from "vuex";
 import createPersistedState from "vuex-persistedstate";
 import { request } from "graphql-request";
-import { MutationTypes, ActionTypes } from "./constants";
+import { MutationTypes, ActionTypes } from "./helpers/constants";
+import { dateTimeRevive } from "./helpers/functions";
+/* eslint-enable no-unused-vars */
 
 Vue.use(Vuex);
 
 const apiEndpoint =
   process.env.VUE_APP_API_ENDPOINT || "http://localhost:1337/graphql";
 
+/** @type {Store<{upcomingMeetigs: any[], selectedMeeting: any}>} */
 export default new Vuex.Store({
   state: { upcomingMeetigs: [], selectedMeeting: null },
   mutations: {
@@ -28,12 +32,16 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    /**
+     * Fetches upcoming meeting (partial)
+     * @param {Store} context The store object
+     */
     async [ActionTypes.FETCH_UPCOMING_MEETINGS](context) {
       const res = await request(
         apiEndpoint,
         `query {
           meetings(where: {date_gt: "${new Date()}"} sort: "date"){
-            _id
+            id
             sid
             date
             committee {
@@ -42,20 +50,23 @@ export default new Vuex.Store({
           }
         }`
       );
-      for (const meetings of res.meetings) {
-        meetings.date = new Date(meetings.date);
-      }
-      context.commit(MutationTypes.SET_UPCOMING_MEETINGS, res.meetings);
+      let meetings = JSON.parse(JSON.stringify(res.meetings), dateTimeRevive);
+      context.commit(MutationTypes.SET_UPCOMING_MEETINGS, meetings);
     },
     [ActionTypes.SET_MEETING](context, meeting) {
       context.commit(MutationTypes.SET_SELECTED_MEETING, meeting);
     },
+    /**
+     * Fetches a meeting by its ID
+     * @param {Store} context the store object
+     * @param {stirng} id ID of meeting to fetch
+     */
     async [ActionTypes.FETCH_MEETING](context, id) {
       const res = await request(
         apiEndpoint,
         `query {
           meeting(id: "${id}"){
-            _id
+            id
             sid
             date
             committee {
@@ -63,18 +74,39 @@ export default new Vuex.Store({
               parent {
                 sid
               }
+              meetings {
+                id
+                sid
+                date
+              }
             }
             plans {
-              _id
+              id
               sid
+              name
+              number
               status
             }
           }
         }`
       );
-      res.meeting.date = new Date(res.meeting.date);
-      context.commit(MutationTypes.SET_SELECTED_MEETING, res.meeting);
+      let meeting = JSON.parse(JSON.stringify(res.meeting), dateTimeRevive);
+      const meetingIndexInState = this.state.upcomingMeetigs.findIndex(
+        m => m.sid == meeting.sid
+      );
+      if (meetingIndexInState == -1) {
+        this.state.upcomingMeetigs.push(meeting);
+      } else {
+        this.state.upcomingMeetigs[meetingIndexInState] = meeting;
+      }
+      context.commit(MutationTypes.SET_SELECTED_MEETING, meeting);
     }
   },
-  plugins: [createPersistedState()]
+  plugins: [
+    createPersistedState({
+      arrayMerger(store, saved) {
+        return JSON.parse(JSON.stringify(saved), dateTimeRevive);
+      }
+    })
+  ]
 });
