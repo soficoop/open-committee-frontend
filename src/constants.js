@@ -4,5 +4,6 @@ export const MutationTypes = Object.freeze({
 });
 export const ActionTypes = Object.freeze({
   FETCH_UPCOMING_MEETINGS: "FETCH_UPCOMING_MEETINGS",
-  SET_MEETING: "SET_MEETING"
+  SET_MEETING: "SET_MEETING",
+  FETCH_MEETING: "FETCH_MEETING"
 });

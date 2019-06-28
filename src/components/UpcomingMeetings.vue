@@ -11,7 +11,7 @@
         :key="i"
         class="ma-1"
         hover
-        :to="'meeting/' + item.sid"
+        :to="'meeting/' + item._id"
       >
         <v-card-title>
           <v-layout>

@@ -39,11 +39,6 @@ export default new Vuex.Store({
             committee {
               sid
             }
-            plans {
-              _id
-              sid
-              status
-            }
           }
         }`
       );
@@ -54,6 +49,31 @@ export default new Vuex.Store({
     },
     [ActionTypes.SET_MEETING](context, meeting) {
       context.commit(MutationTypes.SET_SELECTED_MEETING, meeting);
+    },
+    async [ActionTypes.FETCH_MEETING](context, id) {
+      const res = await request(
+        apiEndpoint,
+        `query {
+          meeting(id: "${id}"){
+            _id
+            sid
+            date
+            committee {
+              sid
+              parent {
+                sid
+              }
+            }
+            plans {
+              _id
+              sid
+              status
+            }
+          }
+        }`
+      );
+      res.meeting.date = new Date(res.meeting.date);
+      context.commit(MutationTypes.SET_SELECTED_MEETING, res.meeting);
     }
   },
   plugins: [createPersistedState()]
