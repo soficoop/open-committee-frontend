@@ -5,6 +5,7 @@ import createPersistedState from "vuex-persistedstate";
 import { request } from "graphql-request";
 import { MutationTypes, ActionTypes } from "./helpers/constants";
 import { dateTimeRevive } from "./helpers/functions";
+import { getMeetings, getMeeting, getPlan } from "./helpers/queries.js";
 /* eslint-enable no-unused-vars */
 
 Vue.use(Vuex);
@@ -62,18 +63,7 @@ export default new Vuex.Store({
      * @param {Store} context The store object
      */
     async [ActionTypes.FETCH_UPCOMING_MEETINGS](context) {
-      const res = await request(
-        apiEndpoint,
-        `query {
-          meetings(where: {date_gt: "${new Date()}"} sort: "date"){
-            id
-            date
-            committee {
-              sid
-            }
-          }
-        }`
-      );
+      const res = await request(apiEndpoint, getMeetings, { date: new Date() });
       let meetings = JSON.parse(JSON.stringify(res.meetings), dateTimeRevive);
       context.commit(MutationTypes.SET_UPCOMING_MEETINGS, meetings);
     },
@@ -86,36 +76,7 @@ export default new Vuex.Store({
      * @param {stirng} id ID of meeting to fetch
      */
     async [ActionTypes.FETCH_MEETING](context, id) {
-      const res = await request(
-        apiEndpoint,
-        `query {
-          meeting(id: "${id}"){
-            id
-            sid
-            number
-            date
-            committee {
-              sid
-              parent {
-                sid
-              }
-              meetings {
-                id
-                date
-                number
-              }
-            }
-            plans {
-              id
-              name
-              number
-              status
-              lastUpdate
-              location
-            }
-          }
-        }`
-      );
+      const res = await request(apiEndpoint, getMeeting, { id: id });
       let meeting = JSON.parse(JSON.stringify(res.meeting), dateTimeRevive);
       context.commit(MutationTypes.SET_SELECTED_MEETING, meeting);
     },
@@ -125,25 +86,7 @@ export default new Vuex.Store({
      * @param {stirng} id ID of plan to fetch
      */
     async [ActionTypes.FETCH_PLAN](context, id) {
-      const res = await request(
-        apiEndpoint,
-        `query {
-          plan(id: "${id}"){
-            id
-            sid
-            number
-            lastUpdate
-            location
-            municipality
-            targets
-            meetings {
-              id
-              date
-              number
-            }
-          }
-        }`
-      );
+      const res = await request(apiEndpoint, getPlan, { id: id });
       let plan = JSON.parse(JSON.stringify(res.plan), dateTimeRevive);
       context.commit(MutationTypes.SET_SELECTED_PLAN, plan);
     }
