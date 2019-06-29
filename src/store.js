@@ -42,7 +42,6 @@ export default new Vuex.Store({
         `query {
           meetings(where: {date_gt: "${new Date()}"} sort: "date"){
             id
-            sid
             date
             committee {
               sid
@@ -68,6 +67,7 @@ export default new Vuex.Store({
           meeting(id: "${id}"){
             id
             sid
+            number
             date
             committee {
               sid
@@ -76,16 +76,17 @@ export default new Vuex.Store({
               }
               meetings {
                 id
-                sid
                 date
+                number
               }
             }
             plans {
               id
-              sid
               name
               number
               status
+              lastUpdate
+              location
             }
           }
         }`

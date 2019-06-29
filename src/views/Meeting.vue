@@ -10,7 +10,7 @@
             {{ meeting.committee.sid }} /&nbsp;
           </h3>
           <h4 class="title primary--text d-inline-block right" tabindex="0">
-            ישיבה מספר {{ meeting.sid }}
+            ישיבה מספר {{ meeting.number }}
           </h4>
         </v-flex>
         <v-flex xs12>
@@ -33,15 +33,33 @@
           </h4>
         </v-flex>
         <v-flex xs12 sm6 md4 v-for="plan in meeting.plans" :key="plan.id" pa-1>
-          <v-card tabindex="0" color="accent" dark height="100%" hover>
-            <v-card-text class="subtitle-2" tabindex="0">
-              <v-icon small>mdi-clipboard-text</v-icon>
-              תכנית מספר {{ plan.number }}
-            </v-card-text>
-            <v-card-title class="title" tabindex="0">
-              {{ plan.name }}
-            </v-card-title>
-          </v-card>
+          <v-hover v-slot:default="{ hover }">
+            <v-card tabindex="0" color="accent" dark height="100%" hover>
+              <v-expand-transition>
+                <v-layout v-if="hover" class="primary" wrap>
+                  <v-flex xs12 ma-1 px-2>
+                    <span class="teal--text text--accent-2">סטטוס: </span>
+                    <span>{{ plan.status }}</span>
+                  </v-flex>
+                  <v-flex xs12 ma-1 px-2 v-if="plan.lastUpdate">
+                    <span class="teal--text text--accent-2">עדכון אחרון: </span>
+                    <span>{{ plan.lastUpdate.toLocaleDateString("he") }}</span>
+                  </v-flex>
+                  <v-flex xs12 ma-1 px-2 v-if="plan.location">
+                    <span class="teal--text text--accent-2">מיקום: </span>
+                    <span>{{ plan.location }}</span>
+                  </v-flex>
+                </v-layout>
+              </v-expand-transition>
+              <v-card-text class="subtitle-2" tabindex="0">
+                <v-icon small>mdi-clipboard-text</v-icon>
+                תכנית מספר {{ plan.number }}
+              </v-card-text>
+              <v-card-title class="title" tabindex="0">
+                {{ plan.name }}
+              </v-card-title>
+            </v-card>
+          </v-hover>
         </v-flex>
       </v-layout>
     </v-flex>
@@ -57,7 +75,7 @@
         <v-card-title>
           <v-layout>
             <h3 class="title text-truncate" tabindex="0">
-              ישיבה מספר {{ item.sid }}
+              ישיבה מספר {{ item.number }}
             </h3>
             <v-spacer class="mx-3"></v-spacer>
             <h3 class="body-1" tabindex="0" v-if="typeof item.date != 'string'">
@@ -66,6 +84,11 @@
           </v-layout>
         </v-card-title>
       </v-card>
+    </v-flex>
+    <v-flex xs12>
+      <a :href="meetingIplanUrl" target="_blank" rel="noopener noreferrer">
+        למידע נוסף באתר מנהל התכנון
+      </a>
     </v-flex>
   </v-layout>
 </template>
@@ -81,6 +104,13 @@ import { Getter } from "vuex-class";
 export default class UpcomingMeetings extends Vue {
   @Getter("selectedMeeting")
   meeting;
+
+  get meetingIplanUrl() {
+    return `http://mavat.moin.gov.il/mavatps/Forms/SV8.1.aspx?MeetingID=${
+      this.meeting.sid
+    }`;
+  }
+
   async beforeRouteEnter(to, from, next) {
     await store.dispatch(ActionTypes.FETCH_MEETING, to.params.meetingId);
     next();
