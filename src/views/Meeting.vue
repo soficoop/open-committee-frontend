@@ -1,6 +1,6 @@
 <template>
   <v-layout ma-3 fill-height wrap align-content-start>
-    <v-flex xs12 my-5>
+    <v-flex xs12 my-3>
       <v-layout column xs12>
         <v-flex xs12>
           <h3
@@ -34,7 +34,14 @@
         </v-flex>
         <v-flex xs12 sm6 md4 v-for="plan in meeting.plans" :key="plan.id" pa-1>
           <v-hover v-slot:default="{ hover }">
-            <v-card tabindex="0" color="accent" dark height="100%" hover>
+            <v-card
+              tabindex="0"
+              color="accent"
+              dark
+              height="100%"
+              hover
+              :to="'/plan/' + plan.id"
+            >
               <v-expand-transition>
                 <v-layout v-if="hover" class="primary" wrap>
                   <v-flex xs12 ma-1 px-2>
@@ -101,7 +108,7 @@ import store from "../store";
 import { Getter } from "vuex-class";
 
 @Component
-export default class UpcomingMeetings extends Vue {
+export default class Meeting extends Vue {
   @Getter("selectedMeeting")
   meeting;
 

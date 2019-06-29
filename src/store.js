@@ -14,13 +14,35 @@ const apiEndpoint =
 
 /** @type {Store<{upcomingMeetigs: any[], selectedMeeting: any}>} */
 export default new Vuex.Store({
-  state: { upcomingMeetigs: [], selectedMeeting: null },
+  state: {
+    upcomingMeetigs: [],
+    selectedMeeting: null,
+    plans: [],
+    selectedPlan: null
+  },
   mutations: {
     [MutationTypes.SET_UPCOMING_MEETINGS](state, payload) {
       state.upcomingMeetigs = payload;
     },
-    [MutationTypes.SET_SELECTED_MEETING](state, payload) {
-      state.selectedMeeting = payload;
+    [MutationTypes.SET_SELECTED_MEETING](state, meeting) {
+      const meetingIndexInState = state.upcomingMeetigs.findIndex(
+        m => m.sid == meeting.sid
+      );
+      if (meetingIndexInState == -1) {
+        state.upcomingMeetigs.push(meeting);
+      } else {
+        state.upcomingMeetigs[meetingIndexInState] = meeting;
+      }
+      state.selectedMeeting = meeting;
+    },
+    [MutationTypes.SET_SELECTED_PLAN](state, plan) {
+      const planIndexInState = state.plans.findIndex(p => p.sid == plan.sid);
+      if (planIndexInState == -1) {
+        state.plans.push(plan);
+      } else {
+        state.plans[planIndexInState] = plan;
+      }
+      state.selectedPlan = plan;
     }
   },
   getters: {
@@ -29,6 +51,9 @@ export default new Vuex.Store({
     },
     selectedMeeting(state) {
       return state.selectedMeeting;
+    },
+    selectedPlan(state) {
+      return state.selectedPlan;
     }
   },
   actions: {
@@ -92,15 +117,35 @@ export default new Vuex.Store({
         }`
       );
       let meeting = JSON.parse(JSON.stringify(res.meeting), dateTimeRevive);
-      const meetingIndexInState = this.state.upcomingMeetigs.findIndex(
-        m => m.sid == meeting.sid
-      );
-      if (meetingIndexInState == -1) {
-        this.state.upcomingMeetigs.push(meeting);
-      } else {
-        this.state.upcomingMeetigs[meetingIndexInState] = meeting;
-      }
       context.commit(MutationTypes.SET_SELECTED_MEETING, meeting);
+    },
+    /**
+     * Fetches a plan by its ID
+     * @param {Store} context the store object
+     * @param {stirng} id ID of plan to fetch
+     */
+    async [ActionTypes.FETCH_PLAN](context, id) {
+      const res = await request(
+        apiEndpoint,
+        `query {
+          plan(id: "${id}"){
+            id
+            sid
+            number
+            lastUpdate
+            location
+            municipality
+            targets
+            meetings {
+              id
+              date
+              number
+            }
+          }
+        }`
+      );
+      let plan = JSON.parse(JSON.stringify(res.plan), dateTimeRevive);
+      context.commit(MutationTypes.SET_SELECTED_PLAN, plan);
     }
   },
   plugins: [

@@ -3,6 +3,7 @@ import Router from "vue-router";
 import Home from "./views/Home.vue";
 import About from "./views/About.vue";
 import Meeting from "./views/Meeting.vue";
+import Plan from "./views/Plan.vue";
 
 Vue.use(Router);
 
@@ -24,6 +25,11 @@ export default new Router({
       path: "/meeting/:meetingId",
       name: "meeting",
       component: Meeting
+    },
+    {
+      path: "/plan/:planId",
+      name: "plan",
+      component: Plan
     }
   ]
 });
