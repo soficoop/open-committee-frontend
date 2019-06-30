@@ -27,7 +27,7 @@ export default new Vuex.Store({
     },
     [MutationTypes.SET_SELECTED_MEETING](state, meeting) {
       const meetingIndexInState = state.upcomingMeetigs.findIndex(
-        m => m.sid == meeting.sid
+        m => m.id == meeting.id
       );
       if (meetingIndexInState == -1) {
         state.upcomingMeetigs.push(meeting);
