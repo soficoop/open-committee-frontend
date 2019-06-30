@@ -6,7 +6,7 @@
 import Component from "vue-class-component";
 import Vue from "vue";
 import { ActionTypes } from "../helpers/constants";
-import store from "../store";
+import store from "../plugins/store";
 import { Getter } from "vuex-class";
 
 @Component

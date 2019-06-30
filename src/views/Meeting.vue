@@ -104,13 +104,13 @@
 import Component from "vue-class-component";
 import Vue from "vue";
 import { ActionTypes } from "../helpers/constants";
-import store from "../store";
+import store from "../plugins/store";
 import { Getter } from "vuex-class";
 
 @Component
 export default class Meeting extends Vue {
-  @Getter("selectedMeeting")
-  meeting;
+  /**@type {import("../helpers/typings").Meeting} */
+  @Getter("selectedMeeting") meeting;
 
   get meetingIplanUrl() {
     return `http://mavat.moin.gov.il/mavatps/Forms/SV8.1.aspx?MeetingID=${

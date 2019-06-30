@@ -3,9 +3,10 @@ import Vue from "vue";
 import Vuex, { Store } from "vuex";
 import createPersistedState from "vuex-persistedstate";
 import { request } from "graphql-request";
-import { MutationTypes, ActionTypes } from "./helpers/constants";
-import { dateTimeRevive } from "./helpers/functions";
-import { getMeetings, getMeeting, getPlan } from "./helpers/queries.js";
+import { MutationTypes, ActionTypes } from "../helpers/constants";
+import { dateTimeRevive } from "../helpers/functions";
+import { getMeetings, getMeeting, getPlan } from "../helpers/queries.js";
+import { createUser } from "../helpers/mutations";
 /* eslint-enable no-unused-vars */
 
 Vue.use(Vuex);
@@ -13,10 +14,11 @@ Vue.use(Vuex);
 const apiEndpoint =
   process.env.VUE_APP_API_ENDPOINT || "http://localhost:1337/graphql";
 
-/** @type {Store<{upcomingMeetigs: any[], selectedMeeting: any}>} */
 export default new Vuex.Store({
   state: {
+    /**@type {import("../helpers/typings").Meeting[]} */
     upcomingMeetigs: [],
+    /**@type {import("../helpers/typings").Meeting} */
     selectedMeeting: null,
     plans: [],
     selectedPlan: null
@@ -25,6 +27,10 @@ export default new Vuex.Store({
     [MutationTypes.SET_UPCOMING_MEETINGS](state, payload) {
       state.upcomingMeetigs = payload;
     },
+    /**
+     * Sets the selected meeting in state by a given meeting
+     * @param {import("../helpers/typings").Meeting} meeting Meeting to set as the selected meeting
+     */
     [MutationTypes.SET_SELECTED_MEETING](state, meeting) {
       const meetingIndexInState = state.upcomingMeetigs.findIndex(
         m => m.id == meeting.id
@@ -91,6 +97,20 @@ export default new Vuex.Store({
       const res = await request(apiEndpoint, getPlan, { id: id });
       let plan = JSON.parse(JSON.stringify(res.plan), dateTimeRevive);
       context.commit(MutationTypes.SET_SELECTED_PLAN, plan);
+    },
+    /**
+     * Creates a new user
+     * @param {Store} context The store object
+     * @param {import("../helpers/typings").User} user User object for user which is going to be created
+     */
+    async [ActionTypes.CREATE_USER](context, user) {
+      const res = await request(apiEndpoint, createUser, {
+        email: user.email,
+        password: user.password
+      });
+      if (res.data.createUser.user == null) {
+        return res;
+      }
     }
   },
   plugins: [

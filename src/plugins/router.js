@@ -1,9 +1,9 @@
 import Vue from "vue";
 import Router from "vue-router";
-import Home from "./views/Home.vue";
-import About from "./views/About.vue";
-import Meeting from "./views/Meeting.vue";
-import Plan from "./views/Plan.vue";
+import Home from "../views/Home.vue";
+const About = () => import("../views/About.vue");
+const Meeting = () => import("../views/Meeting.vue");
+const Plan = () => import("../views/Plan.vue");
 
 Vue.use(Router);
 

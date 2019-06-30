@@ -32,10 +32,11 @@
 <script>
 import Component from "vue-class-component";
 import Vue from "vue";
-import store from "../store";
+import store from "../plugins/store";
 
 @Component
 export default class UpcomingMeetings extends Vue {
+  /**@type {import("../helpers/typings").Meeting[]} */
   get upcomingMeetings() {
     return store.getters.upcomingMeetings;
   }
