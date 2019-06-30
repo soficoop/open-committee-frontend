@@ -19,7 +19,7 @@ export const getMeeting = `query getMeeting($id: ID!){
       parent {
         sid
       }
-      meetings {
+      meetings(sort: "date:desc" where: {_id_ne: $id}) {
         id
         date
         number
