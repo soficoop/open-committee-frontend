@@ -63,7 +63,9 @@ export default new Vuex.Store({
      * @param {Store} context The store object
      */
     async [ActionTypes.FETCH_UPCOMING_MEETINGS](context) {
-      const res = await request(apiEndpoint, getMeetings, { date: new Date() });
+      let date = new Date();
+      date.setHours(0);
+      const res = await request(apiEndpoint, getMeetings, { date: date });
       let meetings = JSON.parse(JSON.stringify(res.meetings), dateTimeRevive);
       context.commit(MutationTypes.SET_UPCOMING_MEETINGS, meetings);
     },
