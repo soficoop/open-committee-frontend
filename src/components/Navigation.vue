@@ -32,7 +32,7 @@ import Vue from "vue";
 @Component
 export default class Navigation extends Vue {
   navItems = [
-    { icon: "mdi-account-circle", text: "הרשמה / התחברות" },
+    { icon: "mdi-account-circle", text: "הרשמה / התחברות", to: "/login" },
     { icon: "mdi-bell", text: "ההתראות שלי" },
     { icon: "mdi-school", text: "מהן ועדות התכנון", to: "/about" },
     { icon: "mdi-magnify", text: "חיפוש" }

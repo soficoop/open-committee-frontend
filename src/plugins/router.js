@@ -2,6 +2,7 @@ import Vue from "vue";
 import Router from "vue-router";
 import Home from "../views/Home.vue";
 const About = () => import("../views/About.vue");
+const Login = () => import("../views/Login.vue");
 const Meeting = () => import("../views/Meeting.vue");
 const Plan = () => import("../views/Plan.vue");
 
@@ -30,6 +31,11 @@ export default new Router({
       path: "/plan/:planId",
       name: "plan",
       component: Plan
+    },
+    {
+      path: "/login",
+      name: "login",
+      component: Login
     }
   ]
 });
