@@ -3,7 +3,9 @@
     <Navigation></Navigation>
     <v-content>
       <v-container fill-height>
-        <router-view></router-view>
+        <v-slide-y-transition mode="out-in">
+          <router-view></router-view>
+        </v-slide-y-transition>
       </v-container>
     </v-content>
   </v-app>
