@@ -84,10 +84,12 @@
             <h3 class="title text-truncate" tabindex="0">
               ישיבה מספר {{ item.number }}
             </h3>
-            <v-spacer class="mx-3"></v-spacer>
+            <v-divider class="mx-2" vertical></v-divider>
             <h3 class="body-1" tabindex="0" v-if="typeof item.date != 'string'">
               {{ item.date.toLocaleDateString("he") }}
             </h3>
+            <v-spacer class="mx-3"></v-spacer>
+            <v-icon>mdi-arrow-left</v-icon>
           </v-layout>
         </v-card-title>
       </v-card>

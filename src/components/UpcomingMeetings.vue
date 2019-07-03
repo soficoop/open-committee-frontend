@@ -18,10 +18,12 @@
             <h3 class="title text-truncate" v-if="item.committee" tabindex="0">
               {{ item.committee.sid }}
             </h3>
-            <v-spacer class="mx-3"></v-spacer>
+            <v-divider vertical color="black" class="mx-2"></v-divider>
             <h3 class="body-1" tabindex="0" v-if="typeof item.date != 'string'">
               {{ item.date.toLocaleDateString("he") }}
             </h3>
+            <v-spacer class="mx-3"></v-spacer>
+            <v-icon>mdi-arrow-left</v-icon>
           </v-layout>
         </v-card-title>
       </v-card>
