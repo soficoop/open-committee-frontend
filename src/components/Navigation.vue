@@ -12,7 +12,12 @@
       </router-link>
       <v-list nav>
         <v-list-item-group color="primary">
-          <v-list-item v-for="(item, i) in navItems" :key="i" :to="item.to">
+          <v-list-item
+            v-for="item in visibleNavItems"
+            :key="item.to"
+            :to="item.to"
+            @click="executeNavItemClick(item)"
+          >
             <v-list-item-icon class="mx-3">
               <v-icon v-text="item.icon"></v-icon>
             </v-list-item-icon>
@@ -28,14 +33,55 @@
 <script>
 import Component from "vue-class-component";
 import Vue from "vue";
+import { Getter, Action } from "vuex-class";
+import { Getters, ActionTypes } from "../helpers/constants";
 
 @Component
 export default class Navigation extends Vue {
+  @Getter(Getters.JWT) jwt;
+  @Action(ActionTypes.SIGN_OUT) signOut;
+
+  get visibleNavItems() {
+    return this.navItems.filter(
+      n => n.visible == null || n.visible.apply(this)
+    );
+  }
+
+  executeNavItemClick(item) {
+    console.info(item);
+    item.click && item.click.apply(this);
+  }
+
   navItems = [
-    { icon: "mdi-account-circle", text: "הרשמה / התחברות", to: "/login" },
-    { icon: "mdi-bell", text: "ההתראות שלי" },
+    {
+      icon: "mdi-account-circle",
+      text: "הרשמה / התחברות",
+      to: "/login",
+      visible() {
+        return !this.jwt;
+      }
+    },
+    {
+      icon: "mdi-bell",
+      text: "ההתראות שלי",
+      to: "/notications",
+      visible() {
+        return this.jwt;
+      }
+    },
     { icon: "mdi-school", text: "מהן ועדות התכנון", to: "/about" },
-    { icon: "mdi-magnify", text: "חיפוש" }
+    { icon: "mdi-magnify", text: "חיפוש", to: "/search" },
+    {
+      icon: "mdi-logout",
+      text: "התנתקות",
+      to: "/signout",
+      visible() {
+        return this.jwt;
+      },
+      click() {
+        this.signOut();
+      }
+    }
   ];
 }
 </script>

@@ -3,16 +3,16 @@ import Vue from "vue";
 import Vuex, { Store } from "vuex";
 import createPersistedState from "vuex-persistedstate";
 import { request } from "graphql-request";
-import { MutationTypes, ActionTypes } from "../helpers/constants";
+import { MutationTypes, ActionTypes, Getters } from "../helpers/constants";
 import { dateTimeRevive } from "../helpers/functions";
 import { getMeetings, getMeeting, getPlan } from "../helpers/queries.js";
-import { createUser } from "../helpers/mutations";
 /* eslint-enable no-unused-vars */
 
 Vue.use(Vuex);
 
-const apiEndpoint =
+const graphqlEndpoint =
   process.env.VUE_APP_API_ENDPOINT || "http://localhost:1337/graphql";
+const authEndpoint = "http://localhost:1337/auth/local";
 
 export default new Vuex.Store({
   state: {
@@ -21,9 +21,19 @@ export default new Vuex.Store({
     /**@type {import("../helpers/typings").Meeting} */
     selectedMeeting: null,
     plans: [],
-    selectedPlan: null
+    selectedPlan: null,
+    jwt: "",
+    /**@type import("../helpers/typings").User */
+    user: null
   },
   mutations: {
+    /**
+     * Sets the current user by the given user
+     * @param {import("../helpers/typings").User} user
+     */
+    [MutationTypes.SET_USER](state, user) {
+      state.user = user;
+    },
     [MutationTypes.SET_UPCOMING_MEETINGS](state, payload) {
       state.upcomingMeetigs = payload;
     },
@@ -50,17 +60,23 @@ export default new Vuex.Store({
         state.plans[planIndexInState] = plan;
       }
       state.selectedPlan = plan;
+    },
+    [MutationTypes.SET_JWT](state, jwt) {
+      state.jwt = jwt;
     }
   },
   getters: {
-    upcomingMeetings(state) {
+    [Getters.UPCOMING_MEETINGS](state) {
       return state.upcomingMeetigs;
     },
-    selectedMeeting(state) {
+    [Getters.SELECTED_MEETING](state) {
       return state.selectedMeeting;
     },
-    selectedPlan(state) {
+    [Getters.SELECTED_PLAN](state) {
       return state.selectedPlan;
+    },
+    [Getters.JWT](state) {
+      return state.jwt;
     }
   },
   actions: {
@@ -71,7 +87,7 @@ export default new Vuex.Store({
     async [ActionTypes.FETCH_UPCOMING_MEETINGS](context) {
       let date = new Date();
       date.setHours(0);
-      const res = await request(apiEndpoint, getMeetings, { date: date });
+      const res = await request(graphqlEndpoint, getMeetings, { date: date });
       let meetings = JSON.parse(JSON.stringify(res.meetings), dateTimeRevive);
       context.commit(MutationTypes.SET_UPCOMING_MEETINGS, meetings);
     },
@@ -79,12 +95,50 @@ export default new Vuex.Store({
       context.commit(MutationTypes.SET_SELECTED_MEETING, meeting);
     },
     /**
+     * Sign ups a user
+     * @param {import("../helpers/typings").User} user
+     */
+    async [ActionTypes.SIGN_UP](context, user) {
+      user.username = user.email;
+      const res = await fetch(`${authEndpoint}/register`, {
+        method: "post",
+        body: JSON.stringify(user),
+        headers: { "Content-Type": "application/json" }
+      });
+      const result = await res.json();
+      if (result.jwt) {
+        context.commit(MutationTypes.SET_JWT, result.jwt);
+        return true;
+      }
+      return false;
+    },
+    async [ActionTypes.SIGN_IN](context, user) {
+      const res = await fetch(`${authEndpoint}`, {
+        method: "post",
+        body: JSON.stringify({
+          identifier: user.email,
+          password: user.password
+        }),
+        headers: { "Content-Type": "application/json" }
+      });
+      const result = await res.json();
+      if (result.jwt) {
+        context.commit(MutationTypes.SET_JWT, result.jwt);
+        return true;
+      }
+      return false;
+    },
+    [ActionTypes.SIGN_OUT](context) {
+      context.commit(MutationTypes.SET_JWT, "");
+      context.commit(MutationTypes.SET_USER, null);
+    },
+    /**
      * Fetches a meeting by its ID
      * @param {Store} context the store object
      * @param {stirng} id ID of meeting to fetch
      */
     async [ActionTypes.FETCH_MEETING](context, id) {
-      const res = await request(apiEndpoint, getMeeting, { id: id });
+      const res = await request(graphqlEndpoint, getMeeting, { id: id });
       let meeting = JSON.parse(JSON.stringify(res.meeting), dateTimeRevive);
       context.commit(MutationTypes.SET_SELECTED_MEETING, meeting);
     },
@@ -94,23 +148,9 @@ export default new Vuex.Store({
      * @param {stirng} id ID of plan to fetch
      */
     async [ActionTypes.FETCH_PLAN](context, id) {
-      const res = await request(apiEndpoint, getPlan, { id: id });
+      const res = await request(graphqlEndpoint, getPlan, { id: id });
       let plan = JSON.parse(JSON.stringify(res.plan), dateTimeRevive);
       context.commit(MutationTypes.SET_SELECTED_PLAN, plan);
-    },
-    /**
-     * Creates a new user
-     * @param {Store} context The store object
-     * @param {import("../helpers/typings").User} user User object for user which is going to be created
-     */
-    async [ActionTypes.CREATE_USER](context, user) {
-      const res = await request(apiEndpoint, createUser, {
-        email: user.email,
-        password: user.password
-      });
-      if (res.data.createUser.user == null) {
-        return res;
-      }
     }
   },
   plugins: [

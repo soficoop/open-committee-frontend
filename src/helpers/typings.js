@@ -16,7 +16,13 @@
 
 /**
  * @typedef User
+ * @property {string} username
  * @property {string} email
  * @property {string} password
+ * @property {string} firstName
+ * @property {string} lastName
+ * @property {string} organization
+ * @property {string} job
+ * @property {string} city
  */
 export {};

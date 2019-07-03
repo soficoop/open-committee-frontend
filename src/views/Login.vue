@@ -8,10 +8,10 @@
           </v-icon>
         </v-flex>
         <v-tabs grow class="my-3" v-model="tab">
-          <v-tab>
+          <v-tab @click="authenticationFailed = false">
             התחברות
           </v-tab>
-          <v-tab>
+          <v-tab @click="authenticationFailed = false">
             הרשמה
           </v-tab>
         </v-tabs>
@@ -21,10 +21,10 @@
               <v-text-field
                 outlined
                 label="אימייל"
-                v-model="login.email"
-                :error="login.email.length > 0 && !isLoginEmailValid"
+                v-model="loginData.email"
+                :error="loginData.email.length > 0 && !isLoginEmailValid"
                 :error-messages="
-                  login.email.length > 0 && !isLoginEmailValid
+                  loginData.email.length > 0 && !isLoginEmailValid
                     ? ['נא להכניס כתובת מייל תקינה']
                     : []
                 "
@@ -37,20 +37,31 @@
                   outlined
                   label="סיסמה"
                   hint="לפחות 8 תווים"
-                  v-model="login.password"
+                  v-model="loginData.password"
                   name="password"
-                  :type="login.showPassword ? 'text' : 'password'"
-                  :append-icon="login.showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                  @click:append="login.showPassword = !login.showPassword"
+                  :type="loginData.showPassword ? 'text' : 'password'"
+                  :append-icon="
+                    loginData.showPassword ? 'mdi-eye' : 'mdi-eye-off'
+                  "
+                  @click:append="
+                    loginData.showPassword = !loginData.showPassword
+                  "
                 >
                 </v-text-field>
               </v-flex>
             </v-expand-transition>
             <v-expand-transition>
-              <v-flex v-if="login.password.length >= 8">
-                <v-btn block large color="primary">
+              <v-flex v-if="loginData.password.length >= 8">
+                <v-btn block large color="primary" @click="logIn(loginData)">
                   התחברות
                 </v-btn>
+              </v-flex>
+            </v-expand-transition>
+            <v-expand-transition>
+              <v-flex v-if="authenticationFailed">
+                <p class="error--text my-1">
+                  שם משתמש או סיסמה לא נכונים
+                </p>
               </v-flex>
             </v-expand-transition>
           </v-tab-item>
@@ -58,10 +69,10 @@
             <v-text-field
               outlined
               label="אימייל"
-              v-model="signup.email"
-              :error="signup.email.length > 0 && !isSignupEmailValid"
+              v-model="signupData.email"
+              :error="signupData.email.length > 0 && !isSignupEmailValid"
               :error-messages="
-                signup.email.length > 0 && !isSignupEmailValid
+                signupData.email.length > 0 && !isSignupEmailValid
                   ? ['נא להכניס כתובת מייל תקינה']
                   : []
               "
@@ -71,18 +82,18 @@
               outlined
               label="סיסמה"
               hint="לפחות 8 תווים"
-              v-model="signup.password"
+              v-model="signupData.password"
               name="password"
-              :type="signup.showPassword ? 'text' : 'password'"
-              :append-icon="signup.showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-              @click:append="signup.showPassword = !signup.showPassword"
+              :type="signupData.showPassword ? 'text' : 'password'"
+              :append-icon="signupData.showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+              @click:append="signupData.showPassword = !signupData.showPassword"
             >
             </v-text-field>
             <v-layout>
               <v-text-field
                 outlined
                 label="שם פרטי"
-                v-model="signup.firstName"
+                v-model="signupData.firstName"
                 name="fname"
                 class="pl-1"
                 :rules="[value => !!value || 'שדה חובה']"
@@ -92,7 +103,7 @@
                 outlined
                 class="pr-1"
                 label="שם משפחה"
-                v-model="signup.lastName"
+                v-model="signupData.lastName"
                 name="lname"
                 :rules="[value => !!value || 'שדה חובה']"
               >
@@ -101,27 +112,40 @@
             <v-text-field
               outlined
               label="עיר מגורים"
-              v-model="signup.city"
+              v-model="signupData.city"
               name="city"
             >
             </v-text-field>
             <v-text-field
               outlined
               label="ארגון"
-              v-model="signup.organization"
+              v-model="signupData.organization"
               name="organization"
             >
             </v-text-field>
             <v-text-field
               outlined
               label="תפקיד"
-              v-model="signup.job"
+              v-model="signupData.job"
               name="job"
             >
             </v-text-field>
-            <v-btn block large color="primary">
+            <v-btn
+              block
+              large
+              color="primary"
+              :disabled="!isSignUpFormValid"
+              @click="signUp(signupData)"
+            >
               הרשמה
             </v-btn>
+            <v-expand-transition>
+              <v-flex v-if="authenticationFailed">
+                <p class="error--text my-1">
+                  המשתמש כבר קיים במערכת
+                </p>
+              </v-flex>
+            </v-expand-transition>
           </v-tab-item>
         </v-tabs-items>
       </v-layout>
@@ -132,14 +156,16 @@
 <script>
 import Component from "vue-class-component";
 import Vue from "vue";
+import { Action } from "vuex-class";
+import { ActionTypes } from "../helpers/constants";
 @Component()
 export default class Login extends Vue {
-  login = {
+  loginData = {
     email: "",
     password: "",
     showPassword: false
   };
-  signup = {
+  signupData = {
     email: "",
     password: "",
     showPassword: false,
@@ -150,15 +176,45 @@ export default class Login extends Vue {
     job: ""
   };
   tab = null;
+  authenticationFailed = false;
+
+  @Action(ActionTypes.SIGN_UP) signUpAction;
+  @Action(ActionTypes.SIGN_IN) loginAction;
+
+  async signUp(user) {
+    const result = await this.signUpAction(user);
+    this.handleAuthentication(result);
+  }
+
+  async logIn(user) {
+    const result = await this.loginAction(user);
+    this.handleAuthentication(result);
+  }
+
+  handleAuthentication(isSuccessful) {
+    if (isSuccessful) {
+      this.$router.push("/");
+    } else {
+      this.authenticationFailed = true;
+    }
+  }
 
   get isLoginEmailValid() {
-    return this.login.email.match(
+    return this.loginData.email.match(
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     );
   }
   get isSignupEmailValid() {
-    return this.signup.email.match(
+    return this.signupData.email.match(
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
+  }
+  get isSignUpFormValid() {
+    return (
+      this.isSignupEmailValid &&
+      this.signupData.firstName &&
+      this.signupData.lastName &&
+      this.signupData.password
     );
   }
 }
