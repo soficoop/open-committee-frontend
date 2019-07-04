@@ -1,14 +1,28 @@
 <template>
-  <v-layout wrap align-content-space-around>
+  <v-layout
+    wrap
+    align-content-space-around
+    :class="{ 'pa-5': $vuetify.breakpoint.mdAndUp }"
+  >
     <v-flex xs12>
-      <h1 class="display-2 font-weight-bold primary--text my-5" tabindex="0">
+      <h1
+        :class="{
+          'headline font-weight-black primary--text mb-3':
+            $vuetify.breakpoint.smAndDown,
+          'display-2 font-weight-black primary--text mb-3':
+            $vuetify.breakpoint.mdAndUp
+        }"
+        tabindex="0"
+      >
         ברוכים הבאים למערכת ועדה פתוחה
       </h1>
-      <p tabindex="0">
-        המערכת שלנו מנגישה לציבור דיונים בנושאי תכנון ובנייה בועדות התכנון
-        בישראל, ומזמינה אתכם להגיב ולנהל דיון, יחד עם נציגי הארגונים הירוקים
-        בועדות השונות.
-      </p>
+      <v-flex xs12 md7>
+        <p tabindex="0" class="primary--text">
+          המערכת שלנו מנגישה לציבור דיונים בנושאי תכנון ובנייה בועדות התכנון
+          בישראל, ומזמינה אתכם להגיב ולנהל דיון, יחד עם נציגי הארגונים הירוקים
+          בועדות השונות.
+        </p>
+      </v-flex>
     </v-flex>
     <v-flex xs12>
       <UpcomingMeetings></UpcomingMeetings>

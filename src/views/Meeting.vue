@@ -7,10 +7,10 @@
             class="headline primary--text font-weight-bold d-inline-block right"
             tabindex="0"
           >
-            {{ meeting.committee.sid }} /&nbsp;
+            {{ meeting.committee.sid }} /
           </h3>
           <h4 class="title primary--text d-inline-block right" tabindex="0">
-            ישיבה מספר {{ meeting.number }}
+            &nbsp;ישיבה מספר {{ meeting.number }}
           </h4>
         </v-flex>
         <v-flex xs12>
@@ -81,13 +81,17 @@
       >
         <v-card-title>
           <v-layout>
-            <h3 class="title text-truncate" tabindex="0">
+            <span class="subtitle-1" tabindex="0">
               ישיבה מספר {{ item.number }}
-            </h3>
+            </span>
             <v-divider class="mx-2" vertical></v-divider>
-            <h3 class="body-1" tabindex="0" v-if="typeof item.date != 'string'">
+            <span
+              class="subtitle-1"
+              tabindex="0"
+              v-if="typeof item.date != 'string'"
+            >
               {{ item.date.toLocaleDateString("he") }}
-            </h3>
+            </span>
             <v-spacer class="mx-3"></v-spacer>
             <v-icon>mdi-arrow-left</v-icon>
           </v-layout>

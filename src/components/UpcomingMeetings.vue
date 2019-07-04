@@ -1,6 +1,6 @@
 <template>
   <v-layout column>
-    <h2 class="display-1 primary--text font-weight-bold my-3" tabindex="0">
+    <h2 class="headline primary--text font-weight-bold my-3" tabindex="0">
       הישיבות הקרובות במערכת
     </h2>
     <v-flex>
@@ -15,11 +15,15 @@
       >
         <v-card-title>
           <v-layout>
-            <h3 class="title text-truncate" v-if="item.committee" tabindex="0">
+            <h3 class="subtitle-1" v-if="item.committee" tabindex="0">
               {{ item.committee.sid }}
             </h3>
             <v-divider vertical color="black" class="mx-2"></v-divider>
-            <h3 class="body-1" tabindex="0" v-if="typeof item.date != 'string'">
+            <h3
+              class="subtitle-1 align-self-center"
+              tabindex="0"
+              v-if="typeof item.date != 'string'"
+            >
               {{ item.date.toLocaleDateString("he") }}
             </h3>
             <v-spacer class="mx-3"></v-spacer>
