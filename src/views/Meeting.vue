@@ -42,8 +42,14 @@
               hover
               :to="'/plan/' + plan.id"
             >
-              <v-expand-transition>
-                <v-layout v-if="hover" class="primary" wrap>
+              <v-slide-y-transition mode="out-in">
+                <v-layout
+                  v-if="hover"
+                  class="primary"
+                  wrap
+                  fill-height
+                  absolute
+                >
                   <v-flex xs12 ma-1 px-2>
                     <span class="teal--text text--accent-2">סטטוס: </span>
                     <span>{{ plan.status }}</span>
@@ -57,14 +63,16 @@
                     <span>{{ plan.location }}</span>
                   </v-flex>
                 </v-layout>
-              </v-expand-transition>
-              <v-card-text class="subtitle-2" tabindex="0">
-                <v-icon small>mdi-clipboard-text</v-icon>
-                תכנית מספר {{ plan.number }}
-              </v-card-text>
-              <v-card-title class="title" tabindex="0">
-                {{ plan.name }}
-              </v-card-title>
+                <v-layout row wrap v-else tag="section">
+                  <v-card-text class="subtitle-2" tabindex="0">
+                    <v-icon small>mdi-clipboard-text</v-icon>
+                    תכנית מספר {{ plan.number }}
+                  </v-card-text>
+                  <v-card-title class="title" tabindex="0">
+                    {{ plan.name }}
+                  </v-card-title>
+                </v-layout>
+              </v-slide-y-transition>
             </v-card>
           </v-hover>
         </v-flex>
