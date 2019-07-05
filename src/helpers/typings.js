@@ -5,6 +5,7 @@
  * @property {Committee} committee
  * @property {Date} date
  * @property {number} number
+ * @property {Plan[]} plans
  */
 
 /**
@@ -24,5 +25,12 @@
  * @property {string} organization
  * @property {string} job
  * @property {string} city
+ */
+
+/**
+ * @typedef Plan
+ * @property {string} id
+ * @property {string} sid
+ * @property {Meeting[]} meetings
  */
 export {};

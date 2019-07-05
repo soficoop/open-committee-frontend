@@ -1,5 +1,5 @@
 <template>
-  <v-layout ma-3 fill-height wrap align-content-start>
+  <v-layout ma-3 fill-height wrap align-content-start @click="hoveredPlan = ''">
     <v-flex xs12 my-3>
       <v-layout column xs12>
         <v-flex xs12>
@@ -33,21 +33,25 @@
           </h4>
         </v-flex>
         <v-flex xs12 sm6 md4 v-for="plan in meeting.plans" :key="plan.id" pa-1>
-          <v-hover v-slot:default="{ hover }">
+          <v-hover
+            v-slot:default="{ hover }"
+            :disabled="$vuetify.breakpoint.smAndDown"
+          >
             <v-card
               tabindex="0"
               color="accent"
               dark
               height="100%"
               hover
-              :to="'/plan/' + plan.id"
+              @click.stop="handlePlanClicked(plan)"
             >
               <v-slide-y-transition mode="out-in">
                 <v-layout
-                  v-if="hover"
+                  v-if="hover || hoveredPlan == plan.id"
                   class="primary"
                   wrap
                   fill-height
+                  align-content-center
                   absolute
                 >
                   <v-flex xs12 ma-1 px-2>
@@ -125,6 +129,20 @@ import { Getter } from "vuex-class";
 export default class Meeting extends Vue {
   /**@type {import("../helpers/typings").Meeting} */
   @Getter(Getters.SELECTED_MEETING) meeting;
+
+  hoveredPlan = "";
+
+  handlePlanClicked(plan) {
+    if (this.$vuetify.breakpoint.mdAndUp) {
+      this.$router.push(`/plan/${plan.id}`);
+    } else {
+      if (this.hoveredPlan == plan.id) {
+        this.$router.push(`/plan/${plan.id}`);
+      } else {
+        this.hoveredPlan = plan.id;
+      }
+    }
+  }
 
   get meetingIplanUrl() {
     return `http://mavat.moin.gov.il/mavatps/Forms/SV8.1.aspx?MeetingID=${
