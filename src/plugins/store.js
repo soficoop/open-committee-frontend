@@ -45,10 +45,12 @@ export default new Vuex.Store({
       const meetingIndexInState = state.upcomingMeetigs.findIndex(
         m => m.id == meeting.id
       );
-      if (meetingIndexInState == -1) {
-        state.upcomingMeetigs.push(meeting);
-      } else {
-        state.upcomingMeetigs[meetingIndexInState] = meeting;
+      if (meeting.date > new Date()) {
+        if (meetingIndexInState == -1) {
+          state.upcomingMeetigs.push(meeting);
+        } else {
+          state.upcomingMeetigs[meetingIndexInState] = meeting;
+        }
       }
       state.selectedMeeting = meeting;
     },
