@@ -98,7 +98,7 @@
             </span>
             <v-divider class="mx-2" vertical></v-divider>
             <span
-              class="subtitle-1"
+              class="subtitle-1 align-self-center"
               tabindex="0"
               v-if="typeof item.date != 'string'"
             >
