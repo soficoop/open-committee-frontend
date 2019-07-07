@@ -48,7 +48,6 @@ export default class Navigation extends Vue {
   }
 
   executeNavItemClick(item) {
-    console.info(item);
     item.click && item.click.apply(this);
   }
 
@@ -74,7 +73,7 @@ export default class Navigation extends Vue {
     {
       icon: "mdi-logout",
       text: "התנתקות",
-      to: "/signout",
+      to: "/login",
       visible() {
         return this.jwt;
       },
