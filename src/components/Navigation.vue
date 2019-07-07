@@ -1,5 +1,11 @@
 <template>
-  <v-navigation-drawer app right floating class="grey lighten-4">
+  <v-navigation-drawer
+    app
+    right
+    floating
+    class="grey lighten-4"
+    v-model="isNavOpen"
+  >
     <v-layout column fill-height py-5>
       <router-link to="/">
         <v-img
@@ -36,7 +42,9 @@ import Vue from "vue";
 import { Getter, Action } from "vuex-class";
 import { Getters, ActionTypes } from "../helpers/constants";
 
-@Component
+@Component({
+  props: { isOpen: Boolean }
+})
 export default class Navigation extends Vue {
   @Getter(Getters.JWT) jwt;
   @Action(ActionTypes.SIGN_OUT) signOut;
@@ -45,6 +53,14 @@ export default class Navigation extends Vue {
     return this.navItems.filter(
       n => n.visible == null || n.visible.apply(this)
     );
+  }
+
+  get isNavOpen() {
+    return this.isOpen;
+  }
+
+  set isNavOpen(value) {
+    this.$emit("openChanged", value);
   }
 
   executeNavItemClick(item) {

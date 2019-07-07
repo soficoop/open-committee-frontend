@@ -1,8 +1,25 @@
 <template>
   <v-app class="background">
-    <Navigation></Navigation>
+    <div v-if="$vuetify.breakpoint.mdAndDown" class="py-4 my-2">
+      <v-app-bar color="grey lighten-4" hide-on-scroll fixed>
+        <v-fab-transition>
+          <v-app-bar-nav-icon
+            @click="isNavOpen = true"
+            v-if="$route.path == '/'"
+          ></v-app-bar-nav-icon>
+          <v-btn icon v-else @click="$router.go(-1)" tag="a">
+            <v-icon>mdi-arrow-right</v-icon>
+          </v-btn>
+        </v-fab-transition>
+        <v-toolbar-title @click="$router.push('/')">ועדה פתוחה</v-toolbar-title>
+      </v-app-bar>
+    </div>
+    <Navigation
+      :isOpen="isNavOpen"
+      @openChanged="value => (isNavOpen = value)"
+    ></Navigation>
     <v-content>
-      <v-container fill-height>
+      <v-container fill-height id="scroll-targer">
         <v-slide-y-transition mode="out-in">
           <router-view></router-view>
         </v-slide-y-transition>
@@ -40,5 +57,6 @@ export default class App extends Vue {
       document.body.classList.remove("using-mouse")
     );
   }
+  isNavOpen = this.$vuetify.breakpoint.mdAndUp;
 }
 </script>
