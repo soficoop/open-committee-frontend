@@ -54,7 +54,7 @@
                   align-content-center
                   absolute
                 >
-                  <v-flex xs12 ma-1 px-2>
+                  <v-flex xs12 ma-1 px-2 v-if="plan.status">
                     <span class="teal--text text--accent-2">סטטוס: </span>
                     <span>{{ plan.status }}</span>
                   </v-flex>
@@ -70,7 +70,7 @@
                 <v-layout row wrap v-else tag="section">
                   <v-card-text class="subtitle-2" tabindex="0">
                     <v-icon small>mdi-clipboard-text</v-icon>
-                    תכנית מספר {{ plan.number }}
+                    {{ plan.type }}: {{ plan.number }}
                   </v-card-text>
                   <v-card-title class="title" tabindex="0">
                     {{ plan.name }}

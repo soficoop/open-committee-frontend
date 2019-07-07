@@ -27,6 +27,7 @@ export const getMeeting = `query getMeeting($id: ID!){
     }
     plans {
       id
+      type
       name
       number
       status
