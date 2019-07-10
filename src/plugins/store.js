@@ -80,6 +80,9 @@ export default new Vuex.Store({
     },
     [Getters.JWT](state) {
       return state.jwt;
+    },
+    [Getters.USER](state) {
+      return state.user;
     }
   },
   actions: {
@@ -111,6 +114,7 @@ export default new Vuex.Store({
       const result = await res.json();
       if (result.jwt) {
         context.commit(MutationTypes.SET_JWT, result.jwt);
+        context.commit(MutationTypes.SET_USER, result.user);
         return true;
       }
       return false;
@@ -127,6 +131,7 @@ export default new Vuex.Store({
       const result = await res.json();
       if (result.jwt) {
         context.commit(MutationTypes.SET_JWT, result.jwt);
+        context.commit(MutationTypes.SET_USER, result.user);
         return true;
       }
       return false;

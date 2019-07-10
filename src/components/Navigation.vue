@@ -47,6 +47,7 @@ import { Getters, ActionTypes } from "../helpers/constants";
 })
 export default class Navigation extends Vue {
   @Getter(Getters.JWT) jwt;
+  @Getter(Getters.USER) user;
   @Action(ActionTypes.SIGN_OUT) signOut;
 
   get visibleNavItems() {
@@ -67,6 +68,15 @@ export default class Navigation extends Vue {
     item.click && item.click.apply(this);
   }
 
+  /** @typedef NavItem
+   *  @property {string} icon
+   *  @property {string} text
+   *  @property {string} to
+   *  @property {Function} visible
+   *  @property {Function} click
+   */
+
+  /**@type {NavItem[]} */
   navItems = [
     {
       icon: "mdi-account-circle",
@@ -86,6 +96,14 @@ export default class Navigation extends Vue {
     },
     { icon: "mdi-school", text: "מהן ועדות התכנון", to: "/about" },
     { icon: "mdi-magnify", text: "חיפוש", to: "/search" },
+    {
+      icon: "mdi-tune",
+      text: "ניהול ישיבות",
+      to: "/manage",
+      visible() {
+        return this.user && this.user.role.name == "Administrator";
+      }
+    },
     {
       icon: "mdi-logout",
       text: "התנתקות",
