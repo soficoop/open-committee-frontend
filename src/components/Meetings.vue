@@ -15,8 +15,8 @@
       >
         <v-card-title>
           <v-layout>
-            <h3 class="subtitle-1" v-if="item.committee" tabindex="0">
-              {{ item.committee.sid }}
+            <h3 class="subtitle-1" v-if="item.headline" tabindex="0">
+              {{ item.headline }}
             </h3>
             <v-divider vertical color="black" class="mx-2"></v-divider>
             <h3
@@ -42,7 +42,7 @@ import Vue from "vue";
 
 @Component
 export default class UpcomingMeetings extends Vue {
-  /**@type {import("../helpers/typings").Meeting[]} */
+  /**@type {import("../helpers/typings").MeetingCard[]} */
   @Prop(Array) meetings;
   get isLoading() {
     return this.meetings == null || this.meetings.length == 0;

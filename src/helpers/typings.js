@@ -33,4 +33,12 @@
  * @property {string} sid
  * @property {Meeting[]} meetings
  */
+
+/**
+ * @typedef MeetingCard
+ * @property {string} headline
+ * @property {string} id
+ * @property {string} date
+ */
+
 export {};

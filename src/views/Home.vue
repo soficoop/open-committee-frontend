@@ -40,6 +40,15 @@ import { Getters } from "../helpers/constants";
   components: { UpcomingMeetings }
 })
 export default class Home extends Vue {
-  @Getter(Getters.UPCOMING_MEETINGS) upcomingMeetings;
+  /** @type {import("../../graphql/types").Meeting[]} */
+  @Getter(Getters.UPCOMING_MEETINGS) upcomingMeetingsState;
+  /** @type {import("../helpers/typings").MeetingCard[]} */
+  get upcomingMeetings() {
+    return this.upcomingMeetingsState.map(meeting => ({
+      id: meeting.id,
+      headline: meeting.committee.sid,
+      date: meeting.date
+    }));
+  }
 }
 </script>
