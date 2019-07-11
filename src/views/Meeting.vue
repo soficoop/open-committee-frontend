@@ -84,31 +84,7 @@
     </v-flex>
     <v-flex xs12 my-3 mx-1>
       <h4 class="title primary--text" tabindex="0">דיונים נוספים של הועדה</h4>
-      <v-card
-        v-for="item in meeting.committee.meetings"
-        :key="item.id"
-        class="my-1"
-        hover
-        :to="'/meeting/' + item.id"
-      >
-        <v-card-title>
-          <v-layout>
-            <span class="subtitle-1" tabindex="0">
-              ישיבה מספר {{ item.number }}
-            </span>
-            <v-divider class="mx-2" vertical></v-divider>
-            <span
-              class="subtitle-1 align-self-center"
-              tabindex="0"
-              v-if="typeof item.date != 'string'"
-            >
-              {{ item.date.toLocaleDateString("he") }}
-            </span>
-            <v-spacer class="mx-3"></v-spacer>
-            <v-icon>mdi-arrow-left</v-icon>
-          </v-layout>
-        </v-card-title>
-      </v-card>
+      <MeetingCards :meetings="otherMeetingsOfCommittee"></MeetingCards>
     </v-flex>
     <v-flex xs12>
       <a :href="meetingIplanUrl" target="_blank" rel="noopener noreferrer">
@@ -124,8 +100,11 @@ import Vue from "vue";
 import { ActionTypes, Getters } from "../helpers/constants";
 import store from "../plugins/store";
 import { Getter } from "vuex-class";
+import MeetingCards from "../components/MeetingCards";
 
-@Component
+@Component({
+  components: { MeetingCards }
+})
 export default class Meeting extends Vue {
   /**@type {import("../helpers/typings").Meeting} */
   @Getter(Getters.SELECTED_MEETING) meeting;
@@ -142,6 +121,15 @@ export default class Meeting extends Vue {
         this.hoveredPlan = plan.id;
       }
     }
+  }
+
+  /** @type {import("../helpers/typings").MeetingCard[]} */
+  get otherMeetingsOfCommittee() {
+    return this.meeting.committee.meetings.map(meeting => ({
+      id: meeting.id,
+      headline: `ישיבה מספר ${meeting.number}`,
+      date: meeting.date
+    }));
   }
 
   get meetingIplanUrl() {

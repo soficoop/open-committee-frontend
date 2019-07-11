@@ -1,8 +1,5 @@
 <template>
   <v-layout column>
-    <h2 class="headline primary--text font-weight-bold my-3" tabindex="0">
-      הישיבות הקרובות במערכת
-    </h2>
     <v-flex>
       <v-progress-circular indeterminate v-if="isLoading"></v-progress-circular>
       <v-card

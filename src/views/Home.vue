@@ -25,19 +25,22 @@
       </v-flex>
     </v-flex>
     <v-flex xs12>
-      <UpcomingMeetings :meetings="upcomingMeetings"></UpcomingMeetings>
+      <h2 class="headline primary--text font-weight-bold my-3" tabindex="0">
+        הישיבות הקרובות במערכת
+      </h2>
+      <MeetingCards :meetings="upcomingMeetings"></MeetingCards>
     </v-flex>
   </v-layout>
 </template>
 
 <script>
-import UpcomingMeetings from "../components/Meetings";
+import MeetingCards from "../components/MeetingCards";
 import Component from "vue-class-component";
 import Vue from "vue";
 import { Getter } from "vuex-class";
 import { Getters } from "../helpers/constants";
 @Component({
-  components: { UpcomingMeetings }
+  components: { MeetingCards }
 })
 export default class Home extends Vue {
   /** @type {import("../../graphql/types").Meeting[]} */
