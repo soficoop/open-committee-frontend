@@ -25,17 +25,21 @@
       </v-flex>
     </v-flex>
     <v-flex xs12>
-      <UpcomingMeetings></UpcomingMeetings>
+      <UpcomingMeetings :meetings="upcomingMeetings"></UpcomingMeetings>
     </v-flex>
   </v-layout>
 </template>
 
 <script>
-import UpcomingMeetings from "../components/UpcomingMeetings";
+import UpcomingMeetings from "../components/Meetings";
 import Component from "vue-class-component";
 import Vue from "vue";
+import { Getter } from "vuex-class";
+import { Getters } from "../helpers/constants";
 @Component({
   components: { UpcomingMeetings }
 })
-export default class Home extends Vue {}
+export default class Home extends Vue {
+  @Getter(Getters.UPCOMING_MEETINGS) upcomingMeetings;
+}
 </script>

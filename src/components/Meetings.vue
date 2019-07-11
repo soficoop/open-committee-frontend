@@ -7,7 +7,7 @@
       <v-progress-circular indeterminate v-if="isLoading"></v-progress-circular>
       <v-card
         v-else
-        v-for="(item, i) in upcomingMeetings"
+        v-for="(item, i) in meetings"
         :key="i"
         class="ma-1"
         hover
@@ -37,16 +37,15 @@
 
 <script>
 import Component from "vue-class-component";
+import { Prop } from "vue-property-decorator";
 import Vue from "vue";
-import { Getter } from "vuex-class";
-import { Getters } from "../helpers/constants";
 
 @Component
 export default class UpcomingMeetings extends Vue {
   /**@type {import("../helpers/typings").Meeting[]} */
-  @Getter(Getters.UPCOMING_MEETINGS) upcomingMeetings;
+  @Prop(Array) meetings;
   get isLoading() {
-    return this.upcomingMeetings == null || this.upcomingMeetings.length == 0;
+    return this.meetings == null || this.meetings.length == 0;
   }
 }
 </script>
