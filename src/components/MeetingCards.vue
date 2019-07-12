@@ -1,14 +1,12 @@
 <template>
   <v-layout column>
     <v-flex>
-      <v-progress-circular indeterminate v-if="isLoading"></v-progress-circular>
       <v-card
-        v-else
         v-for="(item, i) in meetings"
         :key="i"
         class="ma-1"
         hover
-        :to="'meeting/' + item.id"
+        :to="'/meeting/' + item.id"
       >
         <v-card-title>
           <v-layout>
@@ -41,8 +39,5 @@ import Vue from "vue";
 export default class UpcomingMeetings extends Vue {
   /**@type {import("../helpers/typings").MeetingCard[]} */
   @Prop(Array) meetings;
-  get isLoading() {
-    return this.meetings == null || this.meetings.length == 0;
-  }
 }
 </script>

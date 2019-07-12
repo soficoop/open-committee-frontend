@@ -30,8 +30,12 @@
 /**
  * @typedef Plan
  * @property {string} id
- * @property {string} sid
+ * @property {Date} lastUpdate
  * @property {Meeting[]} meetings
+ * @property {string} name
+ * @property {string} number
+ * @property {string} sid
+ * @property {string} status
  */
 
 /**
@@ -39,6 +43,20 @@
  * @property {string} headline
  * @property {string} id
  * @property {string} date
+ */
+
+/**
+ * @typedef AgendaCard
+ * @property {string} id
+ * @property {string} headline
+ * @property {string} description
+ * @property {KeyValuePair[]} bullets
+ */
+
+/**
+ * @typedef KeyValuePair
+ * @property {string} key
+ * @property {string} value
  */
 
 export {};

@@ -1,5 +1,5 @@
 <template>
-  <v-layout ma-3 fill-height wrap align-content-start @click="hoveredPlan = ''">
+  <v-layout ma-3 fill-height wrap align-content-start>
     <v-flex xs12 my-3>
       <v-layout column xs12>
         <v-flex xs12>
@@ -32,54 +32,10 @@
             סדר יום - סעיפי הישיבה
           </h4>
         </v-flex>
-        <v-flex xs12 sm6 md4 v-for="plan in meeting.plans" :key="plan.id" pa-1>
-          <v-hover
-            v-slot:default="{ hover }"
-            :disabled="$vuetify.breakpoint.smAndDown"
-          >
-            <v-card
-              tabindex="0"
-              color="accent"
-              dark
-              height="100%"
-              hover
-              @click.stop="handlePlanClicked(plan)"
-            >
-              <v-slide-y-transition mode="out-in">
-                <v-layout
-                  v-if="hover || hoveredPlan == plan.id"
-                  class="primary"
-                  wrap
-                  fill-height
-                  align-content-center
-                  absolute
-                >
-                  <v-flex xs12 ma-1 px-2 v-if="plan.status">
-                    <span class="teal--text text--accent-2">סטטוס: </span>
-                    <span>{{ plan.status }}</span>
-                  </v-flex>
-                  <v-flex xs12 ma-1 px-2 v-if="plan.lastUpdate">
-                    <span class="teal--text text--accent-2">עדכון אחרון: </span>
-                    <span>{{ plan.lastUpdate.toLocaleDateString("he") }}</span>
-                  </v-flex>
-                  <v-flex xs12 ma-1 px-2 v-if="plan.location">
-                    <span class="teal--text text--accent-2">מיקום: </span>
-                    <span>{{ plan.location }}</span>
-                  </v-flex>
-                </v-layout>
-                <v-layout row wrap v-else tag="section">
-                  <v-card-text class="subtitle-2" tabindex="0">
-                    <v-icon small>mdi-clipboard-text</v-icon>
-                    {{ plan.type }}: {{ plan.number }}
-                  </v-card-text>
-                  <v-card-title class="title" tabindex="0">
-                    {{ plan.name }}
-                  </v-card-title>
-                </v-layout>
-              </v-slide-y-transition>
-            </v-card>
-          </v-hover>
-        </v-flex>
+        <AgendaCards
+          :items="agendaItems"
+          :hoveredItem="hoveredPlan"
+        ></AgendaCards>
       </v-layout>
     </v-flex>
     <v-flex xs12 my-3 mx-1>
@@ -100,10 +56,11 @@ import Vue from "vue";
 import { ActionTypes, Getters } from "../helpers/constants";
 import store from "../plugins/store";
 import { Getter } from "vuex-class";
+import AgendaCards from "../components/AgendaCards";
 import MeetingCards from "../components/MeetingCards";
 
 @Component({
-  components: { MeetingCards }
+  components: { MeetingCards, AgendaCards }
 })
 export default class Meeting extends Vue {
   /**@type {import("../helpers/typings").Meeting} */
@@ -129,6 +86,23 @@ export default class Meeting extends Vue {
       id: meeting.id,
       headline: `ישיבה מספר ${meeting.number}`,
       date: meeting.date
+    }));
+  }
+
+  /**
+   * @returns {import("../helpers/typings").AgendaCard[]}
+   */
+  get agendaItems() {
+    return this.meeting.plans.map(plan => ({
+      id: plan.id,
+      headline: plan.type == "תוכנית" ? `תכנית מספר ${plan.number}` : "נושא",
+      description: plan.name,
+      bullets: [
+        { key: "סטטוס", value: plan.status },
+        { key: "עדכון אחרון", value: plan.lastUpdate.toLocaleDateString("he") },
+        { key: "מיקום", value: plan.location }
+      ],
+      click: () => this.handlePlanClicked(plan)
     }));
   }
 
