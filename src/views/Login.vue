@@ -7,7 +7,7 @@
             mdi-account-circle
           </v-icon>
         </v-flex>
-        <v-tabs grow class="my-3" v-model="tab">
+        <v-tabs grow class="my-3" v-model="tab" background-color="transparent">
           <v-tab @click="authenticationFailed = false">
             התחברות
           </v-tab>
@@ -15,7 +15,7 @@
             הרשמה
           </v-tab>
         </v-tabs>
-        <v-tabs-items v-model="tab" class="overflow-hidden pa-1">
+        <v-tabs-items v-model="tab" class="overflow-hidden pa-1 transparent">
           <v-tab-item>
             <v-flex>
               <v-text-field
