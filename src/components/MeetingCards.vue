@@ -36,7 +36,7 @@ import { Prop } from "vue-property-decorator";
 import Vue from "vue";
 
 @Component
-export default class UpcomingMeetings extends Vue {
+export default class MeetingCards extends Vue {
   /**@type {import("../helpers/typings").MeetingCard[]} */
   @Prop(Array) meetings;
 }
