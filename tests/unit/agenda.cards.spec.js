@@ -41,11 +41,33 @@ describe("AgendaCards.vue", () => {
   let wrapper;
   beforeEach(() => {
     wrapper = mount(AgendaCards, {
-      propsData: { items, hoveredItem: items[0].id },
+      propsData: { items, hoveredItem: "" },
       vuetify: new Vuetify()
     });
   });
   it("renders agenda cards.", () => {
     expect(wrapper.findAll(".v-card").length).toBe(3);
+  });
+  it("contains 3 headlines.", () => {
+    for (const item of items) {
+      expect(wrapper.html()).toContain(item.headline);
+    }
+  });
+  it("contains 3 descriptions.", () => {
+    for (const item of items) {
+      expect(wrapper.html()).toContain(item.description);
+    }
+  });
+  it("contains 3 descriptions.", () => {
+    wrapper.setProps({ hoveredItem: items[0].id });
+    for (const bullet of items[0].bullets) {
+      expect(wrapper.html()).toContain(bullet.key);
+      expect(wrapper.html()).toContain(bullet.value);
+    }
+  });
+  it("doesn't contain null value bullet.", () => {
+    wrapper.setProps({ hoveredItem: items[2].id });
+    expect(wrapper.html()).toContain("סטטוס");
+    expect(wrapper.html()).not.toContain("מיקום");
   });
 });
