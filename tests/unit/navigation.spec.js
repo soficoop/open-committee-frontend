@@ -37,8 +37,6 @@ describe("Navigation.vue", () => {
   });
   it("contains admin links for a logged in admin", () => {
     mocks.$store.getters[Getters.USER].role = { name: "Administrator" };
-    expect(wrapper.html()).toContain("login");
-    expect(wrapper.html()).toContain("notifications");
     expect(wrapper.html()).toContain("manage");
   });
 });
