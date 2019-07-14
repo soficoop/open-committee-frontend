@@ -89,7 +89,7 @@ export default class Navigation extends Vue {
     {
       icon: "mdi-bell",
       text: "ההתראות שלי",
-      to: "/notications",
+      to: "/notifications",
       visible() {
         return this.jwt;
       }
