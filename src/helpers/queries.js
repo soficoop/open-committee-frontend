@@ -53,3 +53,15 @@ export const getPlan = `query getPlan($id: ID!) {
     }
   }
 }`;
+
+export const getCommitteeMeetings = `query getCommitteeMeetings($committees: [ID]) {
+  committees(where: { _id_in: $committees }) {
+    id
+    sid
+    meetings {
+      id
+      number
+      date
+    }
+  }
+}`;

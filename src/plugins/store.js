@@ -5,7 +5,12 @@ import createPersistedState from "vuex-persistedstate";
 import { request } from "graphql-request";
 import { MutationTypes, ActionTypes, Getters } from "../helpers/constants";
 import { dateTimeRevive } from "../helpers/functions";
-import { getMeetings, getMeeting, getPlan } from "../helpers/queries.js";
+import {
+  getMeetings,
+  getMeeting,
+  getPlan,
+  getCommitteeMeetings
+} from "../helpers/queries.js";
 /* eslint-enable no-unused-vars */
 
 Vue.use(Vuex);
@@ -156,12 +161,23 @@ export default new Vuex.Store({
     /**
      * Fetches a plan by its ID
      * @param {Store} context the store object
-     * @param {stirng} id ID of plan to fetch
+     * @param {string} id ID of plan to fetch
      */
     async [ActionTypes.FETCH_PLAN](context, id) {
       const res = await request(graphqlEndpoint, getPlan, { id: id });
       let plan = JSON.parse(JSON.stringify(res.plan), dateTimeRevive);
       context.commit(MutationTypes.SET_SELECTED_PLAN, plan);
+    },
+    /**
+     * Fetches committee meetings for current user
+     * @param {Store} context the store object
+     */
+    async [ActionTypes.FETCH_USER_COMMITTEE_MEETINGS](context) {
+      context.state.user.committees;
+      const res = await request(graphqlEndpoint, getCommitteeMeetings, {
+        committees: context.state.user.committees
+      });
+      console.info(res);
     }
   },
   plugins: [

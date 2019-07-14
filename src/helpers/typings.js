@@ -25,6 +25,8 @@
  * @property {string} organization
  * @property {string} job
  * @property {string} city
+ * @property {{name:string}} role
+ * @property {string[]} committees
  */
 
 /**
