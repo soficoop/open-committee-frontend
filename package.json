@@ -52,12 +52,11 @@
     "vuetify-loader": "^1.2.2"
   },
   "gitHooks": {
-    "pre-commit": "lint-staged"
+    "pre-commit": "lint-staged && npm run test:unit"
   },
   "lint-staged": {
     "*.{js,vue}": [
       "vue-cli-service lint",
-      "vue-cli-service test:unit",
       "git add"
     ]
   }
