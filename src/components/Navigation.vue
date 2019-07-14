@@ -23,6 +23,7 @@
             :key="item.to"
             :to="item.to"
             @click="executeNavItemClick(item)"
+            :ripple="false"
           >
             <v-list-item-icon class="mx-3">
               <v-icon v-text="item.icon"></v-icon>

@@ -24,7 +24,7 @@ export default new Vuex.Store({
     plans: [],
     selectedPlan: null,
     jwt: "",
-    /**@type import("../helpers/typings").User */
+    /**@type {import("../helpers/typings").User} */
     user: null
   },
   mutations: {
@@ -94,7 +94,10 @@ export default new Vuex.Store({
       let date = new Date();
       date.setHours(0);
       const res = await request(graphqlEndpoint, getMeetings, { date: date });
-      let meetings = JSON.parse(JSON.stringify(res.meetings), dateTimeRevive);
+      let meetings = JSON.parse(
+        JSON.stringify(res.meetings),
+        dateTimeRevive
+      ).filter(meeting => meeting.committee);
       context.commit(MutationTypes.SET_UPCOMING_MEETINGS, meetings);
     },
     [ActionTypes.SET_MEETING](context, meeting) {

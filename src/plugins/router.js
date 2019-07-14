@@ -5,6 +5,7 @@ const About = () => import("../views/About.vue");
 const Login = () => import("../views/Login.vue");
 const Meeting = () => import("../views/Meeting.vue");
 const Plan = () => import("../views/Plan.vue");
+const Manage = () => import("../views/Manage.vue");
 
 Vue.use(Router);
 
@@ -36,6 +37,11 @@ export default new Router({
       path: "/login",
       name: "login",
       component: Login
+    },
+    {
+      path: "/manage",
+      name: "manage",
+      component: Manage
     }
   ]
 });

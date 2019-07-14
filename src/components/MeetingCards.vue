@@ -4,9 +4,10 @@
       <v-card
         v-for="(item, i) in meetings"
         :key="i"
-        class="ma-1"
+        class="my-1"
         hover
         :to="'/meeting/' + item.id"
+        v-ripple="{ class: `secondary--text` }"
       >
         <v-card-title>
           <v-layout>

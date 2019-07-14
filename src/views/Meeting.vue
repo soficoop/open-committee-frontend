@@ -1,10 +1,15 @@
 <template>
-  <v-layout ma-3 fill-height wrap align-content-start>
+  <v-layout
+    fill-height
+    wrap
+    align-content-start
+    :class="{ 'pa-5': $vuetify.breakpoint.mdAndUp }"
+  >
     <v-flex xs12 my-3>
       <v-layout column xs12>
         <v-flex xs12>
           <h3
-            class="headline primary--text font-weight-bold d-inline-block right"
+            class="headline primary--text font-weight-black d-inline-block right"
             tabindex="0"
           >
             {{ meeting.committee.sid }} /
@@ -43,7 +48,12 @@
       <MeetingCards :meetings="otherMeetingsOfCommittee"></MeetingCards>
     </v-flex>
     <v-flex xs12>
-      <a :href="meetingIplanUrl" target="_blank" rel="noopener noreferrer">
+      <a
+        :href="meetingIplanUrl"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="secondary--text font-weight-bold px-1"
+      >
         למידע נוסף באתר מנהל התכנון
       </a>
     </v-flex>
