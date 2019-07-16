@@ -44,7 +44,7 @@
  * @typedef MeetingCard
  * @property {string} headline
  * @property {string} id
- * @property {string} date
+ * @property {Date} date
  */
 
 /**

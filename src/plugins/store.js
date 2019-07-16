@@ -30,21 +30,30 @@ export default new Vuex.Store({
     selectedPlan: null,
     jwt: "",
     /**@type {import("../helpers/typings").User} */
-    user: null
+    user: null,
+    /** @type {import("../helpers/typings").Meeting[]} */
+    managableMeetings: []
   },
   mutations: {
     /**
      * Sets the current user by the given user
+     * @param {any} state The current state
      * @param {import("../helpers/typings").User} user
      */
     [MutationTypes.SET_USER](state, user) {
       state.user = user;
     },
+    /**
+     * Sets the upcoming meetings in state by given meeting array
+     * @param {any} state The current state
+     * @param {import("../helpers/typings").Meeting[]} payload Meetings to set as upcoming meetings
+     */
     [MutationTypes.SET_UPCOMING_MEETINGS](state, payload) {
       state.upcomingMeetigs = payload;
     },
     /**
      * Sets the selected meeting in state by a given meeting
+     * @param {any} state The current state
      * @param {import("../helpers/typings").Meeting} meeting Meeting to set as the selected meeting
      */
     [MutationTypes.SET_SELECTED_MEETING](state, meeting) {
@@ -60,6 +69,11 @@ export default new Vuex.Store({
       }
       state.selectedMeeting = meeting;
     },
+    /**
+     * Sets the selected plan in state by a given plan
+     * @param {any} state The current state
+     * @param {import("../helpers/typings").Plan} plan Plan to set as the selected plan
+     */
     [MutationTypes.SET_SELECTED_PLAN](state, plan) {
       const planIndexInState = state.plans.findIndex(p => p.sid == plan.sid);
       if (planIndexInState == -1) {
@@ -71,6 +85,9 @@ export default new Vuex.Store({
     },
     [MutationTypes.SET_JWT](state, jwt) {
       state.jwt = jwt;
+    },
+    [MutationTypes.SET_MANAGABLE_MEETINGS](state, meetings) {
+      state.managableMeetings = meetings;
     }
   },
   getters: {
@@ -88,6 +105,9 @@ export default new Vuex.Store({
     },
     [Getters.USER](state) {
       return state.user;
+    },
+    [Getters.MANAGABLE_MEETINGS](state) {
+      return state.managableMeetings;
     }
   },
   actions: {
@@ -127,6 +147,11 @@ export default new Vuex.Store({
       }
       return false;
     },
+    /**
+     * Performs sign in
+     * @param {Store} context The store object
+     * @param {import("../helpers/typings").User} user user to sign in
+     */
     async [ActionTypes.SIGN_IN](context, user) {
       const res = await fetch(`${authEndpoint}`, {
         method: "post",
@@ -144,9 +169,13 @@ export default new Vuex.Store({
       }
       return false;
     },
+    /**
+     * Signs out the user by removing the user-related data from the store
+     */
     [ActionTypes.SIGN_OUT](context) {
       context.commit(MutationTypes.SET_JWT, "");
       context.commit(MutationTypes.SET_USER, null);
+      context.commit(MutationTypes.SET_MANAGABLE_MEETINGS, []);
     },
     /**
      * Fetches a meeting by its ID
@@ -169,15 +198,32 @@ export default new Vuex.Store({
       context.commit(MutationTypes.SET_SELECTED_PLAN, plan);
     },
     /**
-     * Fetches committee meetings for current user
+     * Fetches managable meetings
      * @param {Store} context the store object
      */
-    async [ActionTypes.FETCH_USER_COMMITTEE_MEETINGS](context) {
-      context.state.user.committees;
+    async [ActionTypes.FETCH_MANAGABLE_MEETINGS](context) {
+      if (context.state.user.role != "Administrator") {
+        return;
+      }
       const res = await request(graphqlEndpoint, getCommitteeMeetings, {
         committees: context.state.user.committees
       });
-      console.info(res);
+      /** @type {{committees: import("../helpers/typings").Committee[]}} */
+      const committees = JSON.parse(
+        JSON.stringify(res.committees),
+        dateTimeRevive
+      );
+      /** @type {import("../helpers/typings").Meeting[]} */
+      let meetings = [];
+      for (const committee of committees) {
+        meetings.push(
+          ...committee.meetings.map(meeting => ({
+            ...meeting,
+            committee: { id: committee.id, sid: committee.sid }
+          }))
+        );
+      }
+      context.commit(MutationTypes.SET_MANAGABLE_MEETINGS, meetings);
     }
   },
   plugins: [
