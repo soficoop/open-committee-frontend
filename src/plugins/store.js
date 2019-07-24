@@ -208,21 +208,8 @@ export default new Vuex.Store({
       const res = await request(graphqlEndpoint, getCommitteeMeetings, {
         committees: context.state.user.committees
       });
-      /** @type {{committees: import("../helpers/typings").Committee[]}} */
-      const committees = JSON.parse(
-        JSON.stringify(res.committees),
-        dateTimeRevive
-      );
       /** @type {import("../helpers/typings").Meeting[]} */
-      let meetings = [];
-      for (const committee of committees) {
-        meetings.push(
-          ...committee.meetings.map(meeting => ({
-            ...meeting,
-            committee: { id: committee.id, sid: committee.sid }
-          }))
-        );
-      }
+      const meetings = JSON.parse(JSON.stringify(res.meetings), dateTimeRevive);
       context.commit(MutationTypes.SET_MANAGABLE_MEETINGS, meetings);
     }
   },
