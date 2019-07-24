@@ -202,7 +202,7 @@ export default new Vuex.Store({
      * @param {Store} context the store object
      */
     async [ActionTypes.FETCH_MANAGABLE_MEETINGS](context) {
-      if (context.state.user.role != "Administrator") {
+      if (context.state.user.role.name != "Administrator") {
         return;
       }
       const res = await request(graphqlEndpoint, getCommitteeMeetings, {
