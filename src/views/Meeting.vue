@@ -1,10 +1,5 @@
 <template>
-  <v-layout
-    fill-height
-    wrap
-    align-content-start
-    :class="{ 'pa-5': $vuetify.breakpoint.mdAndUp }"
-  >
+  <v-layout fill-height wrap align-content-start class="pa-md-12">
     <v-flex xs12 my-3>
       <v-layout column xs12>
         <v-flex xs12>

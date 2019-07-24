@@ -1,5 +1,5 @@
 <template>
-  <v-layout row wrap>
+  <v-layout wrap>
     <v-flex xs12 sm6 md4 v-for="item in items" :key="item.id" pa-1>
       <v-hover
         v-slot:default="{ hover }"
@@ -37,7 +37,7 @@
                 </div>
               </v-flex>
             </v-layout>
-            <v-layout row wrap v-else tag="section">
+            <v-layout wrap v-else tag="section">
               <v-card-text class="subtitle-2" tabindex="0">
                 <v-icon small>mdi-clipboard-text</v-icon>
                 {{ item.headline }}

@@ -1,9 +1,5 @@
 <template>
-  <v-layout
-    wrap
-    align-content-space-around
-    :class="{ 'pa-5': $vuetify.breakpoint.mdAndUp }"
-  >
+  <v-layout wrap align-content-space-around class="pa-md-12">
     <v-flex xs12>
       <h1
         :class="{
