@@ -50,16 +50,15 @@
                 scrollable
               >
                 <v-spacer></v-spacer>
-                <v-btn text color="primary" @click="dateDialog = false">
-                  ביטול
-                </v-btn>
+                <v-btn text color="primary" @click="dateDialog = false"
+                  >ביטול</v-btn
+                >
                 <v-btn
                   text
                   color="primary"
                   @click="$refs.dateDialog.save(meetingDateString)"
+                  >אישור</v-btn
                 >
-                  אישור
-                </v-btn>
               </v-date-picker>
             </v-dialog>
           </v-flex>
@@ -72,7 +71,7 @@
               @change="addAgendaItem"
               append-icon=" "
               hide-no-data
-              cache-items
+              v-model="selectedPlan"
               :items="plans"
               item-text="number"
               item-value="id"
@@ -88,13 +87,12 @@
             </v-btn>
           </v-flex>
         </v-layout>
-        <v-expand-transition>
-          <AgendaCards
-            v-if="agendaItems.length > 0"
-            :items="agendaItems"
-            class="pb-6"
-          ></AgendaCards>
-        </v-expand-transition>
+        <AgendaCards
+          :items="agendaItems"
+          @cardRemoved="handleAgendaItemRemoveClicked"
+          areCardsRemovable
+          class="pb-6"
+        ></AgendaCards>
         <v-layout row wrap>
           <v-flex xs12 md4 px-3>
             <v-file-input label="פרוטוקול" filled rounded></v-file-input>
@@ -110,16 +108,14 @@
           <v-flex xs12 px-3>
             <v-file-input label="מסמכים נוספים" filled rounded multiple>
               <template v-slot:selection="{ text }">
-                <v-chip small label color="primary">
-                  {{ text }}
-                </v-chip>
+                <v-chip small label color="primary">{{ text }}</v-chip>
               </template>
             </v-file-input>
           </v-flex>
         </v-layout>
         <v-layout row wrap>
           <v-flex xs12>
-            <v-textarea label="רקע לישיבה" filled auto-grow> </v-textarea>
+            <v-textarea label="רקע לישיבה" filled auto-grow></v-textarea>
           </v-flex>
         </v-layout>
         <v-layout row wrap>
@@ -166,6 +162,14 @@ export default class NewMeeting extends Vue {
   isSearchingPlans = false;
   /** @type {import("../helpers/typings").AgendaCard[]} */
   agendaItems = [];
+  selectedPlan = "";
+
+  handleAgendaItemRemoveClicked(id) {
+    this.agendaItems.splice(
+      this.agendaItems.findIndex(item => item.id == id),
+      1
+    );
+  }
 
   /**
    * Gets called when a plan is selected via the autocomplete
@@ -195,6 +199,7 @@ export default class NewMeeting extends Vue {
     } else {
       console.info("no plan will be added");
     }
+    this.selectedPlan = "";
   }
 
   get meetingDateFormatted() {
@@ -209,23 +214,20 @@ export default class NewMeeting extends Vue {
   }
 
   set planSearch(value) {
-    if (value && value !== this._planSearch) {
+    if (value) {
       this.isSearchingPlans = true;
       request(graphqlEndpoint, getPlans, { number: value }).then(result => {
-        this.plans.push(
-          ...result.plans.filter(
-            newPlan =>
-              !this.plans.some(existingPlan => existingPlan.id == newPlan.id)
-          )
+        this.plans = result.plans.filter(
+          plan =>
+            !this.agendaItems.some(agendaItem => agendaItem.id === plan.id)
         );
         this.isSearchingPlans = false;
       });
     }
-    this._planSearch = value;
   }
 
   get planSearch() {
-    return this._planSearch;
+    return "";
   }
 }
 </script>
