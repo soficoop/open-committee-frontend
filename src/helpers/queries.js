@@ -46,6 +46,7 @@ export const getPlan = `query getPlan($id: ID!) {
     location
     municipality
     targets
+    type
     meetings {
       id
       date
@@ -63,5 +64,20 @@ export const getCommitteeMeetings = `query getCommitteeMeetings($committees: [ID
       id
       sid
     }
+  }
+}`;
+
+export const getCommittees = `query getCommittees($committees: [ID]) {
+  committees(where: {_id_in: $committees}) {
+    id
+    sid
+  }
+}`;
+
+export const getPlans = `query plans($number: String) {
+  plans(where: { number_contains: $number }) {
+    id
+    number
+    name
   }
 }`;

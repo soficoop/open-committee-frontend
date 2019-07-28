@@ -24,3 +24,9 @@ export const Getters = Object.freeze({
   JWT: "JWT",
   USER: "USER"
 });
+
+export const graphqlEndpoint =
+  process.env.VUE_APP_API_ENDPOINT || "http://localhost:1337/graphql";
+
+export const authEndpoint =
+  process.env.VUE_APP_AUTH_ENDPOINT || "http://localhost:1337/auth/local";

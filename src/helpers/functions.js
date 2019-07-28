@@ -1,3 +1,6 @@
+import request from "graphql-request";
+import { graphqlEndpoint } from "./constants";
+
 export function dateTimeRevive(key, value) {
   var isDate;
   if (typeof value === "string") {
@@ -9,4 +12,14 @@ export function dateTimeRevive(key, value) {
     }
   }
   return value;
+}
+
+/**
+ * makes a graphQL request to the graphQL endpoint
+ * @param {string} query the graphQL query
+ * @param {any} variables query variables
+ */
+export async function makeGqlRequest(query, variables) {
+  const res = await request(graphqlEndpoint, query, variables);
+  return JSON.parse(JSON.stringify(res), dateTimeRevive);
 }

@@ -1,24 +1,24 @@
-/* eslint-disable no-unused-vars */
 import Vue from "vue";
-import Vuex, { Store } from "vuex";
+import Vuex from "vuex";
 import createPersistedState from "vuex-persistedstate";
 import { request } from "graphql-request";
-import { MutationTypes, ActionTypes, Getters } from "../helpers/constants";
-import { dateTimeRevive } from "../helpers/functions";
+import {
+  MutationTypes,
+  ActionTypes,
+  Getters,
+  graphqlEndpoint,
+  authEndpoint
+} from "../helpers/constants";
+import { dateTimeRevive, makeGqlRequest } from "../helpers/functions";
 import {
   getMeetings,
   getMeeting,
   getPlan,
-  getCommitteeMeetings
+  getCommitteeMeetings,
+  getCommittees
 } from "../helpers/queries.js";
-/* eslint-enable no-unused-vars */
 
 Vue.use(Vuex);
-
-const graphqlEndpoint =
-  process.env.VUE_APP_API_ENDPOINT || "http://localhost:1337/graphql";
-const authEndpoint =
-  process.env.VUE_APP_AUTH_ENDPOINT || "http://localhost:1337/auth/local";
 
 export default new Vuex.Store({
   state: {
@@ -113,16 +113,13 @@ export default new Vuex.Store({
   actions: {
     /**
      * Fetches upcoming meeting (partial)
-     * @param {Store} context The store object
+     * @param {import("vuex").Store} context The store object
      */
     async [ActionTypes.FETCH_UPCOMING_MEETINGS](context) {
       let date = new Date();
       date.setHours(0);
-      const res = await request(graphqlEndpoint, getMeetings, { date: date });
-      let meetings = JSON.parse(
-        JSON.stringify(res.meetings),
-        dateTimeRevive
-      ).filter(meeting => meeting.committee);
+      const res = await makeGqlRequest(getMeetings, { date: date });
+      let meetings = res.meetings.filter(meeting => meeting.committee);
       context.commit(MutationTypes.SET_UPCOMING_MEETINGS, meetings);
     },
     [ActionTypes.SET_MEETING](context, meeting) {
@@ -149,7 +146,7 @@ export default new Vuex.Store({
     },
     /**
      * Performs sign in
-     * @param {Store} context The store object
+     * @param {import("vuex").Store} context The store object
      * @param {import("../helpers/typings").User} user user to sign in
      */
     async [ActionTypes.SIGN_IN](context, user) {
@@ -163,6 +160,16 @@ export default new Vuex.Store({
       });
       const result = await res.json();
       if (result.jwt) {
+        if (result.user.committees) {
+          const userCommitteesResult = await request(
+            graphqlEndpoint,
+            getCommittees,
+            {
+              committees: result.user.committees
+            }
+          );
+          result.user.committees = userCommitteesResult.committees;
+        }
         context.commit(MutationTypes.SET_JWT, result.jwt);
         context.commit(MutationTypes.SET_USER, result.user);
         return true;
@@ -179,37 +186,35 @@ export default new Vuex.Store({
     },
     /**
      * Fetches a meeting by its ID
-     * @param {Store} context the store object
+     * @param {import("vuex").Store} context the store object
      * @param {stirng} id ID of meeting to fetch
      */
     async [ActionTypes.FETCH_MEETING](context, id) {
-      const res = await request(graphqlEndpoint, getMeeting, { id: id });
-      let meeting = JSON.parse(JSON.stringify(res.meeting), dateTimeRevive);
+      const meeting = (await makeGqlRequest(getMeeting, { id: id })).meeting;
       context.commit(MutationTypes.SET_SELECTED_MEETING, meeting);
     },
     /**
      * Fetches a plan by its ID
-     * @param {Store} context the store object
+     * @param {import("vuex").Store} context the store object
      * @param {string} id ID of plan to fetch
      */
     async [ActionTypes.FETCH_PLAN](context, id) {
-      const res = await request(graphqlEndpoint, getPlan, { id: id });
-      let plan = JSON.parse(JSON.stringify(res.plan), dateTimeRevive);
+      const plan = (await makeGqlRequest(getPlan, { id: id })).plan;
       context.commit(MutationTypes.SET_SELECTED_PLAN, plan);
     },
     /**
      * Fetches managable meetings
-     * @param {Store} context the store object
+     * @param {import("vuex").Store} context the store object
      */
     async [ActionTypes.FETCH_MANAGABLE_MEETINGS](context) {
       if (context.state.user.role.name != "Administrator") {
         return;
       }
-      const res = await request(graphqlEndpoint, getCommitteeMeetings, {
-        committees: context.state.user.committees
+      const res = await makeGqlRequest(getCommitteeMeetings, {
+        committees: context.state.user.committees.map(committee => committee.id)
       });
       /** @type {import("../helpers/typings").Meeting[]} */
-      const meetings = JSON.parse(JSON.stringify(res.meetings), dateTimeRevive);
+      const meetings = res.meetings;
       context.commit(MutationTypes.SET_MANAGABLE_MEETINGS, meetings);
     }
   },
