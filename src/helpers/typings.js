@@ -53,6 +53,7 @@
  * @property {string} headline
  * @property {string} description
  * @property {KeyValuePair[]} bullets
+ * @property {Function} click
  */
 
 /**
