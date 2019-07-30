@@ -26,7 +26,13 @@ export const Getters = Object.freeze({
 });
 
 export const graphqlEndpoint =
-  process.env.VUE_APP_API_ENDPOINT || "http://localhost:1337/graphql";
+  `${process.env.VUE_APP_API_ENDPOINT}/graphql` ||
+  "http://localhost:1337/graphql";
 
 export const authEndpoint =
-  process.env.VUE_APP_AUTH_ENDPOINT || "http://localhost:1337/auth/local";
+  `${process.env.VUE_APP_API_ENDPOINT}/auth/local` ||
+  "http://localhost:1337/auth/local";
+
+export const uploadEndpoint =
+  `${process.env.VUE_APP_API_ENDPOINT}/upload` ||
+  "http://localhost:1337/upload";

@@ -1,5 +1,5 @@
 import request from "graphql-request";
-import { graphqlEndpoint } from "./constants";
+import { graphqlEndpoint, uploadEndpoint } from "./constants";
 
 export function dateTimeRevive(key, value) {
   var isDate;
@@ -22,4 +22,21 @@ export function dateTimeRevive(key, value) {
 export async function makeGqlRequest(query, variables) {
   const res = await request(graphqlEndpoint, query, variables);
   return JSON.parse(JSON.stringify(res), dateTimeRevive);
+}
+
+/**
+ * Uploads a file to strapi
+ * @param {File} file to upload
+ * @param {string} jwt the json web token (https://strapi.io/documentation/3.0.0-beta.x/guides/authentication.html#token-usage)
+ * @returns {import("../../graphql/types").UploadFile}
+ */
+export async function uploadFile(file, jwt) {
+  const body = new FormData();
+  body.append("files", file);
+  const res = await fetch(uploadEndpoint, {
+    method: "post",
+    body: body,
+    headers: { Authorization: `Bearer ${jwt}` }
+  });
+  return res;
 }
