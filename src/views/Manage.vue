@@ -25,7 +25,7 @@ import { Getter } from "vuex-class";
 
 @Component({ components: { MeetingCards } })
 export default class Manage extends Vue {
-  /** @type {import("../helpers/typings").Meeting[]} */
+  /** @type {import("../../graphql/types").Meeting[]} */
   @Getter(Getters.MANAGABLE_MEETINGS) _meetings;
   async beforeRouteEnter(to, from, next) {
     await store.dispatch(ActionTypes.FETCH_MANAGABLE_MEETINGS);

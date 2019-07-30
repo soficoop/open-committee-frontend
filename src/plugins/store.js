@@ -22,16 +22,16 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    /**@type {import("../helpers/typings").Meeting[]} */
+    /**@type {import("../../graphql/types").Meeting[]} */
     upcomingMeetigs: [],
-    /**@type {import("../helpers/typings").Meeting} */
+    /**@type {import("../../graphql/types").Meeting} */
     selectedMeeting: null,
     plans: [],
     selectedPlan: null,
     jwt: "",
     /**@type {import("../helpers/typings").User} */
     user: null,
-    /** @type {import("../helpers/typings").Meeting[]} */
+    /** @type {import("../../graphql/types").Meeting[]} */
     managableMeetings: []
   },
   mutations: {
@@ -46,7 +46,7 @@ export default new Vuex.Store({
     /**
      * Sets the upcoming meetings in state by given meeting array
      * @param {any} state The current state
-     * @param {import("../helpers/typings").Meeting[]} payload Meetings to set as upcoming meetings
+     * @param {import("../../graphql/types").Meeting[]} payload Meetings to set as upcoming meetings
      */
     [MutationTypes.SET_UPCOMING_MEETINGS](state, payload) {
       state.upcomingMeetigs = payload;
@@ -54,7 +54,7 @@ export default new Vuex.Store({
     /**
      * Sets the selected meeting in state by a given meeting
      * @param {any} state The current state
-     * @param {import("../helpers/typings").Meeting} meeting Meeting to set as the selected meeting
+     * @param {import("../../graphql/types").Meeting} meeting Meeting to set as the selected meeting
      */
     [MutationTypes.SET_SELECTED_MEETING](state, meeting) {
       const meetingIndexInState = state.upcomingMeetigs.findIndex(

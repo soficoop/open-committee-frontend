@@ -68,7 +68,7 @@ import MeetingCards from "../components/MeetingCards";
   components: { MeetingCards, AgendaCards }
 })
 export default class Meeting extends Vue {
-  /**@type {import("../helpers/typings").Meeting} */
+  /**@type {import("../../graphql/types").Meeting} */
   @Getter(Getters.SELECTED_MEETING) meeting;
 
   hoveredPlan = "";
