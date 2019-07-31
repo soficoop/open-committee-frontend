@@ -1,4 +1,4 @@
-import request from "graphql-request";
+import { GraphQLClient } from "graphql-request";
 import { graphqlEndpoint, uploadEndpoint } from "./constants";
 
 export function dateTimeRevive(key, value) {
@@ -18,9 +18,14 @@ export function dateTimeRevive(key, value) {
  * makes a graphQL request to the graphQL endpoint
  * @param {string} query the graphQL query
  * @param {any} variables query variables
+ * @param {string} jwt current JWT
  */
-export async function makeGqlRequest(query, variables) {
-  const res = await request(graphqlEndpoint, query, variables);
+export async function makeGqlRequest(query, variables, jwt) {
+  const graphqlClient = new GraphQLClient(graphqlEndpoint);
+  if (jwt) {
+    graphqlClient.setHeader("Authorization", `Bearer ${jwt}`);
+  }
+  const res = await graphqlClient.request(query, variables);
   return JSON.parse(JSON.stringify(res), dateTimeRevive);
 }
 
@@ -38,5 +43,5 @@ export async function uploadFile(file, jwt) {
     body: body,
     headers: { Authorization: `Bearer ${jwt}` }
   });
-  return res;
+  return (await res.json())[0];
 }
