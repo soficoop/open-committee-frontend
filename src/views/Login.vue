@@ -2,7 +2,7 @@
   <v-layout wrap align-content-space-around justify-center>
     <v-flex xs12 md5 xl4 class="text-xs-center">
       <v-layout column>
-        <v-flex xs1>
+        <v-flex xs1 align-self-center>
           <v-icon size="120px" color="primary" class="my-4">
             mdi-account-circle
           </v-icon>
@@ -19,8 +19,6 @@
           <v-tab-item>
             <v-flex>
               <v-text-field
-                filled
-                background-color="#dae1e4"
                 label="אימייל"
                 v-model="loginData.email"
                 :error="loginData.email.length > 0 && !isLoginEmailValid"
@@ -35,8 +33,6 @@
             <v-expand-transition>
               <v-flex v-if="isLoginEmailValid">
                 <v-text-field
-                  filled
-                  background-color="#dae1e4"
                   label="סיסמה"
                   hint="לפחות 8 תווים"
                   v-model="loginData.password"
@@ -69,8 +65,6 @@
           </v-tab-item>
           <v-tab-item>
             <v-text-field
-              filled
-              background-color="#dae1e4"
               label="אימייל"
               v-model="signupData.email"
               :error="signupData.email.length > 0 && !isSignupEmailValid"
@@ -82,8 +76,6 @@
             >
             </v-text-field>
             <v-text-field
-              filled
-              background-color="#dae1e4"
               label="סיסמה"
               hint="לפחות 8 תווים"
               v-model="signupData.password"
@@ -95,8 +87,6 @@
             </v-text-field>
             <v-layout>
               <v-text-field
-                filled
-                background-color="#dae1e4"
                 label="שם פרטי"
                 v-model="signupData.firstName"
                 name="fname"
@@ -105,8 +95,6 @@
               >
               </v-text-field>
               <v-text-field
-                filled
-                background-color="#dae1e4"
                 class="pr-1"
                 label="שם משפחה"
                 v-model="signupData.lastName"
@@ -116,28 +104,18 @@
               </v-text-field>
             </v-layout>
             <v-text-field
-              filled
-              background-color="#dae1e4"
               label="עיר מגורים"
               v-model="signupData.city"
               name="city"
             >
             </v-text-field>
             <v-text-field
-              filled
-              background-color="#dae1e4"
               label="ארגון"
               v-model="signupData.organization"
               name="organization"
             >
             </v-text-field>
-            <v-text-field
-              filled
-              background-color="#dae1e4"
-              label="תפקיד"
-              v-model="signupData.job"
-              name="job"
-            >
+            <v-text-field label="תפקיד" v-model="signupData.job" name="job">
             </v-text-field>
             <v-btn
               block

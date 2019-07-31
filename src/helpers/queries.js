@@ -44,6 +44,7 @@ export const getPlan = `query getPlan($id: ID!) {
     number
     lastUpdate
     location
+    name
     municipality
     targets
     type

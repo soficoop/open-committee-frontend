@@ -190,7 +190,7 @@ export default new Vuex.Store({
      * @param {stirng} id ID of meeting to fetch
      */
     async [ActionTypes.FETCH_MEETING](context, id) {
-      const meeting = (await makeGqlRequest(getMeeting, { id: id })).meeting;
+      const { meeting } = await makeGqlRequest(getMeeting, { id: id });
       context.commit(MutationTypes.SET_SELECTED_MEETING, meeting);
     },
     /**
@@ -199,7 +199,7 @@ export default new Vuex.Store({
      * @param {string} id ID of plan to fetch
      */
     async [ActionTypes.FETCH_PLAN](context, id) {
-      const plan = (await makeGqlRequest(getPlan, { id: id })).plan;
+      const { plan } = await makeGqlRequest(getPlan, { id: id });
       context.commit(MutationTypes.SET_SELECTED_PLAN, plan);
     },
     /**
