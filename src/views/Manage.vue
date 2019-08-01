@@ -1,18 +1,16 @@
 <template>
-  <v-container fill-height>
-    <v-layout wrap align-content-space-around>
-      <v-flex xs12>
-        <h1 class="display-2 font-weight-bold primary--text my-5" tabindex="0">
-          ישיבות בתחומי הועדות שלי
-        </h1>
-        <v-btn color="secondary" to="/manage/meeting/new" large class="my-3">
-          <v-icon left>mdi-plus</v-icon>
-          הוספת ישיבה חדשה
-        </v-btn>
-        <MeetingCards :meetings="meetings"></MeetingCards>
-      </v-flex>
-    </v-layout>
-  </v-container>
+  <v-layout wrap align-content-space-around>
+    <v-flex xs12>
+      <h1 class="display-2 font-weight-bold primary--text my-5" tabindex="0">
+        ישיבות בתחומי הועדות שלי
+      </h1>
+      <v-btn color="secondary" to="/manage/meeting/new" large class="my-3">
+        <v-icon left>mdi-plus</v-icon>
+        הוספת ישיבה חדשה
+      </v-btn>
+      <MeetingCards :meetings="meetings"></MeetingCards>
+    </v-flex>
+  </v-layout>
 </template>
 
 <script>
