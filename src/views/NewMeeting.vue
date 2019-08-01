@@ -251,7 +251,7 @@
         </v-flex>
       </v-layout>
     </v-flex>
-    <v-dialog v-model="addedSuccessfully" max-width="300px">
+    <v-dialog persistent v-model="addedSuccessfully" max-width="300px">
       <v-card color="secondary" dark>
         <v-card-title>הישיבה נוצרה בהצלחה</v-card-title>
         <v-card-text>לחיצה על אישור תיקח אותך למסך הישיבה</v-card-text>

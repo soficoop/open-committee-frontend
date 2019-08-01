@@ -4,6 +4,9 @@
       <h1 class="display-2 font-weight-bold primary--text my-5" tabindex="0">
         ישיבות בתחומי הועדות שלי
       </h1>
+      <h2 v-if="meetings.length == 0" class="display-1 accent--text my-3">
+        אין ישיבות בתחומי הועדות שלי
+      </h2>
       <v-btn color="secondary" to="/manage/meeting/new" large class="my-3">
         <v-icon left>mdi-plus</v-icon>
         הוספת ישיבה חדשה
