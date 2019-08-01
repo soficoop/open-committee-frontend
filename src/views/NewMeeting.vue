@@ -1,275 +1,273 @@
 <template>
-  <v-container fill-height>
-    <v-layout wrap row align-content-space-around>
-      <v-flex xs12>
-        <h1 class="display-2 font-weight-bold primary--text my-5" tabindex="0">
-          הוספת ישיבה חדשה
-        </h1>
-      </v-flex>
-      <v-flex xs12>
-        <v-layout wrap row>
-          <v-flex xs12 md8 px-3>
-            <v-select
-              label="בחירת מוסד תכנוני"
-              :items="user.committees"
-              item-value="id"
-              item-text="sid"
-              outlined
-              v-model="committee"
-              class="text-right text-truncate"
-            ></v-select>
-          </v-flex>
-          <v-flex xs12 md4 px-3>
-            <v-text-field
-              v-model="meetingNumber"
-              label="מספר/כותרת ישיבה"
-              outlined
-            ></v-text-field>
-          </v-flex>
-        </v-layout>
-        <v-layout wrap row>
-          <v-flex xs12 md4 px-3>
-            <v-dialog
-              max-width="290px"
-              full-width
-              ref="dateDialog"
-              right
-              :return-value.sync="meetingDateString"
-              v-model="dateDialog"
-              absolute
+  <v-layout wrap align-content-space-around>
+    <v-flex xs12>
+      <h1 class="display-2 font-weight-bold primary--text my-5" tabindex="0">
+        הוספת ישיבה חדשה
+      </h1>
+    </v-flex>
+    <v-flex xs12>
+      <v-layout wrap row>
+        <v-flex xs12 md8 px-3>
+          <v-select
+            label="בחירת מוסד תכנוני"
+            :items="user.committees"
+            item-value="id"
+            item-text="sid"
+            outlined
+            v-model="committee"
+            class="text-right text-truncate"
+          ></v-select>
+        </v-flex>
+        <v-flex xs12 md4 px-3>
+          <v-text-field
+            v-model="meetingNumber"
+            label="מספר/כותרת ישיבה"
+            outlined
+          ></v-text-field>
+        </v-flex>
+      </v-layout>
+      <v-layout wrap row>
+        <v-flex xs12 md4 px-3>
+          <v-dialog
+            max-width="290px"
+            full-width
+            ref="dateDialog"
+            right
+            :return-value.sync="meetingDateString"
+            v-model="dateDialog"
+            absolute
+          >
+            <template v-slot:activator="{ on }">
+              <v-text-field
+                outlined
+                v-model="meetingDateFormatted"
+                label="תאריך ישיבה"
+                v-on="on"
+                readonly
+              ></v-text-field>
+            </template>
+            <v-date-picker
+              color="secondary"
+              header-color="primary"
+              locale="he"
+              v-model="meetingDateString"
+              scrollable
             >
-              <template v-slot:activator="{ on }">
-                <v-text-field
-                  outlined
-                  v-model="meetingDateFormatted"
-                  label="תאריך ישיבה"
-                  v-on="on"
-                  readonly
-                ></v-text-field>
-              </template>
-              <v-date-picker
-                color="secondary"
-                header-color="primary"
-                locale="he"
-                v-model="meetingDateString"
-                scrollable
+              <v-spacer></v-spacer>
+              <v-btn text color="primary" @click="dateDialog = false"
+                >ביטול</v-btn
               >
+              <v-btn
+                text
+                color="primary"
+                @click="$refs.dateDialog.save(meetingDateString)"
+                >אישור</v-btn
+              >
+            </v-date-picker>
+          </v-dialog>
+        </v-flex>
+      </v-layout>
+      <v-layout row wrap>
+        <v-flex xs12 md8 px-3>
+          <v-autocomplete
+            label="קישור לתכניות"
+            outlined
+            @change="addPlan"
+            append-icon=" "
+            hide-no-data
+            v-model="selectedPlan"
+            :items="plans"
+            item-text="number"
+            item-value="id"
+            hint="יש להזין מספר תכנית"
+            :loading="isSearchingPlans"
+            :search-input.sync="planSearch"
+          ></v-autocomplete>
+        </v-flex>
+        <v-flex xs12 md4 px-3>
+          <v-btn
+            color="secondary"
+            height="56px"
+            x-large
+            text
+            @click="subjectDialog = true"
+          >
+            <v-icon left>mdi-open-in-new</v-icon>
+            <span class="font-weight-bold">הוספת נושא</span>
+          </v-btn>
+          <v-dialog v-model="subjectDialog" max-width="600">
+            <v-card>
+              <v-card-title class="headline">
+                קישור ישיבה לנושא
+              </v-card-title>
+              <v-card-text>
+                <v-layout wrap py-5 column>
+                  <v-flex>
+                    <v-text-field
+                      label="כותרת"
+                      outlined
+                      v-model="newSubject.title"
+                    ></v-text-field>
+                  </v-flex>
+                  <v-flex>
+                    <v-textarea
+                      label="תיאור"
+                      outlined
+                      v-model="newSubject.description"
+                    ></v-textarea>
+                  </v-flex>
+                  <v-flex>
+                    <v-file-input
+                      label="קבצים מצורפים"
+                      hide
+                      filled
+                      rounded
+                      multiple
+                      v-model="newSubject.attachedFiles"
+                    >
+                      <template v-slot:selection="{ text, index }">
+                        <v-chip
+                          small
+                          label
+                          close
+                          color="primary"
+                          @click:close="
+                            newSubject.attachedFiles.splice(index, 1)
+                          "
+                        >
+                          {{ text }}
+                        </v-chip>
+                      </template>
+                    </v-file-input>
+                  </v-flex>
+                </v-layout>
+              </v-card-text>
+              <v-card-actions class="mt-n12 pb-3">
                 <v-spacer></v-spacer>
-                <v-btn text color="primary" @click="dateDialog = false"
-                  >ביטול</v-btn
-                >
                 <v-btn
                   text
-                  color="primary"
-                  @click="$refs.dateDialog.save(meetingDateString)"
-                  >אישור</v-btn
+                  color="secondary"
+                  class="subtitle-1 font-weight-semibold"
+                  @click="subjectDialog = false"
                 >
-              </v-date-picker>
-            </v-dialog>
-          </v-flex>
-        </v-layout>
-        <v-layout row wrap>
-          <v-flex xs12 md8 px-3>
-            <v-autocomplete
-              label="קישור לתכניות"
-              outlined
-              @change="addPlan"
-              append-icon=" "
-              hide-no-data
-              v-model="selectedPlan"
-              :items="plans"
-              item-text="number"
-              item-value="id"
-              hint="יש להזין מספר תכנית"
-              :loading="isSearchingPlans"
-              :search-input.sync="planSearch"
-            ></v-autocomplete>
-          </v-flex>
-          <v-flex xs12 md4 px-3>
-            <v-btn
-              color="secondary"
-              height="56px"
-              x-large
-              text
-              @click="subjectDialog = true"
-            >
-              <v-icon left>mdi-open-in-new</v-icon>
-              <span class="font-weight-bold">הוספת נושא</span>
-            </v-btn>
-            <v-dialog v-model="subjectDialog" max-width="600">
-              <v-card>
-                <v-card-title class="headline">
-                  קישור ישיבה לנושא
-                </v-card-title>
-                <v-card-text>
-                  <v-layout wrap py-5 column>
-                    <v-flex>
-                      <v-text-field
-                        label="כותרת"
-                        outlined
-                        v-model="newSubject.title"
-                      ></v-text-field>
-                    </v-flex>
-                    <v-flex>
-                      <v-textarea
-                        label="תיאור"
-                        outlined
-                        v-model="newSubject.description"
-                      ></v-textarea>
-                    </v-flex>
-                    <v-flex>
-                      <v-file-input
-                        label="קבצים מצורפים"
-                        hide
-                        filled
-                        rounded
-                        multiple
-                        v-model="newSubject.attachedFiles"
-                      >
-                        <template v-slot:selection="{ text, index }">
-                          <v-chip
-                            small
-                            label
-                            close
-                            color="primary"
-                            @click:close="
-                              newSubject.attachedFiles.splice(index, 1)
-                            "
-                          >
-                            {{ text }}
-                          </v-chip>
-                        </template>
-                      </v-file-input>
-                    </v-flex>
-                  </v-layout>
-                </v-card-text>
-                <v-card-actions class="mt-n12 pb-3">
-                  <v-spacer></v-spacer>
-                  <v-btn
-                    text
-                    color="secondary"
-                    class="subtitle-1 font-weight-semibold"
-                    @click="subjectDialog = false"
-                  >
-                    ביטול
-                  </v-btn>
-                  <v-btn
-                    color="secondary"
-                    text
-                    class="subtitle-1 font-weight-semibold"
-                    @click="addSubject()"
-                  >
-                    אישור
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-          </v-flex>
-        </v-layout>
-        <AgendaCards
-          :items="agendaItems"
-          @cardRemoved="handleAgendaItemRemoveClicked"
-          areCardsRemovable
-          class="pb-6"
-        ></AgendaCards>
-        <v-layout row wrap>
-          <v-flex xs12 md4 px-3>
-            <v-file-input
-              v-model="protocolFile"
-              label="פרוטוקול"
-              filled
-              rounded
-            ></v-file-input>
-          </v-flex>
-          <v-flex xs12 md4 px-3>
-            <v-file-input
-              v-model="transcriptFile"
-              label="תמליל"
-              filled
-              rounded
-            ></v-file-input>
-          </v-flex>
-          <v-flex xs12 md4 px-3>
-            <v-file-input
-              v-model="decisionsFile"
-              label="מסמך החלטות"
-              filled
-              rounded
-            ></v-file-input>
-          </v-flex>
-        </v-layout>
-        <v-layout row wrap>
-          <v-flex xs12 px-3>
-            <v-file-input
-              v-model="additionalFiles"
-              label="מסמכים נוספים"
-              filled
-              rounded
-              multiple
-            >
-              <template v-slot:selection="{ text, index }">
-                <v-chip
-                  small
-                  label
-                  color="primary"
-                  close
-                  @click:close="additionalFiles.splice(index, 1)"
+                  ביטול
+                </v-btn>
+                <v-btn
+                  color="secondary"
+                  text
+                  class="subtitle-1 font-weight-semibold"
+                  @click="addSubject()"
                 >
-                  {{ text }}
-                </v-chip>
-              </template>
-            </v-file-input>
-          </v-flex>
-        </v-layout>
-        <v-layout row wrap>
-          <v-flex xs12>
-            <v-textarea
-              v-model="background"
-              label="רקע לישיבה"
-              outlined
-              auto-grow
-            ></v-textarea>
-          </v-flex>
-        </v-layout>
-        <v-layout row wrap>
-          <v-flex xs12>
-            <v-btn
-              left
-              large
-              color="secondary"
-              min-width="20%"
-              :block="$vuetify.breakpoint.xsOnly"
-              :disabled="!isFormValid"
-              @click="submitMeeting()"
-              :loading="isCreatingMeeting"
-            >
-              יצירת ישיבה
-              <v-icon right>mdi-arrow-left</v-icon>
-            </v-btn>
-            <v-snackbar color="error" v-model="errorOccurred">
-              בעיה לא צפויה קרתה. אנא נסו שוב מאוחר יותר
-            </v-snackbar>
-          </v-flex>
-        </v-layout>
-      </v-flex>
-      <v-dialog v-model="addedSuccessfully" max-width="300px">
-        <v-card color="secondary" dark>
-          <v-card-title>הישיבה נוצרה בהצלחה</v-card-title>
-          <v-card-text>לחיצה על אישור תיקח אותך למסך הישיבה</v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn
-              text
-              class="font-weight-semibold"
-              :to="`/meeting/${addedMeetingId}`"
-            >
-              אישור
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-    </v-layout>
-  </v-container>
+                  אישור
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-flex>
+      </v-layout>
+      <AgendaCards
+        :items="agendaItems"
+        @cardRemoved="handleAgendaItemRemoveClicked"
+        areCardsRemovable
+        class="pb-6"
+      ></AgendaCards>
+      <v-layout row wrap>
+        <v-flex xs12 md4 px-3>
+          <v-file-input
+            v-model="protocolFile"
+            label="פרוטוקול"
+            filled
+            rounded
+          ></v-file-input>
+        </v-flex>
+        <v-flex xs12 md4 px-3>
+          <v-file-input
+            v-model="transcriptFile"
+            label="תמליל"
+            filled
+            rounded
+          ></v-file-input>
+        </v-flex>
+        <v-flex xs12 md4 px-3>
+          <v-file-input
+            v-model="decisionsFile"
+            label="מסמך החלטות"
+            filled
+            rounded
+          ></v-file-input>
+        </v-flex>
+      </v-layout>
+      <v-layout row wrap>
+        <v-flex xs12 px-3>
+          <v-file-input
+            v-model="additionalFiles"
+            label="מסמכים נוספים"
+            filled
+            rounded
+            multiple
+          >
+            <template v-slot:selection="{ text, index }">
+              <v-chip
+                small
+                label
+                color="primary"
+                close
+                @click:close="additionalFiles.splice(index, 1)"
+              >
+                {{ text }}
+              </v-chip>
+            </template>
+          </v-file-input>
+        </v-flex>
+      </v-layout>
+      <v-layout row wrap>
+        <v-flex xs12 px-3>
+          <v-textarea
+            v-model="background"
+            label="רקע לישיבה"
+            outlined
+            auto-grow
+          ></v-textarea>
+        </v-flex>
+      </v-layout>
+      <v-layout row wrap>
+        <v-flex xs12 px-3>
+          <v-btn
+            left
+            large
+            color="secondary"
+            min-width="20%"
+            :block="$vuetify.breakpoint.xsOnly"
+            :disabled="!isFormValid"
+            @click="submitMeeting()"
+            :loading="isCreatingMeeting"
+          >
+            יצירת ישיבה
+            <v-icon right>mdi-arrow-left</v-icon>
+          </v-btn>
+          <v-snackbar color="error" v-model="errorOccurred">
+            בעיה לא צפויה קרתה. אנא נסו שוב מאוחר יותר
+          </v-snackbar>
+        </v-flex>
+      </v-layout>
+    </v-flex>
+    <v-dialog v-model="addedSuccessfully" max-width="300px">
+      <v-card color="secondary" dark>
+        <v-card-title>הישיבה נוצרה בהצלחה</v-card-title>
+        <v-card-text>לחיצה על אישור תיקח אותך למסך הישיבה</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            text
+            class="font-weight-semibold"
+            :to="`/meeting/${addedMeetingId}`"
+          >
+            אישור
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </v-layout>
 </template>
 
 <script>
