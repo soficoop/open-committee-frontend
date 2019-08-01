@@ -62,4 +62,12 @@
  * @property {string} value
  */
 
+/**
+ * @typedef NewSubjectModel
+ * @property {string} id
+ * @property {string} title
+ * @property {string} description
+ * @property {File[]} attachedFiles
+ */
+
 export {};
