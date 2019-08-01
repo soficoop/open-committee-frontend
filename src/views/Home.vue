@@ -1,5 +1,5 @@
 <template>
-  <v-layout wrap align-content-space-around class="pa-md-12">
+  <v-layout wrap align-content-space-around>
     <v-flex xs12>
       <h1
         :class="{

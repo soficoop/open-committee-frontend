@@ -1,5 +1,5 @@
 <template>
-  <v-container fill-height pa-md-12>
+  <v-container fill-height>
     <v-layout wrap align-content-space-around>
       <v-flex xs12>
         <h1 class="display-2 font-weight-bold primary--text my-5" tabindex="0">
