@@ -11,7 +11,11 @@
         <v-icon left>mdi-plus</v-icon>
         הוספת ישיבה חדשה
       </v-btn>
-      <MeetingCards :meetings="meetings"></MeetingCards>
+      <MeetingCards
+        :meetings="meetings"
+        editable
+        @edit="handleEditClicked"
+      ></MeetingCards>
     </v-flex>
   </v-layout>
 </template>
@@ -31,6 +35,14 @@ export default class Manage extends Vue {
   async beforeRouteEnter(to, from, next) {
     await store.dispatch(ActionTypes.FETCH_MANAGABLE_MEETINGS);
     next();
+  }
+
+  /**
+   * Gets called when the user clicks the "edit meeting" button
+   * @param {string} id ID of clicked meeting
+   */
+  handleEditClicked(id) {
+    this.$router.push(`/manage/meeting/${id}`);
   }
   /** @returns {import("../helpers/typings").MeetingCard[]} */
   get meetings() {

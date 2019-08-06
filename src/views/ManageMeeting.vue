@@ -2,14 +2,14 @@
   <v-layout wrap align-content-space-around>
     <v-flex xs12>
       <h1 class="display-2 font-weight-bold primary--text my-5" tabindex="0">
-        הוספת ישיבה חדשה
+        פרטי הישיבה
       </h1>
     </v-flex>
     <v-flex xs12>
       <v-layout wrap row>
         <v-flex xs12 md8 px-3>
           <v-select
-            label="בחירת מוסד תכנוני"
+            label="מוסד תכנוני"
             :items="user.committees"
             item-value="id"
             item-text="sid"
@@ -278,7 +278,7 @@ import { Getter } from "vuex-class";
 import { Getters, graphqlEndpoint } from "../helpers/constants";
 import { request } from "graphql-request";
 import { createMeeting, createSubject } from "../helpers/mutations";
-import { getPlans, getPlan } from "../helpers/queries";
+import { getPlans, getPlan, getMeeting } from "../helpers/queries";
 import { makeGqlRequest, uploadFile } from "../helpers/functions";
 
 @Component({ components: { AgendaCards } })
@@ -354,6 +354,23 @@ export default class NewMeeting extends Vue {
       this.addedPlans.push(plan);
     }
     this.selectedPlan = "";
+  }
+
+  async mounted() {
+    if (this.$route.params.id) {
+      this.loadMeeting(this.$route.params.id);
+    }
+  }
+
+  async loadMeeting(meetingId) {
+    /** @type {import("../../graphql/types").Meeting} */
+    const meeting = (await makeGqlRequest(getMeeting, { id: meetingId }))
+      .meeting;
+    if (meeting) {
+      this.committee = meeting.committee.id;
+      this.meetingNumber = meeting.title || meeting.number;
+      this.meetingDateString = meeting.date.toISOString().split("T")[0];
+    }
   }
 
   /**

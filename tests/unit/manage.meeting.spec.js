@@ -1,11 +1,11 @@
 import Vue from "vue";
 import { shallowMount } from "@vue/test-utils";
-import NewMeeting from "@/views/NewMeeting.vue";
+import ManageMeeting from "@/views/ManageMeeting.vue";
 import { Getters } from "@/helpers/constants";
 import Vuetify from "vuetify";
 Vue.use(Vuetify);
 
-describe("NewMeeting.vue", () => {
+describe("ManageMeeting.vue", () => {
   /** @type {import("@vue/test-utils").Wrapper} */
   let wrapper;
   let mocks = {
@@ -14,7 +14,7 @@ describe("NewMeeting.vue", () => {
     }
   };
   beforeEach(() => {
-    wrapper = shallowMount(NewMeeting, {
+    wrapper = shallowMount(ManageMeeting, {
       mocks,
       vuetify: new Vuetify()
     });

@@ -15,6 +15,7 @@ export const getMeeting = `query getMeeting($id: ID!){
     number
     date
     committee {
+      id
       sid
       parent {
         sid
