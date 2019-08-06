@@ -371,6 +371,7 @@ export type EditMeetingInput = {
   additionalFiles?: Maybe<Array<Maybe<Scalars["ID"]>>>;
   background?: Maybe<Scalars["String"]>;
   plans?: Maybe<Array<Maybe<Scalars["ID"]>>>;
+  summary?: Maybe<Scalars["String"]>;
 };
 
 export type EditParserInput = {
@@ -400,9 +401,9 @@ export type EditPlanInput = {
   number?: Maybe<Scalars["String"]>;
   submission?: Maybe<Scalars["DateTime"]>;
   stype?: Maybe<Scalars["Int"]>;
-  meetings?: Maybe<Array<Maybe<Scalars["ID"]>>>;
   addedManually?: Maybe<Scalars["Boolean"]>;
   attachedFiles?: Maybe<Array<Maybe<Scalars["ID"]>>>;
+  meetings?: Maybe<Array<Maybe<Scalars["ID"]>>>;
 };
 
 export type EditRoleInput = {
@@ -492,6 +493,7 @@ export type Meeting = {
   addedManually?: Maybe<Scalars["Boolean"]>;
   title?: Maybe<Scalars["String"]>;
   background?: Maybe<Scalars["String"]>;
+  summary?: Maybe<Scalars["String"]>;
   additionalFiles?: Maybe<Array<Maybe<UploadFile>>>;
   plans?: Maybe<Array<Maybe<Plan>>>;
 };
@@ -613,6 +615,12 @@ export type MeetingConnectionSid = {
   connection?: Maybe<MeetingConnection>;
 };
 
+export type MeetingConnectionSummary = {
+  __typename?: "MeetingConnectionSummary";
+  key?: Maybe<Scalars["String"]>;
+  connection?: Maybe<MeetingConnection>;
+};
+
 export type MeetingConnectionTitle = {
   __typename?: "MeetingConnectionTitle";
   key?: Maybe<Scalars["String"]>;
@@ -647,6 +655,7 @@ export type MeetingGroupBy = {
   addedManually?: Maybe<Array<Maybe<MeetingConnectionAddedManually>>>;
   title?: Maybe<Array<Maybe<MeetingConnectionTitle>>>;
   background?: Maybe<Array<Maybe<MeetingConnectionBackground>>>;
+  summary?: Maybe<Array<Maybe<MeetingConnectionSummary>>>;
 };
 
 export type MeetingInput = {
@@ -662,6 +671,7 @@ export type MeetingInput = {
   additionalFiles?: Maybe<Array<Maybe<Scalars["ID"]>>>;
   background?: Maybe<Scalars["String"]>;
   plans?: Maybe<Array<Maybe<Scalars["ID"]>>>;
+  summary?: Maybe<Scalars["String"]>;
 };
 
 export type Morph =
@@ -718,6 +728,7 @@ export type Morph =
   | MeetingConnectionAddedManually
   | MeetingConnectionTitle
   | MeetingConnectionBackground
+  | MeetingConnectionSummary
   | Parser
   | CreateParserPayload
   | UpdateParserPayload
@@ -1110,18 +1121,18 @@ export type Plan = {
   submission?: Maybe<Scalars["DateTime"]>;
   stype?: Maybe<Scalars["Int"]>;
   addedManually?: Maybe<Scalars["Boolean"]>;
-  meetings?: Maybe<Array<Maybe<Meeting>>>;
   attachedFiles?: Maybe<Array<Maybe<UploadFile>>>;
+  meetings?: Maybe<Array<Maybe<Meeting>>>;
 };
 
-export type PlanMeetingsArgs = {
+export type PlanAttachedFilesArgs = {
   sort?: Maybe<Scalars["String"]>;
   limit?: Maybe<Scalars["Int"]>;
   start?: Maybe<Scalars["Int"]>;
   where?: Maybe<Scalars["JSON"]>;
 };
 
-export type PlanAttachedFilesArgs = {
+export type PlanMeetingsArgs = {
   sort?: Maybe<Scalars["String"]>;
   limit?: Maybe<Scalars["Int"]>;
   start?: Maybe<Scalars["Int"]>;
@@ -1309,9 +1320,9 @@ export type PlanInput = {
   number?: Maybe<Scalars["String"]>;
   submission?: Maybe<Scalars["DateTime"]>;
   stype?: Maybe<Scalars["Int"]>;
-  meetings?: Maybe<Array<Maybe<Scalars["ID"]>>>;
   addedManually?: Maybe<Scalars["Boolean"]>;
   attachedFiles?: Maybe<Array<Maybe<Scalars["ID"]>>>;
+  meetings?: Maybe<Array<Maybe<Scalars["ID"]>>>;
 };
 
 export type Query = {

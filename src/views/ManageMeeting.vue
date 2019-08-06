@@ -15,7 +15,7 @@
             item-text="sid"
             outlined
             v-model="committee"
-            class="text-right text-truncate"
+            class="text-right"
           ></v-select>
         </v-flex>
         <v-flex xs12 md4 px-3>
@@ -230,6 +230,16 @@
           ></v-textarea>
         </v-flex>
       </v-layout>
+      <v-layout row wrap v-if="meetingId">
+        <v-flex xs12 px-3>
+          <v-textarea
+            v-model="meetingSummary"
+            label="סיכום הישיבה"
+            outlined
+            auto-grow
+          ></v-textarea>
+        </v-flex>
+      </v-layout>
       <v-layout row wrap>
         <v-flex xs12 px-3>
           <v-btn
@@ -240,9 +250,9 @@
             :block="$vuetify.breakpoint.xsOnly"
             :disabled="!isFormValid"
             @click="submitMeeting()"
-            :loading="isCreatingMeeting"
+            :loading="submittingMeeting"
           >
-            יצירת ישיבה
+            שמירת ישיבה
             <v-icon right>mdi-arrow-left</v-icon>
           </v-btn>
           <v-snackbar color="error" v-model="errorOccurred">
@@ -251,16 +261,16 @@
         </v-flex>
       </v-layout>
     </v-flex>
-    <v-dialog persistent v-model="addedSuccessfully" max-width="300px">
+    <v-dialog persistent v-model="submittedSuccessfully" max-width="300px">
       <v-card color="secondary" dark>
-        <v-card-title>הישיבה נוצרה בהצלחה</v-card-title>
+        <v-card-title>הישיבה נשמרה בהצלחה</v-card-title>
         <v-card-text>לחיצה על אישור תיקח אותך למסך הישיבה</v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
             text
             class="font-weight-semibold"
-            :to="`/meeting/${addedMeetingId}`"
+            :to="`/meeting/${submittedMeetingId}`"
           >
             אישור
           </v-btn>
@@ -277,7 +287,11 @@ import Vue from "vue";
 import { Getter } from "vuex-class";
 import { Getters, graphqlEndpoint } from "../helpers/constants";
 import { request } from "graphql-request";
-import { createMeeting, createSubject } from "../helpers/mutations";
+import {
+  createMeeting,
+  createSubject,
+  updateMeeting
+} from "../helpers/mutations";
 import { getPlans, getPlan, getMeeting } from "../helpers/queries";
 import { makeGqlRequest, uploadFile } from "../helpers/functions";
 
@@ -287,16 +301,14 @@ export default class NewMeeting extends Vue {
   @Getter(Getters.USER) user;
   /** @type {string} */
   @Getter(Getters.JWT) jwt;
-  /** @type {string} */
-  addedMeetingId = "";
-  addedSuccessfully = false;
-  /** @type {string} */
+  submittedMeetingId = "";
   background = "";
   dateDialog = false;
-  /** @type {string} */
   meetingDateString = "";
   committee = "";
+  meetingId = "";
   meetingNumber = "";
+  meetingSummary = "";
   /** @type {import("../../graphql/types").Plan[]} */
   plans = [];
   isSearchingPlans = false;
@@ -308,8 +320,8 @@ export default class NewMeeting extends Vue {
   addedSubjects = [];
   /** @type {import("../../graphql/types").Plan[]} */
   addedPlans = [];
-  /** @type {boolean} */
-  isCreatingMeeting = false;
+  submittedSuccessfully = false;
+  submittingMeeting = false;
   protocolFile = null;
   transcriptFile = null;
   decisionsFile = null;
@@ -367,9 +379,13 @@ export default class NewMeeting extends Vue {
     const meeting = (await makeGqlRequest(getMeeting, { id: meetingId }))
       .meeting;
     if (meeting) {
+      this.meetingId = meetingId;
       this.committee = meeting.committee.id;
       this.meetingNumber = meeting.title || meeting.number;
       this.meetingDateString = meeting.date.toISOString().split("T")[0];
+      this.addedPlans = meeting.plans;
+      this.background = meeting.background;
+      this.meetingSummary = meeting.summary;
     }
   }
 
@@ -377,15 +393,19 @@ export default class NewMeeting extends Vue {
    * Wrapper for submitting the meeting, performs error handling
    */
   async submitMeeting() {
-    this.isCreatingMeeting = true;
+    this.submittingMeeting = true;
     try {
-      await this.createNewMeeting();
+      if (this.meetingId) {
+        await this.updateMeeting();
+      } else {
+        await this.createNewMeeting();
+      }
     } catch (e) {
       console.error(e);
       this.errorOccurred = true;
     } finally {
-      this.isCreatingMeeting = false;
-      this.addedSuccessfully = !this.errorOccurred;
+      this.submittingMeeting = false;
+      this.submittedSuccessfully = !this.errorOccurred;
     }
   }
 
@@ -409,7 +429,7 @@ export default class NewMeeting extends Vue {
       additionalFiles: uploadedFiles.additionalFiles
     };
     const res = await makeGqlRequest(createMeeting, meeting, this.jwt);
-    this.addedMeetingId = res.createMeeting.meeting.id;
+    this.submittedMeetingId = res.createMeeting.meeting.id;
   }
 
   /**
@@ -452,6 +472,27 @@ export default class NewMeeting extends Vue {
         )
       );
     return result;
+  }
+
+  async updateMeeting() {
+    await this.submitSubjects();
+    const uploadedFiles = await this.uploadFiles();
+    /** @type {import("../../graphql/types").Meeting} */
+    const meeting = {
+      id: this.meetingId,
+      background: this.background,
+      date: this.meetingDateString,
+      number: !isNaN(this.meetingNumber) ? parseInt(this.meetingNumber) : null,
+      title: isNaN(this.meetingNumber) ? this.meetingNumber : null,
+      committee: this.committee,
+      plans: this.agendaItems.map(i => i.id),
+      protocol: uploadedFiles.protocol,
+      transcript: uploadedFiles.transcript,
+      desicions: uploadedFiles.decisions,
+      additionalFiles: uploadedFiles.additionalFiles
+    };
+    const res = await makeGqlRequest(updateMeeting, meeting, this.jwt);
+    this.submittedMeetingId = res.updateMeeting.meeting.id;
   }
 
   get meetingDateFormatted() {
@@ -498,7 +539,7 @@ export default class NewMeeting extends Vue {
       .concat(
         this.addedPlans.map(plan => ({
           id: plan.id,
-          headline: `תכנית מספר ${plan.number}`,
+          headline: plan.number || plan.type,
           description: plan.name,
           bullets: [
             { key: "סטטוס", value: plan.status },

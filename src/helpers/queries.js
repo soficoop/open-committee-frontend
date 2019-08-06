@@ -12,7 +12,9 @@ export const getMeeting = `query getMeeting($id: ID!){
   meeting(id: $id){
     id
     sid
+    background
     number
+    title
     date
     committee {
       id
