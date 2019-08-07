@@ -230,7 +230,7 @@
           ></v-textarea>
         </v-flex>
       </v-layout>
-      <v-layout row wrap v-if="meetingId">
+      <v-layout row wrap v-if="existingMeeting">
         <v-flex xs12 px-3>
           <v-textarea
             v-model="meetingSummary"
@@ -304,9 +304,10 @@ export default class NewMeeting extends Vue {
   submittedMeetingId = "";
   background = "";
   dateDialog = false;
+  /** @type {import("../../graphql/types").Meeting}  */
+  existingMeeting = null;
   meetingDateString = "";
   committee = "";
-  meetingId = "";
   meetingNumber = "";
   meetingSummary = "";
   /** @type {import("../../graphql/types").Plan[]} */
@@ -322,9 +323,13 @@ export default class NewMeeting extends Vue {
   addedPlans = [];
   submittedSuccessfully = false;
   submittingMeeting = false;
+  /** @type {File} */
   protocolFile = null;
+  /** @type {File} */
   transcriptFile = null;
+  /** @type {File} */
   decisionsFile = null;
+  /** @type {File[]} */
   additionalFiles = [];
   errorOccurred = false;
 
@@ -374,18 +379,36 @@ export default class NewMeeting extends Vue {
     }
   }
 
+  /**
+   * Loads an existing meeting to the form
+   * @param {string} meetingId The meeting's ID
+   */
   async loadMeeting(meetingId) {
     /** @type {import("../../graphql/types").Meeting} */
     const meeting = (await makeGqlRequest(getMeeting, { id: meetingId }))
       .meeting;
     if (meeting) {
-      this.meetingId = meetingId;
+      this.existingMeeting = meeting;
       this.committee = meeting.committee.id;
       this.meetingNumber = meeting.title || meeting.number;
       this.meetingDateString = meeting.date.toISOString().split("T")[0];
       this.addedPlans = meeting.plans;
       this.background = meeting.background;
       this.meetingSummary = meeting.summary;
+      if (meeting.protocol) {
+        this.protocolFile = new File([], meeting.protocol.name);
+      }
+      if (meeting.transcript) {
+        this.transcriptFile = new File([], meeting.transcript.name);
+      }
+      if (meeting.decisions) {
+        this.decisionsFile = new File([], meeting.decisions.name);
+      }
+      if (meeting.additionalFiles && meeting.additionalFiles.length > 0) {
+        this.additionalFiles = meeting.additionalFiles.map(
+          file => new File([], file.name)
+        );
+      }
     }
   }
 
@@ -395,7 +418,7 @@ export default class NewMeeting extends Vue {
   async submitMeeting() {
     this.submittingMeeting = true;
     try {
-      if (this.meetingId) {
+      if (this.existingMeeting) {
         await this.updateMeeting();
       } else {
         await this.createNewMeeting();
@@ -413,21 +436,7 @@ export default class NewMeeting extends Vue {
    * Calls the relevant methods that submit the meeting and its dependencies
    */
   async createNewMeeting() {
-    await this.submitSubjects();
-    const uploadedFiles = await this.uploadFiles();
-    /** @type {import("../../graphql/types").Meeting} */
-    const meeting = {
-      background: this.background,
-      date: this.meetingDateString,
-      number: !isNaN(this.meetingNumber) ? parseInt(this.meetingNumber) : null,
-      title: isNaN(this.meetingNumber) ? this.meetingNumber : null,
-      committee: this.committee,
-      plans: this.agendaItems.map(i => i.id),
-      protocol: uploadedFiles.protocol,
-      transcript: uploadedFiles.transcript,
-      desicions: uploadedFiles.decisions,
-      additionalFiles: uploadedFiles.additionalFiles
-    };
+    const meeting = await this.generateMeetingQueryObject();
     const res = await makeGqlRequest(createMeeting, meeting, this.jwt);
     this.submittedMeetingId = res.createMeeting.meeting.id;
   }
@@ -454,43 +463,84 @@ export default class NewMeeting extends Vue {
   }
 
   /**
+   * Wrapper for file upload to.
+   * If the file is new, it gets uploaded and the generated ID is returned.
+   * If the file isn't new (i.e. its size is 0), the existing file's ID is returned.
+   * @param {File} newFile File to upload
+   * @param {import("../../graphql/types").UploadFile} existingFile Existing file
+   * @returns {string} ID of uploaded file
+   */
+  async uploadFile(newFile, existingFile) {
+    if (newFile.size) {
+      return (await uploadFile(newFile, this.jwt)).id;
+    } else {
+      return existingFile && existingFile.id;
+    }
+  }
+
+  /**
    * Uploads meeting files and returns their ids
    */
   async uploadFiles() {
     let result = {};
     if (this.protocolFile)
-      result.protocol = (await uploadFile(this.protocolFile, this.jwt)).id;
+      result.protocol = await this.uploadFile(
+        this.protocolFile,
+        this.existingMeeting && this.existingMeeting.protocol
+      );
     if (this.transcriptFile)
-      result.transcript = (await uploadFile(this.transcriptFile, this.jwt)).id;
+      result.transcript = await this.uploadFile(
+        this.transcriptFile,
+        this.existingMeeting && this.existingMeeting.transcript
+      );
     if (this.decisionsFile)
-      result.decisions = (await uploadFile(this.decisionsFile, this.jwt)).id;
-    if (this.additionalFiles)
+      result.decisions = await this.uploadFile(
+        this.decisionsFile,
+        this.existingMeeting && this.existingMeeting.decisions
+      );
+    if (this.additionalFiles.length)
       result.additionalFiles = await Promise.all(
         this.additionalFiles.map(
           async additionalFile =>
-            (await uploadFile(additionalFile, this.jwt)).id
+            await this.uploadFile(
+              additionalFile,
+              this.existingMeeting &&
+                this.existingMeeting.additionalFiles.find(
+                  file => file.name == additionalFile.name
+                )
+            )
         )
       );
     return result;
   }
-
-  async updateMeeting() {
+  /**
+   * Generates a meeting object from the form
+   * @returns {import("../../graphql/types").Meeting}
+   */
+  async generateMeetingQueryObject() {
     await this.submitSubjects();
     const uploadedFiles = await this.uploadFiles();
-    /** @type {import("../../graphql/types").Meeting} */
-    const meeting = {
-      id: this.meetingId,
+    let meeting = {
+      additionalFiles: uploadedFiles.additionalFiles,
       background: this.background,
-      date: this.meetingDateString,
-      number: !isNaN(this.meetingNumber) ? parseInt(this.meetingNumber) : null,
-      title: isNaN(this.meetingNumber) ? this.meetingNumber : null,
       committee: this.committee,
+      date: this.meetingDateString,
+      decisions: uploadedFiles.decisions,
+      number: !isNaN(this.meetingNumber) ? parseInt(this.meetingNumber) : null,
       plans: this.agendaItems.map(i => i.id),
       protocol: uploadedFiles.protocol,
-      transcript: uploadedFiles.transcript,
-      desicions: uploadedFiles.decisions,
-      additionalFiles: uploadedFiles.additionalFiles
+      summary: this.meetingSummary,
+      title: isNaN(this.meetingNumber) ? this.meetingNumber : null,
+      transcript: uploadedFiles.transcript
     };
+    if (this.existingMeeting) {
+      meeting.id = this.existingMeeting.id;
+    }
+    return meeting;
+  }
+
+  async updateMeeting() {
+    const meeting = await this.generateMeetingQueryObject();
     const res = await makeGqlRequest(updateMeeting, meeting, this.jwt);
     this.submittedMeetingId = res.updateMeeting.meeting.id;
   }

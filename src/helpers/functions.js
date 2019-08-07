@@ -31,7 +31,7 @@ export async function makeGqlRequest(query, variables, jwt) {
 
 /**
  * Uploads a file to strapi
- * @param {File} file to upload
+ * @param {File} file File to upload
  * @param {string} jwt the json web token (https://strapi.io/documentation/3.0.0-beta.x/guides/authentication.html#token-usage)
  * @returns {import("../../graphql/types").UploadFile}
  */

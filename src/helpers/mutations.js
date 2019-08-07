@@ -35,12 +35,14 @@ export const createMeeting = `mutation createMeeting(
   $decisions: ID
   $protocol: ID
   $transcript: ID
-  $additionalFiles: [ID!]!
+  $additionalFiles: [ID]
+  $background: String
   $plans: [ID!]!
 ) {
   createMeeting(
     input: {
       data: {
+        background: $background
         committee: $committee
         date: $date
         number: $number
@@ -86,6 +88,8 @@ export const createSubject = `mutation createSubject(
 
 export const updateMeeting = `mutation udpateMeeting(
   $id: ID!
+  $background: String
+  $summary: String
   $committee: ID!
   $date: DateTime!
   $number: Int
@@ -93,17 +97,19 @@ export const updateMeeting = `mutation udpateMeeting(
   $decisions: ID
   $protocol: ID
   $transcript: ID
-  $additionalFiles: [ID!]!
+  $additionalFiles: [ID]
   $plans: [ID!]!
 ) {
   updateMeeting(
     input: {
       where: { id: $id }
       data: {
+        background: $background
         committee: $committee
         date: $date
         number: $number
         title: $title
+        summary: $summary
         decisions: $decisions
         protocol: $protocol
         transcript: $transcript

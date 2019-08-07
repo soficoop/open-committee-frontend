@@ -12,10 +12,12 @@ export const getMeeting = `query getMeeting($id: ID!){
   meeting(id: $id){
     id
     sid
+    addedManually
     background
     number
     title
     date
+    summary
     committee {
       id
       sid
@@ -36,6 +38,22 @@ export const getMeeting = `query getMeeting($id: ID!){
       status
       lastUpdate
       location
+    }
+    protocol {
+      id
+      name
+    }
+    transcript {
+      id
+      name
+    }
+    decisions {
+      id
+      name
+    }
+    additionalFiles {
+      id
+      name
     }
   }
 }`;
