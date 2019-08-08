@@ -33,7 +33,10 @@
         </v-flex>
       </v-layout>
     </v-flex>
-    <v-flex xs12 my-2>
+    <v-flex xs12 v-if="meeting.background">
+      <p>{{ meeting.background }}</p>
+    </v-flex>
+    <v-flex xs12 my-2 v-if="agendaItems.length">
       <v-layout wrap xs12 my-3>
         <v-flex xs12 px-1>
           <h4 class="title primary--text" tabindex="0">
@@ -46,11 +49,15 @@
         ></AgendaCards>
       </v-layout>
     </v-flex>
-    <v-flex xs12 my-3 mx-1>
+    <v-flex xs12 v-if="meeting.summary">
+      <h4 class="title primary--text" tabindex="0">סיכום הישיבה</h4>
+      <p>{{ meeting.summary }}</p>
+    </v-flex>
+    <v-flex xs12 my-3 v-if="otherMeetingsOfCommittee.length">
       <h4 class="title primary--text" tabindex="0">דיונים נוספים של הועדה</h4>
       <MeetingCards :meetings="otherMeetingsOfCommittee"></MeetingCards>
     </v-flex>
-    <v-flex xs12>
+    <v-flex xs12 v-if="!meeting.addedManually">
       <a
         :href="meetingIplanUrl"
         target="_blank"
