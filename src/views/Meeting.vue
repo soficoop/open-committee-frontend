@@ -60,7 +60,7 @@ import Component from "vue-class-component";
 import Vue from "vue";
 import { ActionTypes, Getters } from "../helpers/constants";
 import store from "../plugins/store";
-import { Getter } from "vuex-class";
+import { Getter, Action } from "vuex-class";
 import AgendaCards from "../components/AgendaCards";
 import MeetingCards from "../components/MeetingCards";
 
@@ -68,8 +68,11 @@ import MeetingCards from "../components/MeetingCards";
   components: { MeetingCards, AgendaCards }
 })
 export default class Meeting extends Vue {
+  @Action(ActionTypes.FETCH_MANAGABLE_MEETINGS) fetchManagableMeetings;
   /**@type {import("../../graphql/types").Meeting} */
   @Getter(Getters.SELECTED_MEETING) meeting;
+  /**@type {import("../../graphql/types").Meeting[]} */
+  @Getter(Getters.MANAGABLE_MEETINGS) managableMeetings;
 
   hoveredPlan = "";
 
@@ -90,7 +93,8 @@ export default class Meeting extends Vue {
     return this.meeting.committee.meetings.map(meeting => ({
       id: meeting.id,
       headline: `ישיבה מספר ${meeting.number}`,
-      date: meeting.date
+      date: meeting.date,
+      isEditable: this.isMeetingEditable
     }));
   }
 
@@ -117,6 +121,12 @@ export default class Meeting extends Vue {
     }`;
   }
 
+  get isMeetingEditable() {
+    return this.managableMeetings.some(
+      meeting => meeting.id == this.$route.params.meetingId
+    );
+  }
+
   async beforeRouteEnter(to, from, next) {
     await store.dispatch(ActionTypes.FETCH_MEETING, to.params.meetingId);
     next();
@@ -125,6 +135,10 @@ export default class Meeting extends Vue {
   async beforeRouteUpdate(to, from, next) {
     await store.dispatch(ActionTypes.FETCH_MEETING, to.params.meetingId);
     next();
+  }
+
+  async mounted() {
+    await this.fetchManagableMeetings();
   }
 }
 </script>

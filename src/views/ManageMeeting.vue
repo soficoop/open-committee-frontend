@@ -298,7 +298,7 @@ import { makeGqlRequest, uploadFile } from "../helpers/functions";
 
 @Component({ components: { AgendaCards } })
 export default class ManageMeeting extends Vue {
-  /** @type {import("../helpers/typings").User} */
+  /** @type {import("../../graphql/types").UsersPermissionsUser} */
   @Getter(Getters.USER) user;
   /** @type {string} */
   @Getter(Getters.JWT) jwt;

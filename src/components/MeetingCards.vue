@@ -24,10 +24,10 @@
             <v-btn
               icon
               x-small
-              v-if="editable"
+              v-if="item.isEditable"
               color="accent"
               class="mx-1"
-              @click.prevent="$emit('edit', item.id)"
+              @click.prevent="$router.push(`/manage/meeting/${item.id}`)"
             >
               <v-icon>mdi-pencil</v-icon>
             </v-btn>
@@ -48,6 +48,5 @@ import Vue from "vue";
 export default class MeetingCards extends Vue {
   /**@type {import("../helpers/typings").MeetingCard[]} */
   @Prop(Array) meetings;
-  @Prop(Boolean) editable;
 }
 </script>

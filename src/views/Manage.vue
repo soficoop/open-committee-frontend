@@ -11,11 +11,7 @@
         <v-icon left>mdi-plus</v-icon>
         הוספת ישיבה חדשה
       </v-btn>
-      <MeetingCards
-        :meetings="meetings"
-        editable
-        @edit="handleEditClicked"
-      ></MeetingCards>
+      <MeetingCards :meetings="meetings"></MeetingCards>
     </v-flex>
   </v-layout>
 </template>
@@ -37,19 +33,13 @@ export default class Manage extends Vue {
     next();
   }
 
-  /**
-   * Gets called when the user clicks the "edit meeting" button
-   * @param {string} id ID of clicked meeting
-   */
-  handleEditClicked(id) {
-    this.$router.push(`/manage/meeting/${id}`);
-  }
   /** @returns {import("../helpers/typings").MeetingCard[]} */
   get meetings() {
     return this._meetings.map(meeting => ({
       headline: meeting.committee.sid,
       id: meeting.id,
-      date: meeting.date
+      date: meeting.date,
+      isEditable: true
     }));
   }
 }

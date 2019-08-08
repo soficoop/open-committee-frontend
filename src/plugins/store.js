@@ -29,7 +29,7 @@ export default new Vuex.Store({
     plans: [],
     selectedPlan: null,
     jwt: "",
-    /**@type {import("../helpers/typings").User} */
+    /**@type {import("../../graphql/types").UsersPermissionsUser} */
     user: null,
     /** @type {import("../../graphql/types").Meeting[]} */
     managableMeetings: []
@@ -38,7 +38,7 @@ export default new Vuex.Store({
     /**
      * Sets the current user by the given user
      * @param {any} state The current state
-     * @param {import("../helpers/typings").User} user
+     * @param {import("../../graphql/types").UsersPermissionsUser} user
      */
     [MutationTypes.SET_USER](state, user) {
       state.user = user;
@@ -72,7 +72,7 @@ export default new Vuex.Store({
     /**
      * Sets the selected plan in state by a given plan
      * @param {any} state The current state
-     * @param {import("../helpers/typings").Plan} plan Plan to set as the selected plan
+     * @param {import("../../graphql/types").Plan} plan Plan to set as the selected plan
      */
     [MutationTypes.SET_SELECTED_PLAN](state, plan) {
       const planIndexInState = state.plans.findIndex(p => p.sid == plan.sid);
@@ -127,7 +127,7 @@ export default new Vuex.Store({
     },
     /**
      * Sign ups a user
-     * @param {import("../helpers/typings").User} user
+     * @param {import("../../graphql/types").UsersPermissionsUser} user
      */
     async [ActionTypes.SIGN_UP](context, user) {
       user.username = user.email;
@@ -147,7 +147,7 @@ export default new Vuex.Store({
     /**
      * Performs sign in
      * @param {import("vuex").Store} context The store object
-     * @param {import("../helpers/typings").User} user user to sign in
+     * @param {import("../../graphql/types").UsersPermissionsUser} user user to sign in
      */
     async [ActionTypes.SIGN_IN](context, user) {
       const res = await fetch(`${authEndpoint}`, {
@@ -213,7 +213,7 @@ export default new Vuex.Store({
       const res = await makeGqlRequest(getCommitteeMeetings, {
         committees: context.state.user.committees.map(committee => committee.id)
       });
-      /** @type {import("../helpers/typings").Meeting[]} */
+      /** @type {import("../../graphql/types").Meeting[]} */
       const meetings = res.meetings;
       context.commit(MutationTypes.SET_MANAGABLE_MEETINGS, meetings);
     }

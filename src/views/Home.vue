@@ -24,7 +24,7 @@
       <h2 class="headline primary--text font-weight-bold my-3" tabindex="0">
         הישיבות הקרובות במערכת
       </h2>
-      <MeetingCards :meetings="upcomingMeetings"></MeetingCards>
+      <MeetingCards :meetings="upcomingMeetingCards"></MeetingCards>
     </v-flex>
   </v-layout>
 </template>
@@ -33,20 +33,29 @@
 import MeetingCards from "../components/MeetingCards";
 import Component from "vue-class-component";
 import Vue from "vue";
-import { Getter } from "vuex-class";
-import { Getters } from "../helpers/constants";
+import { Getter, Action } from "vuex-class";
+import { Getters, ActionTypes } from "../helpers/constants";
 @Component({
   components: { MeetingCards }
 })
 export default class Home extends Vue {
+  @Action(ActionTypes.FETCH_MANAGABLE_MEETINGS) fetchManagableMeetings;
   /** @type {import("../../graphql/types").Meeting[]} */
-  @Getter(Getters.UPCOMING_MEETINGS) upcomingMeetingsState;
+  @Getter(Getters.UPCOMING_MEETINGS) upcomingMeetings;
+  /** @type {import("../../graphql/types").Meeting[]} */
+  @Getter(Getters.MANAGABLE_MEETINGS) managableMeetings;
+  async mounted() {
+    await this.fetchManagableMeetings();
+  }
   /** @type {import("../helpers/typings").MeetingCard[]} */
-  get upcomingMeetings() {
-    return this.upcomingMeetingsState.map(meeting => ({
+  get upcomingMeetingCards() {
+    return this.upcomingMeetings.map(meeting => ({
       id: meeting.id,
       headline: meeting.committee.sid,
-      date: meeting.date
+      date: meeting.date,
+      isEditable: this.managableMeetings.some(
+        managableMeeting => managableMeeting.id == meeting.id
+      )
     }));
   }
 }
