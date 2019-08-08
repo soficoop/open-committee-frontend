@@ -156,6 +156,7 @@
                   color="secondary"
                   text
                   class="subtitle-1 font-weight-semibold"
+                  :disabled="!newSubject.title && !newSubject.description"
                   @click="addSubject()"
                 >
                   אישור
@@ -335,6 +336,7 @@ export default class ManageMeeting extends Vue {
 
   /**
    * Gets called when the user clicks the remove button of an agenda item
+   * @param {string} id ID of clicked card item
    */
   handleAgendaItemRemoveClicked(id) {
     const planIndex = this.addedPlans.findIndex(item => item.id == id);

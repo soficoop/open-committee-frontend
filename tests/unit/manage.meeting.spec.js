@@ -60,6 +60,13 @@ describe("ManageMeeting.vue", () => {
     expect(wrapper.vm.addedSubjects).toHaveLength(1);
   });
   it("removes an added plan using handleAgendaItemRemoveClicked.", () => {
+    wrapper.vm.addedSubjects.push({
+      id: new Date().getTime(),
+      title: "title",
+      description: "description",
+      attachedFiles: [new File([], "a")]
+    });
+    expect(wrapper.vm.agendaItems).toHaveLength(1);
     wrapper.vm.addedPlans = [
       {
         id: "5d417e0c250469572551dc9f",
@@ -83,7 +90,10 @@ describe("ManageMeeting.vue", () => {
         ]
       }
     ];
+    expect(wrapper.vm.agendaItems).toHaveLength(2);
     wrapper.vm.handleAgendaItemRemoveClicked("5d417e0c250469572551dc9f");
-    expect(wrapper.vm.addedPlans).toHaveLength(0);
+    expect(wrapper.vm.agendaItems).toHaveLength(1);
+    wrapper.vm.handleAgendaItemRemoveClicked(wrapper.vm.addedSubjects[0].id);
+    expect(wrapper.vm.agendaItems).toHaveLength(0);
   });
 });
