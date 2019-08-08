@@ -28,6 +28,7 @@ export const getMeeting = `query getMeeting($id: ID!){
         id
         date
         number
+        title
       }
     }
     plans {

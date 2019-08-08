@@ -16,6 +16,7 @@ describe("Navigation.vue", () => {
   beforeEach(() => {
     wrapper = shallowMount(Navigation, {
       mocks,
+      vuetify: new Vuetify(),
       stubs: {
         "router-link": "<div></div>"
       }

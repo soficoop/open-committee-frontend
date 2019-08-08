@@ -10,12 +10,14 @@
             {{ meeting.committee.sid }} /
           </h3>
           <h4 class="title primary--text d-inline-block right" tabindex="0">
-            &nbsp;ישיבה מספר {{ meeting.number }}
+            <span v-if="$vuetify.breakpoint.mdAndUp">&nbsp;</span>
+            <span v-if="meeting.title">{{ meeting.title }}</span>
+            <span v-else>ישיבה מספר {{ meeting.number }}</span>
           </h4>
         </v-flex>
         <v-flex xs12>
           <h5
-            class="subtitle-1 primary--text"
+            class="subtitle-1 primary--text d-inline-block"
             tabindex="0"
             v-if="typeof meeting.date != 'string'"
           >
@@ -23,9 +25,15 @@
             {{ meeting.date.toLocaleDateString("he") }}
           </h5>
         </v-flex>
+        <v-flex xs1 py-2 v-if="isMeetingEditable">
+          <v-btn color="secondary" :to="`/manage/meeting/${meetingId}`">
+            <v-icon left>mdi-pencil</v-icon>
+            עריכת ישיבה
+          </v-btn>
+        </v-flex>
       </v-layout>
     </v-flex>
-    <v-flex xs12 my-3>
+    <v-flex xs12 my-2>
       <v-layout wrap xs12 my-3>
         <v-flex xs12 px-1>
           <h4 class="title primary--text" tabindex="0">
@@ -92,7 +100,7 @@ export default class Meeting extends Vue {
   get otherMeetingsOfCommittee() {
     return this.meeting.committee.meetings.map(meeting => ({
       id: meeting.id,
-      headline: `ישיבה מספר ${meeting.number}`,
+      headline: meeting.title || `ישיבה מספר ${meeting.number}`,
       date: meeting.date,
       isEditable: this.isMeetingEditable
     }));
@@ -122,9 +130,14 @@ export default class Meeting extends Vue {
   }
 
   get isMeetingEditable() {
-    return this.managableMeetings.some(
-      meeting => meeting.id == this.$route.params.meetingId
+    return (
+      this.$vuetify.breakpoint.mdAndUp &&
+      this.managableMeetings.some(meeting => meeting.id == this.meetingId)
     );
+  }
+
+  get meetingId() {
+    return this.$route.params.meetingId;
   }
 
   async beforeRouteEnter(to, from, next) {

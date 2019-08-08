@@ -102,7 +102,11 @@ export default class Navigation extends Vue {
       text: "ניהול ישיבות",
       to: "/manage",
       visible() {
-        return this.user && this.user.role.name == "Administrator";
+        return (
+          this.$vuetify.breakpoint.mdAndUp &&
+          this.user &&
+          this.user.role.name == "Administrator"
+        );
       }
     },
     {

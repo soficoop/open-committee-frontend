@@ -53,9 +53,11 @@ export default class Home extends Vue {
       id: meeting.id,
       headline: meeting.committee.sid,
       date: meeting.date,
-      isEditable: this.managableMeetings.some(
-        managableMeeting => managableMeeting.id == meeting.id
-      )
+      isEditable:
+        this.$vuetify.breakpoint.mdAndUp &&
+        this.managableMeetings.some(
+          managableMeeting => managableMeeting.id == meeting.id
+        )
     }));
   }
 }
