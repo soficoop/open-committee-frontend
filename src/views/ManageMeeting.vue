@@ -337,11 +337,14 @@ export default class ManageMeeting extends Vue {
    * Gets called when the user clicks the remove button of an agenda item
    */
   handleAgendaItemRemoveClicked(id) {
-    this.addedPlans.splice(this.addedPlans.findIndex(item => item.id == id), 1);
-    this.addedSubjects.splice(
-      this.addedSubjects.findIndex(item => item.id == id),
-      1
-    );
+    const planIndex = this.addedPlans.findIndex(item => item.id == id);
+    if (planIndex != -1) {
+      this.addedPlans.splice(planIndex, 1);
+    }
+    const subjectIndex = this.addedSubjects.findIndex(item => item.id == id);
+    if (subjectIndex != -1) {
+      this.addedSubjects.splice(subjectIndex, 1);
+    }
   }
 
   /**
