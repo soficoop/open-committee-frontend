@@ -296,7 +296,7 @@ import { getPlans, getPlan, getMeeting } from "../helpers/queries";
 import { makeGqlRequest, uploadFile } from "../helpers/functions";
 
 @Component({ components: { AgendaCards } })
-export default class NewMeeting extends Vue {
+export default class ManageMeeting extends Vue {
   /** @type {import("../helpers/typings").User} */
   @Getter(Getters.USER) user;
   /** @type {string} */
