@@ -11,6 +11,9 @@ describe("ManageMeeting.vue", () => {
   let mocks = {
     $store: {
       getters: { [Getters.USER]: "", [Getters.JWT]: "" }
+    },
+    $route: {
+      params: {}
     }
   };
   beforeEach(() => {
