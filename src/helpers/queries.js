@@ -66,6 +66,8 @@ export const getPlan = `query getPlan($id: ID!) {
     number
     lastUpdate
     location
+    status
+    sections
     name
     municipality
     targets
@@ -74,6 +76,9 @@ export const getPlan = `query getPlan($id: ID!) {
       id
       date
       number
+      committee {
+        sid
+      }
     }
   }
 }`;
