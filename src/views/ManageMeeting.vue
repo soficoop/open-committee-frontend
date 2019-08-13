@@ -18,6 +18,8 @@
             class="text-right"
           ></v-select>
         </v-flex>
+      </v-layout>
+      <v-layout wrap row>
         <v-flex xs12 md4 px-3>
           <v-text-field
             v-model="meetingNumber"
