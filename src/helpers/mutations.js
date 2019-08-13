@@ -64,7 +64,7 @@ export const createMeeting = `mutation createMeeting(
 
 export const createSubject = `mutation createSubject(
   $title: String!
-  $description: String
+  $sections: String
   $files: [ID]
   $update: DateTime
 ) {
@@ -74,7 +74,7 @@ export const createSubject = `mutation createSubject(
         name: $title
         type: "נושא"
         addedManually: true
-        sections: $description
+        sections: $sections
         attachedFiles: $files
         lastUpdate: $update
       }
