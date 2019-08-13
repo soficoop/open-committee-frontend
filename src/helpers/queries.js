@@ -80,6 +80,12 @@ export const getPlan = `query getPlan($id: ID!) {
         sid
       }
     }
+    attachedFiles {
+      id
+      name
+      url
+      size
+    }
   }
 }`;
 
