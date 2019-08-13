@@ -63,8 +63,18 @@ describe("Plan.vue", () => {
       vuetify: new Vuetify()
     });
   });
-  it("plan is loaded from store", () => {
+  it("loads plan and managable meetings from the store", () => {
     expect(wrapper.vm.plan).not.toBeUndefined();
     expect(wrapper.vm.managableMeetings).not.toBeUndefined();
+  });
+  it("generates valid plan meetings", () => {
+    expect(wrapper.vm.planMeetings).toHaveLength(1);
+    const planMeeting = wrapper.vm.planMeetings[0];
+    expect(planMeeting.headline).toBe(
+      wrapper.vm.plan.meetings[0].committee.sid
+    );
+    expect(planMeeting.date).toBe(wrapper.vm.plan.meetings[0].date);
+    expect(planMeeting.id).toBe(wrapper.vm.plan.meetings[0].id);
+    expect(planMeeting.isEditable).toBe(false);
   });
 });
