@@ -91,4 +91,9 @@ describe("Plan.vue", () => {
     plan.number = undefined;
     expect(wrapper.text()).not.toContain("תכנית מספר");
   });
+  it("loads attached files exists", () => {
+    expect(wrapper.find("FileCards-stub").exists()).toBeTruthy();
+    plan.attachedFiles = [];
+    expect(wrapper.find("FileCards-stub").exists()).toBeFalsy();
+  });
 });
