@@ -4,12 +4,18 @@
       v-for="file in files"
       :key="file.id"
       class="d-inline-block me-2"
-      color="teal lighten-4"
+      color="grey lighten-4"
       min-width="150px"
     >
-      <v-card-text class="text-center">{{ file.name }}</v-card-text>
+      <v-card-text class="text-center pt-2 pb-0">{{ file.name }}</v-card-text>
       <v-card-actions>
-        <v-btn text block :href="generateUrlFromFile(file)" target="blank">
+        <v-btn
+          text
+          block
+          :href="generateUrlFromFile(file)"
+          target="blank"
+          class="pa-2"
+        >
           לצפייה בקובץ
         </v-btn>
       </v-card-actions>
