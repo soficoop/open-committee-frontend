@@ -20,26 +20,45 @@
         <span tabindex="0">{{ plan.status }}</span>
       </h5>
     </v-flex>
-    <v-flex xs12 md9 py-3 v-if="plan.targets">
-      <v-card flat class="pa-4">
-        <h4 class="title primary--text">
-          <span tabindex="0">
-            מטרות
-          </span>
-        </h4>
-        <p class="whitespace-preline" tabindex="0" v-html="plan.targets"></p>
-      </v-card>
-    </v-flex>
-    <v-flex xs12 md9 py-2 v-if="plan.sections">
-      <v-card flat class="pa-4">
-        <h4 class="title primary--text">
-          <span tabindex="0">
-            עיקרי התכנית
-          </span>
-        </h4>
-        <p class="whitespace-preline" tabindex="0" v-html="plan.sections"></p>
-      </v-card>
-    </v-flex>
+    <v-layout xs12 wrap>
+      <v-flex xs12 md8 pa-3 v-if="plan.targets || plan.sections">
+        <v-flex pb-3 v-if="plan.targets">
+          <v-card flat class="pa-4">
+            <h4 class="title primary--text">מטרות</h4>
+            <p
+              class="whitespace-preline"
+              tabindex="0"
+              v-html="plan.targets"
+            ></p>
+          </v-card>
+        </v-flex>
+        <v-flex pt-3 v-if="plan.sections">
+          <v-card flat class="pa-4">
+            <h4 class="title primary--text" tabindex="0">עיקרי התכנית</h4>
+            <p
+              class="whitespace-preline"
+              tabindex="0"
+              v-html="plan.sections"
+            ></p>
+          </v-card>
+        </v-flex>
+      </v-flex>
+      <v-flex xs12 md4 pt-3 ps-3>
+        <v-card flat class="pa-4">
+          <h4 class="title primary--text" tabindex="0">נתונים</h4>
+          <v-layout
+            py-1
+            wrap
+            v-for="infoItem in planInformation"
+            :key="infoItem.key"
+          >
+            <v-flex xs4 class="font-weight-semibold">{{ infoItem.key }}</v-flex>
+            <v-flex offset-xs1 xs7>{{ infoItem.value }}</v-flex>
+          </v-layout>
+        </v-card>
+      </v-flex>
+    </v-layout>
+
     <v-flex xs12 py-3 v-if="plan.attachedFiles.length">
       <h4 class="title primary--text">
         <span tabindex="0">
@@ -85,6 +104,21 @@ export default class Plan extends Vue {
         this.$vuetify.breakpoint.mdAndUp &&
         this.managableMeetings.some(managable => managable.id == meeting.id)
     }));
+  }
+
+  get planInformation() {
+    return [
+      { key: "סטטוס", value: this.plan.status },
+      { key: "סוג תכנית", value: this.plan.type },
+      { key: "תאריך הפקדה", value: this.plan.submission },
+      { key: "תאריך הפקדה", value: this.plan.submission },
+      {
+        key: "עדכון אחרון",
+        value:
+          this.plan.lastUpdate > new Date("1970-1-2") &&
+          this.plan.lastUpdate.toLocaleDateString("he")
+      }
+    ].filter(i => i.value);
   }
 
   async beforeRouteEnter(to, from, next) {

@@ -131,9 +131,7 @@ export default class Meeting extends Vue {
   }
 
   get meetingIplanUrl() {
-    return `http://mavat.moin.gov.il/mavatps/Forms/SV8.1.aspx?MeetingID=${
-      this.meeting.sid
-    }`;
+    return `https://mavat.iplan.gov.il/SV4/3/${this.meeting.sid}`;
   }
 
   get isMeetingEditable() {
