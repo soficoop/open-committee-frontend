@@ -12,7 +12,7 @@
           src="/img/logo@2x.png"
           contain
           alt="חיים וסביבה"
-          class="ma-4"
+          class="ma-8"
           max-height="200px"
         ></v-img>
       </router-link>

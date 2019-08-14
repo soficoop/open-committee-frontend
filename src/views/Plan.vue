@@ -20,7 +20,7 @@
         <span tabindex="0">{{ plan.status }}</span>
       </h5>
     </v-flex>
-    <v-layout xs12 wrap v-if="plan.targets || plan.sections">
+    <v-layout xs12 wrap row v-if="plan.targets || plan.sections">
       <v-flex xs12 md8 pa-3>
         <v-flex pb-3 v-if="plan.targets">
           <v-card flat class="pa-4">
@@ -43,7 +43,7 @@
           </v-card>
         </v-flex>
       </v-flex>
-      <v-flex xs12 md4 pt-3 ps-3>
+      <v-flex xs12 md4 pa-3>
         <v-card flat class="pa-4">
           <h4 class="title primary--text" tabindex="0">נתונים</h4>
           <Map
