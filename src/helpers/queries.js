@@ -70,6 +70,9 @@ export const getPlan = `query getPlan($id: ID!) {
     sections
     name
     municipality
+    settlement
+    street
+    houseNumber
     targets
     type
     meetings {

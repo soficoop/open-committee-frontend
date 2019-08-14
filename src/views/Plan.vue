@@ -20,8 +20,8 @@
         <span tabindex="0">{{ plan.status }}</span>
       </h5>
     </v-flex>
-    <v-layout xs12 wrap>
-      <v-flex xs12 md8 pa-3 v-if="plan.targets || plan.sections">
+    <v-layout xs12 wrap v-if="plan.targets || plan.sections">
+      <v-flex xs12 md8 pa-3>
         <v-flex pb-3 v-if="plan.targets">
           <v-card flat class="pa-4">
             <h4 class="title primary--text">מטרות</h4>
@@ -46,6 +46,11 @@
       <v-flex xs12 md4 pt-3 ps-3>
         <v-card flat class="pa-4">
           <h4 class="title primary--text" tabindex="0">נתונים</h4>
+          <Map
+            class="my-3"
+            :query="planLocationQuery"
+            v-if="planLocationQuery"
+          />
           <v-layout
             py-1
             wrap
@@ -58,7 +63,9 @@
         </v-card>
       </v-flex>
     </v-layout>
-
+    <h2 v-else class="display-1 accent--text my-3">
+      אין מידע זמין על התכנית
+    </h2>
     <v-flex xs12 py-3 v-if="plan.attachedFiles.length">
       <h4 class="title primary--text">
         <span tabindex="0">
@@ -86,8 +93,9 @@ import store from "../plugins/store";
 import { Getter } from "vuex-class";
 import MeetingCards from "../components/MeetingCards.vue";
 import FileCards from "../components/FileCards.vue";
+import Map from "../components/Map.vue";
 
-@Component({ components: { MeetingCards, FileCards } })
+@Component({ components: { MeetingCards, FileCards, Map } })
 export default class Plan extends Vue {
   /** @type {import("../../graphql/types").Plan} */
   @Getter(Getters.SELECTED_PLAN) plan;
@@ -108,6 +116,7 @@ export default class Plan extends Vue {
 
   get planInformation() {
     return [
+      { key: "כתובת", value: this.planLocationQuery },
       { key: "סטטוס", value: this.plan.status },
       { key: "סוג תכנית", value: this.plan.type },
       { key: "תאריך הפקדה", value: this.plan.submission },
@@ -119,6 +128,11 @@ export default class Plan extends Vue {
           this.plan.lastUpdate.toLocaleDateString("he")
       }
     ].filter(i => i.value);
+  }
+
+  get planLocationQuery() {
+    return `${this.plan.street || ""} ${this.plan.houseNumber || ""} ${this.plan
+      .settlement || ""}`.trim();
   }
 
   async beforeRouteEnter(to, from, next) {

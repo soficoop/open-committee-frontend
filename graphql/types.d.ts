@@ -370,8 +370,8 @@ export type EditMeetingInput = {
   title?: Maybe<Scalars["String"]>;
   additionalFiles?: Maybe<Array<Maybe<Scalars["ID"]>>>;
   background?: Maybe<Scalars["String"]>;
-  plans?: Maybe<Array<Maybe<Scalars["ID"]>>>;
   summary?: Maybe<Scalars["String"]>;
+  plans?: Maybe<Array<Maybe<Scalars["ID"]>>>;
 };
 
 export type EditParserInput = {
@@ -404,6 +404,8 @@ export type EditPlanInput = {
   addedManually?: Maybe<Scalars["Boolean"]>;
   attachedFiles?: Maybe<Array<Maybe<Scalars["ID"]>>>;
   meetings?: Maybe<Array<Maybe<Scalars["ID"]>>>;
+  street?: Maybe<Scalars["String"]>;
+  houseNumber?: Maybe<Scalars["Int"]>;
 };
 
 export type EditRoleInput = {
@@ -670,8 +672,8 @@ export type MeetingInput = {
   title?: Maybe<Scalars["String"]>;
   additionalFiles?: Maybe<Array<Maybe<Scalars["ID"]>>>;
   background?: Maybe<Scalars["String"]>;
-  plans?: Maybe<Array<Maybe<Scalars["ID"]>>>;
   summary?: Maybe<Scalars["String"]>;
+  plans?: Maybe<Array<Maybe<Scalars["ID"]>>>;
 };
 
 export type Morph =
@@ -779,6 +781,8 @@ export type Morph =
   | PlanConnectionSubmission
   | PlanConnectionStype
   | PlanConnectionAddedManually
+  | PlanConnectionStreet
+  | PlanConnectionHouseNumber
   | UploadFile
   | UploadFileConnection
   | UploadFileAggregator
@@ -1121,6 +1125,8 @@ export type Plan = {
   submission?: Maybe<Scalars["DateTime"]>;
   stype?: Maybe<Scalars["Int"]>;
   addedManually?: Maybe<Scalars["Boolean"]>;
+  street?: Maybe<Scalars["String"]>;
+  houseNumber?: Maybe<Scalars["Int"]>;
   attachedFiles?: Maybe<Array<Maybe<UploadFile>>>;
   meetings?: Maybe<Array<Maybe<Meeting>>>;
 };
@@ -1152,21 +1158,25 @@ export type PlanAggregator = {
 export type PlanAggregatorAvg = {
   __typename?: "PlanAggregatorAvg";
   stype?: Maybe<Scalars["Float"]>;
+  houseNumber?: Maybe<Scalars["Float"]>;
 };
 
 export type PlanAggregatorMax = {
   __typename?: "PlanAggregatorMax";
   stype?: Maybe<Scalars["Float"]>;
+  houseNumber?: Maybe<Scalars["Float"]>;
 };
 
 export type PlanAggregatorMin = {
   __typename?: "PlanAggregatorMin";
   stype?: Maybe<Scalars["Float"]>;
+  houseNumber?: Maybe<Scalars["Float"]>;
 };
 
 export type PlanAggregatorSum = {
   __typename?: "PlanAggregatorSum";
   stype?: Maybe<Scalars["Float"]>;
+  houseNumber?: Maybe<Scalars["Float"]>;
 };
 
 export type PlanConnection = {
@@ -1191,6 +1201,12 @@ export type PlanConnectionAddedManually = {
 export type PlanConnectionCreatedAt = {
   __typename?: "PlanConnectionCreatedAt";
   key?: Maybe<Scalars["DateTime"]>;
+  connection?: Maybe<PlanConnection>;
+};
+
+export type PlanConnectionHouseNumber = {
+  __typename?: "PlanConnectionHouseNumber";
+  key?: Maybe<Scalars["Int"]>;
   connection?: Maybe<PlanConnection>;
 };
 
@@ -1254,6 +1270,12 @@ export type PlanConnectionStatus = {
   connection?: Maybe<PlanConnection>;
 };
 
+export type PlanConnectionStreet = {
+  __typename?: "PlanConnectionStreet";
+  key?: Maybe<Scalars["String"]>;
+  connection?: Maybe<PlanConnection>;
+};
+
 export type PlanConnectionStype = {
   __typename?: "PlanConnectionStype";
   key?: Maybe<Scalars["Int"]>;
@@ -1304,6 +1326,8 @@ export type PlanGroupBy = {
   submission?: Maybe<Array<Maybe<PlanConnectionSubmission>>>;
   stype?: Maybe<Array<Maybe<PlanConnectionStype>>>;
   addedManually?: Maybe<Array<Maybe<PlanConnectionAddedManually>>>;
+  street?: Maybe<Array<Maybe<PlanConnectionStreet>>>;
+  houseNumber?: Maybe<Array<Maybe<PlanConnectionHouseNumber>>>;
 };
 
 export type PlanInput = {
@@ -1323,6 +1347,8 @@ export type PlanInput = {
   addedManually?: Maybe<Scalars["Boolean"]>;
   attachedFiles?: Maybe<Array<Maybe<Scalars["ID"]>>>;
   meetings?: Maybe<Array<Maybe<Scalars["ID"]>>>;
+  street?: Maybe<Scalars["String"]>;
+  houseNumber?: Maybe<Scalars["Int"]>;
 };
 
 export type Query = {
