@@ -5,7 +5,7 @@ import { apiEndpoint } from "@/helpers/constants";
 import Vuetify from "vuetify";
 Vue.use(Vuetify);
 
-describe("Meeting.vue", () => {
+describe("FileCards class", () => {
   /** @type {import("@vue/test-utils").Wrapper} */
   let wrapper;
   let files = [
