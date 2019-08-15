@@ -5,17 +5,10 @@
       <l-tile-layer
         url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
       ></l-tile-layer>
-      <l-control position="bottomleft">
-        <v-btn
-          color="white"
-          @click="switchDialog"
-          class="pa-0"
-          height="32"
-          min-width="32"
-          :ripple="false"
-        >
-          <v-icon>mdi-fullscreen</v-icon>
-        </v-btn>
+      <l-control position="bottomleft" class="leaflet-bar">
+        <a @click="switchDialog">
+          <v-icon color="primary">mdi-fullscreen</v-icon>
+        </a>
       </l-control>
     </l-map>
     <v-dialog v-model="dialog" fullscreen>
@@ -24,17 +17,10 @@
         <l-tile-layer
           url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
         ></l-tile-layer>
-        <l-control position="bottomleft">
-          <v-btn
-            color="white"
-            @click="switchDialog"
-            class="pa-0"
-            height="32"
-            min-width="32"
-            :ripple="false"
-          >
-            <v-icon>mdi-fullscreen</v-icon>
-          </v-btn>
+        <l-control position="bottomleft" class="leaflet-bar">
+          <a @click="switchDialog">
+            <v-icon color="primary">mdi-fullscreen</v-icon>
+          </a>
         </l-control>
       </l-map>
     </v-dialog>
