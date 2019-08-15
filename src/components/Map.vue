@@ -1,28 +1,8 @@
 <template>
   <div v-if="center">
-    <l-map :zoom="15" :center="center" class="l-map">
-      <l-marker :lat-lng="center"></l-marker>
-      <l-tile-layer
-        url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
-      ></l-tile-layer>
-      <l-control position="bottomleft" class="leaflet-bar">
-        <a @click="switchDialog">
-          <v-icon color="primary">mdi-fullscreen</v-icon>
-        </a>
-      </l-control>
-    </l-map>
+    <Leaflet :center="center" @fullscreenToggle="switchDialog" class="h-150" />
     <v-dialog v-model="dialog" fullscreen>
-      <l-map :zoom="15" :center="center" class="l-map-enlarged">
-        <l-marker :lat-lng="center"></l-marker>
-        <l-tile-layer
-          url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
-        ></l-tile-layer>
-        <l-control position="bottomleft" class="leaflet-bar">
-          <a @click="switchDialog">
-            <v-icon color="primary">mdi-fullscreen</v-icon>
-          </a>
-        </l-control>
-      </l-map>
+      <Leaflet :center="center" @fullscreenToggle="switchDialog" />
     </v-dialog>
   </div>
 </template>
@@ -30,15 +10,12 @@
 import Component from "vue-class-component";
 import Vue from "vue";
 import { OpenStreetMapProvider } from "leaflet-geosearch";
-import { LMap, LTileLayer, LMarker, LControl } from "vue2-leaflet";
+import Leaflet from "./Leaflet";
 import { Prop } from "vue-property-decorator";
 
 @Component({
   components: {
-    LMap,
-    LTileLayer,
-    LMarker,
-    LControl
+    Leaflet
   }
 })
 export default class Map extends Vue {
@@ -60,13 +37,7 @@ export default class Map extends Vue {
 }
 </script>
 <style scoped>
-.l-map {
-  width: 100%;
+.h-150 {
   height: 150px;
-  z-index: 0;
-}
-.l-map-enlarged {
-  width: 100%;
-  height: 100%;
 }
 </style>

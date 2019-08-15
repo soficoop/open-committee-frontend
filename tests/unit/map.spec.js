@@ -47,7 +47,7 @@ describe("Map.vue", () => {
     expect(wrapper.vm.query).toBe("פרדס חנה-כרכור");
   });
   it("renders map", () => {
-    expect(wrapper.find("l-map-stub").exists()).toBeTruthy();
+    expect(wrapper.find("Leaflet-stub").exists()).toBeTruthy();
   });
   it("has a center", () => {
     expect(wrapper.vm.center).toEqual({ lat: "32.475041", lon: "34.9761087" });
