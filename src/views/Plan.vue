@@ -3,7 +3,7 @@
     <v-flex xs12 pb-3>
       <h3 class="headline primary--text font-weight-black">
         <span v-if="plan.number" tabindex="0">
-          תכנית מספר {{ plan.number }}
+          {{ plan.number }}
         </span>
         <span v-if="plan.number && plan.name"> • </span>
         <span v-if="plan.name" tabindex="0">{{ plan.name }}</span>
@@ -34,7 +34,9 @@
         </v-flex>
         <v-flex pt-3 v-if="plan.sections">
           <v-card flat class="pa-4">
-            <h4 class="title primary--text" tabindex="0">עיקרי התכנית</h4>
+            <h4 class="title primary--text" tabindex="0">
+              עיקרי ה{{ planTypeFirstWord }}
+            </h4>
             <p
               class="whitespace-preline"
               tabindex="0"
@@ -64,7 +66,7 @@
       </v-flex>
     </v-layout>
     <h2 v-else class="display-1 accent--text my-3">
-      אין מידע זמין על התכנית
+      אין מידע זמין על ה{{ planTypeFirstWord }}
     </h2>
     <v-flex xs12 py-3 v-if="plan.attachedFiles.length">
       <h4 class="title primary--text">
@@ -76,9 +78,7 @@
     </v-flex>
     <v-flex xs12 py-3 v-if="planMeetings && planMeetings.length">
       <h4 class="title primary--text">
-        <span tabindex="0">
-          היסטוריית הדיונים בתכנית
-        </span>
+        <span tabindex="0"> היסטוריית הדיונים ב{{ planTypeFirstWord }} </span>
       </h4>
       <MeetingCards :meetings="planMeetings"></MeetingCards>
     </v-flex>
@@ -118,7 +118,7 @@ export default class Plan extends Vue {
     return [
       { key: "כתובת", value: this.planLocationQuery },
       { key: "סטטוס", value: this.plan.status },
-      { key: "סוג תכנית", value: this.plan.type },
+      { key: "סוג ישות תכנונית", value: this.plan.type },
       { key: "תאריך הפקדה", value: this.plan.submission },
       { key: "תאריך הפקדה", value: this.plan.submission },
       {
@@ -133,6 +133,10 @@ export default class Plan extends Vue {
   get planLocationQuery() {
     return `${this.plan.street || ""} ${this.plan.houseNumber || ""} ${this.plan
       .settlement || ""}`.trim();
+  }
+
+  get planTypeFirstWord() {
+    return this.plan.type.split()[0];
   }
 
   async beforeRouteEnter(to, from, next) {
