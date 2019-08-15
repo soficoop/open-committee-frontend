@@ -27,8 +27,7 @@
         </v-flex>
         <v-flex xs1 py-2 v-if="isMeetingEditable">
           <v-btn color="secondary" :to="`/manage/meeting/${meetingId}`">
-            <v-icon left>mdi-pencil</v-icon>
-            עריכת ישיבה
+            <v-icon left>mdi-pencil</v-icon>עריכת ישיבה
           </v-btn>
         </v-flex>
       </v-layout>
@@ -49,6 +48,12 @@
         ></AgendaCards>
       </v-layout>
     </v-flex>
+    <v-flex xs12 py-3 v-if="meeting.additionalFiles.length">
+      <h4 class="title primary--text">
+        <span tabindex="0">מסמכים רלוונטים</span>
+      </h4>
+      <FileCards class="py-1" :files="meeting.additionalFiles" />
+    </v-flex>
     <v-flex xs12 v-if="meeting.summary">
       <h4 class="title primary--text" tabindex="0">סיכום הישיבה</h4>
       <p>{{ meeting.summary }}</p>
@@ -63,9 +68,8 @@
         target="_blank"
         rel="noopener noreferrer"
         class="secondary--text font-weight-bold px-1"
+        >למידע נוסף באתר מנהל התכנון</a
       >
-        למידע נוסף באתר מנהל התכנון
-      </a>
     </v-flex>
   </v-layout>
 </template>
@@ -76,11 +80,12 @@ import Vue from "vue";
 import { ActionTypes, Getters } from "../helpers/constants";
 import store from "../plugins/store";
 import { Getter, Action } from "vuex-class";
-import AgendaCards from "../components/AgendaCards";
-import MeetingCards from "../components/MeetingCards";
+import AgendaCards from "../components/AgendaCards.vue";
+import FileCards from "../components/FileCards.vue";
+import MeetingCards from "../components/MeetingCards.vue";
 
 @Component({
-  components: { MeetingCards, AgendaCards }
+  components: { MeetingCards, AgendaCards, FileCards }
 })
 export default class Meeting extends Vue {
   @Action(ActionTypes.FETCH_MANAGABLE_MEETINGS) fetchManagableMeetings;

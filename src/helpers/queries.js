@@ -55,6 +55,8 @@ export const getMeeting = `query getMeeting($id: ID!){
     additionalFiles {
       id
       name
+      url
+      size
     }
   }
 }`;
