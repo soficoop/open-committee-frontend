@@ -5,25 +5,59 @@
       <l-tile-layer
         url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
       ></l-tile-layer>
+      <l-control position="bottomleft">
+        <v-btn
+          color="white"
+          @click="switchDialog"
+          class="pa-0"
+          height="32"
+          min-width="32"
+          :ripple="false"
+        >
+          <v-icon>mdi-fullscreen</v-icon>
+        </v-btn>
+      </l-control>
     </l-map>
+    <v-dialog v-model="dialog" fullscreen>
+      <l-map :zoom="15" :center="center" class="l-map-enlarged">
+        <l-marker :lat-lng="center"></l-marker>
+        <l-tile-layer
+          url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
+        ></l-tile-layer>
+        <l-control position="bottomleft">
+          <v-btn
+            color="white"
+            @click="switchDialog"
+            class="pa-0"
+            height="32"
+            min-width="32"
+            :ripple="false"
+          >
+            <v-icon>mdi-fullscreen</v-icon>
+          </v-btn>
+        </l-control>
+      </l-map>
+    </v-dialog>
   </div>
 </template>
 <script>
 import Component from "vue-class-component";
 import Vue from "vue";
 import { OpenStreetMapProvider } from "leaflet-geosearch";
-import { LMap, LTileLayer, LMarker } from "vue2-leaflet";
+import { LMap, LTileLayer, LMarker, LControl } from "vue2-leaflet";
 import { Prop } from "vue-property-decorator";
 
 @Component({
   components: {
     LMap,
     LTileLayer,
-    LMarker
+    LMarker,
+    LControl
   }
 })
 export default class Map extends Vue {
   @Prop(String) query;
+  dialog = false;
   center = null;
   async mounted() {
     const query = this.query;
@@ -33,11 +67,20 @@ export default class Map extends Vue {
       this.center = { lon: results[0].x, lat: results[0].y };
     }
   }
+
+  switchDialog() {
+    this.dialog = !this.dialog;
+  }
 }
 </script>
 <style scoped>
 .l-map {
   width: 100%;
   height: 150px;
+  z-index: 0;
+}
+.l-map-enlarged {
+  width: 100%;
+  height: 100%;
 }
 </style>
