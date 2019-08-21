@@ -124,3 +124,44 @@ export const updateMeeting = `mutation udpateMeeting(
     }
   }
 }`;
+
+export const updateUser = `mutation UpdateUser(
+  $id: ID!
+  $job: String
+  $organization: String
+  $city: String
+  $userImage: ID
+) {
+  updateUser(
+    input: {
+      where: { id: $id }
+      data: {
+        job: $job
+        organization: $organization
+        city: $city
+        userImage: $userImage
+      }
+    }
+  ) 
+  {
+    user {
+      id
+      username
+      email 
+      provider
+      confirmed
+      blocked
+      role {
+        type
+      }
+      firstName
+      lastName
+      organization
+      job
+      userImage {
+        url
+      }
+      city
+    }
+  }
+}`;

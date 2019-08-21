@@ -17,6 +17,7 @@ import {
   getCommitteeMeetings,
   getCommittees
 } from "../helpers/queries.js";
+import { updateUser } from "../helpers/mutations.js";
 
 Vue.use(Vuex);
 
@@ -170,6 +171,7 @@ export default new Vuex.Store({
           );
           result.user.committees = userCommitteesResult.committees;
         }
+        console.log(result.user);
         context.commit(MutationTypes.SET_JWT, result.jwt);
         context.commit(MutationTypes.SET_USER, result.user);
         return true;
@@ -216,6 +218,21 @@ export default new Vuex.Store({
       /** @type {import("../../graphql/types").Meeting[]} */
       const meetings = res.meetings;
       context.commit(MutationTypes.SET_MANAGABLE_MEETINGS, meetings);
+    },
+    /**
+     * Update user
+     * @param {import("vuex").Store} context the store object
+     * @param {import("../../graphql/types").UsersPermissionsUser} updatedUserFields
+     * @param {string} id ID of user to update
+     */
+    async [ActionTypes.UPDATE_USER](context, updatedUserFields) {
+      updatedUserFields.id = context.state.user.id;
+      const res = await makeGqlRequest(
+        updateUser,
+        updatedUserFields,
+        context.state.jwt
+      );
+      context.commit(MutationTypes.SET_USER, res.updateUser.user);
     }
   },
   plugins: [

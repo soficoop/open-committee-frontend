@@ -58,6 +58,7 @@ export const getMeeting = `query getMeeting($id: ID!){
       url
       size
     }
+
   }
 }`;
 
@@ -120,3 +121,26 @@ export const getPlans = `query plans($number: String) {
     name
   }
 }`;
+
+export const getCurrentUser = `query($id: ID!) {
+  user(id: $id) {
+    id
+    username
+    email 
+    provider
+    confirmed
+    blocked
+    role {
+      type
+    }
+    firstName
+    lastName
+    organization
+    job
+    userImage {
+      url
+    }
+    city
+	}
+}
+`;

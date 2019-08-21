@@ -3,17 +3,13 @@
     <v-flex xs12 md5 xl4 class="text-xs-center">
       <v-layout column>
         <v-flex xs1 align-self-center>
-          <v-icon size="120px" color="primary" class="my-4">
-            mdi-account-circle
-          </v-icon>
+          <v-icon size="120px" color="primary" class="my-4"
+            >mdi-account-circle</v-icon
+          >
         </v-flex>
         <v-tabs grow class="my-3" v-model="tab" background-color="transparent">
-          <v-tab @click="authenticationFailed = false">
-            התחברות
-          </v-tab>
-          <v-tab @click="authenticationFailed = false">
-            הרשמה
-          </v-tab>
+          <v-tab @click="authenticationFailed = false">התחברות</v-tab>
+          <v-tab @click="authenticationFailed = false">הרשמה</v-tab>
         </v-tabs>
         <v-tabs-items v-model="tab" class="overflow-hidden pa-1 transparent">
           <v-tab-item>
@@ -27,8 +23,7 @@
                     ? ['נא להכניס כתובת מייל תקינה']
                     : []
                 "
-              >
-              </v-text-field>
+              ></v-text-field>
             </v-flex>
             <v-expand-transition>
               <v-flex v-if="isLoginEmailValid">
@@ -44,22 +39,19 @@
                   @click:append="
                     loginData.showPassword = !loginData.showPassword
                   "
-                >
-                </v-text-field>
+                ></v-text-field>
               </v-flex>
             </v-expand-transition>
             <v-expand-transition>
               <v-flex v-if="loginData.password.length >= 8">
-                <v-btn block large color="secondary" @click="logIn(loginData)">
-                  התחברות
-                </v-btn>
+                <v-btn block large color="secondary" @click="logIn(loginData)"
+                  >התחברות</v-btn
+                >
               </v-flex>
             </v-expand-transition>
             <v-expand-transition>
               <v-flex v-if="authenticationFailed">
-                <p class="error--text my-1">
-                  שם משתמש או סיסמה לא נכונים
-                </p>
+                <p class="error--text my-1">שם משתמש או סיסמה לא נכונים</p>
               </v-flex>
             </v-expand-transition>
           </v-tab-item>
@@ -73,8 +65,7 @@
                   ? ['נא להכניס כתובת מייל תקינה']
                   : []
               "
-            >
-            </v-text-field>
+            ></v-text-field>
             <v-text-field
               label="סיסמה"
               hint="לפחות 8 תווים"
@@ -83,8 +74,7 @@
               :type="signupData.showPassword ? 'text' : 'password'"
               :append-icon="signupData.showPassword ? 'mdi-eye' : 'mdi-eye-off'"
               @click:append="signupData.showPassword = !signupData.showPassword"
-            >
-            </v-text-field>
+            ></v-text-field>
             <v-layout>
               <v-text-field
                 label="שם פרטי"
@@ -92,45 +82,41 @@
                 name="fname"
                 class="pl-1"
                 :rules="[value => !!value || 'שדה חובה']"
-              >
-              </v-text-field>
+              ></v-text-field>
               <v-text-field
                 class="pr-1"
                 label="שם משפחה"
                 v-model="signupData.lastName"
                 name="lname"
                 :rules="[value => !!value || 'שדה חובה']"
-              >
-              </v-text-field>
+              ></v-text-field>
             </v-layout>
             <v-text-field
               label="עיר מגורים"
               v-model="signupData.city"
               name="city"
-            >
-            </v-text-field>
+            ></v-text-field>
             <v-text-field
               label="ארגון"
               v-model="signupData.organization"
               name="organization"
-            >
-            </v-text-field>
-            <v-text-field label="תפקיד" v-model="signupData.job" name="job">
-            </v-text-field>
+            ></v-text-field>
+            <v-text-field
+              label="תפקיד"
+              v-model="signupData.job"
+              name="job"
+            ></v-text-field>
             <v-btn
               block
               large
               color="secondary"
               :disabled="!isSignUpFormValid"
               @click="signUp(signupData)"
+              >הרשמה</v-btn
             >
-              הרשמה
-            </v-btn>
             <v-expand-transition>
               <v-flex v-if="authenticationFailed">
-                <p class="error--text my-1">
-                  המשתמש כבר קיים במערכת
-                </p>
+                <p class="error--text my-1">המשתמש כבר קיים במערכת</p>
               </v-flex>
             </v-expand-transition>
           </v-tab-item>

@@ -105,8 +105,8 @@ export type Committee = {
   parent?: Maybe<Committee>;
   area?: Maybe<Area>;
   children?: Maybe<Array<Maybe<Committee>>>;
-  users?: Maybe<Array<Maybe<UsersPermissionsUser>>>;
   meetings?: Maybe<Array<Maybe<Meeting>>>;
+  users?: Maybe<Array<Maybe<UsersPermissionsUser>>>;
 };
 
 export type CommitteeChildrenArgs = {
@@ -116,14 +116,14 @@ export type CommitteeChildrenArgs = {
   where?: Maybe<Scalars["JSON"]>;
 };
 
-export type CommitteeUsersArgs = {
+export type CommitteeMeetingsArgs = {
   sort?: Maybe<Scalars["String"]>;
   limit?: Maybe<Scalars["Int"]>;
   start?: Maybe<Scalars["Int"]>;
   where?: Maybe<Scalars["JSON"]>;
 };
 
-export type CommitteeMeetingsArgs = {
+export type CommitteeUsersArgs = {
   sort?: Maybe<Scalars["String"]>;
   limit?: Maybe<Scalars["Int"]>;
   start?: Maybe<Scalars["Int"]>;
@@ -201,8 +201,8 @@ export type CommitteeInput = {
   parent?: Maybe<Scalars["ID"]>;
   area?: Maybe<Scalars["ID"]>;
   children?: Maybe<Array<Maybe<Scalars["ID"]>>>;
-  users?: Maybe<Array<Maybe<Scalars["ID"]>>>;
   meetings?: Maybe<Array<Maybe<Scalars["ID"]>>>;
+  users?: Maybe<Array<Maybe<Scalars["ID"]>>>;
 };
 
 export type CreateAreaInput = {
@@ -341,8 +341,8 @@ export type EditCommitteeInput = {
   parent?: Maybe<Scalars["ID"]>;
   area?: Maybe<Scalars["ID"]>;
   children?: Maybe<Array<Maybe<Scalars["ID"]>>>;
-  users?: Maybe<Array<Maybe<Scalars["ID"]>>>;
   meetings?: Maybe<Array<Maybe<Scalars["ID"]>>>;
+  users?: Maybe<Array<Maybe<Scalars["ID"]>>>;
 };
 
 export type EditFileInput = {
@@ -403,9 +403,9 @@ export type EditPlanInput = {
   stype?: Maybe<Scalars["Int"]>;
   addedManually?: Maybe<Scalars["Boolean"]>;
   attachedFiles?: Maybe<Array<Maybe<Scalars["ID"]>>>;
-  meetings?: Maybe<Array<Maybe<Scalars["ID"]>>>;
   street?: Maybe<Scalars["String"]>;
   houseNumber?: Maybe<Scalars["Int"]>;
+  meetings?: Maybe<Array<Maybe<Scalars["ID"]>>>;
 };
 
 export type EditRoleInput = {
@@ -427,10 +427,11 @@ export type EditUserInput = {
   role?: Maybe<Scalars["ID"]>;
   firstName?: Maybe<Scalars["String"]>;
   lastName?: Maybe<Scalars["String"]>;
-  city?: Maybe<Scalars["String"]>;
   organization?: Maybe<Scalars["String"]>;
   job?: Maybe<Scalars["String"]>;
   committees?: Maybe<Array<Maybe<Scalars["ID"]>>>;
+  userImage?: Maybe<Scalars["ID"]>;
+  city?: Maybe<Scalars["String"]>;
 };
 
 export enum Enum_Parser_For {
@@ -832,9 +833,10 @@ export type Morph =
   | UsersPermissionsUserConnectionRole
   | UsersPermissionsUserConnectionFirstName
   | UsersPermissionsUserConnectionLastName
-  | UsersPermissionsUserConnectionCity
   | UsersPermissionsUserConnectionOrganization
-  | UsersPermissionsUserConnectionJob;
+  | UsersPermissionsUserConnectionJob
+  | UsersPermissionsUserConnectionUserImage
+  | UsersPermissionsUserConnectionCity;
 
 export type Mutation = {
   __typename?: "Mutation";
@@ -1346,9 +1348,9 @@ export type PlanInput = {
   stype?: Maybe<Scalars["Int"]>;
   addedManually?: Maybe<Scalars["Boolean"]>;
   attachedFiles?: Maybe<Array<Maybe<Scalars["ID"]>>>;
-  meetings?: Maybe<Array<Maybe<Scalars["ID"]>>>;
   street?: Maybe<Scalars["String"]>;
   houseNumber?: Maybe<Scalars["Int"]>;
+  meetings?: Maybe<Array<Maybe<Scalars["ID"]>>>;
 };
 
 export type Query = {
@@ -1742,10 +1744,11 @@ export type UserInput = {
   role?: Maybe<Scalars["ID"]>;
   firstName: Scalars["String"];
   lastName: Scalars["String"];
-  city?: Maybe<Scalars["String"]>;
   organization?: Maybe<Scalars["String"]>;
   job?: Maybe<Scalars["String"]>;
   committees?: Maybe<Array<Maybe<Scalars["ID"]>>>;
+  userImage?: Maybe<Scalars["ID"]>;
+  city?: Maybe<Scalars["String"]>;
 };
 
 export type UsersPermissionsMe = {
@@ -1869,9 +1872,10 @@ export type UsersPermissionsUser = {
   role?: Maybe<UsersPermissionsRole>;
   firstName: Scalars["String"];
   lastName: Scalars["String"];
-  city?: Maybe<Scalars["String"]>;
   organization?: Maybe<Scalars["String"]>;
   job?: Maybe<Scalars["String"]>;
+  userImage?: Maybe<UploadFile>;
+  city?: Maybe<Scalars["String"]>;
   committees?: Maybe<Array<Maybe<Committee>>>;
 };
 
@@ -1979,6 +1983,12 @@ export type UsersPermissionsUserConnectionUpdatedAt = {
   connection?: Maybe<UsersPermissionsUserConnection>;
 };
 
+export type UsersPermissionsUserConnectionUserImage = {
+  __typename?: "UsersPermissionsUserConnectionUserImage";
+  key?: Maybe<Scalars["ID"]>;
+  connection?: Maybe<UsersPermissionsUserConnection>;
+};
+
 export type UsersPermissionsUserConnectionUsername = {
   __typename?: "UsersPermissionsUserConnectionUsername";
   key?: Maybe<Scalars["String"]>;
@@ -1999,9 +2009,10 @@ export type UsersPermissionsUserGroupBy = {
   role?: Maybe<Array<Maybe<UsersPermissionsUserConnectionRole>>>;
   firstName?: Maybe<Array<Maybe<UsersPermissionsUserConnectionFirstName>>>;
   lastName?: Maybe<Array<Maybe<UsersPermissionsUserConnectionLastName>>>;
-  city?: Maybe<Array<Maybe<UsersPermissionsUserConnectionCity>>>;
   organization?: Maybe<
     Array<Maybe<UsersPermissionsUserConnectionOrganization>>
   >;
   job?: Maybe<Array<Maybe<UsersPermissionsUserConnectionJob>>>;
+  userImage?: Maybe<Array<Maybe<UsersPermissionsUserConnectionUserImage>>>;
+  city?: Maybe<Array<Maybe<UsersPermissionsUserConnectionCity>>>;
 };

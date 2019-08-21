@@ -29,7 +29,13 @@
               <v-icon v-text="item.icon"></v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title v-text="item.text"></v-list-item-title>
+              <v-list-item-title
+                v-text="
+                  item.to === '/user/me'
+                    ? user.firstName + ' ' + user.lastName
+                    : item.text
+                "
+              ></v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list-item-group>
@@ -85,6 +91,13 @@ export default class Navigation extends Vue {
       to: "/login",
       visible() {
         return !this.jwt;
+      }
+    },
+    {
+      icon: "mdi-account",
+      to: "/user/me",
+      visible() {
+        return this.jwt;
       }
     },
     {

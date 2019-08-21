@@ -41,7 +41,32 @@ export async function uploadFile(file, jwt) {
   const res = await fetch(uploadEndpoint, {
     method: "post",
     body: body,
-    headers: { Authorization: `Bearer ${jwt}` }
+    headers: {
+      Authorization: `Bearer ${jwt}`
+    }
+  });
+  return (await res.json())[0];
+}
+
+/**
+ * Uploads a user image to strapi
+ * @param {File} file File to upload
+ * @param {string} jwt the json web token (https://strapi.io/documentation/3.0.0-beta.x/guides/authentication.html#token-usage)
+ * @returns {import("../../graphql/types").UploadFile}
+ */
+export async function uploadUserImage(file, jwt, userId) {
+  const body = new FormData();
+  body.append("files", file);
+  body.append("refId", userId);
+  body.append("ref", "user");
+  body.append("source", "users-permissions");
+  body.append("field", "userImage");
+  const res = await fetch(uploadEndpoint, {
+    method: "post",
+    body: body,
+    headers: {
+      Authorization: `Bearer ${jwt}`
+    }
   });
   return (await res.json())[0];
 }

@@ -7,6 +7,7 @@ const Meeting = () => import("../views/Meeting.vue");
 const Plan = () => import("../views/Plan.vue");
 const Manage = () => import("../views/Manage.vue");
 const ManageMeeting = () => import("../views/ManageMeeting.vue");
+const User = () => import("../views/User.vue");
 
 Vue.use(Router);
 
@@ -51,6 +52,15 @@ export default new Router({
     {
       path: "/manage/meeting/:id",
       component: ManageMeeting
+    },
+    {
+      path: "/user",
+      name: "user",
+      component: User
+    },
+    {
+      path: "/user/me",
+      component: User
     }
   ]
 });
