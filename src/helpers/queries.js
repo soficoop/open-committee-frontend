@@ -58,7 +58,6 @@ export const getMeeting = `query getMeeting($id: ID!){
       url
       size
     }
-
   }
 }`;
 
