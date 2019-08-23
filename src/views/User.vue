@@ -114,7 +114,6 @@ export default class User extends Vue {
   @Getter(Getters.JWT) jwt;
   @Action(ActionTypes.UPDATE_USER) updateUserAction;
 
-  editMode = false;
   userInfoData = {};
   tab = null;
 

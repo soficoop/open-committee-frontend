@@ -29,13 +29,7 @@
               <v-icon v-text="item.icon"></v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title
-                v-text="
-                  item.to === '/user/me'
-                    ? user.firstName + ' ' + user.lastName
-                    : item.text
-                "
-              ></v-list-item-title>
+              <v-list-item-title v-text="item.text"></v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list-item-group>
@@ -57,6 +51,71 @@ export default class Navigation extends Vue {
   @Getter(Getters.USER) user;
   @Action(ActionTypes.SIGN_OUT) signOut;
 
+  navItems = [];
+
+  mounted() {
+    /** @typedef NavItem
+     *  @property {string} icon
+     *  @property {string} text
+     *  @property {string} to
+     *  @property {Function} visible
+     *  @property {Function} click
+     */
+
+    /**@type {NavItem[]} */
+    this.navItems = [
+      {
+        icon: "mdi-account-circle",
+        text: "הרשמה / התחברות",
+        to: "/login",
+        visible() {
+          return !this.jwt;
+        }
+      },
+      {
+        icon: "mdi-account",
+        text: this.user.firstName + " " + this.user.lastName,
+        to: "/user/me",
+        visible() {
+          return this.jwt;
+        }
+      },
+      {
+        icon: "mdi-bell",
+        text: "ההתראות שלי",
+        to: "/notifications",
+        visible() {
+          return this.jwt;
+        }
+      },
+      { icon: "mdi-school", text: "מהן ועדות התכנון", to: "/about" },
+      { icon: "mdi-magnify", text: "חיפוש", to: "/search" },
+      {
+        icon: "mdi-tune",
+        text: "ניהול ישיבות",
+        to: "/manage",
+        visible() {
+          return (
+            this.$vuetify.breakpoint.mdAndUp &&
+            this.user &&
+            this.user.role.name == "Administrator"
+          );
+        }
+      },
+      {
+        icon: "mdi-logout",
+        text: "התנתקות",
+        to: "/login",
+        visible() {
+          return this.jwt;
+        },
+        click() {
+          this.signOut();
+        }
+      }
+    ];
+  }
+
   get visibleNavItems() {
     return this.navItems.filter(
       n => n.visible == null || n.visible.apply(this)
@@ -74,65 +133,5 @@ export default class Navigation extends Vue {
   executeNavItemClick(item) {
     item.click && item.click.apply(this);
   }
-
-  /** @typedef NavItem
-   *  @property {string} icon
-   *  @property {string} text
-   *  @property {string} to
-   *  @property {Function} visible
-   *  @property {Function} click
-   */
-
-  /**@type {NavItem[]} */
-  navItems = [
-    {
-      icon: "mdi-account-circle",
-      text: "הרשמה / התחברות",
-      to: "/login",
-      visible() {
-        return !this.jwt;
-      }
-    },
-    {
-      icon: "mdi-account",
-      to: "/user/me",
-      visible() {
-        return this.jwt;
-      }
-    },
-    {
-      icon: "mdi-bell",
-      text: "ההתראות שלי",
-      to: "/notifications",
-      visible() {
-        return this.jwt;
-      }
-    },
-    { icon: "mdi-school", text: "מהן ועדות התכנון", to: "/about" },
-    { icon: "mdi-magnify", text: "חיפוש", to: "/search" },
-    {
-      icon: "mdi-tune",
-      text: "ניהול ישיבות",
-      to: "/manage",
-      visible() {
-        return (
-          this.$vuetify.breakpoint.mdAndUp &&
-          this.user &&
-          this.user.role.name == "Administrator"
-        );
-      }
-    },
-    {
-      icon: "mdi-logout",
-      text: "התנתקות",
-      to: "/login",
-      visible() {
-        return this.jwt;
-      },
-      click() {
-        this.signOut();
-      }
-    }
-  ];
 }
 </script>
