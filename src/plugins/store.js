@@ -171,7 +171,6 @@ export default new Vuex.Store({
           );
           result.user.committees = userCommitteesResult.committees;
         }
-        console.log(result.user);
         context.commit(MutationTypes.SET_JWT, result.jwt);
         context.commit(MutationTypes.SET_USER, result.user);
         return true;
