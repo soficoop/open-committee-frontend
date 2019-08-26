@@ -75,7 +75,7 @@ export default class Navigation extends Vue {
       {
         icon: "mdi-account",
         text:
-          this.user !== null
+          this.user !== undefined
             ? this.user.firstName + " " + this.user.lastName
             : "",
         to: "/user/me",
