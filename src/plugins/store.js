@@ -225,7 +225,6 @@ export default new Vuex.Store({
      * Update user
      * @param {import("vuex").Store} context the store object
      * @param {import("../../graphql/types").UsersPermissionsUser} updatedUserFields
-     * @param {string} id ID of user to update
      */
     async [ActionTypes.UPDATE_USER](context, updatedUserFields) {
       updatedUserFields.id = context.state.user.id;
