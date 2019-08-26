@@ -55,15 +55,15 @@
         </v-tabs>
         <v-tabs-items v-model="tab" class="overflow-hidden pa-1 transparent">
           <v-tab-item>
-            <div v-if="user.job.length">
+            <div v-if="user.job">
               <span class="font-weight-bold ml-1">תפקיד:</span>
               <span>{{ user.job }}</span>
             </div>
-            <div v-if="user.organization.length">
+            <div v-if="user.organization">
               <span class="font-weight-bold ml-1">שייכות לארגון:</span>
               <span>{{ user.organization }}</span>
             </div>
-            <div v-if="user.city.length">
+            <div v-if="user.city">
               <span class="font-weight-bold ml-1">עיר:</span>
               <span>{{ user.city }}</span>
             </div>
@@ -145,7 +145,7 @@ export default class User extends Vue {
     if (this.user.userImage !== undefined) {
       return apiEndpoint + this.user.userImage.url;
     }
-    return "../assets/userImage.png";
+    return require("../assets/userImage.png");
   }
 }
 </script>

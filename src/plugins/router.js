@@ -8,6 +8,7 @@ const Plan = () => import("../views/Plan.vue");
 const Manage = () => import("../views/Manage.vue");
 const ManageMeeting = () => import("../views/ManageMeeting.vue");
 const User = () => import("../views/User.vue");
+const Notifications = () => import("../views/Notifications.vue");
 
 Vue.use(Router);
 
@@ -61,6 +62,10 @@ export default new Router({
     {
       path: "/user/me",
       component: User
+    },
+    {
+      path: "/notifications",
+      component: Notifications
     }
   ]
 });
