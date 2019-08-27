@@ -1,32 +1,34 @@
 <template>
-  <v-layout wrap align-content-space-around>
-    <v-flex xs12>
-      <h1
-        :class="{
-          'headline font-weight-black primary--text mb-3':
-            $vuetify.breakpoint.smAndDown,
-          'display-2 font-weight-black primary--text mb-3':
-            $vuetify.breakpoint.mdAndUp
-        }"
-        tabindex="0"
-      >
-        ברוכים הבאים למערכת ועדה פתוחה
-      </h1>
-      <v-flex xs12 md7>
-        <p tabindex="0" class="primary--text">
-          המערכת שלנו מנגישה לציבור דיונים בנושאי תכנון ובנייה בועדות התכנון
-          בישראל, ומזמינה אתכם להגיב ולנהל דיון, יחד עם נציגי הארגונים הירוקים
-          בועדות השונות.
-        </p>
+  <v-container class="pa-md-12">
+    <v-layout wrap align-content-space-around>
+      <v-flex xs12>
+        <h1
+          :class="{
+            'headline font-weight-black primary--text mb-3':
+              $vuetify.breakpoint.smAndDown,
+            'display-2 font-weight-black primary--text mb-3':
+              $vuetify.breakpoint.mdAndUp
+          }"
+          tabindex="0"
+        >
+          ברוכים הבאים למערכת ועדה פתוחה
+        </h1>
+        <v-flex xs12 md7>
+          <p tabindex="0" class="primary--text">
+            המערכת שלנו מנגישה לציבור דיונים בנושאי תכנון ובנייה בועדות התכנון
+            בישראל, ומזמינה אתכם להגיב ולנהל דיון, יחד עם נציגי הארגונים הירוקים
+            בועדות השונות.
+          </p>
+        </v-flex>
       </v-flex>
-    </v-flex>
-    <v-flex xs12>
-      <h2 class="headline primary--text font-weight-bold my-3" tabindex="0">
-        הישיבות הקרובות במערכת
-      </h2>
-      <MeetingCards :meetings="upcomingMeetingCards"></MeetingCards>
-    </v-flex>
-  </v-layout>
+      <v-flex xs12>
+        <h2 class="headline primary--text font-weight-bold my-3" tabindex="0">
+          הישיבות הקרובות במערכת
+        </h2>
+        <MeetingCards :meetings="upcomingMeetingCards"></MeetingCards>
+      </v-flex>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>

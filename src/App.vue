@@ -19,11 +19,9 @@
       @openChanged="value => (isNavOpen = value)"
     ></Navigation>
     <v-content>
-      <v-container class="pa-md-12">
-        <v-slide-y-transition mode="out-in">
-          <router-view></router-view>
-        </v-slide-y-transition>
-      </v-container>
+      <v-slide-y-transition mode="out-in">
+        <router-view></router-view>
+      </v-slide-y-transition>
     </v-content>
   </v-app>
 </template>
