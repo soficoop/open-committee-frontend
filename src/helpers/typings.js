@@ -1,3 +1,11 @@
+/** @typedef NavItem
+ *  @property {string} icon
+ *  @property {string} text
+ *  @property {string} to
+ *  @property {Function} visible
+ *  @property {Function} click
+ */
+
 /**
  * @typedef MeetingCard
  * @property {string} headline

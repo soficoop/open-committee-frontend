@@ -54,15 +54,7 @@ export default class Navigation extends Vue {
   navItems = [];
 
   mounted() {
-    /** @typedef NavItem
-     *  @property {string} icon
-     *  @property {string} text
-     *  @property {string} to
-     *  @property {Function} visible
-     *  @property {Function} click
-     */
-
-    /**@type {NavItem[]} */
+    /**@type {import("../helpers/typings").NavItem[]} */
     this.navItems = [
       {
         icon: "mdi-account-circle",
@@ -74,8 +66,7 @@ export default class Navigation extends Vue {
       },
       {
         icon: "mdi-account",
-        text:
-          this.jwt !== "" ? this.user.firstName + " " + this.user.lastName : "",
+        text: this.jwt ? `${this.user.firstName} ${this.user.lastName}` : "",
         to: "/user/me",
         visible() {
           return this.jwt;
