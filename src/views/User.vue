@@ -42,56 +42,72 @@
         </div>
       </v-col>
 
-      <v-col cols="12" sm xl="5">
-        <v-tabs
-          grow
-          show-arrows
-          class="mb-3"
-          v-model="tab"
-          background-color="transparent"
-        >
-          <v-tab @click="authenticationFailed = false">פרטים</v-tab>
-          <v-tab @click="authenticationFailed = false">עריכת פרטים</v-tab>
-        </v-tabs>
-        <v-tabs-items v-model="tab" class="overflow-hidden pa-1 transparent">
-          <v-tab-item>
-            <div v-if="user.job">
-              <span class="font-weight-bold ml-1">תפקיד:</span>
-              <span>{{ user.job }}</span>
-            </div>
-            <div v-if="user.organization">
-              <span class="font-weight-bold ml-1">שייכות לארגון:</span>
-              <span>{{ user.organization }}</span>
-            </div>
-            <div v-if="user.city">
-              <span class="font-weight-bold ml-1">עיר:</span>
-              <span>{{ user.city }}</span>
-            </div>
-          </v-tab-item>
-          <v-tab-item>
-            <v-text-field
-              label="תפקיד"
-              v-model="userInfoData.job"
-              name="job"
-              class="pl-1"
-            ></v-text-field>
-            <v-text-field
-              label="שייכות לארגון"
-              v-model="userInfoData.organization"
-              name="organization"
-              class="pl-1"
-            ></v-text-field>
-            <v-text-field
-              label="עיר"
-              v-model="userInfoData.city"
-              name="city"
-              class="pl-1"
-            ></v-text-field>
-            <v-btn block large color="secondary" @click="updateInfo()"
-              >עדכן</v-btn
-            >
-          </v-tab-item>
-        </v-tabs-items>
+      <v-col cols="12" lg="auto">
+        <div v-if="user.job">
+          <span class="font-weight-bold ml-1">תפקיד:</span>
+          <span>{{ user.job }}</span>
+        </div>
+        <div v-if="user.organization">
+          <span class="font-weight-bold ml-1">שייכות לארגון:</span>
+          <span>{{ user.organization }}</span>
+        </div>
+        <div v-if="user.city">
+          <span class="font-weight-bold ml-1">עיר:</span>
+          <span>{{ user.city }}</span>
+        </div>
+      </v-col>
+      <v-col>
+        <v-dialog v-model="dialog" persistent max-width="600px">
+          <template v-slot:activator="{ on }">
+            <v-btn text color="primary" dark v-on="on" icon>
+              <v-icon>mdi-pencil</v-icon>
+            </v-btn>
+          </template>
+          <v-card>
+            <v-card-title>
+              <span class="headline">עריכת פרטים</span>
+            </v-card-title>
+            <v-card-text>
+              <v-container>
+                <v-row>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field
+                      label="תפקיד"
+                      v-model="userInfoData.job"
+                      name="job"
+                      class="pl-1"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field
+                      label="שייכות לארגון"
+                      v-model="userInfoData.organization"
+                      name="organization"
+                      class="pl-1"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field
+                      label="עיר"
+                      v-model="userInfoData.city"
+                      name="city"
+                      class="pl-1"
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-card-text>
+            <v-card-actions>
+              <div class="flex-grow-1"></div>
+              <v-btn color="blue darken-1" text @click="dialog = false"
+                >Close</v-btn
+              >
+              <v-btn color="blue darken-1" text @click="updateInfo()"
+                >Save</v-btn
+              >
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </v-col>
     </v-row>
   </v-layout>
@@ -116,6 +132,7 @@ export default class User extends Vue {
 
   userInfoData = {};
   tab = null;
+  dialog = false;
 
   mounted() {
     this.userInfoData = {
