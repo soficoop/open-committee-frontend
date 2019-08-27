@@ -1,39 +1,42 @@
 <template>
   <v-layout column>
-    <v-flex v-for="(item, i) in meetings" :key="i" xs12>
-      <v-card
-        class="my-1"
-        hover
-        :to="'/meeting/' + item.id"
-        v-ripple="{ class: `secondary--text` }"
-      >
-        <v-card-text>
-          <v-layout align-center>
-            <h3 class="subtitle-1" v-if="item.headline" tabindex="0">
-              {{ item.headline }}
-            </h3>
-            <v-divider vertical color="black" class="mx-2"></v-divider>
-            <h3
-              class="subtitle-1 align-self-center"
-              tabindex="0"
-              v-if="typeof item.date != 'string'"
-            >
-              {{ item.date.toLocaleDateString("he") }}
-            </h3>
-            <v-spacer class="mx-3"></v-spacer>
-            <v-btn
-              icon
-              x-small
-              v-if="item.isEditable"
-              color="accent"
-              class="mx-1"
-              @click.prevent="$router.push(`/manage/meeting/${item.id}`)"
-            >
-              <v-icon>mdi-pencil</v-icon>
-            </v-btn>
-            <v-icon>mdi-arrow-left</v-icon>
-          </v-layout>
-        </v-card-text>
+    <v-flex xs1>
+      <v-card class="pa-1">
+        <v-btn
+          block
+          large
+          depressed
+          :text="!isCreatingNewComment"
+          @click="toggleCommentCreation"
+        >
+          <v-icon left>mdi-plus</v-icon>
+          צור התייחסות חדשה
+        </v-btn>
+        <v-expand-transition>
+          <v-card-text v-if="isCreatingNewComment">
+            <v-layout row wrap>
+              <v-flex xs12 md6 pa-1>
+                <v-text-field outlined hide-details label="נושא"></v-text-field>
+              </v-flex>
+              <v-flex xs12 md6 pa-1>
+                <v-text-field outlined hide-details label="שם"></v-text-field>
+              </v-flex>
+              <v-flex pa-1>
+                <v-textarea
+                  outlined
+                  hide-details
+                  label="תוכן ההתייחסות"
+                ></v-textarea>
+              </v-flex>
+              <v-flex xs12 pa-1>
+                <v-btn block color="primary">
+                  שליחה
+                  <v-icon class="mdi-flip-h" right>mdi-send</v-icon>
+                </v-btn>
+              </v-flex>
+            </v-layout>
+          </v-card-text>
+        </v-expand-transition>
       </v-card>
     </v-flex>
   </v-layout>
@@ -41,12 +44,20 @@
 
 <script>
 import Component from "vue-class-component";
-import { Prop } from "vue-property-decorator";
 import Vue from "vue";
 
 @Component
 export default class Comments extends Vue {
-  /**@type {import("../helpers/typings").MeetingCard[]} */
-  @Prop(Array) meetings;
+  content = "";
+  isCreatingNewComment = false;
+  isSubmitting = false;
+  name = "";
+  title = "";
+  toggleCommentCreation() {
+    this.isCreatingNewComment = !this.isCreatingNewComment;
+  }
+  submitComment() {
+    this.isSubmitting = true;
+  }
 }
 </script>

@@ -4,7 +4,7 @@
       <v-flex xs12 pb-3>
         <h3 class="headline primary--text font-weight-black">
           <span v-if="plan.number" tabindex="0">{{ plan.number }}</span>
-          <span v-if="plan.number && plan.name">•</span>
+          <span v-if="plan.number && plan.name"> • </span>
           <span v-if="plan.name" tabindex="0">{{ plan.name }}</span>
         </h3>
         <h4 class="title primary--text">
@@ -23,7 +23,7 @@
         <v-flex xs12 md8 pa-3>
           <v-flex pb-3 v-if="plan.targets">
             <v-card flat class="pa-4">
-              <h4 class="title primary--text">מטרות</h4>
+              <h4 class="title primary--text" tabindex="0">מטרות</h4>
               <p
                 class="whitespace-preline"
                 tabindex="0"
@@ -58,10 +58,12 @@
               v-for="infoItem in planInformation"
               :key="infoItem.key"
             >
-              <v-flex xs4 class="font-weight-semibold">{{
-                infoItem.key
-              }}</v-flex>
-              <v-flex offset-xs1 xs7>{{ infoItem.value }}</v-flex>
+              <v-flex xs4 class="font-weight-semibold">
+                <span tabindex="0">{{ infoItem.key }}</span>
+              </v-flex>
+              <v-flex offset-xs1 xs7>
+                <span tabindex="0">{{ infoItem.value }}</span>
+              </v-flex>
             </v-layout>
           </v-card>
         </v-flex>
@@ -70,16 +72,18 @@
         אין מידע זמין על ה{{ planTypeFirstWord }}
       </h2>
       <v-flex xs12 py-3 v-if="plan.attachedFiles.length">
-        <h4 class="title primary--text">
-          <span tabindex="0">מסמכים רלוונטים</span>
-        </h4>
+        <h4 class="title primary--text" tabindex="0">מסמכים רלוונטים</h4>
         <FileCards class="py-1" :files="plan.attachedFiles" />
       </v-flex>
       <v-flex xs12 py-3 v-if="planMeetings && planMeetings.length">
-        <h4 class="title primary--text">
-          <span tabindex="0">היסטוריית הדיונים ב{{ planTypeFirstWord }}</span>
+        <h4 class="title primary--text" tabindex="0">
+          היסטוריית הדיונים ב{{ planTypeFirstWord }}
         </h4>
         <MeetingCards :meetings="planMeetings"></MeetingCards>
+      </v-flex>
+      <v-flex xs12 py-3 v-if="planMeetings && planMeetings.length">
+        <h4 class="title primary--text" tabindex="0">התייחסויות</h4>
+        <Comments></Comments>
       </v-flex>
     </v-layout>
   </v-container>
@@ -94,8 +98,9 @@ import { Getter } from "vuex-class";
 import MeetingCards from "../components/MeetingCards.vue";
 import FileCards from "../components/FileCards.vue";
 import Map from "../components/Map.vue";
+import Comments from "../components/Comments.vue";
 
-@Component({ components: { MeetingCards, FileCards, Map } })
+@Component({ components: { MeetingCards, FileCards, Map, Comments } })
 export default class Plan extends Vue {
   /** @type {import("../../graphql/types").Plan} */
   @Getter(Getters.SELECTED_PLAN) plan;
