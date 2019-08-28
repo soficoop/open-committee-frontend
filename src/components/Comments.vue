@@ -75,7 +75,11 @@
                 {{ comment.createdAt.toLocaleDateString("he") }}
               </span>
             </h5>
-            <p tabindex="0" class="whitespace-preline">{{ comment.content }}</p>
+            <p
+              tabindex="0"
+              class="body-1 whitespace-preline"
+              v-html="comment.content"
+            ></p>
           </v-flex>
         </v-card-text>
       </v-card>
