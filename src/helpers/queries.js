@@ -91,6 +91,13 @@ export const getPlan = `query getPlan($id: ID!) {
       url
       size
     }
+    comments {
+      id
+      title
+      name
+      content
+      createdAt
+    }
   }
 }`;
 
