@@ -126,7 +126,7 @@ export default class Meeting extends Vue {
   get agendaItems() {
     return this.meeting.plans.map(plan => ({
       id: plan.id,
-      headline: plan.type == "תוכנית" ? `תכנית מספר ${plan.number}` : "נושא",
+      headline: plan.type == "תוכנית" ? `תכנית מספר ${plan.number}` : plan.type,
       description: plan.name,
       bullets: [
         { key: "סטטוס", value: plan.status },

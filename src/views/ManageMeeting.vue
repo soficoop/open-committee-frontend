@@ -262,7 +262,7 @@
       <v-dialog persistent v-model="submittedSuccessfully" max-width="300px">
         <v-card color="secondary" dark>
           <v-card-title>הישיבה נשמרה בהצלחה</v-card-title>
-          <v-card-text>לחיצה על אישור תיקח אותך למסך הישיבה</v-card-text>
+          <v-card-text>כעת תועבר למסך הישיבה</v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn

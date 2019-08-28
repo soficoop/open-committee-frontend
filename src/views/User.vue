@@ -1,5 +1,5 @@
 <template>
-  <v-container class="pa-md-12" fill-height>
+  <v-container class="pa-md-12" fill-height v-if="user">
     <v-row justify="center">
       <v-col cols="12" lg="auto" align-self="center">
         <v-card flat class="pa-4">
