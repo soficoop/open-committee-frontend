@@ -1,5 +1,5 @@
 /**
- * @typedef NavItem
+ *  @typedef NavItem
  *  @property {string} icon
  *  @property {string} text
  *  @property {string} to
