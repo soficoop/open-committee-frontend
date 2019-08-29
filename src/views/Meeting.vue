@@ -49,11 +49,11 @@
           ></AgendaCards>
         </v-layout>
       </v-flex>
-      <v-flex xs12 py-3 v-if="meeting.additionalFiles.length">
+      <v-flex xs12 py-3 v-if="meetingFiles.length">
         <h4 class="title primary--text">
           <span tabindex="0">מסמכים רלוונטים</span>
         </h4>
-        <FileCards class="py-1" :files="meeting.additionalFiles" />
+        <FileCards class="py-1" :files="meetingFiles" />
       </v-flex>
       <v-flex xs12 v-if="meeting.summary">
         <h4 class="title primary--text" tabindex="0">סיכום הישיבה</h4>
@@ -97,6 +97,30 @@ export default class Meeting extends Vue {
   @Getter(Getters.MANAGABLE_MEETINGS) managableMeetings;
 
   hoveredPlan = "";
+
+  get meetingFiles() {
+    const arr = [
+      {
+        name: "פרוטוקול הישיבה המלא",
+        url: this.meeting.protocol && this.meeting.protocol.url
+      },
+      {
+        name: "סיכום החלטות הישיבה",
+        url: this.meeting.decisions && this.meeting.decisions.url
+      },
+      {
+        name: "סדר היום המלא של הישיבה",
+        url: this.meeting.transcript && this.meeting.transcript.url
+      }
+    ].filter(el => el.url);
+
+    if (this.meeting.additionalFiles.length > 0) {
+      this.meeting.additionalFiles.forEach(el => {
+        arr.push(el);
+      });
+    }
+    return arr;
+  }
 
   handlePlanClicked(plan) {
     if (this.$vuetify.breakpoint.mdAndUp) {
