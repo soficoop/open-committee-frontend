@@ -61,25 +61,43 @@
     <v-flex my-2 v-if="plan.comments.length">
       <v-card flat>
         <v-card-text>
-          <v-flex v-for="comment in plan.comments" :key="comment.id">
-            <h4
-              class="subtitle-1 font-weight-semibold primary--text"
-              tabindex="0"
-            >
-              {{ comment.title }}
-            </h4>
-            <h5 class="subtitle-2 font-weight-light accent--text">
-              <span tabindex="0">{{ comment.name }}</span>
-              <span> • </span>
-              <span tabindex="0">
-                {{ comment.createdAt.toLocaleDateString("he") }}
-              </span>
-            </h5>
-            <p
-              tabindex="0"
-              class="body-1 whitespace-preline"
-              v-html="comment.content"
-            ></p>
+          <v-flex
+            v-for="comment in plan.comments"
+            :key="comment.id"
+            class="my-5"
+          >
+            <v-row>
+              <v-col cols="1" class="text-center">
+                <v-img
+                  v-if="comment.user && comment.user.userImage"
+                  width="48"
+                  height="48"
+                  :src="generateUrlFromComment(comment.user.userImage.url)"
+                  class="s-circle"
+                ></v-img>
+                <v-icon v-else class="mdi-48px">mdi-account-circle</v-icon>
+              </v-col>
+              <v-col>
+                <h4 class="subtitle-1 font-weight-semibold primary--text">
+                  <span tabindex="0">{{ comment.title }}</span>
+                </h4>
+                <h5 class="subtitle-2 font-weight-light accent--text">
+                  <span tabindex="0">{{ comment.name }}</span>
+                  <span> • </span>
+                  <span tabindex="0">
+                    {{ comment.createdAt.toLocaleDateString("he") }}
+                  </span>
+                </h5>
+                <p
+                  tabindex="0"
+                  class="body-1 whitespace-preline my-1"
+                  v-html="comment.content"
+                ></p>
+                <a href="javascript:void(0)">
+                  הגב להתייחסות
+                </a>
+              </v-col>
+            </v-row>
           </v-flex>
         </v-card-text>
       </v-card>
@@ -91,7 +109,7 @@
 import Component from "vue-class-component";
 import Vue from "vue";
 import { Getter, Action } from "vuex-class";
-import { Getters, ActionTypes } from "../helpers/constants";
+import { Getters, ActionTypes, apiEndpoint } from "../helpers/constants";
 import { makeGqlRequest } from "../helpers/functions";
 import { createComment } from "../helpers/mutations";
 
@@ -109,9 +127,15 @@ export default class Comments extends Vue {
   get canSubmit() {
     return this.name && this.title && this.content;
   }
+  /**
+   * Gets executed when the comment creation button is clicked
+   */
   toggleCommentCreation() {
     this.isCreatingNewComment = !this.isCreatingNewComment;
   }
+  /**
+   * Submits a comment
+   */
   async submit() {
     this.isSubmitting = true;
     await makeGqlRequest(createComment, {
@@ -122,6 +146,14 @@ export default class Comments extends Vue {
     });
     await this.fetchPlan(this.plan.id);
     this.hasSubmitted = true;
+  }
+  /**
+   * Generates url for a comment's user image
+   * @param {import("../../graphql/types").Comment} comment
+   * @returns {string} url
+   */
+  generateUrlFromComment(comment) {
+    return apiEndpoint + comment.user.userImage.url;
   }
 }
 </script>
