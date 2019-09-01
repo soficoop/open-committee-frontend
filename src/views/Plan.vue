@@ -4,7 +4,7 @@
       <v-flex xs12 pb-3>
         <h3 class="headline primary--text font-weight-black">
           <span v-if="plan.number" tabindex="0">{{ plan.number }}</span>
-          <span v-if="plan.number && plan.name"> • </span>
+          <span v-if="plan.number && plan.name">•</span>
           <span v-if="plan.name" tabindex="0">{{ plan.name }}</span>
         </h3>
         <h4 class="title primary--text">

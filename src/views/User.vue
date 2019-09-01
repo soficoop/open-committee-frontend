@@ -20,7 +20,7 @@
           </v-row>
           <v-row justify="center" justify-lg="start">
             <v-col cols="10" sm="auto">
-              <div class="img-wrapper p-relative overflow-hidden">
+              <v-card flat class="img-wrapper p-relative overflow-hidden">
                 <img
                   :src="userImageUrl"
                   alt="user image placeholder"
@@ -44,7 +44,7 @@
                   />
                   <input type="submit" class="screen-reader-input" />
                 </form>
-              </div>
+              </v-card>
             </v-col>
 
             <v-col cols="12" lg="auto">
