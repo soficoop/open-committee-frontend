@@ -171,10 +171,12 @@ export const createComment = `mutation createComment(
   $name: String!
   $content: String!
   $plan: ID!
+  $parent: ID
+  $user: ID
 ) {
   createComment(
     input: {
-      data: { title: $title, name: $name, content: $content, plan: $plan }
+      data: { title: $title, name: $name, content: $content, plan: $plan, user: $user, parent: $parent }
     }
   ) {
     comment {

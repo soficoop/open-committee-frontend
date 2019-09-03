@@ -170,7 +170,7 @@ export default class User extends Vue {
     if (this.user.userImage != null) {
       return apiEndpoint + this.user.userImage.url;
     }
-    return "/img/userImage.png";
+    return "/img/userImage.svg";
   }
 }
 </script>
