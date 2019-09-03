@@ -18,7 +18,7 @@
           <v-expand-transition>
             <NewComment
               v-if="isCreatingNewComment"
-              @submit="setCommentCreation(false)"
+              @submit="handleCommentSubmitted"
             />
           </v-expand-transition>
         </v-card>
@@ -60,7 +60,7 @@
                   <NewComment
                     v-if="replyingTo == comment.id"
                     :parent="comment.id"
-                    @submit="setCommentCreation(false)"
+                    @submit="handleCommentSubmitted"
                   />
                 </v-expand-transition>
               </v-col>
@@ -104,16 +104,40 @@
 import Component from "vue-class-component";
 import Vue from "vue";
 import NewComment from "./NewComment";
-import { Getter, Action } from "vuex-class";
-import { Getters, ActionTypes, apiEndpoint } from "../helpers/constants";
+import { Getter } from "vuex-class";
+import { Getters, apiEndpoint } from "../helpers/constants";
+import { getCommentsByPlan } from "../helpers/queries";
+import { makeGqlRequest } from "../helpers/functions";
 
 @Component({ components: { NewComment } })
 export default class Comments extends Vue {
   /** @type {import("../../graphql/types").Plan} */
   @Getter(Getters.SELECTED_PLAN) plan;
-  @Action(ActionTypes.FETCH_PLAN) fetchPlan;
+  comments = [];
   isCreatingNewComment = false;
   replyingTo = "";
+
+  created() {
+    this.fetchComments();
+  }
+
+  /**
+   * Fetches comments for the selected plan
+   */
+  async fetchComments() {
+    const { comments } = await makeGqlRequest(getCommentsByPlan, {
+      plan: this.plan.id
+    });
+    this.comments = comments;
+  }
+
+  /**
+   * Handles submit event of NewComment component
+   */
+  async handleCommentSubmitted() {
+    await this.fetchComments();
+    this.setCommentCreation(false);
+  }
 
   /**
    * Gets executed when the comment creation button is clicked
@@ -152,7 +176,7 @@ export default class Comments extends Vue {
   }
 
   get rootComments() {
-    return this.plan.comments.filter(comment => comment.parent == null);
+    return this.comments.filter(comment => comment.parent == null);
   }
 }
 </script>

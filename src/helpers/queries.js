@@ -93,32 +93,38 @@ export const getPlan = `query getPlan($id: ID!) {
     }
     comments {
       id
+    }
+  }
+}`;
+
+export const getCommentsByPlan = `query getCommentsByPlan($plan: ID!) {
+  comments(where: { plan_eq: $plan }) {
+    id
+    title
+    name
+    content
+    createdAt
+    parent {
+      id
+    }
+    user {
+      firstName
+      lastName
+      userImage {
+        url
+      }
+    }
+    children {
+      id
       title
       name
       content
       createdAt
-      parent {
-        id
-      }
       user {
         firstName
         lastName
         userImage {
           url
-        }
-      }
-      children {
-        id
-        title
-        name
-        content
-        createdAt
-        user {
-          firstName
-          lastName
-          userImage {
-            url
-          }
         }
       }
     }

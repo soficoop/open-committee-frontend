@@ -93,7 +93,6 @@ export default class NewComment extends Vue {
       user: this.user && this.user.id,
       parent: this.parent
     });
-    await this.fetchPlan(this.plan.id);
     this.$emit("submit");
     this.isSubmitting = false;
   }
