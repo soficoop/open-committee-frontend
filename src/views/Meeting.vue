@@ -116,7 +116,8 @@ export default class Meeting extends Vue {
 
     if (this.meeting.additionalFiles.length > 0) {
       this.meeting.additionalFiles.forEach(el => {
-        arr.push(el);
+        delete el.id;
+        el.url !== "" && el.name !== "" ? arr.push(el) : null;
       });
     }
     return arr;

@@ -137,10 +137,33 @@ describe("Meeting.vue", () => {
           'במרחק כ- 200 מטר צפונה ממסגד "עלי בן אבי טאלב" ובצמוד לכביש הטבעת המזרחי .'
       }
     ],
-    protocol: null,
-    transcript: null,
-    decisions: null,
-    additionalFiles: []
+    protocol: {
+      id: "5d679568f33e12619cd1c722",
+      name: "Screenshot from 2019-08-08 00-53-19.png",
+      url: "/uploads/ed3fee06b88747d69ec39db37c4ab3ed.png"
+    },
+    transcript: {
+      id: "5d679568f33e12619cd1c721",
+      name: "Screenshot from 2019-08-09 08-09-42.png",
+      url: "/uploads/1c921d0592a9417793f4bcb3f909429e.png"
+    },
+    decisions: {
+      id: "5d67a32ef33e12619cd1c72a",
+      name: "Screenshot from 2019-07-20 16-16-07.png",
+      url: "/uploads/094d3d84d5344780afa5af6546ec4023.png"
+    },
+    additionalFiles: [
+      {
+        id: "5d679a2ef33e12619cd1c728",
+        name: "Screenshot from 2019-07-20 16-16-07.png",
+        url: "/uploads/2653b635428342c4af43b753f69c776e.png"
+      },
+      {
+        id: "5d66780bdcd8033103b82e6f",
+        name: "land2.png",
+        url: "/uploads/69c04f85fa854641b626a7f6eefdbf55.png"
+      }
+    ]
   };
   let actions = {
     [ActionTypes.FETCH_MEETING]: jest.fn(),
@@ -193,5 +216,14 @@ describe("Meeting.vue", () => {
     meeting.committee.meetings = [];
     expect(wrapper.vm.otherMeetingsOfCommittee).toHaveLength(0);
     expect(wrapper.text()).not.toContain("דיונים נוספים של הועדה");
+  });
+  it("computed meetingFiles getter is correct", () => {
+    expect(wrapper.vm.meetingFiles).toHaveLength(5);
+    meeting.protocol.url = "";
+    expect(wrapper.vm.meetingFiles).toHaveLength(4);
+    meeting.additionalFiles[0].url = "";
+    expect(wrapper.vm.meetingFiles).toHaveLength(3);
+    meeting.additionalFiles[1].name = "";
+    expect(wrapper.vm.meetingFiles).toHaveLength(2);
   });
 });
