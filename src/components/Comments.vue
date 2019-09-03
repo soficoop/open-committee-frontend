@@ -7,6 +7,7 @@
             block
             large
             depressed
+            color="secondary"
             :text="!isCreatingNewComment"
             @click="setCommentCreation(!isCreatingNewComment)"
           >
@@ -26,75 +27,73 @@
     <v-flex my-2 v-if="rootComments.length">
       <v-card flat>
         <v-card-text>
-          <v-row v-for="comment in rootComments" :key="comment.id" dense>
-            <v-col cols="2" sm="1">
-              <v-img
-                aspect-ratio="1"
-                :src="generateUrlFromComment(comment)"
-                class="s-circle mx-auto"
-                max-width="48"
-              ></v-img>
-            </v-col>
-            <v-col cols="10">
-              <h4 class="subtitle-1 font-weight-semibold primary--text">
-                <span tabindex="0">{{ comment.title }}</span>
-              </h4>
-              <h5 class="subtitle-2 font-weight-light accent--text">
-                <span tabindex="0">{{ getCommenter(comment) }}</span>
-                <span> • </span>
-                <span tabindex="0">
-                  {{ comment.createdAt.toLocaleDateString("he") }}
-                </span>
-              </h5>
-              <p
-                tabindex="0"
-                class="body-1 whitespace-preline my-1"
-                v-html="comment.content"
-              ></p>
-              <a href="javascript:void(0)" @click="toggleReply(comment.id)">
-                הגב להתייחסות
-              </a>
-              <v-expand-transition>
-                <NewComment
-                  v-if="replyingTo == comment.id"
-                  :parent="comment.id"
-                  @submit="setCommentCreation(false)"
-                />
-              </v-expand-transition>
-              <v-row
-                v-for="child in comment.children"
-                :key="child.id"
-                my-2
-                dense
-              >
-                <v-col cols="2" sm="1">
-                  <v-img
-                    aspect-ratio="1"
-                    max-width="48"
-                    :src="generateUrlFromComment(comment)"
-                    class="s-circle mx-auto"
-                  ></v-img>
-                </v-col>
-                <v-col cols="10">
-                  <h4 class="subtitle-1 font-weight-semibold primary--text">
-                    <span tabindex="0">{{ child.title }}</span>
-                  </h4>
-                  <h5 class="subtitle-2 font-weight-light accent--text">
-                    <span tabindex="0">{{ getCommenter(child) }}</span>
-                    <span> • </span>
-                    <span tabindex="0">
-                      {{ child.createdAt.toLocaleDateString("he") }}
-                    </span>
-                  </h5>
-                  <p
-                    tabindex="0"
-                    class="body-1 whitespace-preline my-1"
-                    v-html="child.content"
-                  ></p>
-                </v-col>
-              </v-row>
-            </v-col>
-          </v-row>
+          <div v-for="comment in rootComments" :key="comment.id">
+            <v-row dense class="my-2">
+              <v-col cols="2" sm="1">
+                <v-img
+                  aspect-ratio="1"
+                  :src="generateUrlFromComment(comment)"
+                  class="s-circle mx-auto"
+                  max-width="48"
+                ></v-img>
+              </v-col>
+              <v-col cols="10">
+                <h4 class="subtitle-1 font-weight-semibold primary--text">
+                  <span tabindex="0">{{ comment.title }}</span>
+                </h4>
+                <h5 class="subtitle-2 font-weight-light accent--text">
+                  <span tabindex="0">{{ getCommenter(comment) }}</span>
+                  <span> • </span>
+                  <span tabindex="0">
+                    {{ comment.createdAt.toLocaleDateString("he") }}
+                  </span>
+                </h5>
+                <p
+                  tabindex="0"
+                  class="body-1 whitespace-preline my-1"
+                  v-html="comment.content"
+                ></p>
+                <a href="javascript:void(0)" @click="toggleReply(comment.id)">
+                  הגב להתייחסות
+                </a>
+                <v-expand-transition>
+                  <NewComment
+                    v-if="replyingTo == comment.id"
+                    :parent="comment.id"
+                    @submit="setCommentCreation(false)"
+                  />
+                </v-expand-transition>
+              </v-col>
+            </v-row>
+            <v-row v-for="child in comment.children" :key="child.id" my-2 dense>
+              <v-col cols="2" sm="1"></v-col>
+              <v-col cols="2" sm="1">
+                <v-img
+                  aspect-ratio="1"
+                  max-width="48"
+                  :src="generateUrlFromComment(comment)"
+                  class="s-circle mx-auto"
+                ></v-img>
+              </v-col>
+              <v-col cols="8">
+                <h4 class="subtitle-1 font-weight-semibold primary--text">
+                  <span tabindex="0">{{ child.title }}</span>
+                </h4>
+                <h5 class="subtitle-2 font-weight-light accent--text">
+                  <span tabindex="0">{{ getCommenter(child) }}</span>
+                  <span> • </span>
+                  <span tabindex="0">
+                    {{ child.createdAt.toLocaleDateString("he") }}
+                  </span>
+                </h5>
+                <p
+                  tabindex="0"
+                  class="body-1 whitespace-preline my-1"
+                  v-html="child.content"
+                ></p>
+              </v-col>
+            </v-row>
+          </div>
         </v-card-text>
       </v-card>
     </v-flex>
