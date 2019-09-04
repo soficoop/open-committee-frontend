@@ -70,14 +70,7 @@ export default class NewComment extends Vue {
   }
 
   get canSubmit() {
-    return this.name && this.title && this.content;
-  }
-
-  /**
-   * Gets executed when the comment creation button is clicked
-   */
-  toggleCommentCreation() {
-    this.isCreatingNewComment = !this.isCreatingNewComment;
+    return this.name != "" && this.title != "" && this.content != "";
   }
 
   /**

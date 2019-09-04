@@ -32,7 +32,7 @@
               <v-col cols="2" sm="1">
                 <v-img
                   aspect-ratio="1"
-                  :src="generateUrlFromComment(comment)"
+                  :src="generateImageUrlFromComment(comment)"
                   class="s-circle mx-auto"
                   max-width="48"
                 ></v-img>
@@ -71,7 +71,7 @@
                 <v-img
                   aspect-ratio="1"
                   max-width="48"
-                  :src="generateUrlFromComment(comment)"
+                  :src="generateImageUrlFromComment(comment)"
                   class="s-circle mx-auto"
                 ></v-img>
               </v-col>
@@ -153,7 +153,7 @@ export default class Comments extends Vue {
    * @param {import("../../graphql/types").Comment} comment
    * @returns {string} url
    */
-  generateUrlFromComment(comment) {
+  generateImageUrlFromComment(comment) {
     return comment.user && comment.user.userImage
       ? apiEndpoint + comment.user.userImage.url
       : "/img/userImage.svg";
