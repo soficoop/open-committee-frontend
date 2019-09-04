@@ -4,7 +4,7 @@
       <v-flex xs12 pb-3>
         <h3 class="headline primary--text font-weight-black">
           <span v-if="plan.number" tabindex="0">{{ plan.number }}</span>
-          <span v-if="plan.number && plan.name"> • </span>
+          <span v-if="plan.number && plan.name">•</span>
           <span v-if="plan.name" tabindex="0">{{ plan.name }}</span>
         </h3>
         <h4 class="title primary--text">
@@ -81,7 +81,7 @@
         </h4>
         <MeetingCards :meetings="planMeetings"></MeetingCards>
       </v-flex>
-      <v-flex xs12 py-3 v-if="planMeetings && planMeetings.length">
+      <v-flex xs12 py-3 v-if="plan.comments && plan.comments.length">
         <h4 class="title primary--text" tabindex="0">התייחסויות</h4>
         <Comments></Comments>
       </v-flex>

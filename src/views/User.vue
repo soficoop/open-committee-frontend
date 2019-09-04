@@ -1,5 +1,5 @@
 <template>
-  <v-container class="pa-md-12" fill-height>
+  <v-container class="pa-md-12" fill-height v-if="user">
     <v-row justify="center">
       <v-col cols="12" lg="auto" align-self="center">
         <v-card flat class="pa-4">
@@ -20,7 +20,7 @@
           </v-row>
           <v-row justify="center" justify-lg="start">
             <v-col cols="10" sm="auto">
-              <div class="img-wrapper p-relative overflow-hidden">
+              <v-card flat class="img-wrapper p-relative overflow-hidden">
                 <img
                   :src="userImageUrl"
                   alt="user image placeholder"
@@ -44,7 +44,7 @@
                   />
                   <input type="submit" class="screen-reader-input" />
                 </form>
-              </div>
+              </v-card>
             </v-col>
 
             <v-col cols="12" lg="auto">
@@ -170,7 +170,7 @@ export default class User extends Vue {
     if (this.user.userImage != null) {
       return apiEndpoint + this.user.userImage.url;
     }
-    return "/img/userImage.png";
+    return "/img/userImage.svg";
   }
 }
 </script>

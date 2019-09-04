@@ -165,3 +165,22 @@ export const updateUser = `mutation UpdateUser(
     }
   }
 }`;
+
+export const createComment = `mutation createComment(
+  $title: String!
+  $name: String!
+  $content: String!
+  $plan: ID!
+  $parent: ID
+  $user: ID
+) {
+  createComment(
+    input: {
+      data: { title: $title, name: $name, content: $content, plan: $plan, user: $user, parent: $parent }
+    }
+  ) {
+    comment {
+      id
+    }
+  }
+}`;
