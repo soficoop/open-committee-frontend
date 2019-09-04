@@ -117,6 +117,22 @@
                       <v-row>
                         <v-col cols="12" sm="6" md="4">
                           <v-text-field
+                            label="שם פרטי"
+                            v-model="userInfoData.firstName"
+                            name="firstName"
+                            class="pl-1"
+                          ></v-text-field>
+                        </v-col>
+                        <v-col cols="12" sm="6" md="4">
+                          <v-text-field
+                            label="שם משפחה"
+                            v-model="userInfoData.lastName"
+                            name="lastName"
+                            class="pl-1"
+                          ></v-text-field>
+                        </v-col>
+                        <v-col cols="12" sm="6" md="4">
+                          <v-text-field
                             label="תפקיד"
                             v-model="userInfoData.job"
                             name="job"
@@ -191,6 +207,8 @@ export default class User extends Vue {
 
   mounted() {
     this.userInfoData = {
+      firstName: this.user.firstName,
+      lastName: this.user.lastName,
       city: this.user.city,
       organization: this.user.organization,
       job: this.user.job
