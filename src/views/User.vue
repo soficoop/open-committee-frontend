@@ -1,67 +1,107 @@
 <template>
-  <v-container class="pa-md-12" fill-height>
-    <v-row justify="center">
-      <v-col cols="12" lg="auto" align-self="center">
+  <v-container class="pa-md-12">
+    <v-row class="justify-center justify-sm-start">
+      <v-col cols="auto" sm="12" class="py-0">
+        <h1
+          :class="{
+            'headline font-weight-black primary--text mb-3 d-inline':
+              $vuetify.breakpoint.smAndDown,
+            'font-weight-black primary--text mb-3 d-inline':
+              $vuetify.breakpoint.mdAndUp
+          }"
+          tabindex="0"
+        >
+          {{ user.firstName + " " + user.lastName }}
+        </h1>
+      </v-col>
+      <v-col cols="12" sm="auto">
         <v-card flat class="pa-4">
-          <v-row class="w-100" justify="center" justify-sm="start">
-            <v-col cols="auto" class="py-0">
-              <h1
-                :class="{
-                  'headline font-weight-black primary--text mb-3 d-inline':
-                    $vuetify.breakpoint.smAndDown,
-                  'font-weight-black primary--text mb-3 d-inline':
-                    $vuetify.breakpoint.mdAndUp
-                }"
-                tabindex="0"
-              >
-                {{ user.firstName + " " + user.lastName }}
-              </h1>
+          <v-row justify="center">
+            <v-col cols="auto" sm="auto">
+              <v-hover v-slot:default="{ hover }">
+                <div class="img-wrapper b-radius-50 overflow-hidden p-relative">
+                  <v-img
+                    :src="userImageUrl"
+                    alt="user image placeholder"
+                    class="d-block user-image"
+                  />
+                  <v-expand-transition>
+                    <v-btn
+                      v-if="hover"
+                      class="form--reveal text-center w-100 secondary"
+                      height="25%"
+                      @click="triggerImageInput"
+                      absolute
+                    >
+                      <v-row justify="center" align="center" no-gutters>
+                        <v-col cols="auto px-1">
+                          <v-icon color="background">mdi-camera</v-icon>
+                        </v-col>
+                        <v-col cols="auto px-1">
+                          <span
+                            v-if="hasImage"
+                            class="p-0 background--text title"
+                            >עדכון
+                          </span>
+                          <span v-else class="p-0 background--text title"
+                            >העלאה
+                          </span>
+                        </v-col>
+                      </v-row>
+
+                      <input
+                        @change="updateUserImage()"
+                        id="userImage"
+                        type="file"
+                        name="file"
+                        ref="file"
+                        class="screen-reader-input"
+                      />
+                    </v-btn>
+                  </v-expand-transition>
+                  <v-expand-transition v-if="hasImage">
+                    <v-btn
+                      v-if="hover"
+                      block
+                      class="delete-btn--reveal error"
+                      absolute
+                      height="25%"
+                      @click="removeUserImage"
+                    >
+                      <v-row justify="center" align="center" no-gutters>
+                        <v-col cols="auto px-1">
+                          <v-icon color="background">mdi-delete</v-icon>
+                        </v-col>
+                        <v-col cols="auto px-1">
+                          <span class="p-0 background--text title">הסרה</span>
+                        </v-col>
+                      </v-row>
+                    </v-btn>
+                  </v-expand-transition>
+                </div>
+              </v-hover>
             </v-col>
           </v-row>
-          <v-row justify="center" justify-lg="start">
-            <v-col cols="10" sm="auto">
-              <div class="img-wrapper p-relative overflow-hidden">
-                <img
-                  :src="userImageUrl"
-                  alt="user image placeholder"
-                  class="user-image object-fit"
-                />
-                <form>
-                  <label
-                    for="userImage"
-                    class="title d-block pa-3 cursor-pointer"
-                  >
-                    <v-icon color="white" right>mdi-camera</v-icon>
-                    <span>עדכן תמונה</span>
-                  </label>
-                  <input
-                    @change="updateUserImage()"
-                    id="userImage"
-                    type="file"
-                    name="file"
-                    ref="file"
-                    class="screen-reader-input"
-                  />
-                  <input type="submit" class="screen-reader-input" />
-                </form>
+        </v-card>
+      </v-col>
+      <v-col cols="12" sm="auto">
+        <v-card flat class="pa-4 h-100">
+          <v-row justify="space-between">
+            <v-col cols="auto">
+              <div v-if="user.job" class="mb-1">
+                <span class="body-1 font-weight-bold ml-1">תפקיד:</span>
+                <span class="body-1">{{ user.job }}</span>
+              </div>
+              <div v-if="user.organization" class="mb-1">
+                <span class="body-1 font-weight-bold ml-1">שייכות לארגון:</span>
+                <span class="body-1">{{ user.organization }}</span>
+              </div>
+              <div v-if="user.city" class="mb-1">
+                <span class="body-1 font-weight-bold ml-1">עיר:</span>
+                <span class="body-1">{{ user.city }}</span>
               </div>
             </v-col>
-
-            <v-col cols="12" lg="auto">
-              <div v-if="user.job">
-                <span class="font-weight-bold ml-1">תפקיד:</span>
-                <span>{{ user.job }}</span>
-              </div>
-              <div v-if="user.organization">
-                <span class="font-weight-bold ml-1">שייכות לארגון:</span>
-                <span>{{ user.organization }}</span>
-              </div>
-              <div v-if="user.city">
-                <span class="font-weight-bold ml-1">עיר:</span>
-                <span>{{ user.city }}</span>
-              </div>
-            </v-col>
-            <v-col lg="auto">
+            <v-col cols="auto">
               <v-dialog v-model="dialog" persistent max-width="600px">
                 <template v-slot:activator="{ on }">
                   <v-btn text color="primary" dark v-on="on" icon>
@@ -104,12 +144,19 @@
                   </v-card-text>
                   <v-card-actions>
                     <div class="flex-grow-1"></div>
-                    <v-btn color="blue darken-1" text @click="dialog = false"
-                      >סגירה</v-btn
+                    <v-btn
+                      color="secondary darken-1"
+                      text
+                      @click="dialog = false"
+                      >סגירה
+                    </v-btn>
+                    <v-btn
+                      color="secondary darken-1"
+                      text
+                      @click="updateInfo()"
                     >
-                    <v-btn color="blue darken-1" text @click="updateInfo()"
-                      >שמירה</v-btn
-                    >
+                      שמירה
+                    </v-btn>
                   </v-card-actions>
                 </v-card>
               </v-dialog>
@@ -172,48 +219,31 @@ export default class User extends Vue {
     }
     return "/img/userImage.png";
   }
+
+  triggerImageInput() {
+    const inputEl = this.$refs.file;
+    inputEl.click();
+  }
+
+  async removeUserImage() {
+    await this.updateUserAction({ userImage: null });
+  }
+
+  get hasImage() {
+    return this.user.userImage != null;
+  }
 }
 </script>
 
 <style scoped>
-.box-shadow-none {
-  box-shadow: none !important;
+.delete-btn--reveal {
+  top: 0;
 }
-.w-100 {
-  width: 100%;
+.form--reveal {
+  bottom: 0;
 }
 .user-image {
-  -o-object-fit: cover;
-  object-fit: cover;
-  max-width: 100%;
-  height: auto;
-}
-.p-relative {
-  position: relative;
-}
-.user-image + form {
-  transition: transform 0.3s;
-  position: absolute;
-  color: #ffffff;
-  width: 100%;
-  bottom: 0;
-  text-align: right;
-  font-weight: 600;
-  left: 0;
-  right: 0;
-  background-color: #71b790;
-}
-@media (min-width: 960px) {
-  .img-wrapper:hover form {
-    transform: translateY(0);
-  }
-  .user-image {
-    display: block;
-    width: 310px;
-    height: 310px;
-  }
-  .user-image + form {
-    transform: translateY(100%);
-  }
+  width: 200px;
+  height: 200px;
 }
 </style>
