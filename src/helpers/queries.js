@@ -43,20 +43,22 @@ export const getMeeting = `query getMeeting($id: ID!){
     protocol {
       id
       name
+      url
     }
     transcript {
       id
       name
+      url
     }
     decisions {
       id
       name
-    }
+      url
+        }
     additionalFiles {
       id
       name
       url
-      size
     }
   }
 }`;
