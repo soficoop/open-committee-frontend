@@ -217,6 +217,7 @@ export default class User extends Vue {
 
   async updateInfo() {
     await this.updateUserAction(this.userInfoData);
+    this.dialog = false;
   }
 
   async updateUserImage() {
