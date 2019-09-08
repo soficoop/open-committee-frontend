@@ -56,6 +56,7 @@
                         name="file"
                         ref="file"
                         class="screen-reader-input"
+                        accept="image/jpeg, image/png"
                       />
                     </v-btn>
                   </v-expand-transition>
