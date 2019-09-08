@@ -233,11 +233,4 @@ describe("Plan.vue", () => {
     plan.attachedFiles = [];
     expect(wrapper.find("FileCards-stub").exists()).toBeFalsy();
   });
-  it("loads comments when they exist", () => {
-    expect(wrapper.text()).toContain("התייחסויות");
-    expect(wrapper.find("Comments-stub").exists()).toBeTruthy();
-    plan.comments = [];
-    expect(wrapper.text()).not.toContain("התייחסויות");
-    expect(wrapper.find("Comments-stub").exists()).toBeFalsy();
-  });
 });

@@ -4,14 +4,14 @@
       <v-flex xs12 pb-3>
         <h3 class="headline primary--text font-weight-black">
           <span v-if="plan.number" tabindex="0">{{ plan.number }}</span>
-          <span v-if="plan.number && plan.name">•</span>
+          <span v-if="plan.number && plan.name"> • </span>
           <span v-if="plan.name" tabindex="0">{{ plan.name }}</span>
         </h3>
         <h4 class="title primary--text">
           <span v-if="plan.municipality" tabindex="0">
             {{ plan.municipality }}
           </span>
-          <span v-if="plan.municipality && plan.location">•</span>
+          <span v-if="plan.municipality && plan.location"> • </span>
           <span v-if="plan.location" tabindex="0">{{ plan.location }}</span>
         </h4>
         <h5 class="subtitle-1 primary--text" v-if="plan.status">
@@ -81,7 +81,7 @@
         </h4>
         <MeetingCards :meetings="planMeetings"></MeetingCards>
       </v-flex>
-      <v-flex xs12 py-3 v-if="plan.comments && plan.comments.length">
+      <v-flex xs12 py-3>
         <h4 class="title primary--text" tabindex="0">התייחסויות</h4>
         <Comments></Comments>
       </v-flex>
