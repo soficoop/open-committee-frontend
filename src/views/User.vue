@@ -15,11 +15,13 @@
         </h1>
       </v-col>
       <v-col cols="12" sm="auto">
-        <v-card flat class="pa-4">
+        <v-card flat class="pa-4 transparent">
           <v-row justify="center">
             <v-col cols="auto" sm="auto">
               <v-hover v-slot:default="{ hover }">
-                <div class="img-wrapper b-radius-50 overflow-hidden p-relative">
+                <div
+                  class="img-wrapper b-radius-50 overflow-hidden p-relative s-border pr"
+                >
                   <v-img
                     :src="userImageUrl"
                     alt="user image placeholder"

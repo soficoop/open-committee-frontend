@@ -29,6 +29,10 @@
 body.using-mouse :focus {
   outline: none;
 }
+.s-border {
+  border: 8px solid;
+  border-color: var(--v-primary-base);
+}
 </style>
 
 <script>
