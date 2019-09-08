@@ -71,7 +71,7 @@
                 <v-img
                   aspect-ratio="1"
                   max-width="48"
-                  :src="generateImageUrlFromComment(comment)"
+                  :src="generateImageUrlFromComment(child)"
                   class="s-circle mx-auto"
                 ></v-img>
               </v-col>
