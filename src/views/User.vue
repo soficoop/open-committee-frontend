@@ -20,11 +20,11 @@
             <v-col cols="auto" sm="auto">
               <v-hover v-slot:default="{ hover }">
                 <div
-                  class="img-wrapper b-radius-50 overflow-hidden p-relative s-border pr"
+                  class="img-wrapper b-radius-50 overflow-hidden p-relative s-border"
                 >
                   <v-img
                     :src="userImageUrl"
-                    alt="user image placeholder"
+                    :alt="userImageAlt"
                     class="d-block user-image"
                   />
                   <v-expand-transition>
@@ -52,7 +52,10 @@
                       </v-row>
 
                       <input
-                        @change="updateUserImage()"
+                        @change="
+                          removeUserImage();
+                          updateUserImage();
+                        "
                         id="userImage"
                         type="file"
                         name="file"
@@ -239,7 +242,15 @@ export default class User extends Vue {
     if (this.user.userImage != null) {
       return apiEndpoint + this.user.userImage.url;
     }
-    return "/img/userImage.png";
+    return "/img/userImage.svg";
+  }
+
+  get userImageAlt() {
+    const text = "user image";
+    if (this.user.userImage != null) {
+      return text;
+    }
+    return `${text} placeholder`;
   }
 
   triggerImageInput() {
@@ -248,7 +259,7 @@ export default class User extends Vue {
   }
 
   async removeUserImage() {
-    await this.updateUserAction({ userImage: null });
+    await this.updateUserAction({ userImage: "" });
   }
 
   get hasImage() {
