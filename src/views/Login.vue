@@ -31,6 +31,42 @@
                   "
                 ></v-text-field>
               </v-flex>
+              <v-dialog v-model="dialog" max-width="400px">
+                <template v-slot:activator="{ on }">
+                  <button
+                    type="button"
+                    class="primary--text cursor-pointer"
+                    v-on="on"
+                  >
+                    שכחת את הסיסמה?
+                  </button>
+                </template>
+                <v-card>
+                  <v-card-title>
+                    <span class="headline primary--text">שחזור סיסמה</span>
+                  </v-card-title>
+                  <v-card-text>
+                    <v-container>
+                      <v-row>
+                        <v-col cols="12">
+                          <v-text-field
+                            label="אימייל"
+                            name="email-recovery"
+                            class="pl-1"
+                            >{{ loginData.email }}
+                          </v-text-field>
+                        </v-col>
+                      </v-row>
+                    </v-container>
+                  </v-card-text>
+                  <v-card-actions>
+                    <div class="flex-grow-1"></div>
+                    <v-btn color="primary" text @click="dialog = false"
+                      >שלח לי מייל שחזור</v-btn
+                    >
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
               <v-expand-transition>
                 <v-flex v-if="isLoginEmailValid">
                   <v-text-field
@@ -161,9 +197,11 @@ export default class Login extends Vue {
   };
   tab = null;
   authenticationFailed = false;
+  dialog = false;
 
   @Action(ActionTypes.SIGN_UP) signUpAction;
   @Action(ActionTypes.SIGN_IN) loginAction;
+  @Action(ActionTypes.FORGOT_PASSWORD) forgotPasswordAction;
 
   async signUp(user) {
     const result = await this.signUpAction(user);

@@ -235,6 +235,19 @@ export default new Vuex.Store({
       );
       context.commit(MutationTypes.SET_USER, res.updateUser.user);
     }
+    /**
+     * Forgot password
+     * @param {import("vuex").Store} context the store object
+     */
+    // async [ActionTypes.FORGOT_PASSWORD](context) {
+    // updatedUserFields.id = context.state.user.id;
+    // const res = await makeGqlRequest(
+    //   updateUser,
+    //   updatedUserFields,
+    //   context.state.jwt
+    // );
+    // context.commit(MutationTypes.SET_USER, res.updateUser.user);
+    // }
   },
   plugins: [
     createPersistedState({

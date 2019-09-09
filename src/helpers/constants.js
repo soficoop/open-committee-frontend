@@ -15,7 +15,8 @@ export const ActionTypes = Object.freeze({
   SIGN_UP: "SIGN_UP",
   SIGN_IN: "SIGN_IN",
   SIGN_OUT: "SIGN_OUT",
-  UPDATE_USER: "UPDATE_USER"
+  UPDATE_USER: "UPDATE_USER",
+  FORGOT_PASSWORD: "FORGOT_PASSWORD"
 });
 export const Getters = Object.freeze({
   MANAGABLE_MEETINGS: "MANAGABLE_MEETINGS",
