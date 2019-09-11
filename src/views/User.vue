@@ -1,7 +1,7 @@
 <template>
   <v-container class="pa-md-12">
     <v-row class="justify-center justify-sm-start">
-      <v-col cols="12" sm="4" xl="3">
+      <v-col cols="12" sm="6" md="4" xl="3">
         <v-card flat class="px-11 pt-11 pb-3">
           <v-row justify="space-between">
             <v-col class="">
@@ -80,7 +80,7 @@
                 </v-col>
               </v-row>
               <v-row>
-                <v-col cols="auto" sm="12" class="py-0 text-center">
+                <v-col class="py-0 text-center">
                   <h1
                     class="headline primary--text font-weight-bold primary--text pb-6 s-border-bottom"
                     tabindex="0"
