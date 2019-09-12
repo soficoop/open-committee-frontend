@@ -69,24 +69,6 @@ describe("User.vue", () => {
   it("loads user from the store", () => {
     expect(wrapper.vm.user).not.toBeUndefined();
   });
-  it("does not load job title and value when it is not available", () => {
-    user.job = "";
-    expect(wrapper.text()).not.toContain("תפקיד");
-    expect(wrapper.text()).not.toContain("מפתח");
-    user.job = "מפתח";
-  });
-  it("does not load organization title and value when it is not available", () => {
-    user.organization = "";
-    expect(wrapper.text()).not.toContain("שייכות לארגון");
-    expect(wrapper.text()).not.toContain("sofi");
-    user.organization = "sofi";
-  });
-  it("does not load city title and value when it is not available", () => {
-    user.city = "";
-    expect(wrapper.text()).not.toContain("עיר");
-    expect(wrapper.text()).not.toContain("zur-moshe");
-    user.city = "zur-moshe";
-  });
   it("renders correct fields values in dialog", () => {
     expect(wrapper.find("[name='job']").exists()).toBeTruthy();
     expect(wrapper.find("[name='job']").attributes("value")).toEqual("מפתח");
@@ -106,5 +88,44 @@ describe("User.vue", () => {
     expect(wrapper.find("[name='city']").attributes("value")).toEqual(
       "zur-moshe"
     );
+  });
+  it("does not load job title and value when it is not available", () => {
+    user.job = "";
+    expect(wrapper.text()).not.toContain("תפקיד");
+    expect(wrapper.text()).not.toContain("מפתח");
+    user.job = "מפתח";
+  });
+  it("does not load organization title and value when it is not available", () => {
+    user.organization = "";
+    expect(wrapper.text()).not.toContain("שייכות לארגון");
+    expect(wrapper.text()).not.toContain("sofi");
+    user.organization = "sofi";
+  });
+  it("does not load city title and value when it is not available", () => {
+    user.city = "";
+    expect(wrapper.text()).not.toContain("עיר");
+    expect(wrapper.text()).not.toContain("zur-moshe");
+  });
+  it("computes hasImage getter correctly", () => {
+    user.userImage = null;
+    expect(wrapper.vm.hasImage).toBeFalsy();
+    user.userImage = undefined;
+    expect(wrapper.vm.hasImage).toBeFalsy();
+  });
+  it("computes userImageUrl getter correctly", () => {
+    expect(wrapper.vm.userImageUrl).toEqual("/img/userImage.svg");
+    user.userImage = null;
+    expect(wrapper.vm.userImageUrl).toEqual("/img/userImage.svg");
+    user.userImage = { url: "/uploads/87da1bdd384f49f2a90f59fe7b5f9fa0.png" };
+    expect(wrapper.vm.userImageUrl).toContain(
+      "/uploads/87da1bdd384f49f2a90f59fe7b5f9fa0.png"
+    );
+  });
+  it("computes userImageAlt getter correctly", () => {
+    expect(wrapper.vm.userImageAlt).toEqual("user image");
+    user.userImage = null;
+    expect(wrapper.vm.userImageAlt).toEqual("user image placeholder");
+    user.userImage = undefined;
+    expect(wrapper.vm.userImageAlt).toEqual("user image placeholder");
   });
 });
