@@ -69,38 +69,42 @@ describe("User.vue", () => {
   it("loads user from the store", () => {
     expect(wrapper.vm.user).not.toBeUndefined();
   });
-  it("renders correct field values in dialog", () => {
-    expect(wrapper.find("[label='תפקיד']").exists()).toBeTruthy();
-    expect(wrapper.find("[label='תפקיד']").attributes("value")).toEqual("מפתח");
+  it("does not load job title and value when it is not available", () => {
+    user.job = "";
+    expect(wrapper.text()).not.toContain("תפקיד");
+    expect(wrapper.text()).not.toContain("מפתח");
+    user.job = "מפתח";
   });
-  //   it("generates valid plan meetings", () => {
-  //     expect(wrapper.find("MeetingCards-stub").exists()).toBeTruthy();
-  //     expect(wrapper.vm.planMeetings).toHaveLength(1);
-  //     const planMeeting = wrapper.vm.planMeetings[0];
-  //     expect(planMeeting.headline).toBe(
-  //       wrapper.vm.plan.meetings[0].committee.sid
-  //     );
-  //     expect(planMeeting.date).toBe(wrapper.vm.plan.meetings[0].date);
-  //     expect(planMeeting.id).toBe(wrapper.vm.plan.meetings[0].id);
-  //     expect(planMeeting.isEditable).toBe(false);
-  //     plan.meetings = [];
-  //     expect(wrapper.find("MeetingCards-stub").exists()).toBeFalsy();
-  //     expect(wrapper.vm.planMeetings).toHaveLength(0);
-  //   });
-  //   it("loads plan status when it exists", () => {
-  //     expect(wrapper.find("v-icon-stub").exists()).toBeTruthy();
-  //     expect(wrapper.find("v-icon-stub").text()).toBe("mdi-update");
-  //     plan.status = "";
-  //     expect(wrapper.find("v-icon-stub").exists()).toBeFalsy();
-  //   });
-  //   it("loads plan number when it exists", () => {
-  //     expect(wrapper.text()).toContain(plan.number);
-  //     plan.number = undefined;
-  //     expect(wrapper.text()).not.toContain("תכנית מספר");
-  //   });
-  //   it("loads attached files exists", () => {
-  //     expect(wrapper.find("FileCards-stub").exists()).toBeTruthy();
-  //     plan.attachedFiles = [];
-  //     expect(wrapper.find("FileCards-stub").exists()).toBeFalsy();
-  //   });
+  it("does not load organization title and value when it is not available", () => {
+    user.organization = "";
+    expect(wrapper.text()).not.toContain("שייכות לארגון");
+    expect(wrapper.text()).not.toContain("sofi");
+    user.organization = "sofi";
+  });
+  it("does not load city title and value when it is not available", () => {
+    user.city = "";
+    expect(wrapper.text()).not.toContain("עיר");
+    expect(wrapper.text()).not.toContain("zur-moshe");
+    user.city = "zur-moshe";
+  });
+  it("renders correct fields values in dialog", () => {
+    expect(wrapper.find("[name='job']").exists()).toBeTruthy();
+    expect(wrapper.find("[name='job']").attributes("value")).toEqual("מפתח");
+    expect(wrapper.find("[name='organization']").exists()).toBeTruthy();
+    expect(wrapper.find("[name='organization']").attributes("value")).toEqual(
+      "sofi"
+    );
+    expect(wrapper.find("[name='firstName']").exists()).toBeTruthy();
+    expect(wrapper.find("[name='firstName']").attributes("value")).toEqual(
+      "נדב"
+    );
+    expect(wrapper.find("[name='lastName']").exists()).toBeTruthy();
+    expect(wrapper.find("[name='lastName']").attributes("value")).toEqual(
+      "מורנו"
+    );
+    expect(wrapper.find("[name='city']").exists()).toBeTruthy();
+    expect(wrapper.find("[name='city']").attributes("value")).toEqual(
+      "zur-moshe"
+    );
+  });
 });
