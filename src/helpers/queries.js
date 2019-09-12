@@ -182,3 +182,23 @@ export const getCurrentUser = `query($id: ID!) {
 	}
 }
 `;
+
+export const getUserSubscriptions = `query getUserSubscriptions($id: ID!) {
+  user(id: $id) {
+    subscribedCommittees {
+      id
+      sid
+    }
+  }
+}`;
+
+export const getAllCommittees = `query committees {
+  committees {
+    id
+    sid
+    area {
+      id
+      sid
+    }
+  }
+}`;
