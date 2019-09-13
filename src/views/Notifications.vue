@@ -38,13 +38,20 @@
                           dark
                         >
                           <v-card-text class="subtitle-1">
-                            {{ item.sid }}
+                            <v-row>
+                              <v-col>
+                                {{ item.sid }}
+                              </v-col>
+                              <v-col class="shrink py-0 px-1">
+                                <v-btn
+                                  icon
+                                  @click="unsubscribeFromCommittee(item.id)"
+                                >
+                                  <v-icon>mdi-close</v-icon>
+                                </v-btn>
+                              </v-col>
+                            </v-row>
                           </v-card-text>
-                          <v-card-actions>
-                            <v-btn icon class="float-left">
-                              <v-icon>mdi-close</v-icon>
-                            </v-btn>
-                          </v-card-actions>
                         </v-card>
                       </v-col>
                     </v-slide-y-transition>
