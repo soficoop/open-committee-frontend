@@ -188,3 +188,16 @@ export const createComment = `mutation createComment(
     }
   }
 }`;
+
+export const updateSubscriptions = `mutation updateSubscriptions($uid: ID!, $committees: [ID]!) {
+  updateUser(
+    input: { where: { id: $uid }, data: { subscribedCommittees: $committees } }
+  ) {
+    user {
+      subscribedCommittees {
+        id
+        sid
+      }
+    }
+  }
+}`;

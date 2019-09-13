@@ -111,6 +111,8 @@ import Vue from "vue";
 import { Getter } from "vuex-class";
 import { Getters, ActionTypes } from "../helpers/constants";
 import store from "../plugins/store";
+import { makeGqlRequest } from "../helpers/functions";
+import { updateSubscriptions } from "../helpers/mutations";
 
 @Component()
 export default class Notifications extends Vue {
@@ -146,6 +148,14 @@ export default class Notifications extends Vue {
 
   subscribeToCommittee(committee) {
     this.subscribedCommittees.push(committee);
+    this.updateSubscriptions();
+  }
+
+  async updateSubscriptions() {
+    await makeGqlRequest(updateSubscriptions, {
+      uid: this.user.id,
+      committees: this.subscribedCommittees.map(committee => committee.id)
+    });
   }
 
   unsubscribeFromCommittee(committeeId) {
@@ -155,6 +165,7 @@ export default class Notifications extends Vue {
       ),
       1
     );
+    this.updateSubscriptions();
   }
 }
 </script>
