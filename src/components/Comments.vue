@@ -33,7 +33,7 @@
                 <v-img
                   aspect-ratio="1"
                   :src="generateImageUrlFromComment(comment)"
-                  class="s-circle mx-auto"
+                  class="b-radius-50 mx-auto"
                   max-width="48"
                 ></v-img>
               </v-col>
@@ -72,7 +72,7 @@
                   aspect-ratio="1"
                   max-width="48"
                   :src="generateImageUrlFromComment(child)"
-                  class="s-circle mx-auto"
+                  class="b-radius-50 mx-auto"
                 ></v-img>
               </v-col>
               <v-col cols="8">
