@@ -253,16 +253,16 @@
               שמירת ישיבה
               <v-icon right>mdi-arrow-left</v-icon>
             </v-btn>
-            <v-snackbar color="error" v-model="errorOccurred"
-              >בעיה לא צפויה קרתה. אנא נסו שוב מאוחר יותר</v-snackbar
-            >
+            <v-snackbar color="error" v-model="errorOccurred">
+              בעיה לא צפויה קרתה. אנא נסו שוב מאוחר יותר
+            </v-snackbar>
           </v-flex>
         </v-layout>
       </v-flex>
       <v-dialog persistent v-model="submittedSuccessfully" max-width="300px">
         <v-card color="secondary" dark>
           <v-card-title>הישיבה נשמרה בהצלחה</v-card-title>
-          <v-card-text>לחיצה על אישור תיקח אותך למסך הישיבה</v-card-text>
+          <v-card-text>כעת תועבר למסך הישיבה</v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn

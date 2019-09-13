@@ -44,6 +44,143 @@ describe("Plan.vue", () => {
         url: "/uploads/fb39bc1c1ef04fe28816204d0075cd73.pdf",
         size: "368.74"
       }
+    ],
+    comments: [
+      {
+        id: "5d6cbd43c75c1f41ebd3b1ab",
+        title: "תגובה ראשונה",
+        name: "Sofia Sofi",
+        content: "ראשונה",
+        createdAt:
+          "[native Date Mon Sep 02 2019 09:57:07 GMT+0300 (Israel Daylight Time)]",
+        parent: null,
+        user: {
+          firstName: "Sofia",
+          lastName: "Sofi",
+          userImage: { url: "/uploads/6eaca8c4605e4c00aab10ee56b518806.jpg" }
+        }
+      },
+      {
+        id: "5d6cbd4fc75c1f41ebd3b1ac",
+        title: "תגובה לתגובה ראשונה",
+        name: "Sofia Sofi",
+        content: "שנייה",
+        createdAt:
+          "[native Date Mon Sep 02 2019 09:57:19 GMT+0300 (Israel Daylight Time)]",
+        parent: null,
+        user: {
+          firstName: "Sofia",
+          lastName: "Sofi",
+          userImage: { url: "/uploads/6eaca8c4605e4c00aab10ee56b518806.jpg" }
+        },
+        children: []
+      },
+      {
+        id: "5d6cbe68c75c1f41ebd3b1ae",
+        title: "תגובה לראשונה",
+        name: "Sofia Sofi",
+        content: "היי",
+        createdAt:
+          "[native Date Mon Sep 02 2019 10:02:00 GMT+0300 (Israel Daylight Time)]",
+        parent: { id: "5d6cbd43c75c1f41ebd3b1ab" },
+        user: {
+          firstName: "Sofia",
+          lastName: "Sofi",
+          userImage: { url: "/uploads/6eaca8c4605e4c00aab10ee56b518806.jpg" }
+        },
+        children: []
+      },
+      {
+        id: "5d6cc4e3c75c1f41ebd3b1af",
+        title: "אהלן",
+        name: "Sofia Sofi",
+        content: "שלום",
+        createdAt:
+          "[native Date Mon Sep 02 2019 10:29:39 GMT+0300 (Israel Daylight Time)]",
+        parent: { id: "5d6cbd43c75c1f41ebd3b1ab" },
+        user: {
+          firstName: "Sofia",
+          lastName: "Sofi",
+          userImage: { url: "/uploads/6eaca8c4605e4c00aab10ee56b518806.jpg" }
+        },
+        children: []
+      },
+      {
+        id: "5d6cc516c75c1f41ebd3b1b0",
+        title: "tvki",
+        name: "Sofia Sofi",
+        content: "hello",
+        createdAt:
+          "[native Date Mon Sep 02 2019 10:30:30 GMT+0300 (Israel Daylight Time)]",
+        parent: null,
+        user: {
+          firstName: "Sofia",
+          lastName: "Sofi",
+          userImage: { url: "/uploads/6eaca8c4605e4c00aab10ee56b518806.jpg" }
+        },
+        children: []
+      },
+      {
+        id: "5d6cc59cc75c1f41ebd3b1b1",
+        title: "נושא",
+        name: "רבי צדוק",
+        content: "אהלן",
+        createdAt:
+          "[native Date Mon Sep 02 2019 10:32:44 GMT+0300 (Israel Daylight Time)]",
+        parent: null,
+        user: null,
+        children: []
+      },
+      {
+        id: "5d6cd0f7c75c1f41ebd3b1b2",
+        title: "פלאפל זה טעים",
+        name: "יוסי מורנו",
+        content: "הכי טעים",
+        createdAt:
+          "[native Date Mon Sep 02 2019 11:21:11 GMT+0300 (Israel Daylight Time)]",
+        parent: null,
+        user: null
+      },
+      {
+        id: "5d6cd103c75c1f41ebd3b1b3",
+        title: "לא נכון",
+        name: "שונא פלאפל",
+        content: "זה ממש גרוע",
+        createdAt:
+          "[native Date Mon Sep 02 2019 11:21:23 GMT+0300 (Israel Daylight Time)]",
+        parent: { id: "5d6cd0f7c75c1f41ebd3b1b2" },
+        user: null,
+        children: []
+      },
+      {
+        id: "5d6e451fe8b5e8141a55f8d0",
+        title: "יונתן הקטן",
+        name: "aviran katz",
+        content: "רץ בבוקר אל הגן",
+        createdAt:
+          "[native Date Tue Sep 03 2019 13:49:03 GMT+0300 (Israel Daylight Time)]",
+        parent: null,
+        user: {
+          firstName: "aviran",
+          lastName: "katz",
+          userImage: { url: "/uploads/6cd42495303f4eeba4740bb8fdea73b2.png" }
+        }
+      },
+      {
+        id: "5d6e452be8b5e8141a55f8d1",
+        title: "הוא טיפס",
+        name: "aviran katz",
+        content: "על העץ",
+        createdAt:
+          "[native Date Tue Sep 03 2019 13:49:15 GMT+0300 (Israel Daylight Time)]",
+        parent: { id: "5d6e451fe8b5e8141a55f8d0" },
+        user: {
+          firstName: "aviran",
+          lastName: "katz",
+          userImage: { url: "/uploads/6cd42495303f4eeba4740bb8fdea73b2.png" }
+        },
+        children: []
+      }
     ]
   };
   /** @type {import("@vue/test-utils").Wrapper} */
@@ -91,7 +228,7 @@ describe("Plan.vue", () => {
     plan.number = undefined;
     expect(wrapper.text()).not.toContain("תכנית מספר");
   });
-  it("loads attached files exists", () => {
+  it("loads attached files when it exists", () => {
     expect(wrapper.find("FileCards-stub").exists()).toBeTruthy();
     plan.attachedFiles = [];
     expect(wrapper.find("FileCards-stub").exists()).toBeFalsy();

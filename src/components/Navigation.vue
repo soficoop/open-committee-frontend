@@ -69,7 +69,7 @@ export default class Navigation extends Vue {
         text: this.jwt ? `${this.user.firstName} ${this.user.lastName}` : "",
         to: "/user/me",
         visible() {
-          return this.jwt;
+          return this.jwt && this.user;
         }
       },
       {

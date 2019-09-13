@@ -18,7 +18,7 @@
       :isOpen="isNavOpen"
       @openChanged="value => (isNavOpen = value)"
     ></Navigation>
-    <v-content>
+    <v-content class="background">
       <v-slide-y-transition mode="out-in">
         <router-view></router-view>
       </v-slide-y-transition>
