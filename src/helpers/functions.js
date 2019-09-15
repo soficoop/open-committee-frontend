@@ -1,5 +1,9 @@
 import { GraphQLClient } from "graphql-request";
-import { graphqlEndpoint, uploadEndpoint } from "./constants";
+import {
+  graphqlEndpoint,
+  uploadEndpoint,
+  forgotPasswordEndpoint
+} from "./constants";
 
 export function dateTimeRevive(key, value) {
   var isDate;
@@ -69,4 +73,36 @@ export async function uploadUserImage(file, jwt, userId) {
     }
   });
   return (await res.json())[0];
+}
+
+/**
+ * Forgot password
+ */
+export async function forgotenPassword(userMail) {
+  let data = {
+    email: userMail,
+    url:
+      "http:/localhost:1337/admin/plugins/users-permissions/auth/reset-password"
+  };
+  const res = await fetch(forgotPasswordEndpoint, {
+    method: "post",
+    headers: {
+      "Content-Type": "application/json;charset=utf-8"
+    },
+    body: JSON.stringify(data)
+  });
+
+  const result = await res.json();
+
+  if (result.ok) {
+    return {
+      sent: true,
+      loader: false
+    };
+  }
+
+  return {
+    sent: false,
+    loader: false
+  };
 }

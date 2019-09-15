@@ -15,8 +15,7 @@ export const ActionTypes = Object.freeze({
   SIGN_UP: "SIGN_UP",
   SIGN_IN: "SIGN_IN",
   SIGN_OUT: "SIGN_OUT",
-  UPDATE_USER: "UPDATE_USER",
-  FORGOT_PASSWORD: "FORGOT_PASSWORD"
+  UPDATE_USER: "UPDATE_USER"
 });
 export const Getters = Object.freeze({
   MANAGABLE_MEETINGS: "MANAGABLE_MEETINGS",
@@ -41,3 +40,7 @@ export const authEndpoint =
 export const uploadEndpoint =
   `${process.env.VUE_APP_API_ENDPOINT}/upload` ||
   "http://localhost:1337/upload";
+
+export const forgotPasswordEndpoint =
+  `${process.env.VUE_APP_API_ENDPOINT}/auth/forgot-password` ||
+  "http://localhost:1337/auth/forgot-password";

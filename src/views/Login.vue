@@ -29,44 +29,9 @@
                       ? ['נא להכניס כתובת מייל תקינה']
                       : []
                   "
-                ></v-text-field>
+                >
+                </v-text-field>
               </v-flex>
-              <v-dialog v-model="dialog" max-width="400px">
-                <template v-slot:activator="{ on }">
-                  <button
-                    type="button"
-                    class="primary--text cursor-pointer"
-                    v-on="on"
-                  >
-                    שכחת את הסיסמה?
-                  </button>
-                </template>
-                <v-card>
-                  <v-card-title>
-                    <span class="headline primary--text">שחזור סיסמה</span>
-                  </v-card-title>
-                  <v-card-text>
-                    <v-container>
-                      <v-row>
-                        <v-col cols="12">
-                          <v-text-field
-                            label="אימייל"
-                            name="email-recovery"
-                            class="pl-1"
-                            >{{ loginData.email }}
-                          </v-text-field>
-                        </v-col>
-                      </v-row>
-                    </v-container>
-                  </v-card-text>
-                  <v-card-actions>
-                    <div class="flex-grow-1"></div>
-                    <v-btn color="primary" text @click="dialog = false"
-                      >שלח לי מייל שחזור</v-btn
-                    >
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
               <v-expand-transition>
                 <v-flex v-if="isLoginEmailValid">
                   <v-text-field
@@ -82,6 +47,98 @@
                       loginData.showPassword = !loginData.showPassword
                     "
                   ></v-text-field>
+                  <v-dialog
+                    v-model="dialog"
+                    max-width="400px"
+                    @click:outside="closeDialog()"
+                    @keydown.esc="closeDialog()"
+                  >
+                    <template v-slot:activator="{ on }">
+                      <button
+                        type="button"
+                        class="primary--text cursor-pointer mb-3"
+                        v-on="on"
+                      >
+                        שכחת את הסיסמה?
+                      </button>
+                    </template>
+                    <v-card v-if="forgotPasswordData.mailSent === true">
+                      <v-card-text>
+                        <v-container>
+                          <v-row>
+                            <v-col cols="12" class="text-center">
+                              <v-icon color="success" x-large
+                                >mdi-checkbox-marked-circle-outline</v-icon
+                              >
+                            </v-col>
+                            <v-col cols="12">
+                              <span class="title primary--text">
+                                בדקו את תיבת הדואר-האלקטרוני שלכם להמשך תהליך
+                                השחזור
+                              </span>
+                            </v-col>
+                          </v-row>
+                        </v-container>
+                      </v-card-text>
+                      <v-card-actions>
+                        <div class="flex-grow-1"></div>
+                        <v-btn color="primary" text @click="closeDialog()">
+                          סגירה
+                        </v-btn>
+                      </v-card-actions>
+                    </v-card>
+                    <v-card v-else>
+                      <v-card-title>
+                        <span class="headline primary--text">שחזור סיסמה</span>
+                      </v-card-title>
+                      <v-card-text>
+                        <v-container>
+                          <v-row>
+                            <v-col cols="12">
+                              <v-text-field
+                                label="אימייל"
+                                name="email-recovery"
+                                class="pl-1"
+                                v-model="forgotPasswordData.email"
+                                :error="
+                                  forgotPasswordData.email.length > 0 &&
+                                    !isForgotPassEmailValid
+                                "
+                                :error-messages="
+                                  forgotPasswordData.email.length > 0 &&
+                                  !isForgotPassEmailValid
+                                    ? ['נא להכניס כתובת מייל תקינה']
+                                    : []
+                                "
+                              >
+                              </v-text-field>
+                            </v-col>
+                            <v-col
+                              v-if="forgotPasswordData.mailSent === false"
+                              class="pt-0"
+                            >
+                              <span class="error--text"
+                                >אירעה שגיאה בשליחת המייל</span
+                              >
+                            </v-col>
+                          </v-row>
+                        </v-container>
+                      </v-card-text>
+                      <v-card-actions>
+                        <div class="flex-grow-1"></div>
+                        <v-btn color="primary" text @click="closeDialog()">
+                          ביטול
+                        </v-btn>
+                        <v-btn
+                          color="primary"
+                          text
+                          @click="sendRecoverMail(forgotPasswordData.email)"
+                          :disabled="!isForgotPassEmailValid"
+                          >שלח לי מייל שחזור
+                        </v-btn>
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
                 </v-flex>
               </v-expand-transition>
               <v-expand-transition>
@@ -128,7 +185,8 @@
                   name="fname"
                   class="pl-1"
                   :rules="[value => !!value || 'שדה חובה']"
-                ></v-text-field>
+                >
+                </v-text-field>
                 <v-text-field
                   class="pr-1"
                   label="שם משפחה"
@@ -170,6 +228,9 @@
         </v-layout>
       </v-flex>
     </v-layout>
+    <v-overlay v-model="loader" z-index="9999">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
   </v-container>
 </template>
 
@@ -178,6 +239,8 @@ import Component from "vue-class-component";
 import Vue from "vue";
 import { Action } from "vuex-class";
 import { ActionTypes } from "../helpers/constants";
+import { forgotenPassword } from "../helpers/functions";
+
 @Component()
 export default class Login extends Vue {
   loginData = {
@@ -195,13 +258,17 @@ export default class Login extends Vue {
     organization: "",
     job: ""
   };
+  forgotPasswordData = {
+    email: "",
+    mailSent: ""
+  };
   tab = null;
   authenticationFailed = false;
   dialog = false;
+  loader = false;
 
   @Action(ActionTypes.SIGN_UP) signUpAction;
   @Action(ActionTypes.SIGN_IN) loginAction;
-  @Action(ActionTypes.FORGOT_PASSWORD) forgotPasswordAction;
 
   async signUp(user) {
     const result = await this.signUpAction(user);
@@ -213,12 +280,31 @@ export default class Login extends Vue {
     this.handleAuthentication(result);
   }
 
+  async sendRecoverMail(userMail) {
+    this.loader = true;
+    const result = await forgotenPassword(userMail);
+    this.forgotPasswordData.mailSent = result.sent;
+    this.loader = result.loader;
+  }
+
   handleAuthentication(isSuccessful) {
     if (isSuccessful) {
       this.$router.push("/");
     } else {
       this.authenticationFailed = true;
     }
+  }
+
+  closeDialog() {
+    this.dialog = false;
+    this.forgotPasswordData.mailSent = "";
+    this.forgotPasswordData.email = "";
+  }
+
+  get isForgotPassEmailValid() {
+    return this.forgotPasswordData.email.match(
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
   }
 
   get isLoginEmailValid() {
