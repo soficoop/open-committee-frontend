@@ -39,6 +39,7 @@
                     hint="לפחות 8 תווים"
                     v-model="loginData.password"
                     name="password"
+                    class="pb-1"
                     :type="loginData.showPassword ? 'text' : 'password'"
                     :append-icon="
                       loginData.showPassword ? 'mdi-eye' : 'mdi-eye-off'
