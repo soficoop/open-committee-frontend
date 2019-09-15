@@ -37,6 +37,21 @@ describe("Comments.vue", () => {
             }
           },
           {
+            id: "5d7e130b4223d2493c5dda05",
+            title: "תגובה ממש ארוכה",
+            name: "אבירן כץ",
+            content:
+              "תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה ",
+            createdAt: new Date("2019-09-15"),
+            user: {
+              firstName: "אבירן",
+              lastName: "כץ",
+              userImage: {
+                url: "/uploads/0eaa88562ea74e7781dde7bee2a92c08.jpg"
+              }
+            }
+          },
+          {
             id: "5d6cc4e3c75c1f41ebd3b1af",
             title: "אהלן",
             name: "Sofia Sofi",
@@ -189,6 +204,21 @@ describe("Comments.vue", () => {
           userImage: { url: "/uploads/6cd42495303f4eeba4740bb8fdea73b2.png" }
         },
         children: []
+      },
+      {
+        id: "5d7de1e44640b2235c260887",
+        title: "התייחסות כבר יותר ארוכה",
+        name: "אבירן כץ",
+        content:
+          "התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה\nהתייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה",
+        createdAt: new Date("2019-09-15"),
+        parent: null,
+        user: {
+          firstName: "אבירן",
+          lastName: "כץ",
+          userImage: { url: "/uploads/0eaa88562ea74e7781dde7bee2a92c08.jpg" }
+        },
+        children: []
       }
     ]
   };
@@ -207,7 +237,7 @@ describe("Comments.vue", () => {
       methods: {
         // mock fetchComments method
         fetchComments() {
-          this.comments = plan.comments;
+          this.comments = this.mapApiComments(plan.comments);
         }
       },
       vuetify: new Vuetify()
@@ -246,7 +276,9 @@ describe("Comments.vue", () => {
     }
   });
   it("generates correct root comments", () => {
-    expect(wrapper.vm.rootComments).toHaveLength(6);
+    expect(wrapper.vm.rootComments).toHaveLength(
+      plan.comments.reduce((n, comment) => n + (comment.parent == null), 0)
+    );
   });
   it("displays correct commenters", () => {
     for (const comment of plan.comments) {
@@ -257,6 +289,13 @@ describe("Comments.vue", () => {
       } else {
         expect(wrapper.vm.getCommenter(comment)).toEqual(comment.name);
       }
+    }
+  });
+  it("shortens a long comment", () => {
+    for (const comment of wrapper.vm.comments) {
+      expect(comment.isFullContentVisible).toBe(
+        comment.content.split(" ").length <= 50
+      );
     }
   });
 });

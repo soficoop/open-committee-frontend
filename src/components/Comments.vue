@@ -48,11 +48,17 @@
                     {{ comment.createdAt.toLocaleDateString("he") }}
                   </span>
                 </h5>
-                <p
-                  tabindex="0"
-                  class="body-1 whitespace-preline my-1"
-                  v-html="comment.content"
-                ></p>
+                <p tabindex="0" class="body-1 whitespace-preline my-1">
+                  {{ comment.visibleContent }}
+                </p>
+                <a
+                  href="javascript:void(0)"
+                  class="me-2"
+                  @click="showFullComment(comment)"
+                  v-if="!comment.isFullContentVisible"
+                >
+                  קרא עוד
+                </a>
                 <a href="javascript:void(0)" @click="toggleReply(comment.id)">
                   הגב להתייחסות
                 </a>
@@ -86,11 +92,16 @@
                     {{ child.createdAt.toLocaleDateString("he") }}
                   </span>
                 </h5>
-                <p
-                  tabindex="0"
-                  class="body-1 whitespace-preline my-1"
-                  v-html="child.content"
-                ></p>
+                <p tabindex="0" class="body-1 whitespace-preline my-1">
+                  {{ child.visibleContent }}
+                </p>
+                <a
+                  href="javascript:void(0)"
+                  @click="showFullComment(child)"
+                  v-if="!child.isFullContentVisible"
+                >
+                  קרא עוד
+                </a>
               </v-col>
             </v-row>
           </div>
@@ -113,6 +124,7 @@ import { makeGqlRequest } from "../helpers/functions";
 export default class Comments extends Vue {
   /** @type {import("../../graphql/types").Plan} */
   @Getter(Getters.SELECTED_PLAN) plan;
+  /** @type {import("../../graphql/types").Comment[]} */
   comments = [];
   isCreatingNewComment = false;
   replyingTo = "";
@@ -128,7 +140,7 @@ export default class Comments extends Vue {
     const { comments } = await makeGqlRequest(getCommentsByPlan, {
       plan: this.plan.id
     });
-    this.comments = comments;
+    this.comments = this.mapApiComments(comments);
   }
 
   /**
@@ -140,12 +152,47 @@ export default class Comments extends Vue {
   }
 
   /**
+   * Maps fetched comments to CommentModel array
+   * @param {import("../../graphql/types").Comment[]} comments Fetched comments
+   * @returns {import("../helpers/typings").CommentModel[]}
+   */
+  mapApiComments(comments) {
+    return (
+      comments &&
+      comments.map(c => {
+        let visibleContent = c.content;
+        let isFullContentVisible = true;
+        let words = c.content.split(" ");
+        if (words.length > 50) {
+          visibleContent = words.slice(0, 50).join(" ") + "...";
+          isFullContentVisible = false;
+        }
+        return {
+          ...c,
+          isFullContentVisible,
+          visibleContent,
+          children: this.mapApiComments(c.children)
+        };
+      })
+    );
+  }
+
+  /**
    * Gets executed when the comment creation button is clicked
    * @param {boolean} value Desired comment creation state
    */
   setCommentCreation(value) {
     this.replyingTo = "";
     this.isCreatingNewComment = value;
+  }
+
+  /**
+   * Displays full comment content
+   * @param {import("../helpers/typings").CommentModel} comment
+   */
+  showFullComment(comment) {
+    comment.isFullContentVisible = true;
+    comment.visibleContent = comment.content;
   }
 
   /**
