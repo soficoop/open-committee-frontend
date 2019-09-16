@@ -2,7 +2,8 @@ import { GraphQLClient } from "graphql-request";
 import {
   graphqlEndpoint,
   uploadEndpoint,
-  forgotPasswordEndpoint
+  forgotPasswordEndpoint,
+  resetPasswordEndpoint
 } from "./constants";
 
 export function dateTimeRevive(key, value) {
@@ -53,7 +54,7 @@ export async function uploadFile(file, jwt) {
 }
 
 /**
- * Uploads a user image to strapi
+ * Uploads an user image to strapi
  * @param {File} file File to upload
  * @param {string} jwt the json web token (https://strapi.io/documentation/3.0.0-beta.x/guides/authentication.html#token-usage)
  * @returns {import("../../graphql/types").UploadFile}
@@ -76,7 +77,8 @@ export async function uploadUserImage(file, jwt, userId) {
 }
 
 /**
- * Forgot password
+ * Sends an email to a user with the link to the reset password page
+ * @param {string} userMail user mail
  */
 export async function forgotenPassword(userMail) {
   let data = {
@@ -103,6 +105,39 @@ export async function forgotenPassword(userMail) {
 
   return {
     sent: false,
+    loader: false
+  };
+}
+
+/**
+ * Reset the user password
+ * @param {object} resetPassworddata
+ */
+export async function resetPassword(resetPassworddata) {
+  let data = {
+    code: resetPassworddata.code,
+    password: resetPassworddata.password,
+    passwordConfirmation: resetPassworddata.passwordConfirmation
+  };
+  const res = await fetch(resetPasswordEndpoint, {
+    method: "post",
+    headers: {
+      "Content-Type": "application/json;charset=utf-8"
+    },
+    body: JSON.stringify(data)
+  });
+
+  const result = await res.json();
+
+  if (result.jwt) {
+    return {
+      completed: true,
+      loader: false
+    };
+  }
+
+  return {
+    completed: false,
     loader: false
   };
 }

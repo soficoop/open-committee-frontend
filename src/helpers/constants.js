@@ -44,3 +44,7 @@ export const uploadEndpoint =
 export const forgotPasswordEndpoint =
   `${process.env.VUE_APP_API_ENDPOINT}/auth/forgot-password` ||
   "http://localhost:1337/auth/forgot-password";
+
+export const resetPasswordEndpoint =
+  `${process.env.VUE_APP_API_ENDPOINT}/auth/reset-password` ||
+  "http://localhost:1337/auth/reset-password";

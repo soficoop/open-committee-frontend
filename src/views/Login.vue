@@ -1,7 +1,7 @@
 <template>
   <v-container class="pa-md-12">
     <v-layout wrap align-content-space-around justify-center>
-      <v-flex xs12 md5 xl4 class="text-xs-center">
+      <v-flex xs12 sm5 xl4 class="text-xs-center">
         <v-layout column>
           <v-flex xs1 align-self-center>
             <v-icon size="120px" color="primary" class="my-4"
