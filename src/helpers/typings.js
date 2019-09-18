@@ -37,4 +37,17 @@
  * @property {File[]} attachedFiles
  */
 
+/**
+ * @typedef CommentModel
+ * @property {string} id
+ * @property {string} title
+ * @property {string} name
+ * @property {Date} createdAt
+ * @property {string} content
+ * @property {import("../../graphql/types").UsersPermissionsUser} user
+ * @property {CommentModel} children
+ * @property {string} visibleContent
+ * @property {boolean} isFullContentVisible
+ */
+
 export {};

@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Vuetify from "vuetify/lib";
+import he from "vuetify/es5/locale/he";
 
 Vue.use(Vuetify);
 
@@ -8,6 +9,9 @@ export default new Vuetify({
     iconfont: "mdi"
   },
   theme: {
+    options: {
+      customProperties: true
+    },
     themes: {
       light: {
         primary: "#004359",
@@ -18,6 +22,10 @@ export default new Vuetify({
         error: "#C05246"
       }
     }
+  },
+  lang: {
+    locales: { he },
+    current: "he"
   },
   rtl: true
 });

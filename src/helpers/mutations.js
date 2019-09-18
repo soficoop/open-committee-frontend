@@ -127,6 +127,8 @@ export const updateMeeting = `mutation udpateMeeting(
 
 export const updateUser = `mutation UpdateUser(
   $id: ID!
+  $firstName: String
+  $lastName: String
   $job: String
   $organization: String
   $city: String
@@ -136,6 +138,8 @@ export const updateUser = `mutation UpdateUser(
     input: {
       where: { id: $id }
       data: {
+        firstName: $firstName
+        lastName: $lastName
         job: $job
         organization: $organization
         city: $city
@@ -181,6 +185,19 @@ export const createComment = `mutation createComment(
   ) {
     comment {
       id
+    }
+  }
+}`;
+
+export const updateSubscriptions = `mutation updateSubscriptions($uid: ID!, $committees: [ID]!) {
+  updateUser(
+    input: { where: { id: $uid }, data: { subscribedCommittees: $committees } }
+  ) {
+    user {
+      subscribedCommittees {
+        id
+        sid
+      }
     }
   }
 }`;

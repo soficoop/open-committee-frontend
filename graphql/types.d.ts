@@ -108,6 +108,15 @@ export type Comment = {
   plan?: Maybe<Plan>;
   parent?: Maybe<Comment>;
   user?: Maybe<UsersPermissionsUser>;
+  children?: Maybe<Array<Maybe<Comment>>>;
+};
+
+/** Comments on other content types */
+export type CommentChildrenArgs = {
+  sort?: Maybe<Scalars["String"]>;
+  limit?: Maybe<Scalars["Int"]>;
+  start?: Maybe<Scalars["Int"]>;
+  where?: Maybe<Scalars["JSON"]>;
 };
 
 export type CommentAggregator = {
@@ -204,6 +213,7 @@ export type CommentInput = {
   plan?: Maybe<Scalars["ID"]>;
   createdAt?: Maybe<Scalars["DateTime"]>;
   parent?: Maybe<Scalars["ID"]>;
+  children?: Maybe<Array<Maybe<Scalars["ID"]>>>;
   user?: Maybe<Scalars["ID"]>;
 };
 
@@ -219,6 +229,7 @@ export type Committee = {
   children?: Maybe<Array<Maybe<Committee>>>;
   meetings?: Maybe<Array<Maybe<Meeting>>>;
   users?: Maybe<Array<Maybe<UsersPermissionsUser>>>;
+  subscribedUsers?: Maybe<Array<Maybe<UsersPermissionsUser>>>;
 };
 
 export type CommitteeChildrenArgs = {
@@ -236,6 +247,13 @@ export type CommitteeMeetingsArgs = {
 };
 
 export type CommitteeUsersArgs = {
+  sort?: Maybe<Scalars["String"]>;
+  limit?: Maybe<Scalars["Int"]>;
+  start?: Maybe<Scalars["Int"]>;
+  where?: Maybe<Scalars["JSON"]>;
+};
+
+export type CommitteeSubscribedUsersArgs = {
   sort?: Maybe<Scalars["String"]>;
   limit?: Maybe<Scalars["Int"]>;
   start?: Maybe<Scalars["Int"]>;
@@ -315,6 +333,7 @@ export type CommitteeInput = {
   children?: Maybe<Array<Maybe<Scalars["ID"]>>>;
   meetings?: Maybe<Array<Maybe<Scalars["ID"]>>>;
   users?: Maybe<Array<Maybe<Scalars["ID"]>>>;
+  subscribedUsers?: Maybe<Array<Maybe<Scalars["ID"]>>>;
 };
 
 export type CreateAreaInput = {
@@ -473,6 +492,7 @@ export type EditCommentInput = {
   plan?: Maybe<Scalars["ID"]>;
   createdAt?: Maybe<Scalars["DateTime"]>;
   parent?: Maybe<Scalars["ID"]>;
+  children?: Maybe<Array<Maybe<Scalars["ID"]>>>;
   user?: Maybe<Scalars["ID"]>;
 };
 
@@ -483,6 +503,7 @@ export type EditCommitteeInput = {
   children?: Maybe<Array<Maybe<Scalars["ID"]>>>;
   meetings?: Maybe<Array<Maybe<Scalars["ID"]>>>;
   users?: Maybe<Array<Maybe<Scalars["ID"]>>>;
+  subscribedUsers?: Maybe<Array<Maybe<Scalars["ID"]>>>;
 };
 
 export type EditFileInput = {
@@ -574,6 +595,7 @@ export type EditUserInput = {
   committees?: Maybe<Array<Maybe<Scalars["ID"]>>>;
   userImage?: Maybe<Scalars["ID"]>;
   comments?: Maybe<Array<Maybe<Scalars["ID"]>>>;
+  subscribedCommittees?: Maybe<Array<Maybe<Scalars["ID"]>>>;
 };
 
 export enum Enum_Parser_For {
@@ -1964,6 +1986,7 @@ export type UserInput = {
   committees?: Maybe<Array<Maybe<Scalars["ID"]>>>;
   userImage?: Maybe<Scalars["ID"]>;
   comments?: Maybe<Array<Maybe<Scalars["ID"]>>>;
+  subscribedCommittees?: Maybe<Array<Maybe<Scalars["ID"]>>>;
 };
 
 export type UsersPermissionsMe = {
@@ -2093,6 +2116,7 @@ export type UsersPermissionsUser = {
   userImage?: Maybe<UploadFile>;
   committees?: Maybe<Array<Maybe<Committee>>>;
   comments?: Maybe<Array<Maybe<Comment>>>;
+  subscribedCommittees?: Maybe<Array<Maybe<Committee>>>;
 };
 
 export type UsersPermissionsUserCommitteesArgs = {
@@ -2103,6 +2127,13 @@ export type UsersPermissionsUserCommitteesArgs = {
 };
 
 export type UsersPermissionsUserCommentsArgs = {
+  sort?: Maybe<Scalars["String"]>;
+  limit?: Maybe<Scalars["Int"]>;
+  start?: Maybe<Scalars["Int"]>;
+  where?: Maybe<Scalars["JSON"]>;
+};
+
+export type UsersPermissionsUserSubscribedCommitteesArgs = {
   sort?: Maybe<Scalars["String"]>;
   limit?: Maybe<Scalars["Int"]>;
   start?: Maybe<Scalars["Int"]>;
