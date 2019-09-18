@@ -23,9 +23,11 @@
                 <v-text-field
                   label="אימייל"
                   v-model="loginData.email"
-                  :error="loginData.email.length > 0 && !isLoginEmailValid"
+                  :error="
+                    loginData.email.length > 0 && !isEmailValid(loginData.email)
+                  "
                   :error-messages="
-                    loginData.email.length > 0 && !isLoginEmailValid
+                    loginData.email.length > 0 && !isEmailValid(loginData.email)
                       ? ['נא להכניס כתובת מייל תקינה']
                       : []
                   "
@@ -33,7 +35,7 @@
                 </v-text-field>
               </v-flex>
               <v-expand-transition>
-                <v-flex v-if="isLoginEmailValid">
+                <v-flex v-if="isEmailValid(loginData.email)">
                   <v-text-field
                     label="סיסמה"
                     hint="לפחות 8 תווים"
@@ -103,11 +105,11 @@
                                 v-model="forgotPasswordData.email"
                                 :error="
                                   forgotPasswordData.email.length > 0 &&
-                                    !isForgotPassEmailValid
+                                    !isEmailValid(forgotPasswordData.email)
                                 "
                                 :error-messages="
                                   forgotPasswordData.email.length > 0 &&
-                                  !isForgotPassEmailValid
+                                  !isEmailValid(forgotPasswordData.email)
                                     ? ['נא להכניס כתובת מייל תקינה']
                                     : []
                                 "
@@ -135,7 +137,7 @@
                           color="primary"
                           text
                           @click="sendRecoveryMail(forgotPasswordData.email)"
-                          :disabled="!isForgotPassEmailValid"
+                          :disabled="!isEmailValid(forgotPasswordData.email)"
                           >שלח לי מייל שחזור
                         </v-btn>
                       </v-card-actions>
@@ -160,9 +162,11 @@
               <v-text-field
                 label="אימייל"
                 v-model="signupData.email"
-                :error="signupData.email.length > 0 && !isSignupEmailValid"
+                :error="
+                  signupData.email.length > 0 && !isEmailValid(signupData.email)
+                "
                 :error-messages="
-                  signupData.email.length > 0 && !isSignupEmailValid
+                  signupData.email.length > 0 && !isEmailValid(signupData.email)
                     ? ['נא להכניס כתובת מייל תקינה']
                     : []
                 "
@@ -308,25 +312,15 @@ export default class Login extends Vue {
     this.forgotPasswordData.email = "";
   }
 
-  get isForgotPassEmailValid() {
-    return this.forgotPasswordData.email.match(
+  isEmailValid(email) {
+    return email.match(
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     );
   }
 
-  get isLoginEmailValid() {
-    return this.loginData.email.match(
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    );
-  }
-  get isSignupEmailValid() {
-    return this.signupData.email.match(
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    );
-  }
   get isSignUpFormValid() {
     return (
-      this.isSignupEmailValid &&
+      this.isEmailValid(this.signupData.email) &&
       this.signupData.firstName &&
       this.signupData.lastName &&
       this.signupData.password
