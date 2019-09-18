@@ -1,6 +1,17 @@
 <template>
   <v-container class="pa-md-12">
     <v-layout fill-height wrap>
+      <v-row justify="center">
+        <v-col cols="auto">
+          <div class="b-radius-50 overflow-hidden">
+            <v-img
+              src="/img/userImage.svg"
+              alt="user image placeholder"
+              class="d-block user-image"
+            />
+          </div>
+        </v-col>
+      </v-row>
       <v-row class="w-100">
         <v-col class="text-center">
           <h1
@@ -50,13 +61,7 @@
                 hint="הזן את הסיסמה שהזנת בשדה הקודם"
                 v-model="resetPasswordData.passwordConfirmation"
                 name="password"
-                :type="resetPasswordData.showConfPassword ? 'text' : 'password'"
-                :append-icon="
-                  resetPasswordData.showConfPassword ? 'mdi-eye' : 'mdi-eye-off'
-                "
-                @click:append="
-                  resetPasswordData.showConfPassword = !resetPasswordData.showConfPassword
-                "
+                type="password"
               ></v-text-field>
             </v-col>
             <v-col v-if="passwordReseted === false" class="pt-0">
@@ -100,7 +105,6 @@ export default class ResetPassword extends Vue {
     password: "",
     passwordConfirmation: "",
     showPassword: false,
-    showConfPassword: false,
     code: this.urlParams.get("code")
   };
   loader = false;
@@ -117,11 +121,15 @@ export default class ResetPassword extends Vue {
 
   async resetUserPassword(resetPasswordData) {
     this.loader = true;
-    const result = await resetPassword(resetPasswordData);
-    this.passwordReseted = result.completed;
-    this.loader = result.loader;
+    this.passwordReseted = await resetPassword(resetPasswordData);
+    this.loader = false;
   }
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.user-image {
+  width: 125px;
+  height: 125px;
+}
+</style>

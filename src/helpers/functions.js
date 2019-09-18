@@ -80,11 +80,9 @@ export async function uploadUserImage(file, jwt, userId) {
  * Sends an email to a user with the link to the reset password page
  * @param {string} userMail user mail
  */
-export async function forgotenPassword(userMail) {
+export async function sendForgotenPasswordEmail(userMail) {
   let data = {
-    email: userMail,
-    url:
-      "http:/localhost:1337/admin/plugins/users-permissions/auth/reset-password"
+    email: userMail
   };
   const res = await fetch(forgotPasswordEndpoint, {
     method: "post",
@@ -96,17 +94,7 @@ export async function forgotenPassword(userMail) {
 
   const result = await res.json();
 
-  if (result.ok) {
-    return {
-      sent: true,
-      loader: false
-    };
-  }
-
-  return {
-    sent: false,
-    loader: false
-  };
+  return !!result.ok;
 }
 
 /**
@@ -129,15 +117,5 @@ export async function resetPassword(resetPassworddata) {
 
   const result = await res.json();
 
-  if (result.jwt) {
-    return {
-      completed: true,
-      loader: false
-    };
-  }
-
-  return {
-    completed: false,
-    loader: false
-  };
+  return !!result.jwt;
 }

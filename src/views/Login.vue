@@ -119,8 +119,9 @@
                               class="pt-0"
                             >
                               <span class="error--text"
-                                >אירעה שגיאה בשליחת המייל</span
-                              >
+                                >אירעה שגיאה בשליחת המייל, בידקו כי הוזנה כתובת
+                                אימייל נכונה
+                              </span>
                             </v-col>
                           </v-row>
                         </v-container>
@@ -133,7 +134,7 @@
                         <v-btn
                           color="primary"
                           text
-                          @click="sendRecoverMail(forgotPasswordData.email)"
+                          @click="sendRecoveryMail(forgotPasswordData.email)"
                           :disabled="!isForgotPassEmailValid"
                           >שלח לי מייל שחזור
                         </v-btn>
@@ -236,11 +237,11 @@
 </template>
 
 <script>
-import Component from "vue-class-component";
+import { Component, Watch } from "vue-property-decorator";
 import Vue from "vue";
 import { Action } from "vuex-class";
 import { ActionTypes } from "../helpers/constants";
-import { forgotenPassword } from "../helpers/functions";
+import { sendForgotenPasswordEmail } from "../helpers/functions";
 
 @Component()
 export default class Login extends Vue {
@@ -268,6 +269,10 @@ export default class Login extends Vue {
   dialog = false;
   loader = false;
 
+  @Watch("dialog") onPropertyChanged() {
+    this.forgotPasswordData.email = this.loginData.email;
+  }
+
   @Action(ActionTypes.SIGN_UP) signUpAction;
   @Action(ActionTypes.SIGN_IN) loginAction;
 
@@ -281,11 +286,12 @@ export default class Login extends Vue {
     this.handleAuthentication(result);
   }
 
-  async sendRecoverMail(userMail) {
+  async sendRecoveryMail(userMail) {
     this.loader = true;
-    const result = await forgotenPassword(userMail);
-    this.forgotPasswordData.mailSent = result.sent;
-    this.loader = result.loader;
+    this.forgotPasswordData.mailSent = await sendForgotenPasswordEmail(
+      userMail
+    );
+    this.loader = false;
   }
 
   handleAuthentication(isSuccessful) {
