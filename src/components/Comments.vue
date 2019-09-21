@@ -137,9 +137,7 @@ export default class Comments extends Vue {
    * Fetches comments for the selected plan
    */
   async fetchComments() {
-    const { comments } = await makeGqlRequest(getCommentsByPlan, {
-      plan: this.plan.id
-    });
+    const { comments } = await makeGqlRequest(getCommentsByPlan(this.plan.id));
     this.comments = this.mapApiComments(comments);
   }
 

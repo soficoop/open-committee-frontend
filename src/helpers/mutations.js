@@ -157,6 +157,7 @@ export const updateUser = `mutation UpdateUser(
       blocked
       role {
         type
+        name
       }
       firstName
       lastName
@@ -166,6 +167,10 @@ export const updateUser = `mutation UpdateUser(
         url
       }
       city
+      committees {
+        id
+        sid
+      }
     }
   }
 }`;

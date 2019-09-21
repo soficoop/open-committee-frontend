@@ -120,6 +120,8 @@ export default class Notifications extends Vue {
    * @type {import("../../graphql/types").UsersPermissionsUser}
    */
   @Getter(Getters.USER) user;
+  /** @type {string} */
+  @Getter(Getters.JWT) jwt;
   /** @type {import("../../graphql/types").Committee[]} */
   @Getter(Getters.COMMITTEES) committees;
   subscribedCommittees = [];
@@ -152,10 +154,14 @@ export default class Notifications extends Vue {
   }
 
   async updateSubscriptions() {
-    await makeGqlRequest(updateSubscriptions, {
-      uid: this.user.id,
-      committees: this.subscribedCommittees.map(committee => committee.id)
-    });
+    await makeGqlRequest(
+      updateSubscriptions,
+      {
+        uid: this.user.id,
+        committees: this.subscribedCommittees.map(committee => committee.id)
+      },
+      this.jwt
+    );
   }
 
   unsubscribeFromCommittee(committeeId) {
