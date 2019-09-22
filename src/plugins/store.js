@@ -16,7 +16,7 @@ import {
   getUserSubscriptions,
   getAllCommittees
 } from "../helpers/queries.js";
-import { updateUser } from "../helpers/mutations.js";
+import { updateMe } from "../helpers/mutations.js";
 
 Vue.use(Vuex);
 
@@ -241,11 +241,11 @@ export default new Vuex.Store({
     async [ActionTypes.UPDATE_USER](context, updatedUserFields) {
       updatedUserFields.id = context.state.user.id;
       const res = await makeGqlRequest(
-        updateUser,
+        updateMe,
         updatedUserFields,
         context.state.jwt
       );
-      context.commit(MutationTypes.SET_USER, res.updateUser.user);
+      context.commit(MutationTypes.SET_USER, res.updateMe.user);
     },
     /**
      * Fetches user subscriptions and updates user accordingly
