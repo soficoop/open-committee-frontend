@@ -61,15 +61,26 @@
               <v-row>
                 <v-col>
                   <v-card flat class="pa-4">
-                    <h4
-                      class="title primary--text d-inline-block right"
-                      tabindex="0"
-                    >
-                      כל הועדות
-                    </h4>
+                    <v-row>
+                      <v-col cols="12" md="8">
+                        <h4 class="title primary--text" tabindex="0">
+                          כל הועדות
+                        </h4>
+                      </v-col>
+                      <v-col>
+                        <v-text-field
+                          hide-details
+                          label="חיפוש"
+                          append-icon="mdi-magnify"
+                          v-model="committeeSearch"
+                          class="pt-0"
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
                     <v-data-table
                       :headers="committeeHeaders"
                       :items="committees"
+                      :search="committeeSearch"
                     >
                       <template v-slot:item.action="{ item }">
                         <v-btn
@@ -124,6 +135,7 @@ export default class Notifications extends Vue {
   @Getter(Getters.JWT) jwt;
   /** @type {import("../../graphql/types").Committee[]} */
   @Getter(Getters.COMMITTEES) committees;
+  committeeSearch = "";
   subscribedCommittees = [];
   tab = null;
   committeeHeaders = [
