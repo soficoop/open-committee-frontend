@@ -162,13 +162,6 @@ export default new Vuex.Store({
       });
       const result = await res.json();
       return !!result.jwt;
-
-      // if (result.jwt) {
-      //   context.commit(MutationTypes.SET_JWT, result.jwt);
-      //   context.commit(MutationTypes.SET_USER, result.user);
-      //   return true;
-      // }
-      // return false;
     },
     /**
      * Performs sign in
