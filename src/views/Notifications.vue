@@ -2,13 +2,15 @@
   <v-container pa-md-12 pa-5>
     <v-row class="mb-5">
       <v-col>
-        <h1 class="display-1 font-weight-black primary--text">ההתראות שלי</h1>
+        <h1 class="display-1 font-weight-black primary--text" tabindex="0">
+          ההתראות שלי
+        </h1>
       </v-col>
     </v-row>
     <v-row>
       <v-col>
         <v-tabs background-color="transparent" v-model="tab">
-          <v-tab class="title">לפי ועדה</v-tab>
+          <v-tab class="title" tabindex="0">לפי ועדה</v-tab>
           <v-tabs-items v-model="tab" class="transparent">
             <v-tab-item>
               <v-expand-transition>
@@ -39,7 +41,7 @@
                         >
                           <v-card-text class="subtitle-1">
                             <v-row>
-                              <v-col>
+                              <v-col tabindex="0">
                                 {{ item.sid }}
                               </v-col>
                               <v-col class="shrink py-0 px-1">
@@ -97,7 +99,7 @@
                           v-else
                           small
                           color="primary"
-                          depressed
+                          text
                           @click="unsubscribeFromCommittee(item.id)"
                         >
                           <v-icon small left>mdi-check</v-icon>
