@@ -2,25 +2,26 @@
   <v-layout column>
     <v-flex xs1>
       <v-expand-transition>
-        <v-card class="pa-1">
+        <v-card>
           <v-btn
             block
             large
             depressed
-            color="secondary"
-            :text="!isCreatingNewComment"
+            :color="`secondary ${isCreatingNewComment && 'darken-1'}`"
             @click="setCommentCreation(!isCreatingNewComment)"
           >
             <v-icon left>mdi-plus</v-icon>
             צור התייחסות חדשה
           </v-btn>
-          <div v-if="isCreatingNewComment" class="ma-3"></div>
+          <div v-if="isCreatingNewComment" class="pa-1"></div>
           <v-expand-transition>
             <NewComment
+              class="px-1"
               v-if="isCreatingNewComment"
               @submit="handleCommentSubmitted"
             />
           </v-expand-transition>
+          <div v-if="isCreatingNewComment" class="pa-1"></div>
         </v-card>
       </v-expand-transition>
     </v-flex>
