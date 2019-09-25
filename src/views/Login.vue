@@ -22,6 +22,7 @@
               <v-flex>
                 <v-text-field
                   label="אימייל"
+                  name="email"
                   v-model="loginData.email"
                   :error="
                     loginData.email.length > 0 && !isEmailValid(loginData.email)
