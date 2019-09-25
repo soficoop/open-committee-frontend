@@ -1,12 +1,10 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import createPersistedState from "vuex-persistedstate";
-import { request } from "graphql-request";
 import {
   MutationTypes,
   ActionTypes,
   Getters,
-  graphqlEndpoint,
   authEndpoint
 } from "../helpers/constants";
 import { dateTimeRevive, makeGqlRequest } from "../helpers/functions";
@@ -15,11 +13,10 @@ import {
   getMeeting,
   getPlan,
   getCommitteeMeetings,
-  getCommittees,
   getUserSubscriptions,
   getAllCommittees
 } from "../helpers/queries.js";
-import { updateUser } from "../helpers/mutations.js";
+import { updateMe } from "../helpers/mutations.js";
 
 Vue.use(Vuex);
 
@@ -142,7 +139,7 @@ export default new Vuex.Store({
     async [ActionTypes.FETCH_UPCOMING_MEETINGS](context) {
       let date = new Date();
       date.setHours(0);
-      const res = await makeGqlRequest(getMeetings, { date: date });
+      const res = await makeGqlRequest(getMeetings(date));
       let meetings = res.meetings.filter(meeting => meeting.committee);
       context.commit(MutationTypes.SET_UPCOMING_MEETINGS, meetings);
     },
@@ -180,16 +177,6 @@ export default new Vuex.Store({
       const result = await res.json();
 
       if (result.jwt) {
-        if (result.user.committees) {
-          const userCommitteesResult = await request(
-            graphqlEndpoint,
-            getCommittees,
-            {
-              committees: result.user.committees
-            }
-          );
-          result.user.committees = userCommitteesResult.committees;
-        }
         context.commit(MutationTypes.SET_JWT, result.jwt);
         context.commit(MutationTypes.SET_USER, result.user);
         return true;
@@ -210,7 +197,7 @@ export default new Vuex.Store({
      * @param {stirng} id ID of meeting to fetch
      */
     async [ActionTypes.FETCH_MEETING](context, id) {
-      const { meeting } = await makeGqlRequest(getMeeting, { id: id });
+      const { meeting } = await makeGqlRequest(getMeeting(id));
       context.commit(MutationTypes.SET_SELECTED_MEETING, meeting);
     },
     /**
@@ -233,9 +220,11 @@ export default new Vuex.Store({
       ) {
         return;
       }
-      const res = await makeGqlRequest(getCommitteeMeetings, {
-        committees: context.state.user.committees.map(committee => committee.id)
-      });
+      const res = await makeGqlRequest(
+        getCommitteeMeetings(
+          context.state.user.committees.map(committee => committee.id)
+        )
+      );
       /** @type {import("../../graphql/types").Meeting[]} */
       const meetings = res.meetings;
       context.commit(MutationTypes.SET_MANAGABLE_MEETINGS, meetings);
@@ -248,11 +237,11 @@ export default new Vuex.Store({
     async [ActionTypes.UPDATE_USER](context, updatedUserFields) {
       updatedUserFields.id = context.state.user.id;
       const res = await makeGqlRequest(
-        updateUser,
+        updateMe,
         updatedUserFields,
         context.state.jwt
       );
-      context.commit(MutationTypes.SET_USER, res.updateUser.user);
+      context.commit(MutationTypes.SET_USER, res.updateMe.user);
     },
     /**
      * Fetches user subscriptions and updates user accordingly

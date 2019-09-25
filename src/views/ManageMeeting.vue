@@ -283,8 +283,7 @@ import Component from "vue-class-component";
 import AgendaCards from "../components/AgendaCards";
 import Vue from "vue";
 import { Getter } from "vuex-class";
-import { Getters, graphqlEndpoint } from "../helpers/constants";
-import { request } from "graphql-request";
+import { Getters } from "../helpers/constants";
 import {
   createMeeting,
   createSubject,
@@ -387,8 +386,7 @@ export default class ManageMeeting extends Vue {
    */
   async loadMeeting(meetingId) {
     /** @type {import("../../graphql/types").Meeting} */
-    const meeting = (await makeGqlRequest(getMeeting, { id: meetingId }))
-      .meeting;
+    const { meeting } = await makeGqlRequest(getMeeting(meetingId));
     if (meeting) {
       this.existingMeeting = meeting;
       this.committee = meeting.committee.id;
@@ -566,7 +564,7 @@ export default class ManageMeeting extends Vue {
   set planSearch(value) {
     if (value) {
       this.isSearchingPlans = true;
-      request(graphqlEndpoint, getPlans, { number: value }).then(result => {
+      makeGqlRequest(getPlans(value)).then(result => {
         this.plans = result.plans.filter(
           plan =>
             !this.agendaItems.some(agendaItem => agendaItem.id === plan.id)
