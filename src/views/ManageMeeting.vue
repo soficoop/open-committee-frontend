@@ -602,6 +602,9 @@ export default class ManageMeeting extends Vue {
     }
   }
 
+  /**
+   * Inactive getter (by purpose)
+   */
   get planSearch() {
     return "";
   }
