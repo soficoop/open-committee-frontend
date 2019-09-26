@@ -249,6 +249,16 @@
         ></v-textarea>
       </v-col>
     </v-row>
+    <v-row v-if="existingMeeting">
+      <v-col>
+        <v-checkbox
+          label="עדכן/י את העוקבים במייל על השינוי"
+          v-model="notifyByMail"
+          hide-details
+          class="my-0"
+        ></v-checkbox>
+      </v-col>
+    </v-row>
     <v-row>
       <v-col>
         <v-btn
@@ -296,7 +306,8 @@ import { Getters } from "../helpers/constants";
 import {
   createMeeting,
   createSubject,
-  updateMeeting
+  updateMeeting,
+  emailMeeting
 } from "../helpers/mutations";
 import { getPlans, getPlan, getMeeting } from "../helpers/queries";
 import { makeGqlRequest, uploadFile } from "../helpers/functions";
@@ -327,6 +338,7 @@ export default class ManageMeeting extends Vue {
   addedSubjects = [];
   /** @type {import("../../graphql/types").Plan[]} */
   addedPlans = [];
+  notifyByMail = false;
   submittedSuccessfully = false;
   submittingMeeting = false;
   /** @type {File} */
@@ -552,6 +564,13 @@ export default class ManageMeeting extends Vue {
     const meeting = await this.generateMeetingQueryObject();
     const res = await makeGqlRequest(updateMeeting, meeting, this.jwt);
     this.submittedMeetingId = res.updateMeeting.meeting.id;
+    if (this.notifyByMail) {
+      await makeGqlRequest(
+        emailMeeting,
+        { id: this.submittedMeetingId },
+        this.jwt
+      );
+    }
   }
 
   get meetingDateFormatted() {

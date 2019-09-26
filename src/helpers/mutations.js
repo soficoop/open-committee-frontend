@@ -206,3 +206,14 @@ export const updateSubscriptions = `mutation updateMe($uid: ID!, $committees: [I
     }
   }
 }`;
+
+export const emailMeeting = `mutation emailMeeting($id:ID!) {
+  emailMeeting(input:{where:{id:$id}}) {
+    meeting {
+      id
+    }
+    recipients {
+      email
+    }
+  }
+}`;
