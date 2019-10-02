@@ -154,11 +154,10 @@ export function getCommentsByPlan(id) {
 
 export function getCommitteeMeetings(committeeIds) {
   return `query getCommitteeMeetings {
-    meetings(where: { committee_in: ${JSON.stringify(
-      committeeIds
-    )} addedManually: true }) {
+    meetings(where: { committee_in: ${JSON.stringify(committeeIds)} }) {
       id
       number
+      addedManually
       date
       committee {
         id

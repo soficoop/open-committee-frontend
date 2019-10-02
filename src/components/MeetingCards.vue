@@ -16,7 +16,7 @@
             <h3
               class="subtitle-1 align-self-center"
               tabindex="0"
-              v-if="typeof item.date != 'string'"
+              v-if="item.date && typeof item.date != 'string'"
             >
               {{ item.date.toLocaleDateString("he") }}
             </h3>

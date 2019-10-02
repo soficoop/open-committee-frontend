@@ -20,7 +20,7 @@
             <h5
               class="subtitle-1 primary--text d-inline-block"
               tabindex="0"
-              v-if="typeof meeting.date != 'string'"
+              v-if="meeting.date && typeof meeting.date != 'string'"
             >
               <v-icon color="primary">mdi-calendar-blank</v-icon>
               {{ meeting.date.toLocaleDateString("he") }}

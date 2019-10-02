@@ -15,6 +15,7 @@
           item-value="id"
           item-text="sid"
           hide-details
+          :disabled="!addedManually"
           outlined
           v-model="committee"
           class="text-right"
@@ -28,6 +29,7 @@
           label="מספר/כותרת ישיבה"
           hide-details
           outlined
+          :disabled="!addedManually"
         ></v-text-field>
       </v-col>
     </v-row>
@@ -49,7 +51,7 @@
               label="תאריך ישיבה"
               hide-details
               v-on="on"
-              readonly
+              :disabled="!addedManually"
             ></v-text-field>
           </template>
           <v-date-picker
@@ -73,7 +75,7 @@
         </v-dialog>
       </v-col>
     </v-row>
-    <v-row>
+    <v-row v-if="addedManually">
       <v-col cols="12" md="8">
         <v-autocomplete
           label="קישור לתכניות"
@@ -172,7 +174,7 @@
     <AgendaCards
       :items="agendaItems"
       @cardRemoved="handleAgendaItemRemoveClicked"
-      areCardsRemovable
+      :areCardsRemovable="addedManually"
       class="pb-6"
     ></AgendaCards>
     <v-row>
@@ -318,6 +320,7 @@ export default class ManageMeeting extends Vue {
   @Getter(Getters.USER) user;
   /** @type {string} */
   @Getter(Getters.JWT) jwt;
+  addedManually = true;
   submittedMeetingId = "";
   background = "";
   dateDialog = false;
@@ -410,6 +413,7 @@ export default class ManageMeeting extends Vue {
     const { meeting } = await makeGqlRequest(getMeeting(meetingId));
     if (meeting) {
       this.existingMeeting = meeting;
+      this.addedManually = !!meeting.addedManually;
       this.committee = meeting.committee.id;
       this.meetingNumber = meeting.title || meeting.number;
       this.meetingDateString = meeting.date.toISOString().split("T")[0];
