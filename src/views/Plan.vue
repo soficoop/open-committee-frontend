@@ -12,10 +12,10 @@
             {{ plan.municipality }}
           </span>
           <span v-if="plan.municipality && plan.location"> • </span>
-          <span v-if="plan.location" tabindex="0">{{ plan.location }}</span>
+          <span v-if="plan.location" tabindex="0" v-html="plan.location"></span>
         </h4>
         <h5 class="subtitle-1 primary--text" v-if="plan.status">
-          <v-icon color="primary">mdi-update</v-icon>
+          <v-icon right color="primary">mdi-update</v-icon>
           <span tabindex="0">{{ plan.status }}</span>
         </h5>
       </v-flex>
