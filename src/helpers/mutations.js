@@ -86,7 +86,7 @@ export const createSubject = `mutation createSubject(
   }
 }`;
 
-export const updateMeeting = `mutation udpateMeeting(
+export const updateMyMeeting = `mutation udpateMyMeeting(
   $id: ID!
   $background: String
   $summary: String
@@ -100,7 +100,7 @@ export const updateMeeting = `mutation udpateMeeting(
   $additionalFiles: [ID]
   $plans: [ID!]!
 ) {
-  updateMeeting(
+  updateMyMeeting(
     input: {
       where: { id: $id }
       data: {

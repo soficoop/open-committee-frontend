@@ -308,7 +308,7 @@ import { Getters } from "../helpers/constants";
 import {
   createMeeting,
   createSubject,
-  updateMeeting,
+  updateMyMeeting,
   emailMeeting
 } from "../helpers/mutations";
 import { getPlans, getPlan, getMeeting } from "../helpers/queries";
@@ -566,8 +566,8 @@ export default class ManageMeeting extends Vue {
 
   async updateMeeting() {
     const meeting = await this.generateMeetingQueryObject();
-    const res = await makeGqlRequest(updateMeeting, meeting, this.jwt);
-    this.submittedMeetingId = res.updateMeeting.meeting.id;
+    const res = await makeGqlRequest(updateMyMeeting, meeting, this.jwt);
+    this.submittedMeetingId = res.updateMyMeeting.meeting.id;
     if (this.notifyByMail) {
       await makeGqlRequest(
         emailMeeting,
