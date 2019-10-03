@@ -1,7 +1,7 @@
 <template>
   <v-container class="pa-md-12">
-    <v-layout wrap align-content-space-around>
-      <v-flex xs12>
+    <v-row wrap align-content-space-around>
+      <v-col cols="12">
         <h1
           :class="{
             'headline font-weight-black primary--text mb-3':
@@ -13,21 +13,29 @@
         >
           ברוכים הבאים למערכת ועדה פתוחה
         </h1>
-        <v-flex xs12 md7>
-          <p tabindex="0" class="primary--text">
-            המערכת שלנו מנגישה לציבור דיונים בנושאי תכנון ובנייה בועדות התכנון
-            בישראל, ומזמינה אתכם להגיב ולנהל דיון, יחד עם נציגי הארגונים הירוקים
-            בועדות השונות.
-          </p>
-        </v-flex>
-      </v-flex>
-      <v-flex xs12>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col cols="12" md="7">
+        <p tabindex="0" class="primary--text">
+          המערכת שלנו מנגישה לציבור דיונים בנושאי תכנון ובנייה בועדות התכנון
+          בישראל, ומזמינה אתכם להגיב ולנהל דיון, יחד עם נציגי הארגונים הירוקים
+          בועדות השונות.
+        </p>
+        <v-btn color="primary" x-large to="/notifications">
+          <v-icon left>mdi-bell</v-icon>
+          צרו התראות חדשות
+        </v-btn>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col cols="12">
         <h2 class="headline primary--text font-weight-bold my-3" tabindex="0">
           הישיבות הקרובות במערכת
         </h2>
         <MeetingCards :meetings="upcomingMeetingCards"></MeetingCards>
-      </v-flex>
-    </v-layout>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
