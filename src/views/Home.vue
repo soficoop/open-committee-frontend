@@ -22,7 +22,11 @@
           בישראל, ומזמינה אתכם להגיב ולנהל דיון, יחד עם נציגי הארגונים הירוקים
           בועדות השונות.
         </p>
-        <v-btn color="primary" x-large to="/notifications">
+      </v-col>
+    </v-row>
+    <v-row v-if="!!user">
+      <v-col>
+        <v-btn color="accent" x-large to="/notifications">
           <v-icon left>mdi-bell</v-icon>
           צרו התראות חדשות
         </v-btn>
@@ -54,6 +58,7 @@ export default class Home extends Vue {
   @Getter(Getters.UPCOMING_MEETINGS) upcomingMeetings;
   /** @type {import("../../graphql/types").Meeting[]} */
   @Getter(Getters.MANAGABLE_MEETINGS) managableMeetings;
+  @Getter(Getters.USER) user;
   async mounted() {
     await this.fetchManagableMeetings();
   }
