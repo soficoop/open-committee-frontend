@@ -19,9 +19,9 @@
       @openChanged="value => (isNavOpen = value)"
     ></Navigation>
     <v-content class="background">
-      <v-slide-y-transition mode="out-in">
+      <v-fade-transition mode="out-in">
         <router-view></router-view>
-      </v-slide-y-transition>
+      </v-fade-transition>
     </v-content>
   </v-app>
 </template>

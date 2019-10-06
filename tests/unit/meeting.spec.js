@@ -165,18 +165,79 @@ describe("Meeting.vue", () => {
       }
     ]
   };
+  let user = {
+    id: "5d8359f6be96155b71f5c6f9",
+    username: "aviran@soficoop.com",
+    email: "aviran@soficoop.com",
+    provider: "local",
+    confirmed: false,
+    blocked: false,
+    role: { type: "administrator", name: "Administrator" },
+    firstName: "אבירן",
+    lastName: "כץ",
+    organization: "קואופרטיב סופי",
+    job: "מתכנת",
+    userImage: { url: "/uploads/78e83b66743642eb85324d864770b12e.jpg" },
+    city: "ירושלים",
+    committees: [
+      {
+        id: "5d83578727e32d5875120517",
+        sid: "ועדה מחוזית לתכנון ולבניה מחוז המרכז"
+      },
+      {
+        id: "5d83578727e32d587512051a",
+        sid: "ועדה מחוזית לתכנון ולבניה מחוז ירושלים"
+      },
+      {
+        id: "5d83585927e32d5875120725",
+        sid: "ועדה מחוזית לתכנון ולבניה מחוז המרכז - ועדה מקצועית למים וביוב"
+      },
+      {
+        id: "5d83585a27e32d587512072b",
+        sid: "ועדה מחוזית לתכנון ולבניה מחוז חיפה - ועדת משנה לתכניות א'"
+      }
+    ],
+    subscribedCommittees: [
+      {
+        id: "5d83578727e32d5875120517",
+        sid: "ועדה מחוזית לתכנון ולבניה מחוז המרכז"
+      },
+      { id: "5d83578727e32d5875120518", sid: "ועדה ארצית" },
+      {
+        id: "5d83578727e32d587512051a",
+        sid: "ועדה מחוזית לתכנון ולבניה מחוז ירושלים"
+      },
+      {
+        id: "5d83585927e32d5875120725",
+        sid: "ועדה מחוזית לתכנון ולבניה מחוז המרכז - ועדה מקצועית למים וביוב"
+      },
+      {
+        id: "5d83585a27e32d5875120728",
+        sid:
+          "ועדה מחוזית לתכנון ולבניה מחוז הדרום - הועדה המחוזית לתכנון ולבניה מחוז הדרום"
+      },
+      {
+        id: "5d83585a27e32d5875120729",
+        sid: "ועדה מחוזית לתכנון ולבניה מחוז המרכז - ועדת משנה להתנגדויות"
+      }
+    ]
+  };
   let actions = {
     [ActionTypes.FETCH_MEETING]: jest.fn(),
-    [ActionTypes.FETCH_MANAGABLE_MEETINGS]: jest.fn()
+    [ActionTypes.FETCH_MANAGABLE_MEETINGS]: jest.fn(),
+    [ActionTypes.FETCH_USER_SUBSCRIPTIONS]: jest.fn()
   };
   let store = new Vuex.Store({
-    state: { meeting },
+    state: { meeting, user },
     getters: {
       [Getters.MANAGABLE_MEETINGS]() {
         return [];
       },
       [Getters.SELECTED_MEETING]() {
         return meeting;
+      },
+      [Getters.USER]() {
+        return user;
       }
     },
     actions
@@ -228,5 +289,10 @@ describe("Meeting.vue", () => {
     expect(wrapper.vm.meetingFiles).toHaveLength(3);
     meeting.additionalFiles[1].name = "";
     expect(wrapper.vm.meetingFiles).toHaveLength(2);
+  });
+  it("computes isUserSubscribed correctly", () => {
+    expect(wrapper.vm.isUserSubscribed).toBeFalsy();
+    user.subscribedCommittees.push({ id: meeting.committee.id });
+    expect(wrapper.vm.isUserSubscribed).toBeTruthy();
   });
 });
