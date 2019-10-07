@@ -1,27 +1,6 @@
 <template>
   <v-container class="pa-md-12">
-    <v-snackbar
-      v-model="hasToggledSubscription"
-      :top="$vuetify.breakpoint.xsOnly"
-    >
-      <span v-if="isUserSubscribed">התראות על הועדה הופעלו</span>
-      <span v-else>התראות על הועדה כובו</span>
-      <v-btn icon @click="hasToggledSubscription = false" color="secondary">
-        <v-icon class="mdi-flip-h">mdi-thumb-up</v-icon>
-      </v-btn>
-    </v-snackbar>
-    <v-btn
-      v-if="user"
-      fixed
-      fab
-      bottom
-      left
-      :color="isUserSubscribed ? 'grey lighten-1' : 'secondary'"
-      @click="toggleSubscription"
-    >
-      <v-icon v-if="!isUserSubscribed">mdi-bell-ring</v-icon>
-      <v-icon v-else color="white">mdi-bell-off</v-icon>
-    </v-btn>
+    <SubscriptionToggle :committeeId="meeting.committee.id" />
     <v-row no-gutters>
       <v-col cols="12">
         <h3
@@ -115,21 +94,17 @@ import { Getter, Action } from "vuex-class";
 import AgendaCards from "../components/AgendaCards.vue";
 import FileCards from "../components/FileCards.vue";
 import MeetingCards from "../components/MeetingCards.vue";
+import SubscriptionToggle from "../components/SubscriptionToggle.vue";
 
 @Component({
-  components: { MeetingCards, AgendaCards, FileCards }
+  components: { MeetingCards, AgendaCards, FileCards, SubscriptionToggle }
 })
 export default class Meeting extends Vue {
   @Action(ActionTypes.FETCH_MANAGABLE_MEETINGS) fetchManagableMeetings;
-  @Action(ActionTypes.FETCH_USER_SUBSCRIPTIONS) fetchUserSubscriptions;
-  @Action(ActionTypes.UPDATE_USER) updateUser;
   /**@type {import("../../graphql/types").Meeting} */
   @Getter(Getters.SELECTED_MEETING) meeting;
   /**@type {import("../../graphql/types").Meeting[]} */
   @Getter(Getters.MANAGABLE_MEETINGS) managableMeetings;
-  /** @type {import("../../graphql/types").UsersPermissionsUser} */
-  @Getter(Getters.USER) user;
-  hasToggledSubscription = false;
   hoveredPlan = "";
 
   get meetingFiles() {
@@ -155,18 +130,6 @@ export default class Meeting extends Vue {
       });
     }
     return arr;
-  }
-
-  /**
-   * gets subscription status for the meeting's committee
-   */
-  get isUserSubscribed() {
-    return (
-      !!this.user.subscribedCommittees &&
-      !!this.user.subscribedCommittees.find(
-        committee => committee.id == this.meeting.committee.id
-      )
-    );
   }
 
   handlePlanClicked(plan) {
@@ -234,31 +197,7 @@ export default class Meeting extends Vue {
   }
 
   async mounted() {
-    await this.fetchUserSubscriptions();
     await this.fetchManagableMeetings();
-  }
-
-  /**
-   * Toggles subscription to the meeting's committee
-   */
-  async toggleSubscription() {
-    if (!this.meeting.committee) {
-      return;
-    }
-    let committees;
-    if (this.isUserSubscribed) {
-      committees = this.user.subscribedCommittees
-        .filter(committee => committee.id != this.meeting.committee.id)
-        .map(committee => committee.id);
-    } else {
-      committees = this.user.subscribedCommittees.map(
-        committee => committee.id
-      );
-      committees.push(this.meeting.committee.id);
-    }
-    await this.updateUser({ subscribedCommittees: committees });
-    await this.fetchUserSubscriptions();
-    this.hasToggledSubscription = true;
   }
 }
 </script>
