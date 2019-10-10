@@ -16,7 +16,7 @@ import {
   getUserSubscriptions,
   getAllCommittees
 } from "../helpers/queries.js";
-import { updateMe } from "../helpers/mutations.js";
+import { updateMe, updatePlan } from "../helpers/mutations.js";
 
 Vue.use(Vuex);
 
@@ -246,6 +246,24 @@ export default new Vuex.Store({
         context.state.jwt
       );
       context.commit(MutationTypes.SET_USER, res.updateMe.user);
+    },
+    /**
+     * Update plan
+     * @param {import("vuex").Store} context the store object
+     * @param {import("../../graphql/types").Plan} updatedPlanFields
+     */
+    async [ActionTypes.UPDATE_PLAN](context, updatedPlanFields) {
+      try {
+        const res = await makeGqlRequest(
+          updatePlan,
+          updatedPlanFields,
+          context.state.jwt
+        );
+        context.commit(MutationTypes.SET_SELECTED_PLAN, res.updatePlan.plan);
+        return true;
+      } catch (e) {
+        return false;
+      }
     },
     /**
      * Fetches user subscriptions and updates user accordingly

@@ -182,10 +182,12 @@ export const createComment = `mutation createComment(
   $plan: ID!
   $parent: ID
   $user: ID
+  $isPinned: Boolean
+  $isHidden: Boolean
 ) {
   createComment(
     input: {
-      data: { title: $title, name: $name, content: $content, plan: $plan, user: $user, parent: $parent }
+      data: { title: $title, name: $name, content: $content, plan: $plan, user: $user, parent: $parent, isPinned: $isPinned, isHidden: $isHidden }
     }
   ) {
     comment {
@@ -214,6 +216,81 @@ export const emailMeeting = `mutation emailMeeting($id:ID!) {
     }
     recipients {
       email
+    }
+  }
+}`;
+
+export const updateComment = `mutation updateComment(
+  $id: ID!
+  $isHidden: Boolean
+  $isPinned: Boolean
+) {
+  updateComment(
+    input: {
+      where: { id: $id }
+      data: {
+        isHidden: $isHidden
+        isPinned: $isPinned
+      }
+    }
+  ) {
+    comment {
+      id
+      isHidden
+      isPinned
+    }
+  }
+}`;
+
+export const updatePlan = `mutation updatePlan(
+  $id: ID!
+  $lockComments: Boolean
+) {
+  updatePlan(
+    input: {
+      where: {id: $id}
+      data: {
+        lockComments: $lockComments
+      }
+    }
+  ) {
+    plan {
+      id
+      sid
+      number
+      lastUpdate
+      location
+      status
+      sections
+      name
+      municipality
+      settlement
+      street
+      houseNumber
+      targets
+      type
+      lockComments
+      meetings {
+        id
+        date
+        number
+        committee {
+          sid,
+          id,
+          users {
+            id
+          }
+        }
+      }
+      attachedFiles {
+        id
+        name
+        url
+        size
+      }
+      comments {
+        id
+      }
     }
   }
 }`;

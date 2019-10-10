@@ -27,6 +27,11 @@ describe("Plan.vue", () => {
         date: new Date("2019-08-13"),
         number: 2019042,
         committee: {
+          users: [
+            {
+              id: "5d87a0865702f43b0e04b190"
+            }
+          ],
           sid: "ועדה מחוזית לתכנון ולבניה מחוז ירושלים - ועדת משנה להתנגדויות"
         }
       }
@@ -183,12 +188,16 @@ describe("Plan.vue", () => {
       }
     ]
   };
+  let currentUser = {
+    id: "5d7031217aeaf53846765332"
+  };
   /** @type {import("@vue/test-utils").Wrapper} */
   let wrapper;
   let mocks = {
     $store: {
       getters: {
         [Getters.SELECTED_PLAN]: plan,
+        [Getters.USER]: currentUser,
         [Getters.MANAGABLE_MEETINGS]: []
       }
     }

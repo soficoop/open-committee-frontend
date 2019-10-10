@@ -84,7 +84,9 @@ export default class NewComment extends Vue {
       title: this.title,
       content: this.content,
       user: this.user && this.user.id,
-      parent: this.parent
+      parent: this.parent,
+      isPinned: false,
+      isHidden: false
     });
     this.$emit("submit");
     this.isSubmitting = false;

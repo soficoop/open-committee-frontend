@@ -18,7 +18,8 @@ export const ActionTypes = Object.freeze({
   SIGN_UP: "SIGN_UP",
   SIGN_IN: "SIGN_IN",
   SIGN_OUT: "SIGN_OUT",
-  UPDATE_USER: "UPDATE_USER"
+  UPDATE_USER: "UPDATE_USER",
+  UPDATE_PLAN: "UPDATE_PLAN"
 });
 export const Getters = Object.freeze({
   COMMITTEES: "COMMITTEES",

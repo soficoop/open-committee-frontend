@@ -81,11 +81,46 @@
         </h4>
         <MeetingCards :meetings="planMeetings"></MeetingCards>
       </v-flex>
-      <v-flex xs12 py-3>
-        <h4 class="title primary--text" tabindex="0">התייחסויות</h4>
-        <Comments></Comments>
-      </v-flex>
+      <v-row py-3 justify="space-between" align="center">
+        <v-col cols="auto">
+          <v-row>
+            <v-col cols="auto">
+              <h4 class="title primary--text d-inline-block" tabindex="0">
+                התייחסויות
+              </h4>
+            </v-col>
+            <v-col v-if="currentUserIsCommentsAdmin" cols="12" class="py-0">
+              <v-switch
+                color="grey"
+                v-model="comments.switch"
+                @change="onLockCommentsChange($event)"
+                :prepend-icon="comments.switch ? 'mdi-lock' : 'mdi-lock-open'"
+                :error-messages="comments.errorMessage"
+              >
+              </v-switch>
+            </v-col>
+            <v-col
+              v-else-if="comments.locked && !currentUserIsCommentsAdmin"
+              cols="auto"
+            >
+              <v-chip color="orange" text-color="white">
+                הוספה של התייחסויות ותגובות חדשות ננעלה
+              </v-chip>
+            </v-col>
+          </v-row>
+        </v-col>
+        <v-col cols="12" class="pt-0">
+          <Comments
+            :privilegedUsers="privilegedUsers"
+            :lockComments="comments.locked"
+            :currentUserIsCommentsAdmin="currentUserIsCommentsAdmin"
+          ></Comments>
+        </v-col>
+      </v-row>
     </v-layout>
+    <v-overlay v-model="loader" z-index="9999">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
   </v-container>
 </template>
 
@@ -94,7 +129,7 @@ import Component from "vue-class-component";
 import Vue from "vue";
 import { ActionTypes, Getters } from "../helpers/constants";
 import store from "../plugins/store";
-import { Getter } from "vuex-class";
+import { Getter, Action } from "vuex-class";
 import MeetingCards from "../components/MeetingCards.vue";
 import FileCards from "../components/FileCards.vue";
 import Map from "../components/Map.vue";
@@ -102,10 +137,43 @@ import Comments from "../components/Comments.vue";
 
 @Component({ components: { MeetingCards, FileCards, Map, Comments } })
 export default class Plan extends Vue {
+  /**
+   * @type {import("../../graphql/types").UsersPermissionsUser}
+   */
+  @Getter(Getters.USER) currentUser;
   /** @type {import("../../graphql/types").Plan} */
   @Getter(Getters.SELECTED_PLAN) plan;
   /** @type {import("../../graphql/types").Meeting[]} */
   @Getter(Getters.MANAGABLE_MEETINGS) managableMeetings;
+  @Action(ActionTypes.UPDATE_PLAN) updatePlanAction;
+
+  loader = false;
+
+  comments = {
+    locked: "",
+    switch: "",
+    errorMessage: ""
+  };
+
+  created() {
+    this.comments.locked = this.plan.lockComments;
+    this.comments.switch = this.comments.locked;
+  }
+
+  async onLockCommentsChange(val) {
+    this.loader = true;
+    const res = await this.updatePlanAction({
+      id: this.plan.id,
+      lockComments: val
+    });
+    if (!res) {
+      this.comments.switch = !val;
+      this.comments.errorMessage = "ארעה שגיאה";
+    } else {
+      this.comments.locked = val;
+    }
+    this.loader = false;
+  }
 
   /** @returns {import("../helpers/typings").MeetingCard[]} */
   get planMeetings() {
@@ -115,8 +183,24 @@ export default class Plan extends Vue {
       id: meeting.id,
       isEditable:
         this.$vuetify.breakpoint.mdAndUp &&
-        this.managableMeetings.some(managable => managable.id == meeting.id)
+        this.managableMeetings.some(managable => managable.id == meeting.id),
+      committeeUsers: meeting.committee.users
     }));
+  }
+
+  get privilegedUsers() {
+    const arr = [];
+    this.planMeetings.forEach(meeting => {
+      meeting.committeeUsers.forEach(user => {
+        arr.push(user.id);
+      });
+    });
+
+    return arr;
+  }
+
+  get currentUserIsCommentsAdmin() {
+    return this.privilegedUsers.includes(this.currentUser.id);
   }
 
   get planInformation() {

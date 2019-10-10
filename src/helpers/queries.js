@@ -93,12 +93,17 @@ export const getPlan = `query getPlan($id: ID!) {
     houseNumber
     targets
     type
+    lockComments
     meetings {
       id
       date
       number
       committee {
-        sid
+        sid,
+        id,
+        users {
+          id
+        }
       }
     }
     attachedFiles {
@@ -117,19 +122,23 @@ export function getCommentsByPlan(id) {
   return `query getCommentsByPlan {
     comments(
       where: { plan_eq: "${id}" }
-      sort: "createdAt:desc"
+      sort: "isPinned:desc,createdAt:asc"
     ) {
       id
       title
       name
       content
       createdAt
+      isHidden
+      isPinned
       parent {
         id
       }
       user {
         firstName
         lastName
+        id
+        job
         userImage {
           url
         }
@@ -139,10 +148,13 @@ export function getCommentsByPlan(id) {
         title
         name
         content
+        isHidden
         createdAt
         user {
           firstName
           lastName
+          id
+          job
           userImage {
             url
           }
@@ -214,6 +226,9 @@ export const getAllCommittees = `query committees {
   committees {
     id
     sid
+    users {
+      id
+    }
     area {
       id
       sid
