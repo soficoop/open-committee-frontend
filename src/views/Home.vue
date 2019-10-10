@@ -26,8 +26,8 @@
     </v-row>
     <v-row v-if="!!user">
       <v-col>
-        <v-btn color="accent" x-large to="/notifications">
-          <v-icon left>mdi-bell</v-icon>
+        <v-btn color="secondary" x-large to="/notifications">
+          <v-icon left>mdi-bell-plus</v-icon>
           צרו התראות חדשות
         </v-btn>
       </v-col>

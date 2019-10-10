@@ -14,7 +14,7 @@
             </h3>
             <v-divider vertical color="black" class="mx-2"></v-divider>
             <h3
-              class="subtitle-1 align-self-center"
+              class="subtitle-1 align-self-center text-no-wrap"
               tabindex="0"
               v-if="item.date && typeof item.date != 'string'"
             >

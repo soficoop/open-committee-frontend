@@ -99,6 +99,7 @@ export const getPlan = `query getPlan($id: ID!) {
       number
       committee {
         sid
+        id
       }
     }
     attachedFiles {
