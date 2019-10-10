@@ -35,7 +35,7 @@
                     <span class="teal--text text--accent-2">{{
                       bullet.key + ": "
                     }}</span>
-                    <span>{{ bullet.value }}</span>
+                    <span v-html="bullet.value"></span>
                   </div>
                 </v-flex>
                 <v-flex xs12 ma-3 v-if="areCardsRemovable">

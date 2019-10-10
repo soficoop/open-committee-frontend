@@ -1,5 +1,9 @@
 <template>
   <v-container class="pa-md-12">
+    <SubscriptionToggle
+      v-if="plan.meetings.length == 1"
+      :committeeId="plan.meetings[0].committee.id"
+    />
     <v-row>
       <v-col>
         <h3 class="headline primary--text font-weight-black">
@@ -113,8 +117,11 @@ import MeetingCards from "../components/MeetingCards.vue";
 import FileCards from "../components/FileCards.vue";
 import Map from "../components/Map.vue";
 import Comments from "../components/Comments.vue";
+import SubscriptionToggle from "../components/SubscriptionToggle.vue";
 
-@Component({ components: { MeetingCards, FileCards, Map, Comments } })
+@Component({
+  components: { MeetingCards, FileCards, Map, Comments, SubscriptionToggle }
+})
 export default class Plan extends Vue {
   /** @type {import("../../graphql/types").Plan} */
   @Getter(Getters.SELECTED_PLAN) plan;
@@ -151,7 +158,9 @@ export default class Plan extends Vue {
 
   get planLocationQuery() {
     return `${this.plan.street || ""} ${this.plan.houseNumber || ""} ${this.plan
-      .settlement || ""}`.trim();
+      .settlement || ""}`
+      .replace(/&nbsp;/g, "")
+      .trim();
   }
 
   get planTypeFirstWord() {
