@@ -86,7 +86,7 @@ export const createSubject = `mutation createSubject(
   }
 }`;
 
-export const updateMeeting = `mutation udpateMeeting(
+export const updateMyMeeting = `mutation udpateMyMeeting(
   $id: ID!
   $background: String
   $summary: String
@@ -100,7 +100,7 @@ export const updateMeeting = `mutation udpateMeeting(
   $additionalFiles: [ID]
   $plans: [ID!]!
 ) {
-  updateMeeting(
+  updateMyMeeting(
     input: {
       where: { id: $id }
       data: {
@@ -125,7 +125,7 @@ export const updateMeeting = `mutation udpateMeeting(
   }
 }`;
 
-export const updateUser = `mutation UpdateUser(
+export const updateMe = `mutation UpdateMe(
   $id: ID!
   $firstName: String
   $lastName: String
@@ -133,8 +133,9 @@ export const updateUser = `mutation UpdateUser(
   $organization: String
   $city: String
   $userImage: ID
+  $subscribedCommittees: [ID]
 ) {
-  updateUser(
+  updateMe(
     input: {
       where: { id: $id }
       data: {
@@ -144,19 +145,20 @@ export const updateUser = `mutation UpdateUser(
         organization: $organization
         city: $city
         userImage: $userImage
+        subscribedCommittees: $subscribedCommittees
       }
     }
-  ) 
-  {
+  ) {
     user {
       id
       username
-      email 
+      email
       provider
       confirmed
       blocked
       role {
         type
+        name
       }
       firstName
       lastName
@@ -166,6 +168,10 @@ export const updateUser = `mutation UpdateUser(
         url
       }
       city
+      committees {
+        id
+        sid
+      }
     }
   }
 }`;
@@ -189,15 +195,13 @@ export const createComment = `mutation createComment(
   }
 }`;
 
-export const updateSubscriptions = `mutation updateSubscriptions($uid: ID!, $committees: [ID]!) {
-  updateUser(
-    input: { where: { id: $uid }, data: { subscribedCommittees: $committees } }
-  ) {
-    user {
-      subscribedCommittees {
-        id
-        sid
-      }
+export const emailMeeting = `mutation emailMeeting($id:ID!) {
+  emailMeeting(input:{where:{id:$id}}) {
+    meeting {
+      id
+    }
+    recipients {
+      email
     }
   }
 }`;

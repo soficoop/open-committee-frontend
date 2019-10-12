@@ -1,5 +1,11 @@
-export const getMeetings = `query getMeetings($date: String!){
-  meetings(where: {date_gt: $date} sort: "date"){
+/**
+ * Gets meetings with date greater than given date
+ * @param {Date} date meetings start date
+ * @returns {string} getMeetings query
+ */
+export function getMeetings(date) {
+  return `query getMeetings{
+  meetings(where: {date_gt: "${date.toISOString()}"} sort: "date"){
     id
     date
     committee {
@@ -7,61 +13,69 @@ export const getMeetings = `query getMeetings($date: String!){
     }
   }
 }`;
+}
 
-export const getMeeting = `query getMeeting($id: ID!){
-  meeting(id: $id){
-    id
-    sid
-    addedManually
-    background
-    number
-    title
-    date
-    summary
-    committee {
+/**
+ * Gets a single meeting
+ * @param {string} id meeting ID
+ * @returns {string} getMeeting query
+ */
+export function getMeeting(id) {
+  return `query getMeeting {
+    meeting(id: "${id}"){
       id
       sid
-      parent {
-        sid
-      }
-      meetings(sort: "date:desc" where: {_id_ne: $id}) {
-        id
-        date
-        number
-        title
-      }
-    }
-    plans {
-      id
-      type
-      name
+      addedManually
+      background
       number
-      status
-      lastUpdate
-      location
-    }
-    protocol {
-      id
-      name
-      url
-    }
-    transcript {
-      id
-      name
-      url
-    }
-    decisions {
-      id
-      name
-      url
+      title
+      date
+      summary
+      committee {
+        id
+        sid
+        parent {
+          sid
         }
-    additionalFiles {
-      id
-      name
-      url
+        meetings(sort: "date:desc" where: {_id_ne: "${id}"}) {
+          id
+          date
+          number
+          title
+        }
+      }
+      plans {
+        id
+        type
+        name
+        number
+        status
+        lastUpdate
+        location
+      }
+      protocol {
+        id
+        name
+        url
+      }
+      transcript {
+        id
+        name
+        url
+      }
+      decisions {
+        id
+        name
+        url
+          }
+      additionalFiles {
+        id
+        name
+        url
+      }
     }
-  }
-}`;
+  }`;
+}
 
 export const getPlan = `query getPlan($id: ID!) {
   plan(id: $id){
@@ -85,6 +99,7 @@ export const getPlan = `query getPlan($id: ID!) {
       number
       committee {
         sid
+        id
       }
     }
     attachedFiles {
@@ -99,29 +114,20 @@ export const getPlan = `query getPlan($id: ID!) {
   }
 }`;
 
-export const getCommentsByPlan = `query getCommentsByPlan($plan: ID!) {
-  comments(where: { plan_eq: $plan }) {
-    id
-    title
-    name
-    content
-    createdAt
-    parent {
-      id
-    }
-    user {
-      firstName
-      lastName
-      userImage {
-        url
-      }
-    }
-    children {
+export function getCommentsByPlan(id) {
+  return `query getCommentsByPlan {
+    comments(
+      where: { plan_eq: "${id}" }
+      sort: "createdAt:desc"
+    ) {
       id
       title
       name
       content
       createdAt
+      parent {
+        id
+      }
       user {
         firstName
         lastName
@@ -129,36 +135,48 @@ export const getCommentsByPlan = `query getCommentsByPlan($plan: ID!) {
           url
         }
       }
+      children {
+        id
+        title
+        name
+        content
+        createdAt
+        user {
+          firstName
+          lastName
+          userImage {
+            url
+          }
+        }
+      }
     }
-  }
-}`;
+  }`;
+}
 
-export const getCommitteeMeetings = `query getCommitteeMeetings($committees: [ID]) {
-  meetings(where: { committee_in: $committees, addedManually: true }) {
-    id
-    number
-    date
-    committee {
+export function getCommitteeMeetings(committeeIds) {
+  return `query getCommitteeMeetings {
+    meetings(where: { committee_in: ${JSON.stringify(committeeIds)} }) {
       id
-      sid
+      number
+      addedManually
+      date
+      committee {
+        id
+        sid
+      }
     }
-  }
-}`;
+  }`;
+}
 
-export const getCommittees = `query getCommittees($committees: [ID]) {
-  committees(where: {_id_in: $committees}) {
-    id
-    sid
-  }
-}`;
-
-export const getPlans = `query plans($number: String) {
-  plans(where: { number_contains: $number }) {
-    id
-    number
-    name
-  }
-}`;
+export function getPlans(number) {
+  return `query plans {
+    plans(where: { number_contains: "${number}" }) {
+      id
+      number
+      name
+    }
+  }`;
+}
 
 export const getCurrentUser = `query($id: ID!) {
   user(id: $id) {

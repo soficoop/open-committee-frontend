@@ -96,4 +96,27 @@ describe("ManageMeeting.vue", () => {
     wrapper.vm.handleAgendaItemRemoveClicked(wrapper.vm.addedSubjects[0].id);
     expect(wrapper.vm.agendaItems).toHaveLength(0);
   });
+  it("disables some fields when a meeting isn't a manual one.", () => {
+    expect(wrapper.find('[label="מוסד תכנוני"]').props("disabled")).toBeFalsy();
+    expect(
+      wrapper.find('[label="מספר/כותרת ישיבה"]').props("disabled")
+    ).toBeFalsy();
+    expect(wrapper.find('[label="קישור לתכניות"]').exists()).toBeTruthy();
+    expect(wrapper.html()).toContain("הוספת נושא");
+    expect(
+      wrapper.find("AgendaCards-stub").props("areCardsRemovable")
+    ).toBeTruthy();
+    wrapper.vm.addedManually = false;
+    expect(
+      wrapper.find('[label="מוסד תכנוני"]').props("disabled")
+    ).toBeTruthy();
+    expect(
+      wrapper.find('[label="מספר/כותרת ישיבה"]').props("disabled")
+    ).toBeTruthy();
+    expect(wrapper.find('[label="קישור לתכניות"]').exists()).toBeFalsy();
+    expect(wrapper.html()).not.toContain("הוספת נושא");
+    expect(
+      wrapper.find("AgendaCards-stub").props("areCardsRemovable")
+    ).toBeFalsy();
+  });
 });

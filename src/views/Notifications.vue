@@ -2,13 +2,15 @@
   <v-container pa-md-12 pa-5>
     <v-row class="mb-5">
       <v-col>
-        <h1 class="display-1 font-weight-black primary--text">ההתראות שלי</h1>
+        <h1 class="display-1 font-weight-black primary--text" tabindex="0">
+          ההתראות שלי
+        </h1>
       </v-col>
     </v-row>
     <v-row>
       <v-col>
         <v-tabs background-color="transparent" v-model="tab">
-          <v-tab class="title">לפי ועדה</v-tab>
+          <v-tab class="title" tabindex="0">לפי ועדה</v-tab>
           <v-tabs-items v-model="tab" class="transparent">
             <v-tab-item>
               <v-expand-transition>
@@ -39,7 +41,7 @@
                         >
                           <v-card-text class="subtitle-1">
                             <v-row>
-                              <v-col>
+                              <v-col tabindex="0">
                                 {{ item.sid }}
                               </v-col>
                               <v-col class="shrink py-0 px-1">
@@ -61,15 +63,26 @@
               <v-row>
                 <v-col>
                   <v-card flat class="pa-4">
-                    <h4
-                      class="title primary--text d-inline-block right"
-                      tabindex="0"
-                    >
-                      כל הועדות
-                    </h4>
+                    <v-row>
+                      <v-col cols="12" md="8">
+                        <h4 class="title primary--text" tabindex="0">
+                          כל הועדות
+                        </h4>
+                      </v-col>
+                      <v-col>
+                        <v-text-field
+                          hide-details
+                          label="חיפוש"
+                          append-icon="mdi-magnify"
+                          v-model="committeeSearch"
+                          class="pt-0"
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
                     <v-data-table
                       :headers="committeeHeaders"
                       :items="committees"
+                      :search="committeeSearch"
                     >
                       <template v-slot:item.action="{ item }">
                         <v-btn
@@ -86,7 +99,7 @@
                           v-else
                           small
                           color="primary"
-                          depressed
+                          text
                           @click="unsubscribeFromCommittee(item.id)"
                         >
                           <v-icon small left>mdi-check</v-icon>
@@ -108,20 +121,22 @@
 <script>
 import Component from "vue-class-component";
 import Vue from "vue";
-import { Getter } from "vuex-class";
+import { Getter, Action } from "vuex-class";
 import { Getters, ActionTypes } from "../helpers/constants";
 import store from "../plugins/store";
-import { makeGqlRequest } from "../helpers/functions";
-import { updateSubscriptions } from "../helpers/mutations";
 
 @Component()
 export default class Notifications extends Vue {
+  @Action(ActionTypes.UPDATE_USER) updateUser;
   /**
    * @type {import("../../graphql/types").UsersPermissionsUser}
    */
   @Getter(Getters.USER) user;
+  /** @type {string} */
+  @Getter(Getters.JWT) jwt;
   /** @type {import("../../graphql/types").Committee[]} */
   @Getter(Getters.COMMITTEES) committees;
+  committeeSearch = "";
   subscribedCommittees = [];
   tab = null;
   committeeHeaders = [
@@ -152,9 +167,10 @@ export default class Notifications extends Vue {
   }
 
   async updateSubscriptions() {
-    await makeGqlRequest(updateSubscriptions, {
-      uid: this.user.id,
-      committees: this.subscribedCommittees.map(committee => committee.id)
+    await this.updateUser({
+      subscribedCommittees: this.subscribedCommittees.map(
+        committee => committee.id
+      )
     });
   }
 
