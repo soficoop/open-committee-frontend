@@ -22,7 +22,7 @@
               <v-flex>
                 <v-text-field
                   label="אימייל"
-                  name="email"
+                  name="login-email"
                   v-model="loginData.email"
                   :error="
                     loginData.email.length > 0 && !isEmailValid(loginData.email)
@@ -41,7 +41,7 @@
                     label="סיסמה"
                     hint="לפחות 8 תווים"
                     v-model="loginData.password"
-                    name="password"
+                    name="login-password"
                     class="pb-1"
                     :type="loginData.showPassword ? 'text' : 'password'"
                     :append-icon="
