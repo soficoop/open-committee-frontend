@@ -234,6 +234,7 @@
                   name="job"
                 ></v-text-field>
                 <v-btn
+                  id="submit-button"
                   block
                   large
                   color="secondary"
@@ -345,10 +346,10 @@ export default class Login extends Vue {
 
   get isSignUpFormValid() {
     return (
-      this.isEmailValid(this.signupData.email) &&
-      this.signupData.firstName &&
-      this.signupData.lastName &&
-      this.signupData.password
+      !!this.isEmailValid(this.signupData.email) &&
+      !!this.signupData.firstName &&
+      !!this.signupData.lastName &&
+      !!this.signupData.password
     );
   }
 }
