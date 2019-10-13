@@ -99,6 +99,7 @@ export const getPlan = `query getPlan($id: ID!) {
       number
       committee {
         sid
+        id
       }
     }
     attachedFiles {
@@ -115,7 +116,10 @@ export const getPlan = `query getPlan($id: ID!) {
 
 export function getCommentsByPlan(id) {
   return `query getCommentsByPlan {
-    comments(where: { plan_eq: "${id}" }) {
+    comments(
+      where: { plan_eq: "${id}" }
+      sort: "createdAt:desc"
+    ) {
       id
       title
       name
@@ -151,11 +155,10 @@ export function getCommentsByPlan(id) {
 
 export function getCommitteeMeetings(committeeIds) {
   return `query getCommitteeMeetings {
-    meetings(where: { committee_in: ${JSON.stringify(
-      committeeIds
-    )} addedManually: true }) {
+    meetings(where: { committee_in: ${JSON.stringify(committeeIds)} }) {
       id
       number
+      addedManually
       date
       committee {
         id

@@ -121,14 +121,13 @@
 <script>
 import Component from "vue-class-component";
 import Vue from "vue";
-import { Getter } from "vuex-class";
+import { Getter, Action } from "vuex-class";
 import { Getters, ActionTypes } from "../helpers/constants";
 import store from "../plugins/store";
-import { makeGqlRequest } from "../helpers/functions";
-import { updateSubscriptions } from "../helpers/mutations";
 
 @Component()
 export default class Notifications extends Vue {
+  @Action(ActionTypes.UPDATE_USER) updateUser;
   /**
    * @type {import("../../graphql/types").UsersPermissionsUser}
    */
@@ -168,14 +167,11 @@ export default class Notifications extends Vue {
   }
 
   async updateSubscriptions() {
-    await makeGqlRequest(
-      updateSubscriptions,
-      {
-        uid: this.user.id,
-        committees: this.subscribedCommittees.map(committee => committee.id)
-      },
-      this.jwt
-    );
+    await this.updateUser({
+      subscribedCommittees: this.subscribedCommittees.map(
+        committee => committee.id
+      )
+    });
   }
 
   unsubscribeFromCommittee(committeeId) {

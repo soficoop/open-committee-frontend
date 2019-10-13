@@ -223,9 +223,9 @@ export type Committee = {
   parent?: Maybe<Committee>;
   area?: Maybe<Area>;
   children?: Maybe<Array<Maybe<Committee>>>;
-  meetings?: Maybe<Array<Maybe<Meeting>>>;
   users?: Maybe<Array<Maybe<UsersPermissionsUser>>>;
   subscribedUsers?: Maybe<Array<Maybe<UsersPermissionsUser>>>;
+  meetings?: Maybe<Array<Maybe<Meeting>>>;
   _id: Scalars["ID"];
   id: Scalars["ID"];
   createdAt: Scalars["DateTime"];
@@ -233,13 +233,6 @@ export type Committee = {
 };
 
 export type CommitteeChildrenArgs = {
-  sort?: Maybe<Scalars["String"]>;
-  limit?: Maybe<Scalars["Int"]>;
-  start?: Maybe<Scalars["Int"]>;
-  where?: Maybe<Scalars["JSON"]>;
-};
-
-export type CommitteeMeetingsArgs = {
   sort?: Maybe<Scalars["String"]>;
   limit?: Maybe<Scalars["Int"]>;
   start?: Maybe<Scalars["Int"]>;
@@ -254,6 +247,13 @@ export type CommitteeUsersArgs = {
 };
 
 export type CommitteeSubscribedUsersArgs = {
+  sort?: Maybe<Scalars["String"]>;
+  limit?: Maybe<Scalars["Int"]>;
+  start?: Maybe<Scalars["Int"]>;
+  where?: Maybe<Scalars["JSON"]>;
+};
+
+export type CommitteeMeetingsArgs = {
   sort?: Maybe<Scalars["String"]>;
   limit?: Maybe<Scalars["Int"]>;
   start?: Maybe<Scalars["Int"]>;
@@ -331,9 +331,9 @@ export type CommitteeInput = {
   parent?: Maybe<Scalars["ID"]>;
   area?: Maybe<Scalars["ID"]>;
   children?: Maybe<Array<Maybe<Scalars["ID"]>>>;
-  meetings?: Maybe<Array<Maybe<Scalars["ID"]>>>;
   users?: Maybe<Array<Maybe<Scalars["ID"]>>>;
   subscribedUsers?: Maybe<Array<Maybe<Scalars["ID"]>>>;
+  meetings?: Maybe<Array<Maybe<Scalars["ID"]>>>;
 };
 
 export type CreateAreaInput = {
@@ -501,9 +501,9 @@ export type EditCommitteeInput = {
   parent?: Maybe<Scalars["ID"]>;
   area?: Maybe<Scalars["ID"]>;
   children?: Maybe<Array<Maybe<Scalars["ID"]>>>;
-  meetings?: Maybe<Array<Maybe<Scalars["ID"]>>>;
   users?: Maybe<Array<Maybe<Scalars["ID"]>>>;
   subscribedUsers?: Maybe<Array<Maybe<Scalars["ID"]>>>;
+  meetings?: Maybe<Array<Maybe<Scalars["ID"]>>>;
 };
 
 export type EditFileInput = {
@@ -533,6 +533,7 @@ export type EditMeetingInput = {
   background?: Maybe<Scalars["String"]>;
   summary?: Maybe<Scalars["String"]>;
   plans?: Maybe<Array<Maybe<Scalars["ID"]>>>;
+  emailViews?: Maybe<Scalars["Int"]>;
 };
 
 export type EditParserInput = {
@@ -564,10 +565,10 @@ export type EditPlanInput = {
   stype?: Maybe<Scalars["Int"]>;
   addedManually?: Maybe<Scalars["Boolean"]>;
   attachedFiles?: Maybe<Array<Maybe<Scalars["ID"]>>>;
-  meetings?: Maybe<Array<Maybe<Scalars["ID"]>>>;
   street?: Maybe<Scalars["String"]>;
   houseNumber?: Maybe<Scalars["Int"]>;
   comments?: Maybe<Array<Maybe<Scalars["ID"]>>>;
+  meetings?: Maybe<Array<Maybe<Scalars["ID"]>>>;
 };
 
 export type EditRoleInput = {
@@ -596,6 +597,16 @@ export type EditUserInput = {
   userImage?: Maybe<Scalars["ID"]>;
   comments?: Maybe<Array<Maybe<Scalars["ID"]>>>;
   subscribedCommittees?: Maybe<Array<Maybe<Scalars["ID"]>>>;
+};
+
+export type EmailMeetingInput = {
+  where: InputId;
+};
+
+export type EmailMeetingPayload = {
+  __typename?: "emailMeetingPayload";
+  meeting?: Maybe<Meeting>;
+  recipients?: Maybe<Array<Maybe<UsersPermissionsUser>>>;
 };
 
 export enum Enum_Parser_For {
@@ -657,6 +668,7 @@ export type Meeting = {
   title?: Maybe<Scalars["String"]>;
   background?: Maybe<Scalars["String"]>;
   summary?: Maybe<Scalars["String"]>;
+  emailViews?: Maybe<Scalars["Int"]>;
   additionalFiles?: Maybe<Array<Maybe<UploadFile>>>;
   plans?: Maybe<Array<Maybe<Plan>>>;
   _id: Scalars["ID"];
@@ -692,21 +704,25 @@ export type MeetingAggregator = {
 export type MeetingAggregatorAvg = {
   __typename?: "MeetingAggregatorAvg";
   number?: Maybe<Scalars["Float"]>;
+  emailViews?: Maybe<Scalars["Float"]>;
 };
 
 export type MeetingAggregatorMax = {
   __typename?: "MeetingAggregatorMax";
   number?: Maybe<Scalars["Float"]>;
+  emailViews?: Maybe<Scalars["Float"]>;
 };
 
 export type MeetingAggregatorMin = {
   __typename?: "MeetingAggregatorMin";
   number?: Maybe<Scalars["Float"]>;
+  emailViews?: Maybe<Scalars["Float"]>;
 };
 
 export type MeetingAggregatorSum = {
   __typename?: "MeetingAggregatorSum";
   number?: Maybe<Scalars["Float"]>;
+  emailViews?: Maybe<Scalars["Float"]>;
 };
 
 export type MeetingConnection = {
@@ -758,6 +774,12 @@ export type MeetingConnectionDecisions = {
   connection?: Maybe<MeetingConnection>;
 };
 
+export type MeetingConnectionEmailViews = {
+  __typename?: "MeetingConnectionEmailViews";
+  key?: Maybe<Scalars["Int"]>;
+  connection?: Maybe<MeetingConnection>;
+};
+
 export type MeetingConnectionId = {
   __typename?: "MeetingConnectionId";
   key?: Maybe<Scalars["ID"]>;
@@ -806,12 +828,6 @@ export type MeetingConnectionUpdatedAt = {
   connection?: Maybe<MeetingConnection>;
 };
 
-export type MeetingEmail = {
-  __typename?: "MeetingEmail";
-  meeting?: Maybe<Meeting>;
-  recipients?: Maybe<Array<Maybe<UsersPermissionsUser>>>;
-};
-
 export type MeetingGroupBy = {
   __typename?: "MeetingGroupBy";
   date?: Maybe<Array<Maybe<MeetingConnectionDate>>>;
@@ -825,6 +841,7 @@ export type MeetingGroupBy = {
   title?: Maybe<Array<Maybe<MeetingConnectionTitle>>>;
   background?: Maybe<Array<Maybe<MeetingConnectionBackground>>>;
   summary?: Maybe<Array<Maybe<MeetingConnectionSummary>>>;
+  emailViews?: Maybe<Array<Maybe<MeetingConnectionEmailViews>>>;
   _id?: Maybe<Array<Maybe<MeetingConnection_Id>>>;
   id?: Maybe<Array<Maybe<MeetingConnectionId>>>;
   createdAt?: Maybe<Array<Maybe<MeetingConnectionCreatedAt>>>;
@@ -845,10 +862,11 @@ export type MeetingInput = {
   background?: Maybe<Scalars["String"]>;
   summary?: Maybe<Scalars["String"]>;
   plans?: Maybe<Array<Maybe<Scalars["ID"]>>>;
+  emailViews?: Maybe<Scalars["Int"]>;
 };
 
 export type Morph =
-  | MeetingEmail
+  | EmailMeetingPayload
   | UsersPermissionsMe
   | UsersPermissionsMeRole
   | Area
@@ -916,6 +934,7 @@ export type Morph =
   | MeetingConnectionTitle
   | MeetingConnectionBackground
   | MeetingConnectionSummary
+  | MeetingConnectionEmailViews
   | MeetingConnection_Id
   | MeetingConnectionId
   | MeetingConnectionCreatedAt
@@ -1058,7 +1077,8 @@ export type Mutation = {
   updateUser?: Maybe<UpdateUserPayload>;
   /** Delete an existing user */
   deleteUser?: Maybe<DeleteUserPayload>;
-  emailMeeting?: Maybe<MeetingEmail>;
+  emailMeeting?: Maybe<EmailMeetingPayload>;
+  updateMyMeeting?: Maybe<UpdateMeetingPayload>;
   upload: UploadFile;
   multipleUpload: Array<Maybe<UploadFile>>;
   updateMe?: Maybe<UpdateUserPayload>;
@@ -1158,6 +1178,14 @@ export type MutationUpdateUserArgs = {
 
 export type MutationDeleteUserArgs = {
   input?: Maybe<DeleteUserInput>;
+};
+
+export type MutationEmailMeetingArgs = {
+  input: EmailMeetingInput;
+};
+
+export type MutationUpdateMyMeetingArgs = {
+  input?: Maybe<UpdateMeetingInput>;
 };
 
 export type MutationUploadArgs = {
@@ -1345,8 +1373,8 @@ export type Plan = {
   street?: Maybe<Scalars["String"]>;
   houseNumber?: Maybe<Scalars["Int"]>;
   attachedFiles?: Maybe<Array<Maybe<UploadFile>>>;
-  meetings?: Maybe<Array<Maybe<Meeting>>>;
   comments?: Maybe<Array<Maybe<Comment>>>;
+  meetings?: Maybe<Array<Maybe<Meeting>>>;
   _id: Scalars["ID"];
   id: Scalars["ID"];
   createdAt: Scalars["DateTime"];
@@ -1360,14 +1388,14 @@ export type PlanAttachedFilesArgs = {
   where?: Maybe<Scalars["JSON"]>;
 };
 
-export type PlanMeetingsArgs = {
+export type PlanCommentsArgs = {
   sort?: Maybe<Scalars["String"]>;
   limit?: Maybe<Scalars["Int"]>;
   start?: Maybe<Scalars["Int"]>;
   where?: Maybe<Scalars["JSON"]>;
 };
 
-export type PlanCommentsArgs = {
+export type PlanMeetingsArgs = {
   sort?: Maybe<Scalars["String"]>;
   limit?: Maybe<Scalars["Int"]>;
   start?: Maybe<Scalars["Int"]>;
@@ -1575,10 +1603,10 @@ export type PlanInput = {
   stype?: Maybe<Scalars["Int"]>;
   addedManually?: Maybe<Scalars["Boolean"]>;
   attachedFiles?: Maybe<Array<Maybe<Scalars["ID"]>>>;
-  meetings?: Maybe<Array<Maybe<Scalars["ID"]>>>;
   street?: Maybe<Scalars["String"]>;
   houseNumber?: Maybe<Scalars["Int"]>;
   comments?: Maybe<Array<Maybe<Scalars["ID"]>>>;
+  meetings?: Maybe<Array<Maybe<Scalars["ID"]>>>;
 };
 
 export type Query = {
