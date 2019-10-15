@@ -17,6 +17,7 @@
 /**
  * @typedef AgendaCard
  * @property {string} id
+ * @property {boolean} isEditable
  * @property {string} headline
  * @property {string} description
  * @property {KeyValuePair[]} bullets
