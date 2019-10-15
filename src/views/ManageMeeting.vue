@@ -142,26 +142,19 @@
                         close
                         color="primary"
                         @click:close="newSubject.attachedFiles.splice(index, 1)"
-                        >{{ text }}</v-chip
                       >
+                        {{ text }}
+                      </v-chip>
                     </template>
                   </v-file-input>
                 </v-col>
               </v-row>
             </v-card-text>
-            <v-card-actions class="mt-n12 pb-3">
+            <v-card-actions>
               <v-spacer></v-spacer>
+              <v-btn text @click="subjectDialog = false">ביטול</v-btn>
               <v-btn
                 text
-                color="secondary"
-                class="subtitle-1 font-weight-semibold"
-                @click="subjectDialog = false"
-                >ביטול</v-btn
-              >
-              <v-btn
-                color="secondary"
-                text
-                class="subtitle-1 font-weight-semibold"
                 :disabled="!newSubject.title && !newSubject.description"
                 @click="addSubject()"
                 >אישור</v-btn
@@ -173,9 +166,9 @@
     </v-row>
     <AgendaCards
       :items="agendaItems"
-      @cardRemoved="handleAgendaItemRemoveClicked"
+      @cardRemove="handleAgendaItemRemoveClicked"
+      @cardEdit="handleAgendaItemEditClicked"
       :areCardsRemovable="addedManually"
-      class="pb-6"
     ></AgendaCards>
     <v-row>
       <v-col cols="12" md="4">
@@ -354,6 +347,19 @@ export default class ManageMeeting extends Vue {
   additionalFiles = [];
   errorOccurred = false;
 
+  handleAgendaItemEditClicked(itemId) {
+    let item = this.addedPlans
+      .concat(this.addedSubjects)
+      .find(item => item.id == itemId);
+    this.newSubject = {
+      id: item.id,
+      title: item.name || item.title,
+      description: item.sections || item.description,
+      attachedFiles: item.attachedFiles
+    };
+    this.subjectDialog = true;
+  }
+
   /**
    * Gets called when the user clicks the remove button of an agenda item
    * @param {string} id ID of clicked card item
@@ -375,11 +381,14 @@ export default class ManageMeeting extends Vue {
    */
   addSubject() {
     const subjectModel = {
-      id: new Date().getTime(),
+      id: this.newSubject.id || new Date().getTime(),
       title: this.newSubject.title,
       description: this.newSubject.description,
       attachedFiles: this.newSubject.attachedFiles || []
     };
+    this.addedPlans = this.addedPlans.filter(
+      plan => plan.id != subjectModel.id
+    );
     this.addedSubjects.push(subjectModel);
     this.newSubject = {};
     this.subjectDialog = false;
@@ -391,7 +400,7 @@ export default class ManageMeeting extends Vue {
    */
   async addPlan(planId) {
     /** @type {import("../../graphql/types").Plan} */
-    const plan = (await makeGqlRequest(getPlan, { id: planId })).plan;
+    const { plan } = await makeGqlRequest(getPlan, { id: planId });
     if (plan) {
       this.addedPlans.push(plan);
     }
@@ -420,19 +429,11 @@ export default class ManageMeeting extends Vue {
       this.addedPlans = meeting.plans;
       this.background = meeting.background;
       this.meetingSummary = meeting.summary;
-      if (meeting.protocol) {
-        this.protocolFile = new File([], meeting.protocol.name);
-      }
-      if (meeting.transcript) {
-        this.transcriptFile = new File([], meeting.transcript.name);
-      }
-      if (meeting.decisions) {
-        this.decisionsFile = new File([], meeting.decisions.name);
-      }
+      this.protocolFile = meeting.protocol;
+      this.transcriptFile = meeting.transcript;
+      this.decisionsFile = meeting.decisions;
       if (meeting.additionalFiles && meeting.additionalFiles.length > 0) {
-        this.additionalFiles = meeting.additionalFiles.map(
-          file => new File([], file.name)
-        );
+        this.additionalFiles = meeting.additionalFiles;
       }
     }
   }
@@ -467,15 +468,14 @@ export default class ManageMeeting extends Vue {
   }
 
   /**
-   * Makes an api call to submit the added subject
+   * Makes api calls to submit the added subjects
    */
   async submitSubjects() {
     for (const subject of this.addedSubjects) {
-      const fileIds = await Promise.all(
-        subject.attachedFiles.map(
-          async file => (await uploadFile(file, this.jwt)).id
-        )
-      );
+      let fileIds = [];
+      for (const file of subject.attachedFiles) {
+        fileIds.push(await this.uploadFile(file));
+      }
       const queryVars = {
         files: fileIds,
         title: subject.title,
@@ -488,19 +488,20 @@ export default class ManageMeeting extends Vue {
   }
 
   /**
-   * Wrapper for file upload to.
+   * Wrapper for file upload.
    * If the file is new, it gets uploaded and the generated ID is returned.
    * If the file isn't new (i.e. its size is 0), the existing file's ID is returned.
-   * @param {File} newFile File to upload
-   * @param {import("../../graphql/types").UploadFile} existingFile Existing file
+   * @param {File | import("../../graphql/types").UploadFile} file File to upload
    * @returns {string} ID of uploaded file
    */
-  async uploadFile(newFile, existingFile) {
-    if (newFile.size) {
-      return (await uploadFile(newFile, this.jwt)).id;
-    } else {
-      return existingFile && existingFile.id;
+  async uploadFile(file) {
+    if (!file) {
+      return "";
     }
+    if (file.size) {
+      return (await uploadFile(file, this.jwt)).id;
+    }
+    return file.id;
   }
 
   /**
@@ -508,34 +509,15 @@ export default class ManageMeeting extends Vue {
    */
   async uploadFiles() {
     let result = {};
-    if (this.protocolFile)
-      result.protocol = await this.uploadFile(
-        this.protocolFile,
-        this.existingMeeting && this.existingMeeting.protocol
-      );
-    if (this.transcriptFile)
-      result.transcript = await this.uploadFile(
-        this.transcriptFile,
-        this.existingMeeting && this.existingMeeting.transcript
-      );
-    if (this.decisionsFile)
-      result.decisions = await this.uploadFile(
-        this.decisionsFile,
-        this.existingMeeting && this.existingMeeting.decisions
-      );
-    if (this.additionalFiles.length)
-      result.additionalFiles = await Promise.all(
-        this.additionalFiles.map(
-          async additionalFile =>
-            await this.uploadFile(
-              additionalFile,
-              this.existingMeeting &&
-                this.existingMeeting.additionalFiles.find(
-                  file => file.name == additionalFile.name
-                )
-            )
-        )
-      );
+    result.protocol = await this.uploadFile(this.protocolFile);
+    result.transcript = await this.uploadFile(this.transcriptFile);
+    result.decisions = await this.uploadFile(this.decisionsFile);
+    if (this.additionalFiles.length) {
+      let additionalFiles = [];
+      for (const file of this.additionalFiles) {
+        additionalFiles.push(await this.uploadFile(file));
+      }
+    }
     return result;
   }
   /**
@@ -618,8 +600,10 @@ export default class ManageMeeting extends Vue {
     return this.addedSubjects
       .map(subject => ({
         id: subject.id,
-        headline: `נושא ${subject.title}`,
-        description: subject.description
+        headline: "נושא",
+        description: subject.title,
+        bullets: [{ key: "תיאור הנושא", value: subject.description }],
+        isEditable: true
       }))
       .concat(
         this.addedPlans.map(plan => ({
@@ -633,7 +617,8 @@ export default class ManageMeeting extends Vue {
               value: plan.lastUpdate && plan.lastUpdate.toLocaleDateString("he")
             },
             { key: "מיקום", value: plan.location }
-          ]
+          ],
+          isEditable: plan.addedManually
         }))
       );
   }
