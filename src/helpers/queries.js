@@ -227,3 +227,26 @@ export const getAllCommittees = `query committees {
     }
   }
 }`;
+
+export const findUser = `query findUser($id: ID!) {
+  user(id: $id) {
+    id
+    username
+    email
+    role {
+      name
+    }
+    firstName
+    lastName
+    city
+    job
+    organization
+    userImage {
+      url
+    }
+    committees {
+      sid
+      id
+    }
+  }
+}`;
