@@ -46,12 +46,18 @@ export function getMeeting(id) {
       }
       plans {
         id
+        addedManually
+        attachedFiles {
+          id
+          name
+        }
         type
         name
         number
         status
         lastUpdate
         location
+        sections
       }
       protocol {
         id
@@ -82,6 +88,7 @@ export const getPlan = `query getPlan($id: ID!) {
     id
     sid
     number
+    addedManually
     lastUpdate
     location
     status
