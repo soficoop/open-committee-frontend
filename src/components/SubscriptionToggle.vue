@@ -50,7 +50,11 @@ export default class SubscriptionToggle extends Vue {
   }
 
   mounted() {
-    this.fetchUserSubscriptions();
+    if (this.user) {
+      this.fetchUserSubscriptions();
+    } else {
+      this.$destroy();
+    }
   }
 
   async toggleSubscription() {
