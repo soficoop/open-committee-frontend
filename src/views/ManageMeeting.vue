@@ -389,6 +389,9 @@ export default class ManageMeeting extends Vue {
     this.addedPlans = this.addedPlans.filter(
       plan => plan.id != subjectModel.id
     );
+    this.addedSubjects = this.addedSubjects.filter(
+      plan => plan.id != subjectModel.id
+    );
     this.addedSubjects.push(subjectModel);
     this.newSubject = {};
     this.subjectDialog = false;
