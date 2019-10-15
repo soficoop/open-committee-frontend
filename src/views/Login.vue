@@ -160,7 +160,7 @@
               </v-expand-transition>
             </v-tab-item>
             <v-tab-item>
-              <div v-if="registrationSuccess === true">
+              <div v-if="registrationSuccess">
                 <v-row>
                   <v-col cols="12" class="text-center mt-6">
                     <v-icon color="success" x-large
@@ -297,7 +297,7 @@ export default class Login extends Vue {
   authenticationFailed = false;
   dialog = false;
   loader = false;
-  registrationSuccess = "";
+  registrationSuccess = false;
 
   @Watch("dialog") onPropertyChanged() {
     this.forgotPasswordData.email = this.loginData.email;
