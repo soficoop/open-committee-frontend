@@ -32,7 +32,7 @@
           <span class="title">הסיסמה שונתה בהצלחה</span>
         </v-col>
         <v-col cols="12" class="text-center">
-          <v-btn to="login" color="secondary" text class="title"
+          <v-btn to="/login" color="secondary" text class="title"
             >לעמוד ההתחברות
           </v-btn>
         </v-col>
@@ -100,12 +100,10 @@ import { resetPassword } from "../helpers/functions";
 
 @Component()
 export default class ResetPassword extends Vue {
-  urlParams = new URLSearchParams(window.location.search);
   resetPasswordData = {
     password: "",
     passwordConfirmation: "",
-    showPassword: false,
-    code: this.urlParams.get("code")
+    showPassword: false
   };
   loader = false;
   passwordReseted = "";
@@ -121,6 +119,7 @@ export default class ResetPassword extends Vue {
 
   async resetUserPassword(resetPasswordData) {
     this.loader = true;
+    resetPasswordData.code = this.$route.params.code;
     this.passwordReseted = await resetPassword(resetPasswordData);
     this.loader = false;
   }

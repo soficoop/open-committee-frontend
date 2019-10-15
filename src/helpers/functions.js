@@ -99,7 +99,8 @@ export async function sendForgotenPasswordEmail(userMail) {
 
 /**
  * Reset the user password
- * @param {object} resetPassworddata
+ *
+ * @param {import("./typings").ResetPasswordData} resetPassworddata
  */
 export async function resetPassword(resetPassworddata) {
   let data = {

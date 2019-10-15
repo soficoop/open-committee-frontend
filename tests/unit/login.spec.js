@@ -32,4 +32,16 @@ describe("Login.vue", () => {
       wrapper.vm.forgotPasswordData.email
     );
   });
+  it("has correct subscribtion button status", () => {
+    expect(wrapper.find("#submit-button").props("disabled")).toBeTruthy();
+    wrapper.setData({
+      signupData: {
+        firstName: "נדב",
+        lastName: "סופי",
+        email: "asd@awd.com",
+        password: "asdsadasdasd"
+      }
+    });
+    expect(wrapper.find("#submit-button").props("disabled")).toBeFalsy();
+  });
 });

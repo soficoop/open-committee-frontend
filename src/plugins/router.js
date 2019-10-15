@@ -69,7 +69,7 @@ export default new Router({
       component: Notifications
     },
     {
-      path: "/reset-password",
+      path: "/reset-password/:code",
       component: ResetPassword
     }
   ]
