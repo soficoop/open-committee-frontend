@@ -14,7 +14,8 @@ import {
   getPlan,
   getCommitteeMeetings,
   getUserSubscriptions,
-  getAllCommittees
+  getAllCommittees,
+  findUser
 } from "../helpers/queries.js";
 import { updateMe } from "../helpers/mutations.js";
 
@@ -232,6 +233,19 @@ export default new Vuex.Store({
       /** @type {import("../../graphql/types").Meeting[]} */
       const meetings = res.meetings;
       context.commit(MutationTypes.SET_MANAGABLE_MEETINGS, meetings);
+    },
+    /**
+     * Refreshes current user
+     * @param {import("vuex").Store} context the store object
+     */
+    async [ActionTypes.REFRESH_USER](context) {
+      if (!context.state.user) return;
+      const { user } = await makeGqlRequest(
+        findUser,
+        { id: context.state.user.id },
+        context.state.jwt
+      );
+      context.commit(MutationTypes.SET_USER, user);
     },
     /**
      * Update user

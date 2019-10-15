@@ -49,7 +49,9 @@
                 </v-flex>
               </v-expand-transition>
               <v-expand-transition>
-                <v-flex v-if="loginData.password.length >= 8">
+                <v-flex
+                  v-if="isLoginEmailValid && loginData.password.length >= 8"
+                >
                   <v-btn block large color="secondary" @click="logIn(loginData)"
                     >התחברות</v-btn
                   >
