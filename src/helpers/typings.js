@@ -51,4 +51,11 @@
  * @property {boolean} isFullContentVisible
  */
 
+/**
+ * @typedef ResetPasswordData
+ * @property {string} code
+ * @property {string} password
+ * @property {string} passwordConfirmation
+ */
+
 export {};

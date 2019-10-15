@@ -159,12 +159,7 @@ export default new Vuex.Store({
         headers: { "Content-Type": "application/json" }
       });
       const result = await res.json();
-      if (result.jwt) {
-        context.commit(MutationTypes.SET_JWT, result.jwt);
-        context.commit(MutationTypes.SET_USER, result.user);
-        return true;
-      }
-      return false;
+      return !!result.jwt;
     },
     /**
      * Performs sign in
@@ -181,6 +176,7 @@ export default new Vuex.Store({
         headers: { "Content-Type": "application/json" }
       });
       const result = await res.json();
+
       if (result.jwt) {
         context.commit(MutationTypes.SET_JWT, result.jwt);
         context.commit(MutationTypes.SET_USER, result.user);

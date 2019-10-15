@@ -8,9 +8,7 @@
               <v-row justify="center" class="mb-3">
                 <v-col cols="auto" sm="auto" class="py-0">
                   <v-hover v-slot:default="{ hover }">
-                    <div
-                      class="img-wrapper b-radius-50 overflow-hidden p-relative"
-                    >
+                    <div class="b-radius-50 overflow-hidden p-relative">
                       <v-img
                         :src="userImageUrl"
                         :alt="userImageAlt"
