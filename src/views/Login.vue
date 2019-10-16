@@ -1,5 +1,8 @@
 <template>
   <v-container class="pa-md-12">
+    <v-alert type="success" dense v-if="userIsConfirmed">
+      ההרשמה הושלמה, כעת ניתן להתחבר למערכת
+    </v-alert>
     <v-layout wrap align-content-space-around justify-center>
       <v-flex xs12 sm5 xl4 class="text-xs-center">
         <v-layout column>
@@ -8,14 +11,25 @@
               >mdi-account-circle</v-icon
             >
           </v-flex>
+          <h1
+            class="pa-1 headline text-center primary--text"
+            v-if="userIsConfirmed"
+          >
+            התחברות
+          </h1>
           <v-tabs
+            :height="userIsConfirmed ? '0' : ''"
             grow
-            class="my-3"
+            class="my-3 pa-1"
             v-model="tab"
             background-color="transparent"
           >
-            <v-tab @click="authenticationFailed = false">התחברות</v-tab>
-            <v-tab @click="authenticationFailed = false">הרשמה</v-tab>
+            <v-tab @click="authenticationFailed = false" class="ma-0"
+              >התחברות
+            </v-tab>
+            <v-tab @click="authenticationFailed = false" class="ma-0">
+              הרשמה
+            </v-tab>
           </v-tabs>
           <v-tabs-items v-model="tab" class="overflow-hidden pa-1 transparent">
             <v-tab-item>
@@ -305,6 +319,10 @@ export default class Login extends Vue {
 
   @Action(ActionTypes.SIGN_UP) signUpAction;
   @Action(ActionTypes.SIGN_IN) loginAction;
+
+  get userIsConfirmed() {
+    return !!this.$route && this.$route.path === "/login/user-is-confirmed";
+  }
 
   async signUp(user) {
     this.loader = true;
