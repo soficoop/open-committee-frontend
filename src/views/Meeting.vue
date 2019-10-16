@@ -164,7 +164,10 @@ export default class Meeting extends Vue {
       description: plan.name,
       bullets: [
         { key: "סטטוס", value: plan.status },
-        { key: "עדכון אחרון", value: plan.lastUpdate.toLocaleDateString("he") },
+        {
+          key: "עדכון אחרון",
+          value: plan.lastUpdate && plan.lastUpdate.toLocaleDateString("he")
+        },
         { key: "מיקום", value: plan.location }
       ],
       click: () => this.handlePlanClicked(plan)

@@ -147,9 +147,7 @@
                 </v-flex>
               </v-expand-transition>
               <v-expand-transition>
-                <v-flex
-                  v-if="isLoginEmailValid && loginData.password.length >= 8"
-                >
+                <v-flex v-if="canLogin">
                   <v-btn block large color="secondary" @click="logIn(loginData)"
                     >התחברות</v-btn
                   >
@@ -344,6 +342,13 @@ export default class Login extends Vue {
   isEmailValid(email) {
     return email.match(
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
+  }
+
+  get canLogin() {
+    return (
+      this.isEmailValid(this.loginData.email) &&
+      this.loginData.password.length >= 8
     );
   }
 

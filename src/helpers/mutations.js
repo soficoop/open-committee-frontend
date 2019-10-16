@@ -205,3 +205,27 @@ export const emailMeeting = `mutation emailMeeting($id:ID!) {
     }
   }
 }`;
+
+export const updateMyPlan = `mutation updateMyPlan(
+  $id: ID!
+  $title: String
+  $sections: String
+  $files: [ID]
+  $update: DateTime
+) {
+  updateMyPlan(
+    input: {
+      where: { id: $id }
+      data: {
+        name: $title
+        sections: $sections
+        attachedFiles: $files
+        lastUpdate: $update
+      }
+    }
+  ) {
+    plan {
+      id
+    }
+  }
+}`;

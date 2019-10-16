@@ -302,7 +302,8 @@ import {
   createMeeting,
   createSubject,
   updateMyMeeting,
-  emailMeeting
+  emailMeeting,
+  updateMyPlan
 } from "../helpers/mutations";
 import { getPlans, getPlan, getMeeting } from "../helpers/queries";
 import { makeGqlRequest, uploadFile } from "../helpers/functions";
@@ -485,8 +486,13 @@ export default class ManageMeeting extends Vue {
         sections: subject.description,
         update: new Date().toISOString()
       };
-      let result = await makeGqlRequest(createSubject, queryVars, this.jwt);
-      subject.id = result.createPlan.plan.id;
+      if (typeof subject.id == "string") {
+        queryVars.id = subject.id;
+        await makeGqlRequest(updateMyPlan, queryVars, this.jwt);
+      } else {
+        let result = await makeGqlRequest(createSubject, queryVars, this.jwt);
+        subject.id = result.createPlan.plan.id;
+      }
     }
   }
 
