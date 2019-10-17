@@ -162,12 +162,13 @@ export function getCommentsByPlan(id) {
 
 export function getCommitteeMeetings(committeeIds) {
   return `query getCommitteeMeetings {
-    meetings(where: { committee_in: ${JSON.stringify(committeeIds)} }) {
+    meetings(where: { committee_in: ${JSON.stringify(
+      committeeIds
+    )} ,  isHidden: "false"}) {
       id
       number
       addedManually
       date
-      isHidden
       committee {
         id
         sid
