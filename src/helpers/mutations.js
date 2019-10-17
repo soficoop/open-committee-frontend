@@ -205,3 +205,20 @@ export const emailMeeting = `mutation emailMeeting($id:ID!) {
     }
   }
 }`;
+
+export const hideMeeting = `mutation hideMeeting(
+  $id: ID!
+) {
+  updateMeeting(
+    input: {
+      where: { id: $id }
+      data: {
+        isHidden: true
+      }
+    }
+  ) {
+    meeting {
+      id
+    }
+  }
+}`;

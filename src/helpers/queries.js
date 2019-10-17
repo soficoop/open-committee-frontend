@@ -160,6 +160,7 @@ export function getCommitteeMeetings(committeeIds) {
       number
       addedManually
       date
+      isHidden
       committee {
         id
         sid
