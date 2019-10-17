@@ -230,7 +230,7 @@ export default new Vuex.Store({
         )
       );
       /** @type {import("../../graphql/types").Meeting[]} */
-      const meetings = res.meetings;
+      const meetings = res.meetings.filter(meeting => !meeting.isHidden);
       context.commit(MutationTypes.SET_MANAGABLE_MEETINGS, meetings);
     },
     /**
