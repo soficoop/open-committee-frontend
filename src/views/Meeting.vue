@@ -37,12 +37,12 @@
           text
           large
           @click.stop="dialog = true"
-          class="mx-2"
+          class="mx-2 delete-button"
         >
           <v-icon left>mdi-delete</v-icon>
           <span class="subtitle-1">מחיקת ישיבה</span>
         </v-btn>
-        <v-dialog v-model="dialog" max-width="350">
+        <v-dialog v-model="dialog" max-width="350" class="delete-digalog">
           <v-card>
             <v-card-title class="headline" text-xs-center
               >האם ברצונך למחוק את הישיבה?</v-card-title
