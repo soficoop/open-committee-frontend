@@ -44,14 +44,13 @@
         </v-btn>
         <v-dialog v-model="dialog" max-width="350">
           <v-card>
-            <v-card-title text-xs-center
+            <v-card-title class="headline" text-xs-center
               >האם ברצונך למחוק את הישיבה?</v-card-title
             >
             <v-card-actions>
-              <v-layout justify-center>
-                <v-btn color="secondary" @click="deleteMeeting()">אישור</v-btn>
-                <v-btn color="error" @click="dialog = false">ביטול</v-btn>
-              </v-layout>
+              <v-spacer></v-spacer>
+              <v-btn text @click="deleteMeeting()">אישור</v-btn>
+              <v-btn text @click="dialog = false">ביטול</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
