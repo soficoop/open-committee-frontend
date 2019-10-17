@@ -5,7 +5,7 @@
  */
 export function getMeetings(date) {
   return `query getMeetings{
-  meetings(where: {date_gt: "${date.toISOString()}"} sort: "date"){
+  meetings(where: {date_gt: "${date.toISOString()}", isHidden: "false"} sort: "date"){
     id
     date
     committee {
@@ -164,11 +164,12 @@ export function getCommitteeMeetings(committeeIds) {
   return `query getCommitteeMeetings {
     meetings(where: { committee_in: ${JSON.stringify(
       committeeIds
-    )} ,  isHidden: "false"}) {
+    )}, isHidden: "false"}) {
       id
       number
       addedManually
       date
+      isHidden
       committee {
         id
         sid

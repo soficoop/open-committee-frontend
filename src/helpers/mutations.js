@@ -53,6 +53,7 @@ export const createMeeting = `mutation createMeeting(
         additionalFiles: $additionalFiles
         plans: $plans
         addedManually: true
+        isHidden: false
       }
     }
   ) {
