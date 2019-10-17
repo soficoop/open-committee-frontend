@@ -14,7 +14,8 @@ import {
   getPlan,
   getCommitteeMeetings,
   getUserSubscriptions,
-  getAllCommittees
+  getAllCommittees,
+  findUser
 } from "../helpers/queries.js";
 import { updateMe } from "../helpers/mutations.js";
 
@@ -158,12 +159,7 @@ export default new Vuex.Store({
         headers: { "Content-Type": "application/json" }
       });
       const result = await res.json();
-      if (result.jwt) {
-        context.commit(MutationTypes.SET_JWT, result.jwt);
-        context.commit(MutationTypes.SET_USER, result.user);
-        return true;
-      }
-      return false;
+      return !!result.jwt;
     },
     /**
      * Performs sign in
@@ -180,6 +176,7 @@ export default new Vuex.Store({
         headers: { "Content-Type": "application/json" }
       });
       const result = await res.json();
+
       if (result.jwt) {
         context.commit(MutationTypes.SET_JWT, result.jwt);
         context.commit(MutationTypes.SET_USER, result.user);
@@ -232,6 +229,19 @@ export default new Vuex.Store({
       /** @type {import("../../graphql/types").Meeting[]} */
       const meetings = res.meetings.filter(meeting => !meeting.isHidden);
       context.commit(MutationTypes.SET_MANAGABLE_MEETINGS, meetings);
+    },
+    /**
+     * Refreshes current user
+     * @param {import("vuex").Store} context the store object
+     */
+    async [ActionTypes.REFRESH_USER](context) {
+      if (!context.state.user) return;
+      const { user } = await makeGqlRequest(
+        findUser,
+        { id: context.state.user.id },
+        context.state.jwt
+      );
+      context.commit(MutationTypes.SET_USER, user);
     },
     /**
      * Update user

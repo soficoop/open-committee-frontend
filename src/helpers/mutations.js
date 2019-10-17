@@ -218,6 +218,29 @@ export const hideMeeting = `mutation hideMeeting(
     }
   ) {
     meeting {
+    }
+  }
+}`;
+
+export const updateMyPlan = `mutation updateMyPlan(
+  $id: ID!
+  $title: String
+  $sections: String
+  $files: [ID]
+  $update: DateTime
+) {
+  updateMyPlan(
+    input: {
+      where: { id: $id }
+      data: {
+        name: $title
+        sections: $sections
+        attachedFiles: $files
+        lastUpdate: $update
+      }
+    }
+  ) {
+    plan {
       id
     }
   }

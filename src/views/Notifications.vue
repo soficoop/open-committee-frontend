@@ -11,6 +11,8 @@
       <v-col>
         <v-tabs background-color="transparent" v-model="tab">
           <v-tab class="title" tabindex="0">לפי ועדה</v-tab>
+          <v-tab class="title" tabindex="0">לפי מיקום</v-tab>
+          <v-tab class="title" tabindex="0" disabled>לפי נושא (בקרוב)</v-tab>
           <v-tabs-items v-model="tab" class="transparent">
             <v-tab-item>
               <v-expand-transition>
@@ -108,6 +110,26 @@
                       </template>
                     </v-data-table>
                   </v-card>
+                </v-col>
+              </v-row>
+            </v-tab-item>
+            <v-tab-item>
+              <v-row>
+                <v-col>
+                  <h4 class="title primary--text" tabindex="0">
+                    התראות לפי מיקום זמינות במערכת "מעירים".
+                  </h4>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <a
+                    href="https://meirim.org"
+                    target="blank"
+                    class="secondary--text"
+                  >
+                    למעבר לאתר מעירים
+                  </a>
                 </v-col>
               </v-row>
             </v-tab-item>

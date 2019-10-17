@@ -49,8 +49,10 @@ import { Action } from "vuex-class";
 })
 export default class App extends Vue {
   @Action(ActionTypes.FETCH_UPCOMING_MEETINGS) fetchUpcomingMeetings;
+  @Action(ActionTypes.REFRESH_USER) refreshUser;
   mounted() {
     this.fetchUpcomingMeetings();
+    this.refreshUser();
     // prevent tabindex accessibility feature from hurting ux
     document.addEventListener("mousedown", () =>
       document.body.classList.add("using-mouse")

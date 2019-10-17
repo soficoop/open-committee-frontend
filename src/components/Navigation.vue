@@ -51,11 +51,9 @@ export default class Navigation extends Vue {
   @Getter(Getters.USER) user;
   @Action(ActionTypes.SIGN_OUT) signOut;
 
-  navItems = [];
-
-  mounted() {
-    /**@type {import("../helpers/typings").NavItem[]} */
-    this.navItems = [
+  /**@type {import("../helpers/typings").NavItem[]} */
+  get navItems() {
+    return [
       {
         icon: "mdi-account-circle",
         text: "הרשמה / התחברות",
@@ -66,10 +64,10 @@ export default class Navigation extends Vue {
       },
       {
         icon: "mdi-account",
-        text: this.jwt ? `${this.user.firstName} ${this.user.lastName}` : "",
+        text: this.user && `${this.user.firstName} ${this.user.lastName}`,
         to: "/user/me",
         visible() {
-          return this.jwt && this.user;
+          return !!this.jwt && !!this.user;
         }
       },
       {
@@ -77,7 +75,7 @@ export default class Navigation extends Vue {
         text: "ההתראות שלי",
         to: "/notifications",
         visible() {
-          return this.jwt;
+          return !!this.jwt;
         }
       },
       { icon: "mdi-school", text: "מהן ועדות התכנון", to: "/about" },
@@ -99,7 +97,7 @@ export default class Navigation extends Vue {
         text: "התנתקות",
         to: "/login",
         visible() {
-          return this.jwt;
+          return !!this.jwt;
         },
         click() {
           this.signOut();
