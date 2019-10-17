@@ -218,6 +218,7 @@ export const hideMeeting = `mutation hideMeeting(
     }
   ) {
     meeting {
+      id
     }
   }
 }`;
