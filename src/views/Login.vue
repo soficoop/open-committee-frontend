@@ -321,7 +321,7 @@ export default class Login extends Vue {
   @Action(ActionTypes.SIGN_IN) loginAction;
 
   get userIsConfirmed() {
-    return !!this.$route && this.$route.path === "/login/user-is-confirmed";
+    return this.$route.path === "/login/user-is-confirmed";
   }
 
   async signUp(user) {
