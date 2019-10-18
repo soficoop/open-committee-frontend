@@ -43,6 +43,10 @@ export default new Router({
       component: Login
     },
     {
+      path: "/login/user-is-confirmed",
+      component: Login
+    },
+    {
       path: "/manage",
       name: "manage",
       component: Manage
