@@ -82,7 +82,7 @@
                       </span>
                       <span
                         class="ml-1"
-                        v-if="comment.user.job && isCommentsAdmin(comment)"
+                        v-if="isCommentsAdmin(comment) && comment.user.job"
                         >{{ comment.user.job }} •
                       </span>
                       <span tabindex="0">
@@ -181,7 +181,7 @@
                       </span>
                       <span
                         class="ml-1"
-                        v-if="child.user.job && isCommentsAdmin(child)"
+                        v-if="isCommentsAdmin(child) && child.user.job"
                         >{{ child.user.job }} •
                       </span>
                       <span tabindex="0">
