@@ -180,9 +180,9 @@ export default new Vuex.Store({
       if (result.jwt) {
         context.commit(MutationTypes.SET_JWT, result.jwt);
         context.commit(MutationTypes.SET_USER, result.user);
-        return true;
+        return { status: true };
       }
-      return false;
+      return { status: false, message: result.message };
     },
     /**
      * Signs out the user by removing the user-related data from the store
