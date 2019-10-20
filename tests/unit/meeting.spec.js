@@ -184,6 +184,9 @@ describe("Meeting.vue", () => {
   beforeEach(() => {
     wrapper = shallowMount(Meeting, {
       store,
+      mocks: {
+        $route: { params: { id: meeting.id } }
+      },
       vuetify: new Vuetify()
     });
   });

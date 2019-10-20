@@ -11,6 +11,8 @@
       <v-col>
         <v-tabs background-color="transparent" v-model="tab">
           <v-tab class="title" tabindex="0">לפי ועדה</v-tab>
+          <v-tab class="title" tabindex="0">לפי מיקום</v-tab>
+          <v-tab class="title" tabindex="0" disabled>לפי נושא (בקרוב)</v-tab>
           <v-tabs-items v-model="tab" class="transparent">
             <v-tab-item>
               <v-expand-transition>
@@ -66,7 +68,7 @@
                     <v-row>
                       <v-col cols="12" md="8">
                         <h4 class="title primary--text" tabindex="0">
-                          כל הועדות
+                          בחירת ועדות להתראות
                         </h4>
                       </v-col>
                       <v-col>
@@ -111,6 +113,26 @@
                 </v-col>
               </v-row>
             </v-tab-item>
+            <v-tab-item>
+              <v-row>
+                <v-col>
+                  <h4 class="title primary--text" tabindex="0">
+                    התראות לפי מיקום זמינות במערכת "מעירים".
+                  </h4>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <a
+                    href="https://meirim.org"
+                    target="blank"
+                    class="secondary--text"
+                  >
+                    למעבר לאתר מעירים
+                  </a>
+                </v-col>
+              </v-row>
+            </v-tab-item>
           </v-tabs-items>
         </v-tabs>
       </v-col>
@@ -121,14 +143,13 @@
 <script>
 import Component from "vue-class-component";
 import Vue from "vue";
-import { Getter } from "vuex-class";
+import { Getter, Action } from "vuex-class";
 import { Getters, ActionTypes } from "../helpers/constants";
 import store from "../plugins/store";
-import { makeGqlRequest } from "../helpers/functions";
-import { updateSubscriptions } from "../helpers/mutations";
 
 @Component()
 export default class Notifications extends Vue {
+  @Action(ActionTypes.UPDATE_USER) updateUser;
   /**
    * @type {import("../../graphql/types").UsersPermissionsUser}
    */
@@ -168,14 +189,11 @@ export default class Notifications extends Vue {
   }
 
   async updateSubscriptions() {
-    await makeGqlRequest(
-      updateSubscriptions,
-      {
-        uid: this.user.id,
-        committees: this.subscribedCommittees.map(committee => committee.id)
-      },
-      this.jwt
-    );
+    await this.updateUser({
+      subscribedCommittees: this.subscribedCommittees.map(
+        committee => committee.id
+      )
+    });
   }
 
   unsubscribeFromCommittee(committeeId) {

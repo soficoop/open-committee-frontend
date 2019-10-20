@@ -9,6 +9,7 @@ const Manage = () => import("../views/Manage.vue");
 const ManageMeeting = () => import("../views/ManageMeeting.vue");
 const User = () => import("../views/User.vue");
 const Notifications = () => import("../views/Notifications.vue");
+const ResetPassword = () => import("../views/ResetPassword.vue");
 
 Vue.use(Router);
 
@@ -42,6 +43,10 @@ export default new Router({
       component: Login
     },
     {
+      path: "/login/user-is-confirmed",
+      component: Login
+    },
+    {
       path: "/manage",
       name: "manage",
       component: Manage
@@ -66,6 +71,10 @@ export default new Router({
     {
       path: "/notifications",
       component: Notifications
+    },
+    {
+      path: "/reset-password/:code",
+      component: ResetPassword
     }
   ]
 });

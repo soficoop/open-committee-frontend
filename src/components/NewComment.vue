@@ -21,6 +21,7 @@
       <v-textarea
         outlined
         hide-details
+        maxlength="1000"
         label="תוכן ההתייחסות"
         v-model="content"
       ></v-textarea>

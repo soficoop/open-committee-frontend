@@ -86,7 +86,7 @@ export const createSubject = `mutation createSubject(
   }
 }`;
 
-export const updateMeeting = `mutation udpateMeeting(
+export const updateMyMeeting = `mutation udpateMyMeeting(
   $id: ID!
   $background: String
   $summary: String
@@ -100,7 +100,7 @@ export const updateMeeting = `mutation udpateMeeting(
   $additionalFiles: [ID]
   $plans: [ID!]!
 ) {
-  updateMeeting(
+  updateMyMeeting(
     input: {
       where: { id: $id }
       data: {
@@ -133,6 +133,7 @@ export const updateMe = `mutation UpdateMe(
   $organization: String
   $city: String
   $userImage: ID
+  $subscribedCommittees: [ID]
 ) {
   updateMe(
     input: {
@@ -144,14 +145,14 @@ export const updateMe = `mutation UpdateMe(
         organization: $organization
         city: $city
         userImage: $userImage
+        subscribedCommittees: $subscribedCommittees
       }
     }
-  ) 
-  {
+  ) {
     user {
       id
       username
-      email 
+      email
       provider
       confirmed
       blocked
@@ -196,19 +197,6 @@ export const createComment = `mutation createComment(
   }
 }`;
 
-export const updateSubscriptions = `mutation updateMe($uid: ID!, $committees: [ID]!) {
-  updateMe(
-    input: { where: { id: $uid }, data: { subscribedCommittees: $committees } }
-  ) {
-    user {
-      subscribedCommittees {
-        id
-        sid
-      }
-    }
-  }
-}`;
-
 export const emailMeeting = `mutation emailMeeting($id:ID!) {
   emailMeeting(input:{where:{id:$id}}) {
     meeting {
@@ -242,14 +230,22 @@ export const updateComment = `mutation updateComment(
   }
 }`;
 
-export const updatePlan = `mutation updatePlan(
+export const updateMyPlan = `mutation updateMyPlan(
   $id: ID!
+  $title: String
   $lockComments: Boolean
+  $sections: String
+  $files: [ID]
+  $update: DateTime
 ) {
-  updatePlan(
+  updateMyPlan(
     input: {
-      where: {id: $id}
+      where: { id: $id }
       data: {
+        name: $title
+        sections: $sections
+        attachedFiles: $files
+        lastUpdate: $update
         lockComments: $lockComments
       }
     }

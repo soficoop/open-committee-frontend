@@ -46,12 +46,18 @@ export function getMeeting(id) {
       }
       plans {
         id
+        addedManually
+        attachedFiles {
+          id
+          name
+        }
         type
         name
         number
         status
         lastUpdate
         location
+        sections
       }
       protocol {
         id
@@ -82,6 +88,7 @@ export const getPlan = `query getPlan($id: ID!) {
     id
     sid
     number
+    addedManually
     lastUpdate
     location
     status
@@ -166,11 +173,10 @@ export function getCommentsByPlan(id) {
 
 export function getCommitteeMeetings(committeeIds) {
   return `query getCommitteeMeetings {
-    meetings(where: { committee_in: ${JSON.stringify(
-      committeeIds
-    )} addedManually: true }) {
+    meetings(where: { committee_in: ${JSON.stringify(committeeIds)} }) {
       id
       number
+      addedManually
       date
       committee {
         id
@@ -232,6 +238,29 @@ export const getAllCommittees = `query committees {
     area {
       id
       sid
+    }
+  }
+}`;
+
+export const findUser = `query findUser($id: ID!) {
+  user(id: $id) {
+    id
+    username
+    email
+    role {
+      name
+    }
+    firstName
+    lastName
+    city
+    job
+    organization
+    userImage {
+      url
+    }
+    committees {
+      sid
+      id
     }
   }
 }`;

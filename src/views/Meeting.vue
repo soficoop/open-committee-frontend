@@ -1,69 +1,78 @@
 <template>
   <v-container class="pa-md-12">
-    <v-layout fill-height wrap align-content-start>
-      <v-flex xs12 my-3>
-        <v-layout column xs12>
-          <v-flex xs12>
-            <h3
-              class="headline primary--text font-weight-black d-inline-block right"
-              tabindex="0"
-            >
-              {{ meeting.committee.sid }} /
-            </h3>
-            <h4 class="title primary--text d-inline-block right" tabindex="0">
-              <span v-if="$vuetify.breakpoint.mdAndUp">&nbsp;</span>
-              <span v-if="meeting.title">{{ meeting.title }}</span>
-              <span v-else>ישיבה מספר {{ meeting.number }}</span>
-            </h4>
-          </v-flex>
-          <v-flex xs12>
-            <h5
-              class="subtitle-1 primary--text d-inline-block"
-              tabindex="0"
-              v-if="typeof meeting.date != 'string'"
-            >
-              <v-icon color="primary">mdi-calendar-blank</v-icon>
-              {{ meeting.date.toLocaleDateString("he") }}
-            </h5>
-          </v-flex>
-          <v-flex xs1 py-2 v-if="isMeetingEditable">
-            <v-btn color="secondary" :to="`/manage/meeting/${meetingId}`">
-              <v-icon left>mdi-pencil</v-icon>עריכת ישיבה
-            </v-btn>
-          </v-flex>
-        </v-layout>
-      </v-flex>
-      <v-flex xs12 v-if="meeting.background">
+    <SubscriptionToggle :committeeId="meeting.committee.id" />
+    <v-row no-gutters>
+      <v-col cols="12">
+        <h3
+          class="headline primary--text font-weight-black d-inline-block right"
+          tabindex="0"
+        >
+          {{ meeting.committee.sid }} /
+        </h3>
+        <h4 class="title primary--text d-inline-block right" tabindex="0">
+          <span v-if="$vuetify.breakpoint.mdAndUp">&nbsp;</span>
+          <span v-if="meeting.title">{{ meeting.title }}</span>
+          <span v-else>ישיבה מספר {{ meeting.number }}</span>
+        </h4>
+      </v-col>
+      <v-col v-if="meeting.date && typeof meeting.date != 'string'">
+        <h5 class="subtitle-1 primary--text d-inline-block" tabindex="0">
+          <v-icon color="primary">mdi-calendar-blank</v-icon>
+          {{ meeting.date.toLocaleDateString("he") }}
+        </h5>
+        <v-btn
+          v-if="isMeetingEditable"
+          color="secondary"
+          text
+          large
+          :to="`/manage/meeting/${meetingId}`"
+          class="mx-2"
+        >
+          <v-icon left>mdi-pencil</v-icon>
+          <span class="subtitle-1">
+            עריכת ישיבה
+          </span>
+        </v-btn>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col v-if="meeting.background">
         <p>{{ meeting.background }}</p>
-      </v-flex>
-      <v-flex xs12 my-2 v-if="agendaItems.length">
-        <v-layout wrap xs12 my-3>
-          <v-flex xs12 px-1>
-            <h4 class="title primary--text" tabindex="0">
-              סדר יום - סעיפי הישיבה
-            </h4>
-          </v-flex>
-          <AgendaCards
-            :items="agendaItems"
-            :hoveredItem="hoveredPlan"
-          ></AgendaCards>
-        </v-layout>
-      </v-flex>
-      <v-flex xs12 py-3 v-if="meetingFiles.length">
+      </v-col>
+    </v-row>
+    <v-row v-if="agendaItems.length">
+      <v-col>
+        <h4 class="title primary--text" tabindex="0">
+          סדר יום - סעיפי הישיבה
+        </h4>
+        <AgendaCards
+          :items="agendaItems"
+          :hoveredItem="hoveredPlan"
+        ></AgendaCards>
+      </v-col>
+    </v-row>
+    <v-row v-if="meetingFiles.length">
+      <v-col>
         <h4 class="title primary--text">
           <span tabindex="0">מסמכים רלוונטים</span>
         </h4>
         <FileCards class="py-1" :files="meetingFiles" />
-      </v-flex>
-      <v-flex xs12 v-if="meeting.summary">
+      </v-col>
+    </v-row>
+    <v-row v-if="meeting.summary">
+      <v-col>
         <h4 class="title primary--text" tabindex="0">סיכום הישיבה</h4>
         <p>{{ meeting.summary }}</p>
-      </v-flex>
-      <v-flex xs12 my-3 v-if="otherMeetingsOfCommittee.length">
+      </v-col>
+    </v-row>
+    <v-row v-if="otherMeetingsOfCommittee.length">
+      <v-col>
         <h4 class="title primary--text" tabindex="0">דיונים נוספים של הועדה</h4>
         <MeetingCards :meetings="otherMeetingsOfCommittee"></MeetingCards>
-      </v-flex>
-      <v-flex xs12 v-if="!meeting.addedManually">
+      </v-col>
+    </v-row>
+    <v-row v-if="!meeting.addedManually">
+      <v-col>
         <a
           :href="meetingIplanUrl"
           target="_blank"
@@ -71,8 +80,8 @@
           class="secondary--text font-weight-bold px-1"
           >למידע נוסף באתר מנהל התכנון</a
         >
-      </v-flex>
-    </v-layout>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -85,9 +94,10 @@ import { Getter, Action } from "vuex-class";
 import AgendaCards from "../components/AgendaCards.vue";
 import FileCards from "../components/FileCards.vue";
 import MeetingCards from "../components/MeetingCards.vue";
+import SubscriptionToggle from "../components/SubscriptionToggle.vue";
 
 @Component({
-  components: { MeetingCards, AgendaCards, FileCards }
+  components: { MeetingCards, AgendaCards, FileCards, SubscriptionToggle }
 })
 export default class Meeting extends Vue {
   @Action(ActionTypes.FETCH_MANAGABLE_MEETINGS) fetchManagableMeetings;
@@ -95,11 +105,10 @@ export default class Meeting extends Vue {
   @Getter(Getters.SELECTED_MEETING) meeting;
   /**@type {import("../../graphql/types").Meeting[]} */
   @Getter(Getters.MANAGABLE_MEETINGS) managableMeetings;
-
   hoveredPlan = "";
 
   get meetingFiles() {
-    const arr = [
+    let result = [
       {
         name: "פרוטוקול הישיבה המלא",
         url: this.meeting.protocol && this.meeting.protocol.url
@@ -112,15 +121,14 @@ export default class Meeting extends Vue {
         name: "סדר היום המלא של הישיבה",
         url: this.meeting.transcript && this.meeting.transcript.url
       }
-    ].filter(el => el.url);
+    ].filter(file => file.url);
 
     if (this.meeting.additionalFiles.length > 0) {
       this.meeting.additionalFiles.forEach(el => {
-        delete el.id;
-        el.url !== "" && el.name !== "" ? arr.push(el) : null;
+        !!el.url && !!el.name && result.push(el);
       });
     }
-    return arr;
+    return result;
   }
 
   handlePlanClicked(plan) {
@@ -155,7 +163,10 @@ export default class Meeting extends Vue {
       description: plan.name,
       bullets: [
         { key: "סטטוס", value: plan.status },
-        { key: "עדכון אחרון", value: plan.lastUpdate.toLocaleDateString("he") },
+        {
+          key: "עדכון אחרון",
+          value: plan.lastUpdate && plan.lastUpdate.toLocaleDateString("he")
+        },
         { key: "מיקום", value: plan.location }
       ],
       click: () => this.handlePlanClicked(plan)

@@ -17,6 +17,7 @@
 /**
  * @typedef AgendaCard
  * @property {string} id
+ * @property {boolean} isEditable
  * @property {string} headline
  * @property {string} description
  * @property {KeyValuePair[]} bullets
@@ -48,6 +49,13 @@
  * @property {CommentModel} children
  * @property {string} visibleContent
  * @property {boolean} isFullContentVisible
+ */
+
+/**
+ * @typedef ResetPasswordData
+ * @property {string} code
+ * @property {string} password
+ * @property {string} passwordConfirmation
  */
 
 export {};
