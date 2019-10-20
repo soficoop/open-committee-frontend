@@ -11,11 +11,13 @@ describe("Comments.vue", () => {
     comments: [
       {
         id: "5d6cbd43c75c1f41ebd3b1ab",
-        title: "תגובה ראשונה",
+        title: "נדב",
         name: "Sofia Sofi",
         content: "ראשונה",
         createdAt: new Date("Mon Sep 02 2019"),
         parent: null,
+        isHidden: false,
+        isPinned: true,
         user: {
           firstName: "Sofia",
           lastName: "Sofi",
@@ -28,6 +30,7 @@ describe("Comments.vue", () => {
             name: "Sofia Sofi",
             content: "היי",
             createdAt: new Date("Mon Sep 02 2019"),
+            isHidden: true,
             user: {
               firstName: "Sofia",
               lastName: "Sofi",
@@ -43,6 +46,7 @@ describe("Comments.vue", () => {
             content:
               "תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה תגובה ממש ארוכה ",
             createdAt: new Date("2019-09-15"),
+            isHidden: false,
             user: {
               firstName: "אבירן",
               lastName: "כץ",
@@ -57,6 +61,7 @@ describe("Comments.vue", () => {
             name: "Sofia Sofi",
             content: "שלום",
             createdAt: new Date("Mon Sep 02 2019"),
+            isHidden: true,
             user: {
               firstName: "Sofia",
               lastName: "Sofi",
@@ -69,9 +74,11 @@ describe("Comments.vue", () => {
       },
       {
         id: "5d6cbd4fc75c1f41ebd3b1ac",
-        title: "תגובה לתגובה ראשונה",
+        title: "נדב1",
         name: "Sofia Sofi",
         content: "שנייה",
+        isHidden: false,
+        isPinned: true,
         createdAt: new Date("Mon Sep 02 2019"),
         parent: null,
         user: {
@@ -83,9 +90,11 @@ describe("Comments.vue", () => {
       },
       {
         id: "5d6cbe68c75c1f41ebd3b1ae",
-        title: "תגובה לראשונה",
+        title: "נדב2",
         name: "Sofia Sofi",
         content: "היי",
+        isHidden: false,
+        isPinned: false,
         createdAt: new Date("Mon Sep 02 2019"),
         parent: { id: "5d6cbd43c75c1f41ebd3b1ab" },
         user: {
@@ -102,6 +111,8 @@ describe("Comments.vue", () => {
         content: "שלום",
         createdAt: new Date("Mon Sep 02 2019"),
         parent: { id: "5d6cbd43c75c1f41ebd3b1ab" },
+        isHidden: false,
+        isPinned: false,
         user: {
           firstName: "Sofia",
           lastName: "Sofi",
@@ -115,6 +126,8 @@ describe("Comments.vue", () => {
         name: "Sofia Sofi",
         content: "hello",
         createdAt: new Date("Mon Sep 02 2019"),
+        isHidden: false,
+        isPinned: true,
         parent: null,
         user: {
           firstName: "Sofia",
@@ -129,6 +142,8 @@ describe("Comments.vue", () => {
         name: "רבי צדוק",
         content: "אהלן",
         createdAt: new Date("Mon Sep 02 2019"),
+        isHidden: false,
+        isPinned: false,
         parent: null,
         user: null,
         children: []
@@ -139,6 +154,8 @@ describe("Comments.vue", () => {
         name: "יוסי מורנו",
         content: "הכי טעים",
         createdAt: new Date("Mon Sep 02 2019"),
+        isHidden: false,
+        isPinned: false,
         parent: null,
         user: null,
         children: [
@@ -147,6 +164,7 @@ describe("Comments.vue", () => {
             title: "לא נכון",
             name: "שונא פלאפל",
             content: "זה ממש גרוע",
+            isHidden: false,
             createdAt: new Date("Mon Sep 02 2019"),
             user: null
           }
@@ -158,6 +176,8 @@ describe("Comments.vue", () => {
         name: "שונא פלאפל",
         content: "זה ממש גרוע",
         createdAt: new Date("Mon Sep 02 2019"),
+        isHidden: false,
+        isPinned: false,
         parent: { id: "5d6cd0f7c75c1f41ebd3b1b2" },
         user: null,
         children: []
@@ -168,6 +188,8 @@ describe("Comments.vue", () => {
         name: "aviran katz",
         content: "רץ בבוקר אל הגן",
         createdAt: new Date("Tue Sep 03 2019"),
+        isHidden: false,
+        isPinned: false,
         parent: null,
         user: {
           firstName: "aviran",
@@ -181,6 +203,7 @@ describe("Comments.vue", () => {
             name: "aviran katz",
             content: "על העץ",
             createdAt: new Date("Tue Sep 03 2019"),
+            isHidden: true,
             user: {
               firstName: "aviran",
               lastName: "katz",
@@ -197,6 +220,8 @@ describe("Comments.vue", () => {
         name: "aviran katz",
         content: "על העץ",
         createdAt: new Date("Tue Sep 03 2019"),
+        isPinned: false,
+        isHidden: true,
         parent: { id: "5d6e451fe8b5e8141a55f8d0" },
         user: {
           firstName: "aviran",
@@ -212,6 +237,8 @@ describe("Comments.vue", () => {
         content:
           "התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה\nהתייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה התייחסות קצת ארוכה",
         createdAt: new Date("2019-09-15"),
+        isPinned: false,
+        isHidden: false,
         parent: null,
         user: {
           firstName: "אבירן",
@@ -225,6 +252,7 @@ describe("Comments.vue", () => {
   /** @type {import("@vue/test-utils").Wrapper} */
   let wrapper;
   let privilegedUsers = ["5da74a0687c6474bf6838131"];
+  let lockComments = false;
   let mocks = {
     $store: {
       getters: {
@@ -235,7 +263,7 @@ describe("Comments.vue", () => {
   beforeEach(() => {
     wrapper = shallowMount(Comments, {
       mocks,
-      propsData: { privilegedUsers },
+      propsData: { privilegedUsers, lockComments },
       methods: {
         fetchComments() {
           this.comments = this.mapApiComments(plan.comments);
@@ -298,5 +326,17 @@ describe("Comments.vue", () => {
         comment.content.split(" ").length <= 50
       );
     }
+  });
+  it("has visual indication for a pinned comment", () => {
+    expect(wrapper.findAll("v-tooltip-stub").length).toBe(3);
+  });
+  it("hides a comment when it should", () => {
+    expect(wrapper.findAll("v-card-stub.comment").length).toBe(7);
+    expect(wrapper.findAll("v-row-stub.comment").length).toBe(2);
+  });
+  it("enebles and disables commenting correctly", () => {
+    expect(wrapper.findAll(".comment-action").length).toBe(7);
+    wrapper.setProps({ lockComments: true });
+    expect(wrapper.findAll(".comment-action").length).toBe(0);
   });
 });
