@@ -169,7 +169,9 @@
               </v-expand-transition>
               <v-expand-transition>
                 <v-flex v-if="authenticationFailed">
-                  <p class="error--text my-1">שם משתמש או סיסמה לא נכונים</p>
+                  <p class="error--text my-1">
+                    {{ this.userIsNotConfirmedMsg }}
+                  </p>
                 </v-flex>
               </v-expand-transition>
             </v-tab-item>
@@ -309,6 +311,7 @@ export default class Login extends Vue {
   };
   tab = null;
   authenticationFailed = false;
+  userIsNotConfirmedMsg = "";
   dialog = false;
   loader = false;
   registrationSuccess = false;
@@ -332,7 +335,7 @@ export default class Login extends Vue {
 
   async logIn(user) {
     const result = await this.loginAction(user);
-    this.handleAuthentication(result);
+    this.handleAuthentication(result.status, result.message);
   }
 
   async sendRecoveryMail(userMail) {
@@ -343,10 +346,14 @@ export default class Login extends Vue {
     this.loader = false;
   }
 
-  handleAuthentication(isSuccessful) {
+  handleAuthentication(isSuccessful, message) {
     if (isSuccessful) {
       this.$router.push("/");
     } else {
+      this.userIsNotConfirmedMsg =
+        message === "Your account email is not confirmed."
+          ? "טרם אישרת במייל את חשבונך"
+          : "שם משתמש או סיסמה לא נכונים";
       this.authenticationFailed = true;
     }
   }
