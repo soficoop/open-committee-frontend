@@ -108,7 +108,7 @@ export default class Meeting extends Vue {
   hoveredPlan = "";
 
   get meetingFiles() {
-    const arr = [
+    let result = [
       {
         name: "פרוטוקול הישיבה המלא",
         url: this.meeting.protocol && this.meeting.protocol.url
@@ -121,15 +121,14 @@ export default class Meeting extends Vue {
         name: "סדר היום המלא של הישיבה",
         url: this.meeting.transcript && this.meeting.transcript.url
       }
-    ].filter(el => el.url);
+    ].filter(file => file.url);
 
     if (this.meeting.additionalFiles.length > 0) {
       this.meeting.additionalFiles.forEach(el => {
-        delete el.id;
-        el.url !== "" && el.name !== "" ? arr.push(el) : null;
+        !!el.url && !!el.name && result.push(el);
       });
     }
-    return arr;
+    return result;
   }
 
   handlePlanClicked(plan) {

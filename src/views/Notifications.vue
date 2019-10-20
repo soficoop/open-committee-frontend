@@ -68,7 +68,7 @@
                     <v-row>
                       <v-col cols="12" md="8">
                         <h4 class="title primary--text" tabindex="0">
-                          כל הועדות
+                          בחירת ועדות להתראות
                         </h4>
                       </v-col>
                       <v-col>
