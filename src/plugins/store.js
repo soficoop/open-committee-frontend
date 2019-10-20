@@ -17,7 +17,7 @@ import {
   getAllCommittees,
   findUser
 } from "../helpers/queries.js";
-import { updateMe, updatePlan } from "../helpers/mutations.js";
+import { updateMe, updateMyPlan } from "../helpers/mutations.js";
 
 Vue.use(Vuex);
 
@@ -265,11 +265,11 @@ export default new Vuex.Store({
     async [ActionTypes.UPDATE_PLAN](context, updatedPlanFields) {
       try {
         const res = await makeGqlRequest(
-          updatePlan,
+          updateMyPlan,
           updatedPlanFields,
           context.state.jwt
         );
-        context.commit(MutationTypes.SET_SELECTED_PLAN, res.updatePlan.plan);
+        context.commit(MutationTypes.SET_SELECTED_PLAN, res.updateMyPlan.plan);
         return true;
       } catch (e) {
         return false;
