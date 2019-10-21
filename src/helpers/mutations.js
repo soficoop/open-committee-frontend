@@ -210,7 +210,7 @@ export const emailMeeting = `mutation emailMeeting($id:ID!) {
 export const hideMeeting = `mutation hideMeeting(
   $id: ID!
 ) {
-  updateMeeting(
+  updateMyMeeting(
     input: {
       where: { id: $id }
       data: {
