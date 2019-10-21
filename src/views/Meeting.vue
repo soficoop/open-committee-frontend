@@ -54,6 +54,9 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
+        <v-snackbar color="error" v-model="errorOccurred">
+          בעיה לא צפויה קרתה. אנא נסו שוב מאוחר יותר
+        </v-snackbar>
       </v-col>
     </v-row>
     <v-row>
@@ -128,7 +131,7 @@ export default class Meeting extends Vue {
   @Getter(Getters.MANAGABLE_MEETINGS) managableMeetings;
   hoveredPlan = "";
   dialog = false;
-
+  errorOccurred = false;
   get meetingFiles() {
     const arr = [
       {
