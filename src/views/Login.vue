@@ -264,9 +264,6 @@
                     <v-flex v-if="authenticationFailed">
                       <p class="error--text my-1">המשתמש כבר קיים במערכת</p>
                     </v-flex>
-                    <v-flex v-if="registrationSuccess === false">
-                      <p class="error--text my-1">אירעה שגיאה בהרשמה</p>
-                    </v-flex>
                   </div>
                 </v-expand-transition>
               </div>
@@ -314,7 +311,7 @@ export default class Login extends Vue {
   userIsNotConfirmedMsg = "";
   dialog = false;
   loader = false;
-  registrationSuccess = null;
+  registrationSuccess = false;
 
   @Watch("dialog") onPropertyChanged() {
     this.forgotPasswordData.email = this.loginData.email;
@@ -330,6 +327,7 @@ export default class Login extends Vue {
   async signUp(user) {
     this.loader = true;
     this.registrationSuccess = await this.signUpAction(user);
+    this.authenticationFailed = !this.registrationSuccess;
     this.loader = false;
   }
 
