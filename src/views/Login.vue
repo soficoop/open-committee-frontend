@@ -314,7 +314,7 @@ export default class Login extends Vue {
   userIsNotConfirmedMsg = "";
   dialog = false;
   loader = false;
-  registrationSuccess = false;
+  registrationSuccess = null;
 
   @Watch("dialog") onPropertyChanged() {
     this.forgotPasswordData.email = this.loginData.email;
