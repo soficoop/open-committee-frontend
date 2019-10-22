@@ -270,9 +270,9 @@ export default new Vuex.Store({
           context.state.jwt
         );
         context.commit(MutationTypes.SET_SELECTED_PLAN, res.updateMyPlan.plan);
-        return true;
+        return { status: true };
       } catch (e) {
-        return false;
+        return { status: false, message: "שגיאה בשרת" };
       }
     },
     /**

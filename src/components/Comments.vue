@@ -58,7 +58,7 @@
                   </v-img>
                 </v-col>
                 <v-col>
-                  <div class="grey lighten-5 pa-4">
+                  <div class="pa-4">
                     <h4 class="subtitle-1 font-weight-semibold primary--text">
                       <span tabindex="0">{{ comment.title }}</span>
                     </h4>
@@ -157,7 +157,7 @@
                   ></v-img>
                 </v-col>
                 <v-col>
-                  <div class="grey lighten-5 pa-4">
+                  <div class="pa-4">
                     <h4 class="subtitle-1 font-weight-semibold primary--text">
                       <span tabindex="0">{{ child.title }}</span>
                     </h4>

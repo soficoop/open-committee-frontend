@@ -128,6 +128,9 @@
               <v-icon small left>mdi-lock</v-icon>
               ההתייחסויות נעולות
             </v-btn>
+            <span class="error--text d-block" v-if="lockCommentErrMessage">
+              {{ lockCommentErrMessage }}
+            </span>
           </v-col>
           <v-col
             v-else-if="
@@ -183,6 +186,7 @@ export default class Plan extends Vue {
 
   loader = false;
   lockCommentLoader = false;
+  lockCommentErrMessage = "";
 
   planData = {
     id: "",
@@ -196,16 +200,26 @@ export default class Plan extends Vue {
 
   async lockComments() {
     this.lockCommentLoader = true;
-    this.planData.commentsAreLocked = true;
     const res = await this.updatePlanAction(this.planData);
-    this.lockCommentLoader = !res;
+    if (!res.status) {
+      this.lockCommentErrMessage = res.message;
+    } else {
+      this.planData.commentsAreLocked = true;
+      this.lockCommentErrMessage = "";
+    }
+    this.lockCommentLoader = false;
   }
 
   async unlockComments() {
     this.lockCommentLoader = true;
-    this.planData.commentsAreLocked = false;
     const res = await this.updatePlanAction(this.planData);
-    this.lockCommentLoader = !res;
+    if (!res.status) {
+      this.lockCommentErrMessage = res.message;
+    } else {
+      this.planData.commentsAreLocked = false;
+      this.lockCommentErrMessage = "";
+    }
+    this.lockCommentLoader = false;
   }
 
   /** @returns {import("../helpers/typings").MeetingCard[]} */
