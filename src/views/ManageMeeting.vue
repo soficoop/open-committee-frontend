@@ -521,10 +521,10 @@ export default class ManageMeeting extends Vue {
     result.protocol = await this.uploadFile(this.protocolFile);
     result.transcript = await this.uploadFile(this.transcriptFile);
     result.decisions = await this.uploadFile(this.decisionsFile);
+    result.additionalFiles = [];
     if (this.additionalFiles.length) {
-      let additionalFiles = [];
       for (const file of this.additionalFiles) {
-        additionalFiles.push(await this.uploadFile(file));
+        result.additionalFiles.push(await this.uploadFile(file));
       }
     }
     return result;
