@@ -15,6 +15,9 @@ describe("Login.vue", () => {
   let wrapper;
   beforeEach(() => {
     wrapper = shallowMount(Login, {
+      mocks: {
+        $route: {}
+      },
       loginData,
       vuetify: new Vuetify()
     });

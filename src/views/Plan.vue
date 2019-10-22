@@ -98,12 +98,63 @@
         <MeetingCards :meetings="planMeetings"></MeetingCards>
       </v-col>
     </v-row>
-    <v-row>
+    <v-row py-3 justify="space-between" align="center">
       <v-col>
-        <h4 class="title primary--text" tabindex="0">התייחסויות</h4>
-        <Comments></Comments>
+        <v-row justify="space-between" align="center">
+          <v-col cols="auto">
+            <h4 class="title primary--text d-inline-block" tabindex="0">
+              התייחסויות
+            </h4>
+          </v-col>
+          <v-col v-if="currentUserIsCommentsAdmin" cols="auto" class="py-0">
+            <v-btn
+              color="primary"
+              outlined
+              small
+              :loading="lockCommentLoader"
+              @click="lockComments()"
+              v-if="!planData.commentsAreLocked"
+            >
+              נעילת התייחסויות
+            </v-btn>
+            <v-btn
+              v-else
+              small
+              :loading="lockCommentLoader"
+              color="primary"
+              class="text--white"
+              @click="unlockComments()"
+            >
+              <v-icon small left>mdi-lock</v-icon>
+              ההתייחסויות נעולות
+            </v-btn>
+            <span class="error--text d-block" v-if="lockCommentErrMessage">
+              {{ lockCommentErrMessage }}
+            </span>
+          </v-col>
+          <v-col
+            v-else-if="
+              planData.commentsAreLocked && !currentUserIsCommentsAdmin
+            "
+            cols="auto"
+          >
+            <v-chip color="orange" text-color="white">
+              הוספה של התייחסויות ותגובות חדשות ננעלה
+            </v-chip>
+          </v-col>
+        </v-row>
+      </v-col>
+      <v-col cols="12" class="pt-0">
+        <Comments
+          :privilegedUsers="privilegedUsers"
+          :commentsAreLocked="planData.commentsAreLocked"
+          :currentUserIsCommentsAdmin="currentUserIsCommentsAdmin"
+        ></Comments>
       </v-col>
     </v-row>
+    <v-overlay v-model="loader" z-index="9999">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
   </v-container>
 </template>
 
@@ -112,7 +163,7 @@ import Component from "vue-class-component";
 import Vue from "vue";
 import { ActionTypes, Getters } from "../helpers/constants";
 import store from "../plugins/store";
-import { Getter } from "vuex-class";
+import { Getter, Action } from "vuex-class";
 import MeetingCards from "../components/MeetingCards.vue";
 import FileCards from "../components/FileCards.vue";
 import Map from "../components/Map.vue";
@@ -123,10 +174,53 @@ import SubscriptionToggle from "../components/SubscriptionToggle.vue";
   components: { MeetingCards, FileCards, Map, Comments, SubscriptionToggle }
 })
 export default class Plan extends Vue {
+  /**
+   * @type {import("../../graphql/types").UsersPermissionsUser}
+   */
+  @Getter(Getters.USER) currentUser;
   /** @type {import("../../graphql/types").Plan} */
   @Getter(Getters.SELECTED_PLAN) plan;
   /** @type {import("../../graphql/types").Meeting[]} */
   @Getter(Getters.MANAGABLE_MEETINGS) managableMeetings;
+  @Action(ActionTypes.UPDATE_PLAN) updatePlanAction;
+
+  loader = false;
+  lockCommentLoader = false;
+  lockCommentErrMessage = "";
+
+  planData = {
+    id: "",
+    commentsAreLocked: ""
+  };
+
+  created() {
+    this.planData.id = this.plan.id;
+    this.planData.commentsAreLocked = this.plan.commentsAreLocked;
+  }
+
+  async lockComments() {
+    this.lockCommentLoader = true;
+    const res = await this.updatePlanAction(this.planData);
+    if (!res.status) {
+      this.lockCommentErrMessage = res.message;
+    } else {
+      this.planData.commentsAreLocked = true;
+      this.lockCommentErrMessage = "";
+    }
+    this.lockCommentLoader = false;
+  }
+
+  async unlockComments() {
+    this.lockCommentLoader = true;
+    const res = await this.updatePlanAction(this.planData);
+    if (!res.status) {
+      this.lockCommentErrMessage = res.message;
+    } else {
+      this.planData.commentsAreLocked = false;
+      this.lockCommentErrMessage = "";
+    }
+    this.lockCommentLoader = false;
+  }
 
   /** @returns {import("../helpers/typings").MeetingCard[]} */
   get planMeetings() {
@@ -138,6 +232,22 @@ export default class Plan extends Vue {
         this.$vuetify.breakpoint.mdAndUp &&
         this.managableMeetings.some(managable => managable.id == meeting.id)
     }));
+  }
+
+  get privilegedUsers() {
+    const users = [];
+    for (const meeting of this.plan.meetings) {
+      for (const user of meeting.committee.users) {
+        users.push(user.id);
+      }
+    }
+    return users;
+  }
+
+  get currentUserIsCommentsAdmin() {
+    return (
+      this.currentUser && this.privilegedUsers.includes(this.currentUser.id)
+    );
   }
 
   get planInformation() {
