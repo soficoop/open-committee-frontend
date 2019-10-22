@@ -5,7 +5,7 @@
         <v-expand-transition>
           <v-card>
             <v-btn
-              :disabled="lockComments"
+              :disabled="commentsAreLocked"
               block
               large
               depressed
@@ -102,7 +102,7 @@
                           קרא עוד
                         </a>
                       </v-col>
-                      <v-col cols="auto" v-if="!lockComments">
+                      <v-col cols="auto" v-if="!commentsAreLocked">
                         <a
                           href="javascript:void(0)"
                           @click="toggleReply(comment.id)"
@@ -257,7 +257,7 @@ export default class Comments extends Vue {
   loader = false;
 
   @Prop(Array) privilegedUsers;
-  @Prop(Boolean) lockComments;
+  @Prop(Boolean) commentsAreLocked;
   @Prop(Boolean) currentUserIsCommentsAdmin;
 
   created() {
@@ -381,13 +381,13 @@ export default class Comments extends Vue {
 
   get rootComments() {
     return this.comments.filter(
-      comment => comment.parent == null && comment.isHidden != true
+      comment => comment.parent == null && !comment.isHidden
     );
   }
 
   childComments(parentComment) {
     return parentComment.children.filter(
-      childComment => childComment.isHidden != true
+      childComment => !childComment.isHidden
     );
   }
 

@@ -99,25 +99,40 @@
       </v-col>
     </v-row>
     <v-row py-3 justify="space-between" align="center">
-      <v-col cols="auto">
-        <v-row>
+      <v-col>
+        <v-row justify="space-between" align="center">
           <v-col cols="auto">
             <h4 class="title primary--text d-inline-block" tabindex="0">
               התייחסויות
             </h4>
           </v-col>
-          <v-col v-if="currentUserIsCommentsAdmin" cols="12" class="py-0">
-            <v-switch
-              color="grey"
-              v-model="comments.switch"
-              @change="onLockCommentsChange($event)"
-              :prepend-icon="comments.switch ? 'mdi-lock' : 'mdi-lock-open'"
-              :error-messages="comments.errorMessage"
+          <v-col v-if="currentUserIsCommentsAdmin" cols="auto" class="py-0">
+            <v-btn
+              color="primary"
+              outlined
+              small
+              :loading="lockCommentLoader"
+              @click="lockComments()"
+              v-if="!planData.commentsAreLocked"
             >
-            </v-switch>
+              נעילת התייחסויות
+            </v-btn>
+            <v-btn
+              v-else
+              small
+              :loading="lockCommentLoader"
+              color="primary"
+              class="text--white"
+              @click="unlockComments()"
+            >
+              <v-icon small left>mdi-lock</v-icon>
+              ההתייחסויות נעולות
+            </v-btn>
           </v-col>
           <v-col
-            v-else-if="comments.locked && !currentUserIsCommentsAdmin"
+            v-else-if="
+              planData.commentsAreLocked && !currentUserIsCommentsAdmin
+            "
             cols="auto"
           >
             <v-chip color="orange" text-color="white">
@@ -129,7 +144,7 @@
       <v-col cols="12" class="pt-0">
         <Comments
           :privilegedUsers="privilegedUsers"
-          :lockComments="comments.locked"
+          :commentsAreLocked="planData.commentsAreLocked"
           :currentUserIsCommentsAdmin="currentUserIsCommentsAdmin"
         ></Comments>
       </v-col>
@@ -167,31 +182,30 @@ export default class Plan extends Vue {
   @Action(ActionTypes.UPDATE_PLAN) updatePlanAction;
 
   loader = false;
+  lockCommentLoader = false;
 
-  comments = {
-    locked: "",
-    switch: "",
-    errorMessage: ""
+  planData = {
+    id: "",
+    commentsAreLocked: ""
   };
 
   created() {
-    this.comments.locked = this.plan.lockComments;
-    this.comments.switch = this.comments.locked;
+    this.planData.id = this.plan.id;
+    this.planData.commentsAreLocked = this.plan.commentsAreLocked;
   }
 
-  async onLockCommentsChange(val) {
-    this.loader = true;
-    const res = await this.updatePlanAction({
-      id: this.plan.id,
-      lockComments: val
-    });
-    if (!res) {
-      this.comments.switch = !val;
-      this.comments.errorMessage = "ארעה שגיאה";
-    } else {
-      this.comments.locked = val;
-    }
-    this.loader = false;
+  async lockComments() {
+    this.lockCommentLoader = true;
+    this.planData.commentsAreLocked = true;
+    const res = await this.updatePlanAction(this.planData);
+    this.lockCommentLoader = !res;
+  }
+
+  async unlockComments() {
+    this.lockCommentLoader = true;
+    this.planData.commentsAreLocked = false;
+    const res = await this.updatePlanAction(this.planData);
+    this.lockCommentLoader = !res;
   }
 
   /** @returns {import("../helpers/typings").MeetingCard[]} */

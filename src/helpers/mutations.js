@@ -183,12 +183,10 @@ export const createComment = `mutation createComment(
   $plan: ID!
   $parent: ID
   $user: ID
-  $isPinned: Boolean
-  $isHidden: Boolean
 ) {
   createComment(
     input: {
-      data: { title: $title, name: $name, content: $content, plan: $plan, user: $user, parent: $parent, isPinned: $isPinned, isHidden: $isHidden }
+      data: { title: $title, name: $name, content: $content, plan: $plan, user: $user, parent: $parent, isPinned: false, isHidden: false }
     }
   ) {
     comment {
@@ -233,7 +231,7 @@ export const updateComment = `mutation updateComment(
 export const updateMyPlan = `mutation updateMyPlan(
   $id: ID!
   $title: String
-  $lockComments: Boolean
+  $commentsAreLocked: Boolean
   $sections: String
   $files: [ID]
   $update: DateTime
@@ -246,30 +244,17 @@ export const updateMyPlan = `mutation updateMyPlan(
         sections: $sections
         attachedFiles: $files
         lastUpdate: $update
-        lockComments: $lockComments
+        commentsAreLocked: $commentsAreLocked
       }
     }
   ) {
     plan {
       id
-      sid
-      number
-      lastUpdate
-      location
-      status
-      sections
-      name
-      municipality
-      settlement
-      street
-      houseNumber
-      targets
       type
-      lockComments
+      commentsAreLocked
       meetings {
         id
         date
-        number
         committee {
           sid,
           id,
@@ -282,10 +267,6 @@ export const updateMyPlan = `mutation updateMyPlan(
         id
         name
         url
-        size
-      }
-      comments {
-        id
       }
     }
   }

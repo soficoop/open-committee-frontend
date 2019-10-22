@@ -100,7 +100,7 @@ export const getPlan = `query getPlan($id: ID!) {
     houseNumber
     targets
     type
-    lockComments
+    commentsAreLocked
     meetings {
       id
       date

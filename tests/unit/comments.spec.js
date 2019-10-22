@@ -252,7 +252,7 @@ describe("Comments.vue", () => {
   /** @type {import("@vue/test-utils").Wrapper} */
   let wrapper;
   let privilegedUsers = ["5da74a0687c6474bf6838131"];
-  let lockComments = false;
+  let commentsAreLocked = false;
   let mocks = {
     $store: {
       getters: {
@@ -263,7 +263,7 @@ describe("Comments.vue", () => {
   beforeEach(() => {
     wrapper = shallowMount(Comments, {
       mocks,
-      propsData: { privilegedUsers, lockComments },
+      propsData: { privilegedUsers, commentsAreLocked },
       methods: {
         fetchComments() {
           this.comments = this.mapApiComments(plan.comments);
@@ -336,7 +336,7 @@ describe("Comments.vue", () => {
   });
   it("enebles and disables commenting correctly", () => {
     expect(wrapper.findAll(".comment-action").length).toBe(7);
-    wrapper.setProps({ lockComments: true });
+    wrapper.setProps({ commentsAreLocked: true });
     expect(wrapper.findAll(".comment-action").length).toBe(0);
   });
 });
