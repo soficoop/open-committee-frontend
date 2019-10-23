@@ -18,18 +18,20 @@
       :isOpen="isNavOpen"
       @openChanged="value => (isNavOpen = value)"
     ></Navigation>
-    <v-content>
-      <v-container fill-height class="pa-md-12">
-        <v-slide-y-transition mode="out-in">
-          <router-view></router-view>
-        </v-slide-y-transition>
-      </v-container>
+    <v-content class="background">
+      <v-fade-transition mode="out-in">
+        <router-view></router-view>
+      </v-fade-transition>
     </v-content>
   </v-app>
 </template>
 <style>
 body.using-mouse :focus {
   outline: none;
+}
+.s-border-bottom {
+  border-bottom: 1px solid;
+  border-color: var(--v-background-base);
 }
 </style>
 
@@ -47,8 +49,10 @@ import { Action } from "vuex-class";
 })
 export default class App extends Vue {
   @Action(ActionTypes.FETCH_UPCOMING_MEETINGS) fetchUpcomingMeetings;
+  @Action(ActionTypes.REFRESH_USER) refreshUser;
   mounted() {
     this.fetchUpcomingMeetings();
+    this.refreshUser();
     // prevent tabindex accessibility feature from hurting ux
     document.addEventListener("mousedown", () =>
       document.body.classList.add("using-mouse")

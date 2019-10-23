@@ -53,6 +53,7 @@ export const createMeeting = `mutation createMeeting(
         additionalFiles: $additionalFiles
         plans: $plans
         addedManually: true
+        isHidden: false
       }
     }
   ) {
@@ -86,7 +87,7 @@ export const createSubject = `mutation createSubject(
   }
 }`;
 
-export const updateMeeting = `mutation udpateMeeting(
+export const updateMyMeeting = `mutation udpateMyMeeting(
   $id: ID!
   $background: String
   $summary: String
@@ -100,7 +101,7 @@ export const updateMeeting = `mutation udpateMeeting(
   $additionalFiles: [ID]
   $plans: [ID!]!
 ) {
-  updateMeeting(
+  updateMyMeeting(
     input: {
       where: { id: $id }
       data: {
@@ -121,6 +122,170 @@ export const updateMeeting = `mutation udpateMeeting(
   ) {
     meeting {
       id
+    }
+  }
+}`;
+
+export const updateMe = `mutation UpdateMe(
+  $id: ID!
+  $firstName: String
+  $lastName: String
+  $job: String
+  $organization: String
+  $city: String
+  $userImage: ID
+  $subscribedCommittees: [ID]
+) {
+  updateMe(
+    input: {
+      where: { id: $id }
+      data: {
+        firstName: $firstName
+        lastName: $lastName
+        job: $job
+        organization: $organization
+        city: $city
+        userImage: $userImage
+        subscribedCommittees: $subscribedCommittees
+      }
+    }
+  ) {
+    user {
+      id
+      username
+      email
+      provider
+      confirmed
+      blocked
+      role {
+        type
+        name
+      }
+      firstName
+      lastName
+      organization
+      job
+      userImage {
+        url
+      }
+      city
+      committees {
+        id
+        sid
+      }
+    }
+  }
+}`;
+
+export const createComment = `mutation createComment(
+  $title: String!
+  $name: String!
+  $content: String!
+  $plan: ID!
+  $parent: ID
+  $user: ID
+) {
+  createComment(
+    input: {
+      data: { title: $title, name: $name, content: $content, plan: $plan, user: $user, parent: $parent, isPinned: false, isHidden: false }
+    }
+  ) {
+    comment {
+      id
+    }
+  }
+}`;
+
+export const emailMeeting = `mutation emailMeeting($id:ID!) {
+  emailMeeting(input:{where:{id:$id}}) {
+    meeting {
+      id
+    }
+    recipients {
+      email
+    }
+  }
+}`;
+
+export const hideMeeting = `mutation hideMeeting(
+  $id: ID!
+) {
+  updateMyMeeting(
+    input: {
+      where: { id: $id }
+      data: {
+        isHidden: true
+      }
+    }
+  ) {
+    meeting {
+      id 
+    }
+  }
+}`;
+
+export const updateComment = `mutation updateComment(
+  $id: ID!
+  $isHidden: Boolean
+  $isPinned: Boolean
+) {
+  updateComment(
+    input: {
+      where: { id: $id }
+      data: {
+        isHidden: $isHidden
+        isPinned: $isPinned
+      }
+    }
+  ) {
+    comment {
+      id
+      isHidden
+      isPinned
+    }
+  }
+}`;
+
+export const updateMyPlan = `mutation updateMyPlan(
+  $id: ID!
+  $title: String
+  $commentsAreLocked: Boolean
+  $sections: String
+  $files: [ID]
+  $update: DateTime
+) {
+  updateMyPlan(
+    input: {
+      where: { id: $id }
+      data: {
+        name: $title
+        sections: $sections
+        attachedFiles: $files
+        lastUpdate: $update
+        commentsAreLocked: $commentsAreLocked
+      }
+    }
+  ) {
+    plan {
+      id
+      type
+      commentsAreLocked
+      meetings {
+        id
+        date
+        committee {
+          sid,
+          id,
+          users {
+            id
+          }
+        }
+      }
+      attachedFiles {
+        id
+        name
+        url
+      }
     }
   }
 }`;

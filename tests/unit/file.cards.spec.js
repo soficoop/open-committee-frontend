@@ -5,27 +5,24 @@ import { apiEndpoint } from "@/helpers/constants";
 import Vuetify from "vuetify";
 Vue.use(Vuetify);
 
-describe("Meeting.vue", () => {
+describe("FileCards class", () => {
   /** @type {import("@vue/test-utils").Wrapper} */
   let wrapper;
   let files = [
     {
       id: "5d5244b9270bac2cc03358d6",
       name: "2012ב מועד א3.pdf",
-      url: "/uploads/6c2bc95fb8be43e7b9c0a071ce34ca66.pdf",
-      size: "170.61"
+      url: "/uploads/6c2bc95fb8be43e7b9c0a071ce34ca66.pdf"
     },
     {
       id: "5d5243cd270bac2cc03358d3",
       name: "File.msg",
-      url: "/uploads/468e0c0b22c04c818010758550ea64da.msg",
-      size: "790.02"
+      url: "/uploads/468e0c0b22c04c818010758550ea64da.msg"
     },
     {
       id: "5d5243cd270bac2cc03358d2",
       name: "env.docker",
-      url: "/uploads/34fce02495a24cde88836bd70eefd2c5.docker",
-      size: "0.82"
+      url: "/uploads/34fce02495a24cde88836bd70eefd2c5.docker"
     }
   ];
   beforeEach(() => {

@@ -51,6 +51,61 @@ export default class Navigation extends Vue {
   @Getter(Getters.USER) user;
   @Action(ActionTypes.SIGN_OUT) signOut;
 
+  /**@type {import("../helpers/typings").NavItem[]} */
+  get navItems() {
+    return [
+      {
+        icon: "mdi-account-circle",
+        text: "הרשמה / התחברות",
+        to: "/login",
+        visible() {
+          return !this.jwt;
+        }
+      },
+      {
+        icon: "mdi-account",
+        text: this.user && `${this.user.firstName} ${this.user.lastName}`,
+        to: "/user/me",
+        visible() {
+          return !!this.jwt && !!this.user;
+        }
+      },
+      {
+        icon: "mdi-bell",
+        text: "ההתראות שלי",
+        to: "/notifications",
+        visible() {
+          return !!this.jwt;
+        }
+      },
+      { icon: "mdi-school", text: "אודות ועדה פתוחה", to: "/about" },
+      { icon: "mdi-magnify", text: "חיפוש", to: "/search" },
+      {
+        icon: "mdi-tune",
+        text: "ניהול ישיבות",
+        to: "/manage",
+        visible() {
+          return (
+            this.$vuetify.breakpoint.mdAndUp &&
+            this.user &&
+            this.user.role.name == "Administrator"
+          );
+        }
+      },
+      {
+        icon: "mdi-logout",
+        text: "התנתקות",
+        to: "/login",
+        visible() {
+          return !!this.jwt;
+        },
+        click() {
+          this.signOut();
+        }
+      }
+    ];
+  }
+
   get visibleNavItems() {
     return this.navItems.filter(
       n => n.visible == null || n.visible.apply(this)
@@ -68,58 +123,5 @@ export default class Navigation extends Vue {
   executeNavItemClick(item) {
     item.click && item.click.apply(this);
   }
-
-  /** @typedef NavItem
-   *  @property {string} icon
-   *  @property {string} text
-   *  @property {string} to
-   *  @property {Function} visible
-   *  @property {Function} click
-   */
-
-  /**@type {NavItem[]} */
-  navItems = [
-    {
-      icon: "mdi-account-circle",
-      text: "הרשמה / התחברות",
-      to: "/login",
-      visible() {
-        return !this.jwt;
-      }
-    },
-    {
-      icon: "mdi-bell",
-      text: "ההתראות שלי",
-      to: "/notifications",
-      visible() {
-        return this.jwt;
-      }
-    },
-    { icon: "mdi-school", text: "מהן ועדות התכנון", to: "/about" },
-    { icon: "mdi-magnify", text: "חיפוש", to: "/search" },
-    {
-      icon: "mdi-tune",
-      text: "ניהול ישיבות",
-      to: "/manage",
-      visible() {
-        return (
-          this.$vuetify.breakpoint.mdAndUp &&
-          this.user &&
-          this.user.role.name == "Administrator"
-        );
-      }
-    },
-    {
-      icon: "mdi-logout",
-      text: "התנתקות",
-      to: "/login",
-      visible() {
-        return this.jwt;
-      },
-      click() {
-        this.signOut();
-      }
-    }
-  ];
 }
 </script>
