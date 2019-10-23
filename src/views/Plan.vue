@@ -112,7 +112,7 @@
               outlined
               small
               :loading="lockCommentLoader"
-              @click="lockComments()"
+              @click="switchCommentsLockState(true)"
               v-if="!planData.commentsAreLocked"
             >
               נעילת התייחסויות
@@ -123,7 +123,7 @@
               :loading="lockCommentLoader"
               color="primary"
               class="text--white"
-              @click="unlockComments()"
+              @click="switchCommentsLockState(false)"
             >
               <v-icon small left>mdi-lock</v-icon>
               ההתייחסויות נעולות
@@ -132,12 +132,7 @@
               {{ lockCommentErrMessage }}
             </span>
           </v-col>
-          <v-col
-            v-else-if="
-              planData.commentsAreLocked && !currentUserIsCommentsAdmin
-            "
-            cols="auto"
-          >
+          <v-col v-else-if="planData.commentsAreLocked" cols="auto">
             <v-chip color="orange" text-color="white">
               הוספה של התייחסויות ותגובות חדשות ננעלה
             </v-chip>
@@ -193,31 +188,23 @@ export default class Plan extends Vue {
     commentsAreLocked: ""
   };
 
-  created() {
+  mounted() {
     this.planData.id = this.plan.id;
     this.planData.commentsAreLocked = this.plan.commentsAreLocked;
   }
 
-  async lockComments() {
+  async switchCommentsLockState(lock) {
     this.lockCommentLoader = true;
-    const res = await this.updatePlanAction(this.planData);
+    const res = await this.updatePlanAction({
+      id: this.planData.id,
+      commentsAreLocked: lock
+    });
     if (!res.status) {
       this.lockCommentErrMessage = res.message;
+      this.planData.commentsAreLocked = !lock;
     } else {
-      this.planData.commentsAreLocked = true;
       this.lockCommentErrMessage = "";
-    }
-    this.lockCommentLoader = false;
-  }
-
-  async unlockComments() {
-    this.lockCommentLoader = true;
-    const res = await this.updatePlanAction(this.planData);
-    if (!res.status) {
-      this.lockCommentErrMessage = res.message;
-    } else {
-      this.planData.commentsAreLocked = false;
-      this.lockCommentErrMessage = "";
+      this.planData.commentsAreLocked = lock;
     }
     this.lockCommentLoader = false;
   }
