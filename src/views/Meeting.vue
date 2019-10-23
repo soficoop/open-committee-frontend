@@ -44,13 +44,13 @@
         </v-btn>
         <v-dialog v-model="dialog" max-width="350" class="delete-digalog">
           <v-card>
-            <v-card-title class="headline" text-xs-center
-              >האם ברצונך למחוק את הישיבה?</v-card-title
-            >
+            <v-card-title>
+              האם ברצונך למחוק את הישיבה?
+            </v-card-title>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn text @click="deleteMeeting()">אישור</v-btn>
               <v-btn text @click="dialog = false">ביטול</v-btn>
+              <v-btn text @click="deleteMeeting()">אישור</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -129,6 +129,7 @@ export default class Meeting extends Vue {
   @Getter(Getters.SELECTED_MEETING) meeting;
   /**@type {import("../../graphql/types").Meeting[]} */
   @Getter(Getters.MANAGABLE_MEETINGS) managableMeetings;
+  @Getter(Getters.JWT) jwt;
   hoveredPlan = "";
   dialog = false;
   errorOccurred = false;
@@ -231,12 +232,12 @@ export default class Meeting extends Vue {
     try {
       const meeting = { id: this.meeting.id };
       await makeGqlRequest(hideMeeting, meeting, this.jwt);
+      this.$router.push(`/manage`);
     } catch (e) {
       console.error(e);
       this.errorOccurred = true;
     } finally {
       this.dialog = false;
-      this.$router.push(`/manage`);
     }
   }
 }
