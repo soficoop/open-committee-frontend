@@ -165,6 +165,7 @@ describe("Meeting.vue", () => {
       }
     ]
   };
+  let managableMeetings = [];
   let actions = {
     [ActionTypes.FETCH_MEETING]: jest.fn(),
     [ActionTypes.FETCH_MANAGABLE_MEETINGS]: jest.fn()
@@ -173,7 +174,7 @@ describe("Meeting.vue", () => {
     state: { meeting },
     getters: {
       [Getters.MANAGABLE_MEETINGS]() {
-        return [];
+        return managableMeetings;
       },
       [Getters.SELECTED_MEETING]() {
         return meeting;
@@ -185,7 +186,7 @@ describe("Meeting.vue", () => {
     wrapper = shallowMount(Meeting, {
       store,
       mocks: {
-        $route: { params: { id: meeting.id } }
+        $route: { params: { meetingId: meeting.id } }
       },
       vuetify: new Vuetify()
     });
@@ -198,9 +199,21 @@ describe("Meeting.vue", () => {
     expect(wrapper.text()).not.toContain("ישיבה מספר");
     expect(wrapper.text()).toContain("כותרת ישיבה");
   });
-  it("meeting is not editable", () => {
+  it("doesn't display edit and remove buttons for a non-editable meeting", () => {
     expect(wrapper.vm.isMeetingEditable).toBeFalsy();
+    expect(wrapper.text()).not.toContain("מחיקת ישיבה");
     expect(wrapper.text()).not.toContain("עריכת ישיבה");
+    managableMeetings.push(meeting);
+  });
+  it("dispalys edit and remove buttons for an editable meeting", () => {
+    expect(wrapper.vm.isMeetingEditable).toBeTruthy();
+    expect(wrapper.text()).toContain("מחיקת ישיבה");
+    expect(wrapper.text()).toContain("עריכת ישיבה");
+  });
+  it("should open delete confiramtion popup", () => {
+    const deleteButton = wrapper.find(".delete-button");
+    deleteButton.trigger("click");
+    expect(wrapper.text()).toContain("האם ברצונך למחוק את הישיבה?");
   });
   it("has 11 agenda items", () => {
     expect(wrapper.vm.agendaItems).toHaveLength(11);

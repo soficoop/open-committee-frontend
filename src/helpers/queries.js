@@ -5,7 +5,7 @@
  */
 export function getMeetings(date) {
   return `query getMeetings{
-  meetings(where: {date_gt: "${date.toISOString()}"} sort: "date"){
+  meetings(where: {date_gt: "${date.toISOString()}", isHidden_ne: true} sort: "date"){
     id
     date
     committee {
@@ -100,13 +100,17 @@ export const getPlan = `query getPlan($id: ID!) {
     houseNumber
     targets
     type
+    commentsAreLocked
     meetings {
       id
       date
       number
       committee {
-        sid
-        id
+        sid,
+        id,
+        users {
+          id
+        }
       }
     }
     attachedFiles {
@@ -125,19 +129,23 @@ export function getCommentsByPlan(id) {
   return `query getCommentsByPlan {
     comments(
       where: { plan_eq: "${id}" }
-      sort: "createdAt:desc"
+      sort: "isPinned:desc,createdAt:asc"
     ) {
       id
       title
       name
       content
       createdAt
+      isHidden
+      isPinned
       parent {
         id
       }
       user {
         firstName
         lastName
+        id
+        job
         userImage {
           url
         }
@@ -147,10 +155,13 @@ export function getCommentsByPlan(id) {
         title
         name
         content
+        isHidden
         createdAt
         user {
           firstName
           lastName
+          id
+          job
           userImage {
             url
           }
@@ -162,11 +173,14 @@ export function getCommentsByPlan(id) {
 
 export function getCommitteeMeetings(committeeIds) {
   return `query getCommitteeMeetings {
-    meetings(where: { committee_in: ${JSON.stringify(committeeIds)} }) {
+    meetings(where: { committee_in: ${JSON.stringify(
+      committeeIds
+    )}, isHidden_ne: true}) {
       id
       number
       addedManually
       date
+      isHidden
       committee {
         id
         sid
@@ -221,6 +235,9 @@ export const getAllCommittees = `query committees {
   committees {
     id
     sid
+    users {
+      id
+    }
     area {
       id
       sid

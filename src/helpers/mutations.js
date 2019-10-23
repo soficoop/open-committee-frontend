@@ -53,6 +53,7 @@ export const createMeeting = `mutation createMeeting(
         additionalFiles: $additionalFiles
         plans: $plans
         addedManually: true
+        isHidden: false
       }
     }
   ) {
@@ -186,7 +187,7 @@ export const createComment = `mutation createComment(
 ) {
   createComment(
     input: {
-      data: { title: $title, name: $name, content: $content, plan: $plan, user: $user, parent: $parent }
+      data: { title: $title, name: $name, content: $content, plan: $plan, user: $user, parent: $parent, isPinned: false, isHidden: false }
     }
   ) {
     comment {
@@ -206,9 +207,49 @@ export const emailMeeting = `mutation emailMeeting($id:ID!) {
   }
 }`;
 
+export const hideMeeting = `mutation hideMeeting(
+  $id: ID!
+) {
+  updateMyMeeting(
+    input: {
+      where: { id: $id }
+      data: {
+        isHidden: true
+      }
+    }
+  ) {
+    meeting {
+      id 
+    }
+  }
+}`;
+
+export const updateComment = `mutation updateComment(
+  $id: ID!
+  $isHidden: Boolean
+  $isPinned: Boolean
+) {
+  updateComment(
+    input: {
+      where: { id: $id }
+      data: {
+        isHidden: $isHidden
+        isPinned: $isPinned
+      }
+    }
+  ) {
+    comment {
+      id
+      isHidden
+      isPinned
+    }
+  }
+}`;
+
 export const updateMyPlan = `mutation updateMyPlan(
   $id: ID!
   $title: String
+  $commentsAreLocked: Boolean
   $sections: String
   $files: [ID]
   $update: DateTime
@@ -221,11 +262,30 @@ export const updateMyPlan = `mutation updateMyPlan(
         sections: $sections
         attachedFiles: $files
         lastUpdate: $update
+        commentsAreLocked: $commentsAreLocked
       }
     }
   ) {
     plan {
       id
+      type
+      commentsAreLocked
+      meetings {
+        id
+        date
+        committee {
+          sid,
+          id,
+          users {
+            id
+          }
+        }
+      }
+      attachedFiles {
+        id
+        name
+        url
+      }
     }
   }
 }`;

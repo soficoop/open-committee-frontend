@@ -29,10 +29,34 @@
           class="mx-2"
         >
           <v-icon left>mdi-pencil</v-icon>
-          <span class="subtitle-1">
-            עריכת ישיבה
-          </span>
+          <span class="subtitle-1">עריכת ישיבה</span>
         </v-btn>
+        <v-btn
+          v-if="isMeetingEditable"
+          color="error"
+          text
+          large
+          @click.stop="dialog = true"
+          class="mx-2 delete-button"
+        >
+          <v-icon left>mdi-delete</v-icon>
+          <span class="subtitle-1">מחיקת ישיבה</span>
+        </v-btn>
+        <v-dialog v-model="dialog" max-width="350" class="delete-digalog">
+          <v-card>
+            <v-card-title>
+              האם ברצונך למחוק את הישיבה?
+            </v-card-title>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn text @click="dialog = false">ביטול</v-btn>
+              <v-btn text @click="deleteMeeting()">אישור</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+        <v-snackbar color="error" v-model="errorOccurred">
+          בעיה לא צפויה קרתה. אנא נסו שוב מאוחר יותר
+        </v-snackbar>
       </v-col>
     </v-row>
     <v-row>
@@ -42,9 +66,7 @@
     </v-row>
     <v-row v-if="agendaItems.length">
       <v-col>
-        <h4 class="title primary--text" tabindex="0">
-          סדר יום - סעיפי הישיבה
-        </h4>
+        <h4 class="title primary--text" tabindex="0">סדר יום - סעיפי הישיבה</h4>
         <AgendaCards
           :items="agendaItems"
           :hoveredItem="hoveredPlan"
@@ -89,6 +111,8 @@
 import Component from "vue-class-component";
 import Vue from "vue";
 import { ActionTypes, Getters } from "../helpers/constants";
+import { makeGqlRequest } from "../helpers/functions";
+import { hideMeeting } from "../helpers/mutations";
 import store from "../plugins/store";
 import { Getter, Action } from "vuex-class";
 import AgendaCards from "../components/AgendaCards.vue";
@@ -105,8 +129,10 @@ export default class Meeting extends Vue {
   @Getter(Getters.SELECTED_MEETING) meeting;
   /**@type {import("../../graphql/types").Meeting[]} */
   @Getter(Getters.MANAGABLE_MEETINGS) managableMeetings;
+  @Getter(Getters.JWT) jwt;
   hoveredPlan = "";
-
+  dialog = false;
+  errorOccurred = false;
   get meetingFiles() {
     let result = [
       {
@@ -200,6 +226,19 @@ export default class Meeting extends Vue {
 
   async mounted() {
     await this.fetchManagableMeetings();
+  }
+
+  async deleteMeeting() {
+    try {
+      const meeting = { id: this.meeting.id };
+      await makeGqlRequest(hideMeeting, meeting, this.jwt);
+      this.$router.push(`/manage`);
+    } catch (e) {
+      console.error(e);
+      this.errorOccurred = true;
+    } finally {
+      this.dialog = false;
+    }
   }
 }
 </script>
