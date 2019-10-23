@@ -37,7 +37,7 @@ export function getMeeting(id) {
         parent {
           sid
         }
-        meetings(sort: "date:desc" where: {_id_ne: "${id}"}) {
+        meetings(sort: "date:desc" where: {_id_ne: "${id}", isHidden_ne: true}) {
           id
           date
           number
@@ -84,7 +84,7 @@ export function getMeeting(id) {
 }
 
 export const getPlan = `query getPlan($id: ID!) {
-  plan(id: $id){
+  plan(id: $id) {
     id
     sid
     number
@@ -101,13 +101,13 @@ export const getPlan = `query getPlan($id: ID!) {
     targets
     type
     commentsAreLocked
-    meetings {
+    meetings(where: { isHidden_ne: true }) {
       id
       date
       number
       committee {
-        sid,
-        id,
+        sid
+        id
         users {
           id
         }
