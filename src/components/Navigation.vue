@@ -78,7 +78,7 @@ export default class Navigation extends Vue {
           return !!this.jwt;
         }
       },
-      { icon: "mdi-school", text: "אודות ועדה פתוחה", to: "/about" },
+      { icon: "mdi-school", text: "אודות", to: "/about" },
       { icon: "mdi-magnify", text: "חיפוש", to: "/search" },
       {
         icon: "mdi-tune",
