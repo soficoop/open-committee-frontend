@@ -27,13 +27,13 @@ describe("Navigation.vue", () => {
   });
   it("contains log in link.", () => {
     expect(wrapper.html()).not.toContain("logout");
-    expect(wrapper.html()).not.toContain("notifications");
+    expect(wrapper.html()).not.toContain("subscriptions");
     expect(wrapper.html()).toContain("login");
   });
   it("contains links for a logged in user", () => {
     mocks.$store.getters[Getters.JWT] = "12345";
     expect(wrapper.html()).toContain("login");
-    expect(wrapper.html()).toContain("notifications");
+    expect(wrapper.html()).toContain("subscriptions");
     expect(wrapper.html()).not.toContain("manage");
   });
   it("contains admin links for a logged in admin", () => {
