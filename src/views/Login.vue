@@ -306,7 +306,7 @@ export default class Login extends Vue {
     email: "",
     mailSent: ""
   };
-  tab = null;
+  tab = 1;
   authenticationFailed = false;
   userIsNotConfirmedMsg = "";
   dialog = false;
