@@ -232,7 +232,7 @@ export const getUserSubscriptions = `query getUserSubscriptions($id: ID!) {
 }`;
 
 export const getAllCommittees = `query committees {
-  committees {
+  committees(where: {isHidden_ne: true}) {
     id
     sid
     users {
