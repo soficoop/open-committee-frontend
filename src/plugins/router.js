@@ -76,5 +76,8 @@ export default new Router({
       path: "/reset-password/:code",
       component: ResetPassword
     }
-  ]
+  ],
+  scrollBehavior() {
+    return { x: 0, y: 0 };
+  }
 });
