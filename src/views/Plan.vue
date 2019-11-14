@@ -143,7 +143,7 @@
         <Comments
           :privilegedUsers="privilegedUsers"
           :commentsAreLocked="planData.commentsAreLocked"
-          :isUserCommentsAdmin="isUserCommentsAdmin"
+          :isCurrentUserCommentsAdmin="isUserCommentsAdmin"
         ></Comments>
       </v-col>
     </v-row>
