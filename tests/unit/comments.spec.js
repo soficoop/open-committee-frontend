@@ -331,12 +331,16 @@ describe("Comments.vue", () => {
     expect(wrapper.findAll("v-tooltip-stub").length).toBe(3);
   });
   it("hides a comment when it should", () => {
-    expect(wrapper.findAll("v-card-stub.comment").length).toBe(7);
-    expect(wrapper.findAll("v-row-stub.comment").length).toBe(2);
+    expect(wrapper.findAll("v-card-stub[flat]").length).toBe(
+      plan.comments.reduce(
+        (sum, comment) => (!comment.parent ? sum + 1 : sum),
+        0
+      )
+    );
   });
   it("enebles and disables commenting correctly", () => {
-    expect(wrapper.findAll(".comment-action").length).toBe(7);
+    expect(wrapper.text()).toContain("הגב להתייחסות");
     wrapper.setProps({ commentsAreLocked: true });
-    expect(wrapper.findAll(".comment-action").length).toBe(0);
+    expect(wrapper.text()).not.toContain("הגב להתייחסות");
   });
 });

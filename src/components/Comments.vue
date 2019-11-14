@@ -36,7 +36,7 @@
           :outlined="comment.isPinned"
           flat
           :key="comment.id"
-          class="comment border my-2 pa-3"
+          class="my-2 pa-3"
         >
           <v-tooltip bottom v-if="comment.isPinned">
             <template v-slot:activator="{ on }">
@@ -106,7 +106,7 @@
                         <a
                           href="javascript:void(0)"
                           @click="toggleReply(comment.id)"
-                          class="comment-action grey--text"
+                          class="grey--text"
                         >
                           הגב להתייחסות
                         </a>
@@ -144,7 +144,7 @@
               <v-row
                 v-for="child in childComments(comment)"
                 :key="child.id"
-                class="comment my-2"
+                class="my-2"
                 dense
               >
                 <v-col cols="2" sm="1"></v-col>
