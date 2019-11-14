@@ -106,7 +106,7 @@
               התייחסויות
             </h4>
           </v-col>
-          <v-col v-if="currentUserIsCommentsAdmin" cols="auto" class="py-0">
+          <v-col v-if="isUserCommentsAdmin" cols="auto" class="py-0">
             <v-btn
               color="primary"
               outlined
@@ -143,7 +143,7 @@
         <Comments
           :privilegedUsers="privilegedUsers"
           :commentsAreLocked="planData.commentsAreLocked"
-          :currentUserIsCommentsAdmin="currentUserIsCommentsAdmin"
+          :isUserCommentsAdmin="isUserCommentsAdmin"
         ></Comments>
       </v-col>
     </v-row>
@@ -231,7 +231,7 @@ export default class Plan extends Vue {
     return users;
   }
 
-  get currentUserIsCommentsAdmin() {
+  get isUserCommentsAdmin() {
     return (
       this.currentUser && this.privilegedUsers.includes(this.currentUser.id)
     );
