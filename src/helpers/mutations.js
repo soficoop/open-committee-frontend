@@ -289,3 +289,11 @@ export const updateMyPlan = `mutation updateMyPlan(
     }
   }
 }`;
+
+export const hideMyComment = `mutation hideMyComment($id: ID!) {
+  updateMyComment(input: { where: { id: $id }, data: { isHidden: true } }) {
+    comment {
+      isHidden
+    }
+  }
+}`;

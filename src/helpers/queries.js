@@ -119,16 +119,13 @@ export const getPlan = `query getPlan($id: ID!) {
       url
       size
     }
-    comments {
-      id
-    }
   }
 }`;
 
 export function getCommentsByPlan(id) {
   return `query getCommentsByPlan {
     comments(
-      where: { plan_eq: "${id}" }
+      where: { plan_eq: "${id}", isHidden_ne: true }
       sort: "isPinned:desc,createdAt:asc"
     ) {
       id
@@ -150,7 +147,7 @@ export function getCommentsByPlan(id) {
           url
         }
       }
-      children {
+      children(where: { isHidden_ne: true }) {
         id
         title
         name

@@ -1,7 +1,7 @@
 import Vue from "vue";
 import { shallowMount } from "@vue/test-utils";
 import Comments from "@/components/Comments.vue";
-import { Getters, apiEndpoint } from "@/helpers/constants";
+import { Getters } from "@/helpers/constants";
 import Vuetify from "vuetify";
 Vue.use(Vuetify);
 
@@ -273,52 +273,21 @@ describe("Comments.vue", () => {
     });
   });
   it("contains new comment button", () => {
-    expect(wrapper.text()).toContain("התייחסות חדשה");
+    const newCommentButton = wrapper.find("v-btn-stub");
+    expect(newCommentButton.text()).toContain("התייחסות חדשה");
+    expect(newCommentButton.attributes("disabled")).toBeFalsy();
+    wrapper.setProps({ commentsAreLocked: true });
+    expect(newCommentButton.attributes("disabled")).toBeTruthy();
   });
   it("displays NewComment component when it should", () => {
     expect(wrapper.find("NewComment-stub").exists()).toBeFalsy();
-    wrapper.vm.setCommentCreation(true);
+    wrapper.vm.isCreatingNewComment = true;
     expect(wrapper.find("NewComment-stub").exists()).toBeTruthy();
-  });
-  it("sets reply dialog to correct comment", () => {
-    wrapper.vm.toggleReply(plan.comments[0].id);
-    expect(wrapper.vm.isCreatingNewComment).toBeFalsy();
-    expect(wrapper.vm.replyingTo).toBe(plan.comments[0].id);
-    wrapper.vm.toggleReply(plan.comments[1].id);
-    expect(wrapper.vm.isCreatingNewComment).toBeFalsy();
-    expect(wrapper.vm.replyingTo).toBe(plan.comments[1].id);
-    wrapper.vm.toggleReply(plan.comments[1].id);
-    expect(wrapper.vm.isCreatingNewComment).toBeFalsy();
-    expect(wrapper.vm.replyingTo).toBe("");
-  });
-  it("generates correct image URLS", () => {
-    for (const comment of plan.comments) {
-      if (comment.user != null) {
-        expect(wrapper.vm.generateImageUrlFromComment(comment)).toEqual(
-          apiEndpoint + comment.user.userImage.url
-        );
-      } else {
-        expect(wrapper.vm.generateImageUrlFromComment(comment)).toEqual(
-          "/img/userImage.svg"
-        );
-      }
-    }
   });
   it("generates correct root comments", () => {
     expect(wrapper.vm.rootComments).toHaveLength(
       plan.comments.reduce((n, comment) => n + (comment.parent == null), 0)
     );
-  });
-  it("displays correct commenters", () => {
-    for (const comment of plan.comments) {
-      if (comment.user != null) {
-        expect(wrapper.vm.getCommenter(comment)).toEqual(
-          `${comment.user.firstName} ${comment.user.lastName}`
-        );
-      } else {
-        expect(wrapper.vm.getCommenter(comment)).toEqual(comment.name);
-      }
-    }
   });
   it("shortens a long comment", () => {
     for (const comment of wrapper.vm.comments) {
@@ -330,13 +299,13 @@ describe("Comments.vue", () => {
   it("has visual indication for a pinned comment", () => {
     expect(wrapper.findAll("v-tooltip-stub").length).toBe(3);
   });
-  it("hides a comment when it should", () => {
-    expect(wrapper.findAll("v-card-stub.comment").length).toBe(7);
-    expect(wrapper.findAll("v-row-stub.comment").length).toBe(2);
-  });
-  it("enebles and disables commenting correctly", () => {
-    expect(wrapper.findAll(".comment-action").length).toBe(7);
-    wrapper.setProps({ commentsAreLocked: true });
-    expect(wrapper.findAll(".comment-action").length).toBe(0);
+  it("generates single comment components", () => {
+    expect(wrapper.findAll("Comment-stub")).toHaveLength(
+      wrapper.vm.rootComments.length +
+        wrapper.vm.rootComments.reduce(
+          (sum, comment) => sum + comment.children.length,
+          0
+        )
+    );
   });
 });
