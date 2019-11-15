@@ -119,9 +119,6 @@ export const getPlan = `query getPlan($id: ID!) {
       url
       size
     }
-    comments {
-      id
-    }
   }
 }`;
 
@@ -150,7 +147,7 @@ export function getCommentsByPlan(id) {
           url
         }
       }
-      children {
+      children(where: { isHidden_ne: true }) {
         id
         title
         name
