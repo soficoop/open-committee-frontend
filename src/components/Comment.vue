@@ -3,7 +3,7 @@
     <v-col cols="2" sm="1" class="text-center">
       <v-img
         aspect-ratio="1"
-        :src="generateImageUrlFromComment(comment)"
+        :src="imageUrl"
         class="b-radius-50 mx-auto"
         max-width="50"
       ></v-img>
@@ -128,18 +128,17 @@ export default class Comment extends Vue {
   }
 
   /**
-   * Generates url for a comment's user image
-   * @param {import("../../graphql/types").Comment} comment
+   * Computes url for the user image
    * @returns {string} url
    */
-  generateImageUrlFromComment(comment) {
-    return comment.user && comment.user.userImage
-      ? apiEndpoint + comment.user.userImage.url
+  get imageUrl() {
+    return this.comment.user && this.comment.user.userImage
+      ? apiEndpoint + this.comment.user.userImage.url
       : "/img/userImage.svg";
   }
 
   /**
-   * Gets the commenter
+   * Computes the commenter
    * @returns {string} name of the commenter
    */
   get commenter() {
@@ -148,6 +147,10 @@ export default class Comment extends Vue {
       : this.comment.name;
   }
 
+  /**
+   * Computes whether the current user is the one who made the comment
+   * @reutns {boolean}
+   */
   get isUserCommentOwner() {
     return (
       !!this.currentUser &&
