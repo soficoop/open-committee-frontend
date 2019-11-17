@@ -106,7 +106,7 @@
               התייחסויות
             </h4>
           </v-col>
-          <v-col v-if="currentUserIsCommentsAdmin" cols="auto" class="py-0">
+          <v-col v-if="isUserCommentsAdmin" cols="auto" class="py-0">
             <v-btn
               color="primary"
               outlined
@@ -143,8 +143,19 @@
         <Comments
           :privilegedUsers="privilegedUsers"
           :commentsAreLocked="planData.commentsAreLocked"
-          :currentUserIsCommentsAdmin="currentUserIsCommentsAdmin"
+          :isCurrentUserCommentsAdmin="isUserCommentsAdmin"
         ></Comments>
+      </v-col>
+    </v-row>
+    <v-row v-if="!plan.addedManually">
+      <v-col>
+        <a
+          :href="iplanUrl"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="secondary--text font-weight-bold px-1"
+          >למידע נוסף באתר מנהל התכנון</a
+        >
       </v-col>
     </v-row>
     <v-overlay v-model="loader" z-index="9999">
@@ -231,7 +242,7 @@ export default class Plan extends Vue {
     return users;
   }
 
-  get currentUserIsCommentsAdmin() {
+  get isUserCommentsAdmin() {
     return (
       this.currentUser && this.privilegedUsers.includes(this.currentUser.id)
     );
@@ -251,6 +262,12 @@ export default class Plan extends Vue {
           this.plan.lastUpdate.toLocaleDateString("he")
       }
     ].filter(i => i.value);
+  }
+
+  get iplanUrl() {
+    return `http://www.mavat.moin.gov.il/MavatPS/Forms/SV4.aspx?et=${
+      this.plan.stype
+    }&pl_id=${encodeURIComponent(this.plan.sid)}`;
   }
 
   get planLocationQuery() {

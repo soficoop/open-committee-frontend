@@ -33,9 +33,9 @@
         </p>
       </v-col>
     </v-row>
-    <v-row v-if="!!user">
+    <v-row>
       <v-col>
-        <v-btn color="secondary" x-large to="/notifications">
+        <v-btn color="secondary" x-large :to="subscriptionDestination">
           <v-icon left>mdi-bell-plus</v-icon>
           צרו התראות חדשות
         </v-btn>
@@ -83,6 +83,9 @@ export default class Home extends Vue {
           managableMeeting => managableMeeting.id == meeting.id
         )
     }));
+  }
+  get subscriptionDestination() {
+    return this.user ? "/subscriptions" : "/login";
   }
 }
 </script>

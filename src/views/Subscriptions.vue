@@ -148,7 +148,7 @@ import { Getters, ActionTypes } from "../helpers/constants";
 import store from "../plugins/store";
 
 @Component()
-export default class Notifications extends Vue {
+export default class Subscriptions extends Vue {
   @Action(ActionTypes.UPDATE_USER) updateUser;
   /**
    * @type {import("../../graphql/types").UsersPermissionsUser}

@@ -10,10 +10,9 @@
               large
               depressed
               :color="`secondary ${isCreatingNewComment && 'darken-1'}`"
-              @click="setCommentCreation(!isCreatingNewComment)"
+              @click="isCreatingNewComment = !isCreatingNewComment"
             >
-              <v-icon left>mdi-plus</v-icon>
-              צור התייחסות חדשה
+              <v-icon left>mdi-plus</v-icon>צור התייחסות חדשה
             </v-btn>
             <div v-if="isCreatingNewComment" class="pa-1"></div>
             <v-expand-transition>
@@ -36,7 +35,7 @@
           :outlined="comment.isPinned"
           flat
           :key="comment.id"
-          class="comment border my-2 pa-3"
+          class="my-2 pa-3"
         >
           <v-tooltip bottom v-if="comment.isPinned">
             <template v-slot:activator="{ on }">
@@ -46,180 +45,34 @@
           </v-tooltip>
 
           <v-card-text>
-            <div>
-              <v-row dense class="my-2">
-                <v-col cols="2" sm="1" class="text-center">
-                  <v-img
-                    aspect-ratio="1"
-                    :src="generateImageUrlFromComment(comment)"
-                    class="b-radius-50 mx-auto"
-                    max-width="50"
-                  >
-                  </v-img>
-                </v-col>
-                <v-col>
-                  <div class="pa-4">
-                    <h4 class="subtitle-1 font-weight-semibold primary--text">
-                      <span tabindex="0">{{ comment.title }}</span>
-                    </h4>
-                    <h5
-                      class="subtitle-2 secondary--text d-flex align-center"
-                      :class="[
-                        isCommentsAdmin(comment)
-                          ? 'font-weight-bold'
-                          : 'font-weight-light'
-                      ]"
-                    >
-                      <v-icon
-                        color="secondary"
-                        v-if="isCommentsAdmin(comment)"
-                        small
-                        class="ml-1"
-                        >mdi-shield-check
-                      </v-icon>
-                      <span class="ml-1" tabindex="0"
-                        >{{ getCommenter(comment) }} •
-                      </span>
-                      <span
-                        class="ml-1"
-                        v-if="isCommentsAdmin(comment) && comment.user.job"
-                        >{{ comment.user.job }} •
-                      </span>
-                      <span tabindex="0">
-                        {{ comment.createdAt.toLocaleDateString("he") }}
-                      </span>
-                    </h5>
-                    <p tabindex="0" class="body-1 whitespace-preline my-1">
-                      {{ comment.visibleContent }}
-                    </p>
-                    <v-row>
-                      <v-col cols="auto" v-if="!comment.isFullContentVisible">
-                        <a
-                          href="javascript:void(0)"
-                          class="me-2"
-                          @click="showFullComment(comment)"
-                        >
-                          קרא עוד
-                        </a>
-                      </v-col>
-                      <v-col cols="auto" v-if="!commentsAreLocked">
-                        <a
-                          href="javascript:void(0)"
-                          @click="toggleReply(comment.id)"
-                          class="comment-action grey--text"
-                        >
-                          הגב להתייחסות
-                        </a>
-                      </v-col>
-                      <v-col cols="auto" v-if="currentUserIsCommentsAdmin">
-                        <a
-                          href="javascript:void(0)"
-                          @click="pinComment(comment)"
-                          class="grey--text"
-                        >
-                          {{ comment.isPinned ? "בטל נעיצה" : "נעץ" }}
-                        </a>
-                      </v-col>
-                      <v-col cols="auto" v-if="currentUserIsCommentsAdmin">
-                        <a
-                          href="javascript:void(0)"
-                          @click="removeComment(comment)"
-                          class="grey--text"
-                        >
-                          מחק
-                        </a>
-                      </v-col>
-                    </v-row>
-
-                    <v-expand-transition>
-                      <NewComment
-                        v-if="replyingTo == comment.id"
-                        :parent="comment.id"
-                        @submit="handleCommentSubmitted"
-                      />
-                    </v-expand-transition>
-                  </div>
-                </v-col>
-              </v-row>
-              <v-row
-                v-for="child in childComments(comment)"
-                :key="child.id"
-                class="comment my-2"
-                dense
-              >
-                <v-col cols="2" sm="1"></v-col>
-                <v-col cols="2" sm="1" class="text-center">
-                  <v-img
-                    aspect-ratio="1"
-                    max-width="50"
-                    :src="generateImageUrlFromComment(child)"
-                    class="b-radius-50 mx-auto"
-                  ></v-img>
-                </v-col>
-                <v-col>
-                  <div class="pa-4">
-                    <h4 class="subtitle-1 font-weight-semibold primary--text">
-                      <span tabindex="0">{{ child.title }}</span>
-                    </h4>
-                    <h5
-                      class="subtitle-2 secondary--text d-flex align-center"
-                      :class="[
-                        isCommentsAdmin(child)
-                          ? 'font-weight-bold'
-                          : 'font-weight-light'
-                      ]"
-                    >
-                      <v-icon
-                        color="secondary"
-                        v-if="isCommentsAdmin(child)"
-                        small
-                        class="ml-1"
-                        >mdi-shield-check
-                      </v-icon>
-                      <span class="ml-1" tabindex="0"
-                        >{{ getCommenter(child) }} •
-                      </span>
-                      <span
-                        class="ml-1"
-                        v-if="isCommentsAdmin(child) && child.user.job"
-                        >{{ child.user.job }} •
-                      </span>
-                      <span tabindex="0">
-                        {{ child.createdAt.toLocaleDateString("he") }}
-                      </span>
-                    </h5>
-                    <p tabindex="0" class="body-1 whitespace-preline my-1">
-                      {{ child.visibleContent }}
-                    </p>
-                    <v-row
-                      v-if="
-                        !child.isFullContentVisible ||
-                          currentUserIsCommentsAdmin
-                      "
-                    >
-                      <v-col cols="auto" v-if="!child.isFullContentVisible">
-                        <a
-                          href="javascript:void(0)"
-                          @click="showFullComment(child)"
-                          class="grey--text"
-                        >
-                          קרא עוד
-                        </a>
-                      </v-col>
-                      <v-col cols="auto" v-if="currentUserIsCommentsAdmin">
-                        <a
-                          href="javascript:void(0)"
-                          @click="removeComment(child)"
-                          class="grey--text"
-                        >
-                          מחק
-                        </a>
-                      </v-col>
-                    </v-row>
-                  </div>
-                </v-col>
-              </v-row>
-            </div>
+            <Comment
+              :comment="comment"
+              :isCommenterAdmin="isCommenterAdmin(comment)"
+              :isUserAdmin="isCurrentUserCommentsAdmin"
+              :isReplyAllowed="!commentsAreLocked"
+              @newCommentSubmit="handleCommentSubmitted"
+              @remove="removeComment(comment)"
+              @pin="pinComment(comment)"
+              isPinAllowed
+            />
+            <v-row
+              v-for="child in comment.children"
+              :key="child.id"
+              class="my-2"
+              dense
+            >
+              <v-col cols="2" sm="1"></v-col>
+              <v-col>
+                <Comment
+                  :comment="child"
+                  :isCommenterAdmin="isCommenterAdmin(child)"
+                  :isUserAdmin="isCurrentUserCommentsAdmin"
+                  :isReplyAllowed="false"
+                  :isPinAllowed="false"
+                  @remove="removeComment(child)"
+                />
+              </v-col>
+            </v-row>
           </v-card-text>
         </v-card>
       </v-col>
@@ -234,31 +87,30 @@
 import Component from "vue-class-component";
 import Vue from "vue";
 import NewComment from "./NewComment";
+import Comment from "./Comment";
 import { Getter } from "vuex-class";
-import { Getters, apiEndpoint } from "../helpers/constants";
+import { Getters } from "../helpers/constants";
 import { getCommentsByPlan } from "../helpers/queries";
-import { updateComment } from "../helpers/mutations";
+import { updateComment, hideMyComment } from "../helpers/mutations";
 import { makeGqlRequest } from "../helpers/functions";
 import { Prop } from "vue-property-decorator";
 
-@Component({ components: { NewComment } })
+@Component({ components: { NewComment, Comment } })
 export default class Comments extends Vue {
   /**
    * @type {import("../../graphql/types").UsersPermissionsUser}
    */
-  @Getter(Getters.USER) currentUser;
   @Getter(Getters.JWT) jwt;
   /** @type {import("../../graphql/types").Plan} */
   @Getter(Getters.SELECTED_PLAN) plan;
   /** @type {import("../../graphql/types").Comment[]} */
   comments = [];
   isCreatingNewComment = false;
-  replyingTo = "";
   loader = false;
 
   @Prop(Array) privilegedUsers;
   @Prop(Boolean) commentsAreLocked;
-  @Prop(Boolean) currentUserIsCommentsAdmin;
+  @Prop(Boolean) isCurrentUserCommentsAdmin;
 
   created() {
     this.fetchComments();
@@ -277,23 +129,32 @@ export default class Comments extends Vue {
    */
   async handleCommentSubmitted() {
     await this.fetchComments();
-    this.setCommentCreation(false);
+    this.isCreatingNewComment = false;
   }
 
+  /**
+   * Removes (i.e. sets "isHidden: true") a given comment
+   * @param {import("../helpers/typings").CommentModel} comment comment to pin
+   */
   async removeComment(comment) {
     this.loader = true;
-    const res = await makeGqlRequest(
-      updateComment,
-      {
-        id: comment.id,
-        isHidden: true
-      },
-      this.jwt
-    );
-    comment.isHidden = !!res;
+    let query;
+    let variables = { id: comment.id };
+    if (this.isCurrentUserCommentsAdmin) {
+      query = updateComment;
+      variables.isHidden = true;
+    } else {
+      query = hideMyComment;
+    }
+    const res = await makeGqlRequest(query, variables, this.jwt);
+    await this.fetchComments();
     this.loader = !res;
   }
 
+  /**
+   * Pins a given comment
+   * @param {import("../helpers/typings").CommentModel} comment comment to pin
+   */
   async pinComment(comment) {
     this.loader = true;
     const res = await makeGqlRequest(
@@ -335,63 +196,17 @@ export default class Comments extends Vue {
   }
 
   /**
-   * Gets executed when the comment creation button is clicked
-   * @param {boolean} value Desired comment creation state
+   * @returns {import("../helpers/typings").CommentModel[]} comments without a parent
    */
-  setCommentCreation(value) {
-    this.replyingTo = "";
-    this.isCreatingNewComment = value;
-  }
-
-  /**
-   * Displays full comment content
-   * @param {import("../helpers/typings").CommentModel} comment
-   */
-  showFullComment(comment) {
-    comment.isFullContentVisible = true;
-    comment.visibleContent = comment.content;
-  }
-
-  /**
-   * Generates url for a comment's user image
-   * @param {import("../../graphql/types").Comment} comment
-   * @returns {string} url
-   */
-  generateImageUrlFromComment(comment) {
-    return comment.user && comment.user.userImage
-      ? apiEndpoint + comment.user.userImage.url
-      : "/img/userImage.svg";
-  }
-
-  toggleReply(commentId) {
-    this.isCreatingNewComment = false;
-    this.replyingTo = this.replyingTo == commentId ? "" : commentId;
-  }
-
-  /**
-   * Gets the commenter of a given comment
-   * @param {import("../../graphql/types").Comment} comment The comment object
-   * @returns {string} name of the commenter
-   */
-  getCommenter(comment) {
-    return comment.user
-      ? `${comment.user.firstName} ${comment.user.lastName}`
-      : comment.name;
-  }
-
   get rootComments() {
-    return this.comments.filter(
-      comment => comment.parent == null && !comment.isHidden
-    );
+    return this.comments.filter(comment => comment.parent == null);
   }
 
-  childComments(parentComment) {
-    return parentComment.children.filter(
-      childComment => !childComment.isHidden
-    );
-  }
-
-  isCommentsAdmin(comment) {
+  /**
+   * @param {import("../helpers/typings").CommentModel} comment a given comment
+   * @returns true if the commenter of the given comment is a relevant admin, or false otherwise
+   */
+  isCommenterAdmin(comment) {
     return !!comment.user && this.privilegedUsers.includes(comment.user.id);
   }
 }

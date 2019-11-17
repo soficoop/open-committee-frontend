@@ -1,5 +1,5 @@
 <template>
-  <div v-if="committeeId && user">
+  <div v-if="committeeId">
     <v-snackbar
       v-model="hasToggledSubscription"
       :top="$vuetify.breakpoint.xsOnly"
@@ -11,7 +11,6 @@
       </v-btn>
     </v-snackbar>
     <v-btn
-      v-if="user"
       fixed
       fab
       bottom
@@ -42,6 +41,7 @@ export default class SubscriptionToggle extends Vue {
 
   get isUserSubscribed() {
     return (
+      !!this.user &&
       !!this.user.subscribedCommittees &&
       this.user.subscribedCommittees.some(
         committee => committee.id == this.committeeId
@@ -52,12 +52,14 @@ export default class SubscriptionToggle extends Vue {
   mounted() {
     if (this.user) {
       this.fetchUserSubscriptions();
-    } else {
-      this.$destroy();
     }
   }
 
   async toggleSubscription() {
+    if (!this.user) {
+      this.$router.push("/login");
+      return;
+    }
     if (this.isUserSubscribed) {
       await this.updateUser({
         subscribedCommittees: this.user.subscribedCommittees

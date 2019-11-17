@@ -1,6 +1,6 @@
 <template>
   <v-container class="pa-md-12">
-    <v-alert type="success" dense v-if="userIsConfirmed">
+    <v-alert type="success" dense v-if="isUserConfirmed">
       ההרשמה הושלמה, כעת ניתן להתחבר למערכת
     </v-alert>
     <v-layout wrap align-content-space-around justify-center>
@@ -13,25 +13,118 @@
           </v-flex>
           <h1
             class="pa-1 headline text-center primary--text"
-            v-if="userIsConfirmed"
+            v-if="isUserConfirmed"
           >
             התחברות
           </h1>
           <v-tabs
-            :height="userIsConfirmed ? '0' : ''"
+            :height="isUserConfirmed ? '0' : ''"
             grow
             class="my-3 pa-1"
             v-model="tab"
             background-color="transparent"
           >
             <v-tab @click="authenticationFailed = false" class="ma-0"
-              >התחברות
+              >הרשמה
             </v-tab>
             <v-tab @click="authenticationFailed = false" class="ma-0">
-              הרשמה
+              התחברות
             </v-tab>
           </v-tabs>
           <v-tabs-items v-model="tab" class="overflow-hidden pa-1 transparent">
+            <v-tab-item>
+              <div v-if="registrationSuccess">
+                <v-row>
+                  <v-col cols="12" class="text-center mt-6">
+                    <v-icon color="success" x-large
+                      >mdi-checkbox-marked-circle-outline</v-icon
+                    >
+                  </v-col>
+                  <v-col cols="12">
+                    <span class="title primary--text">
+                      בדקו את תיבת הדואר-האלקטרוני שלכם לסיום תהליך ההרשמה
+                    </span>
+                  </v-col>
+                </v-row>
+              </div>
+              <div v-else>
+                <v-text-field
+                  label="אימייל"
+                  v-model="signupData.email"
+                  :error="
+                    signupData.email.length > 0 &&
+                      !isEmailValid(signupData.email)
+                  "
+                  :error-messages="
+                    signupData.email.length > 0 &&
+                    !isEmailValid(signupData.email)
+                      ? ['נא להכניס כתובת מייל תקינה']
+                      : []
+                  "
+                ></v-text-field>
+                <v-text-field
+                  label="סיסמה"
+                  hint="לפחות 8 תווים"
+                  v-model="signupData.password"
+                  name="password"
+                  :type="signupData.showPassword ? 'text' : 'password'"
+                  :append-icon="
+                    signupData.showPassword ? 'mdi-eye' : 'mdi-eye-off'
+                  "
+                  @click:append="
+                    signupData.showPassword = !signupData.showPassword
+                  "
+                ></v-text-field>
+                <v-layout>
+                  <v-text-field
+                    label="שם פרטי"
+                    v-model="signupData.firstName"
+                    name="fname"
+                    class="pl-1"
+                    :rules="[value => !!value || 'שדה חובה']"
+                  >
+                  </v-text-field>
+                  <v-text-field
+                    class="pr-1"
+                    label="שם משפחה"
+                    v-model="signupData.lastName"
+                    name="lname"
+                    :rules="[value => !!value || 'שדה חובה']"
+                  ></v-text-field>
+                </v-layout>
+                <v-text-field
+                  label="עיר מגורים"
+                  v-model="signupData.city"
+                  name="city"
+                ></v-text-field>
+                <v-text-field
+                  label="ארגון"
+                  v-model="signupData.organization"
+                  name="organization"
+                ></v-text-field>
+                <v-text-field
+                  label="תפקיד"
+                  v-model="signupData.job"
+                  name="job"
+                ></v-text-field>
+                <v-btn
+                  id="submit-button"
+                  block
+                  large
+                  color="secondary"
+                  :disabled="!isSignUpFormValid"
+                  @click="signUp(signupData)"
+                  >הרשמה</v-btn
+                >
+                <v-expand-transition>
+                  <div>
+                    <v-flex v-if="authenticationFailed">
+                      <p class="error--text my-1">המשתמש כבר קיים במערכת</p>
+                    </v-flex>
+                  </div>
+                </v-expand-transition>
+              </div>
+            </v-tab-item>
             <v-tab-item>
               <v-flex>
                 <v-text-field
@@ -175,99 +268,6 @@
                 </v-flex>
               </v-expand-transition>
             </v-tab-item>
-            <v-tab-item>
-              <div v-if="registrationSuccess">
-                <v-row>
-                  <v-col cols="12" class="text-center mt-6">
-                    <v-icon color="success" x-large
-                      >mdi-checkbox-marked-circle-outline</v-icon
-                    >
-                  </v-col>
-                  <v-col cols="12">
-                    <span class="title primary--text">
-                      בדקו את תיבת הדואר-האלקטרוני שלכם לסיום תהליך ההרשמה
-                    </span>
-                  </v-col>
-                </v-row>
-              </div>
-              <div v-else>
-                <v-text-field
-                  label="אימייל"
-                  v-model="signupData.email"
-                  :error="
-                    signupData.email.length > 0 &&
-                      !isEmailValid(signupData.email)
-                  "
-                  :error-messages="
-                    signupData.email.length > 0 &&
-                    !isEmailValid(signupData.email)
-                      ? ['נא להכניס כתובת מייל תקינה']
-                      : []
-                  "
-                ></v-text-field>
-                <v-text-field
-                  label="סיסמה"
-                  hint="לפחות 8 תווים"
-                  v-model="signupData.password"
-                  name="password"
-                  :type="signupData.showPassword ? 'text' : 'password'"
-                  :append-icon="
-                    signupData.showPassword ? 'mdi-eye' : 'mdi-eye-off'
-                  "
-                  @click:append="
-                    signupData.showPassword = !signupData.showPassword
-                  "
-                ></v-text-field>
-                <v-layout>
-                  <v-text-field
-                    label="שם פרטי"
-                    v-model="signupData.firstName"
-                    name="fname"
-                    class="pl-1"
-                    :rules="[value => !!value || 'שדה חובה']"
-                  >
-                  </v-text-field>
-                  <v-text-field
-                    class="pr-1"
-                    label="שם משפחה"
-                    v-model="signupData.lastName"
-                    name="lname"
-                    :rules="[value => !!value || 'שדה חובה']"
-                  ></v-text-field>
-                </v-layout>
-                <v-text-field
-                  label="עיר מגורים"
-                  v-model="signupData.city"
-                  name="city"
-                ></v-text-field>
-                <v-text-field
-                  label="ארגון"
-                  v-model="signupData.organization"
-                  name="organization"
-                ></v-text-field>
-                <v-text-field
-                  label="תפקיד"
-                  v-model="signupData.job"
-                  name="job"
-                ></v-text-field>
-                <v-btn
-                  id="submit-button"
-                  block
-                  large
-                  color="secondary"
-                  :disabled="!isSignUpFormValid"
-                  @click="signUp(signupData)"
-                  >הרשמה</v-btn
-                >
-                <v-expand-transition>
-                  <div>
-                    <v-flex v-if="authenticationFailed">
-                      <p class="error--text my-1">המשתמש כבר קיים במערכת</p>
-                    </v-flex>
-                  </div>
-                </v-expand-transition>
-              </div>
-            </v-tab-item>
           </v-tabs-items>
         </v-layout>
       </v-flex>
@@ -306,7 +306,7 @@ export default class Login extends Vue {
     email: "",
     mailSent: ""
   };
-  tab = null;
+  tab = 0;
   authenticationFailed = false;
   userIsNotConfirmedMsg = "";
   dialog = false;
@@ -320,7 +320,11 @@ export default class Login extends Vue {
   @Action(ActionTypes.SIGN_UP) signUpAction;
   @Action(ActionTypes.SIGN_IN) loginAction;
 
-  get userIsConfirmed() {
+  created() {
+    this.tab = this.isUserConfirmed ? 1 : 0;
+  }
+
+  get isUserConfirmed() {
     return this.$route.path === "/login/user-is-confirmed";
   }
 

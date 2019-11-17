@@ -44,8 +44,8 @@
 <script>
 import Component from "vue-class-component";
 import Vue from "vue";
-import { Getter, Action } from "vuex-class";
-import { Getters, ActionTypes } from "../helpers/constants";
+import { Getter } from "vuex-class";
+import { Getters } from "../helpers/constants";
 import { makeGqlRequest } from "../helpers/functions";
 import { createComment } from "../helpers/mutations";
 import { Prop } from "vue-property-decorator";
@@ -56,7 +56,6 @@ export default class NewComment extends Vue {
   @Getter(Getters.SELECTED_PLAN) plan;
   /** @type {import("../../graphql/types").UsersPermissionsUser} */
   @Getter(Getters.USER) user;
-  @Action(ActionTypes.FETCH_PLAN) fetchPlan;
   @Prop(String) parent;
   content = "";
   isCreatingNewComment = false;

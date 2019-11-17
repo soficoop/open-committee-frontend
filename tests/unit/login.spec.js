@@ -47,4 +47,19 @@ describe("Login.vue", () => {
     });
     expect(wrapper.find("#submit-button").props("disabled")).toBeFalsy();
   });
+  it("displays login form on email confirmation", () => {
+    wrapper = shallowMount(Login, {
+      mocks: {
+        $route: { path: "/login/user-is-confirmed" }
+      },
+      loginData,
+      vuetify: new Vuetify()
+    });
+    expect(wrapper.vm.isUserConfirmed).toBeTruthy();
+    expect(wrapper.text()).toContain("ההרשמה הושלמה, כעת ניתן להתחבר למערכת");
+    expect(wrapper.vm.tab).toEqual(1);
+    expect(
+      wrapper.findAll("v-btn").filter(btn => btn.isVisible())
+    ).toHaveLength(0);
+  });
 });
