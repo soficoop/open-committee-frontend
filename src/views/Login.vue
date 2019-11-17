@@ -1,6 +1,6 @@
 <template>
   <v-container class="pa-md-12">
-    <v-alert type="success" dense v-if="userIsConfirmed">
+    <v-alert type="success" dense v-if="isUserConfirmed">
       ההרשמה הושלמה, כעת ניתן להתחבר למערכת
     </v-alert>
     <v-layout wrap align-content-space-around justify-center>
@@ -13,12 +13,12 @@
           </v-flex>
           <h1
             class="pa-1 headline text-center primary--text"
-            v-if="userIsConfirmed"
+            v-if="isUserConfirmed"
           >
             התחברות
           </h1>
           <v-tabs
-            :height="userIsConfirmed ? '0' : ''"
+            :height="isUserConfirmed ? '0' : ''"
             grow
             class="my-3 pa-1"
             v-model="tab"
@@ -320,7 +320,11 @@ export default class Login extends Vue {
   @Action(ActionTypes.SIGN_UP) signUpAction;
   @Action(ActionTypes.SIGN_IN) loginAction;
 
-  get userIsConfirmed() {
+  created() {
+    this.tab = this.isUserConfirmed ? 1 : 0;
+  }
+
+  get isUserConfirmed() {
     return this.$route.path === "/login/user-is-confirmed";
   }
 
