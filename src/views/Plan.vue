@@ -147,6 +147,17 @@
         ></Comments>
       </v-col>
     </v-row>
+    <v-row v-if="!plan.addedManually">
+      <v-col>
+        <a
+          :href="iplanUrl"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="secondary--text font-weight-bold px-1"
+          >למידע נוסף באתר מנהל התכנון</a
+        >
+      </v-col>
+    </v-row>
     <v-overlay v-model="loader" z-index="9999">
       <v-progress-circular indeterminate size="64"></v-progress-circular>
     </v-overlay>
@@ -251,6 +262,12 @@ export default class Plan extends Vue {
           this.plan.lastUpdate.toLocaleDateString("he")
       }
     ].filter(i => i.value);
+  }
+
+  get iplanUrl() {
+    return `http://www.mavat.moin.gov.il/MavatPS/Forms/SV4.aspx?et=${
+      this.plan.stype
+    }&pl_id=${encodeURIComponent(this.plan.sid)}`;
   }
 
   get planLocationQuery() {

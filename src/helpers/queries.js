@@ -87,6 +87,7 @@ export const getPlan = `query getPlan($id: ID!) {
   plan(id: $id) {
     id
     sid
+    stype
     number
     addedManually
     lastUpdate
