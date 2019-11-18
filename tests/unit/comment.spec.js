@@ -1,7 +1,7 @@
 import Vue from "vue";
 import { shallowMount } from "@vue/test-utils";
 import Comment from "@/components/Comment.vue";
-import { Getters, apiEndpoint } from "@/helpers/constants";
+import { Getters, filesEndpoint } from "@/helpers/constants";
 import Vuetify from "vuetify";
 Vue.use(Vuetify);
 
@@ -104,7 +104,9 @@ describe("Comment.vue", () => {
   });
   it("displays correct commenter image", () => {
     expect(wrapper.find("v-img-stub").props("src")).toBe(wrapper.vm.imageUrl);
-    expect(wrapper.vm.imageUrl).toBe(apiEndpoint + comment.user.userImage.url);
+    expect(wrapper.vm.imageUrl).toBe(
+      filesEndpoint + comment.user.userImage.url
+    );
     comment.user.userImage = null;
     expect(wrapper.vm.imageUrl).toBe("/img/userImage.svg");
   });

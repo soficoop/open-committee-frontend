@@ -85,7 +85,7 @@ import Component from "vue-class-component";
 import Vue from "vue";
 import NewComment from "./NewComment";
 import { Getter } from "vuex-class";
-import { Getters, apiEndpoint } from "../helpers/constants";
+import { Getters, filesEndpoint } from "../helpers/constants";
 import { Prop } from "vue-property-decorator";
 
 @Component({ components: { NewComment } })
@@ -133,7 +133,7 @@ export default class Comment extends Vue {
    */
   get imageUrl() {
     return this.comment.user && this.comment.user.userImage
-      ? apiEndpoint + this.comment.user.userImage.url
+      ? filesEndpoint + this.comment.user.userImage.url
       : "/img/userImage.svg";
   }
 
