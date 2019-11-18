@@ -35,6 +35,8 @@ export const Getters = Object.freeze({
 export const apiEndpoint =
   `${process.env.VUE_APP_API_ENDPOINT}` || "http://localhost:1337";
 
+export const filesEndpoint = process.env.VUE_APP_FILES_ENDPOINT || "";
+
 export const graphqlEndpoint =
   `${process.env.VUE_APP_API_ENDPOINT}/graphql` ||
   "http://localhost:1337/graphql";
