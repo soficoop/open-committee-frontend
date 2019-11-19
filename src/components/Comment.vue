@@ -70,11 +70,13 @@
       </v-row>
 
       <v-expand-transition>
-        <NewComment
-          v-if="isReplying"
-          :parent="comment.id"
-          @submit="handleCommentSubmitted"
-        />
+        <div v-if="isReplying">
+          <NewComment
+            :parent="comment.id"
+            @submit="handleCommentSubmitted"
+            class="ma-n3"
+          />
+        </div>
       </v-expand-transition>
     </v-col>
   </v-row>

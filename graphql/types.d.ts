@@ -101,11 +101,14 @@ export type Comment = {
   title?: Maybe<Scalars["String"]>;
   name?: Maybe<Scalars["String"]>;
   content?: Maybe<Scalars["String"]>;
-  plan?: Maybe<Plan>;
   createdAt: Scalars["DateTime"];
   parent?: Maybe<Comment>;
   user?: Maybe<UsersPermissionsUser>;
+  isHidden?: Maybe<Scalars["Boolean"]>;
+  isPinned?: Maybe<Scalars["Boolean"]>;
+  plan?: Maybe<Plan>;
   children?: Maybe<Array<Maybe<Comment>>>;
+  files?: Maybe<Array<Maybe<UploadFile>>>;
   _id: Scalars["ID"];
   id: Scalars["ID"];
   updatedAt: Scalars["DateTime"];
@@ -113,6 +116,14 @@ export type Comment = {
 
 /** Comments on other content types */
 export type CommentChildrenArgs = {
+  sort?: Maybe<Scalars["String"]>;
+  limit?: Maybe<Scalars["Int"]>;
+  start?: Maybe<Scalars["Int"]>;
+  where?: Maybe<Scalars["JSON"]>;
+};
+
+/** Comments on other content types */
+export type CommentFilesArgs = {
   sort?: Maybe<Scalars["String"]>;
   limit?: Maybe<Scalars["Int"]>;
   start?: Maybe<Scalars["Int"]>;
@@ -153,6 +164,18 @@ export type CommentConnectionCreatedAt = {
 export type CommentConnectionId = {
   __typename?: "CommentConnectionId";
   key?: Maybe<Scalars["ID"]>;
+  connection?: Maybe<CommentConnection>;
+};
+
+export type CommentConnectionIsHidden = {
+  __typename?: "CommentConnectionIsHidden";
+  key?: Maybe<Scalars["Boolean"]>;
+  connection?: Maybe<CommentConnection>;
+};
+
+export type CommentConnectionIsPinned = {
+  __typename?: "CommentConnectionIsPinned";
+  key?: Maybe<Scalars["Boolean"]>;
   connection?: Maybe<CommentConnection>;
 };
 
@@ -197,10 +220,12 @@ export type CommentGroupBy = {
   title?: Maybe<Array<Maybe<CommentConnectionTitle>>>;
   name?: Maybe<Array<Maybe<CommentConnectionName>>>;
   content?: Maybe<Array<Maybe<CommentConnectionContent>>>;
-  plan?: Maybe<Array<Maybe<CommentConnectionPlan>>>;
   createdAt?: Maybe<Array<Maybe<CommentConnectionCreatedAt>>>;
   parent?: Maybe<Array<Maybe<CommentConnectionParent>>>;
   user?: Maybe<Array<Maybe<CommentConnectionUser>>>;
+  isHidden?: Maybe<Array<Maybe<CommentConnectionIsHidden>>>;
+  isPinned?: Maybe<Array<Maybe<CommentConnectionIsPinned>>>;
+  plan?: Maybe<Array<Maybe<CommentConnectionPlan>>>;
   _id?: Maybe<Array<Maybe<CommentConnection_Id>>>;
   id?: Maybe<Array<Maybe<CommentConnectionId>>>;
   updatedAt?: Maybe<Array<Maybe<CommentConnectionUpdatedAt>>>;
@@ -210,11 +235,14 @@ export type CommentInput = {
   title?: Maybe<Scalars["String"]>;
   name?: Maybe<Scalars["String"]>;
   content?: Maybe<Scalars["String"]>;
-  plan?: Maybe<Scalars["ID"]>;
   createdAt?: Maybe<Scalars["DateTime"]>;
   parent?: Maybe<Scalars["ID"]>;
   children?: Maybe<Array<Maybe<Scalars["ID"]>>>;
   user?: Maybe<Scalars["ID"]>;
+  isHidden?: Maybe<Scalars["Boolean"]>;
+  isPinned?: Maybe<Scalars["Boolean"]>;
+  plan?: Maybe<Scalars["ID"]>;
+  files?: Maybe<Array<Maybe<Scalars["ID"]>>>;
 };
 
 export type Committee = {
@@ -222,6 +250,7 @@ export type Committee = {
   sid: Scalars["String"];
   parent?: Maybe<Committee>;
   area?: Maybe<Area>;
+  isHidden?: Maybe<Scalars["Boolean"]>;
   children?: Maybe<Array<Maybe<Committee>>>;
   users?: Maybe<Array<Maybe<UsersPermissionsUser>>>;
   subscribedUsers?: Maybe<Array<Maybe<UsersPermissionsUser>>>;
@@ -297,6 +326,12 @@ export type CommitteeConnectionId = {
   connection?: Maybe<CommitteeConnection>;
 };
 
+export type CommitteeConnectionIsHidden = {
+  __typename?: "CommitteeConnectionIsHidden";
+  key?: Maybe<Scalars["Boolean"]>;
+  connection?: Maybe<CommitteeConnection>;
+};
+
 export type CommitteeConnectionParent = {
   __typename?: "CommitteeConnectionParent";
   key?: Maybe<Scalars["ID"]>;
@@ -320,6 +355,7 @@ export type CommitteeGroupBy = {
   sid?: Maybe<Array<Maybe<CommitteeConnectionSid>>>;
   parent?: Maybe<Array<Maybe<CommitteeConnectionParent>>>;
   area?: Maybe<Array<Maybe<CommitteeConnectionArea>>>;
+  isHidden?: Maybe<Array<Maybe<CommitteeConnectionIsHidden>>>;
   _id?: Maybe<Array<Maybe<CommitteeConnection_Id>>>;
   id?: Maybe<Array<Maybe<CommitteeConnectionId>>>;
   createdAt?: Maybe<Array<Maybe<CommitteeConnectionCreatedAt>>>;
@@ -334,6 +370,7 @@ export type CommitteeInput = {
   users?: Maybe<Array<Maybe<Scalars["ID"]>>>;
   subscribedUsers?: Maybe<Array<Maybe<Scalars["ID"]>>>;
   meetings?: Maybe<Array<Maybe<Scalars["ID"]>>>;
+  isHidden?: Maybe<Scalars["Boolean"]>;
 };
 
 export type CreateAreaInput = {
@@ -489,11 +526,14 @@ export type EditCommentInput = {
   title?: Maybe<Scalars["String"]>;
   name?: Maybe<Scalars["String"]>;
   content?: Maybe<Scalars["String"]>;
-  plan?: Maybe<Scalars["ID"]>;
   createdAt?: Maybe<Scalars["DateTime"]>;
   parent?: Maybe<Scalars["ID"]>;
   children?: Maybe<Array<Maybe<Scalars["ID"]>>>;
   user?: Maybe<Scalars["ID"]>;
+  isHidden?: Maybe<Scalars["Boolean"]>;
+  isPinned?: Maybe<Scalars["Boolean"]>;
+  plan?: Maybe<Scalars["ID"]>;
+  files?: Maybe<Array<Maybe<Scalars["ID"]>>>;
 };
 
 export type EditCommitteeInput = {
@@ -504,6 +544,7 @@ export type EditCommitteeInput = {
   users?: Maybe<Array<Maybe<Scalars["ID"]>>>;
   subscribedUsers?: Maybe<Array<Maybe<Scalars["ID"]>>>;
   meetings?: Maybe<Array<Maybe<Scalars["ID"]>>>;
+  isHidden?: Maybe<Scalars["Boolean"]>;
 };
 
 export type EditFileInput = {
@@ -515,7 +556,7 @@ export type EditFileInput = {
   size?: Maybe<Scalars["String"]>;
   url?: Maybe<Scalars["String"]>;
   provider?: Maybe<Scalars["String"]>;
-  public_id?: Maybe<Scalars["String"]>;
+  provider_metadata?: Maybe<Scalars["JSON"]>;
   related?: Maybe<Array<Maybe<Scalars["ID"]>>>;
 };
 
@@ -526,14 +567,15 @@ export type EditMeetingInput = {
   protocol?: Maybe<Scalars["ID"]>;
   transcript?: Maybe<Scalars["ID"]>;
   sid?: Maybe<Scalars["String"]>;
-  committee?: Maybe<Scalars["ID"]>;
   addedManually?: Maybe<Scalars["Boolean"]>;
   title?: Maybe<Scalars["String"]>;
   additionalFiles?: Maybe<Array<Maybe<Scalars["ID"]>>>;
   background?: Maybe<Scalars["String"]>;
   summary?: Maybe<Scalars["String"]>;
-  plans?: Maybe<Array<Maybe<Scalars["ID"]>>>;
   emailViews?: Maybe<Scalars["Int"]>;
+  isHidden?: Maybe<Scalars["Boolean"]>;
+  plans?: Maybe<Array<Maybe<Scalars["ID"]>>>;
+  committee?: Maybe<Scalars["ID"]>;
 };
 
 export type EditParserInput = {
@@ -547,6 +589,7 @@ export type EditParserInput = {
   method?: Maybe<Enum_Parser_Method>;
   requestParams?: Maybe<Scalars["String"]>;
   runInterval?: Maybe<Enum_Parser_Runinterval>;
+  fileFields?: Maybe<Scalars["String"]>;
 };
 
 export type EditPlanInput = {
@@ -567,8 +610,9 @@ export type EditPlanInput = {
   attachedFiles?: Maybe<Array<Maybe<Scalars["ID"]>>>;
   street?: Maybe<Scalars["String"]>;
   houseNumber?: Maybe<Scalars["Int"]>;
-  comments?: Maybe<Array<Maybe<Scalars["ID"]>>>;
   meetings?: Maybe<Array<Maybe<Scalars["ID"]>>>;
+  commentsAreLocked?: Maybe<Scalars["Boolean"]>;
+  comments?: Maybe<Array<Maybe<Scalars["ID"]>>>;
 };
 
 export type EditRoleInput = {
@@ -593,10 +637,10 @@ export type EditUserInput = {
   city?: Maybe<Scalars["String"]>;
   organization?: Maybe<Scalars["String"]>;
   job?: Maybe<Scalars["String"]>;
-  committees?: Maybe<Array<Maybe<Scalars["ID"]>>>;
   userImage?: Maybe<Scalars["ID"]>;
-  comments?: Maybe<Array<Maybe<Scalars["ID"]>>>;
+  committees?: Maybe<Array<Maybe<Scalars["ID"]>>>;
   subscribedCommittees?: Maybe<Array<Maybe<Scalars["ID"]>>>;
+  comments?: Maybe<Array<Maybe<Scalars["ID"]>>>;
 };
 
 export type EmailMeetingInput = {
@@ -647,7 +691,7 @@ export type FileInput = {
   size: Scalars["String"];
   url: Scalars["String"];
   provider: Scalars["String"];
-  public_id?: Maybe<Scalars["String"]>;
+  provider_metadata?: Maybe<Scalars["JSON"]>;
   related?: Maybe<Array<Maybe<Scalars["ID"]>>>;
 };
 
@@ -663,12 +707,13 @@ export type Meeting = {
   protocol?: Maybe<UploadFile>;
   transcript?: Maybe<UploadFile>;
   sid?: Maybe<Scalars["String"]>;
-  committee?: Maybe<Committee>;
   addedManually?: Maybe<Scalars["Boolean"]>;
   title?: Maybe<Scalars["String"]>;
   background?: Maybe<Scalars["String"]>;
   summary?: Maybe<Scalars["String"]>;
   emailViews?: Maybe<Scalars["Int"]>;
+  isHidden?: Maybe<Scalars["Boolean"]>;
+  committee?: Maybe<Committee>;
   additionalFiles?: Maybe<Array<Maybe<UploadFile>>>;
   plans?: Maybe<Array<Maybe<Plan>>>;
   _id: Scalars["ID"];
@@ -786,6 +831,12 @@ export type MeetingConnectionId = {
   connection?: Maybe<MeetingConnection>;
 };
 
+export type MeetingConnectionIsHidden = {
+  __typename?: "MeetingConnectionIsHidden";
+  key?: Maybe<Scalars["Boolean"]>;
+  connection?: Maybe<MeetingConnection>;
+};
+
 export type MeetingConnectionNumber = {
   __typename?: "MeetingConnectionNumber";
   key?: Maybe<Scalars["Int"]>;
@@ -836,12 +887,13 @@ export type MeetingGroupBy = {
   protocol?: Maybe<Array<Maybe<MeetingConnectionProtocol>>>;
   transcript?: Maybe<Array<Maybe<MeetingConnectionTranscript>>>;
   sid?: Maybe<Array<Maybe<MeetingConnectionSid>>>;
-  committee?: Maybe<Array<Maybe<MeetingConnectionCommittee>>>;
   addedManually?: Maybe<Array<Maybe<MeetingConnectionAddedManually>>>;
   title?: Maybe<Array<Maybe<MeetingConnectionTitle>>>;
   background?: Maybe<Array<Maybe<MeetingConnectionBackground>>>;
   summary?: Maybe<Array<Maybe<MeetingConnectionSummary>>>;
   emailViews?: Maybe<Array<Maybe<MeetingConnectionEmailViews>>>;
+  isHidden?: Maybe<Array<Maybe<MeetingConnectionIsHidden>>>;
+  committee?: Maybe<Array<Maybe<MeetingConnectionCommittee>>>;
   _id?: Maybe<Array<Maybe<MeetingConnection_Id>>>;
   id?: Maybe<Array<Maybe<MeetingConnectionId>>>;
   createdAt?: Maybe<Array<Maybe<MeetingConnectionCreatedAt>>>;
@@ -855,20 +907,22 @@ export type MeetingInput = {
   protocol?: Maybe<Scalars["ID"]>;
   transcript?: Maybe<Scalars["ID"]>;
   sid?: Maybe<Scalars["String"]>;
-  committee?: Maybe<Scalars["ID"]>;
   addedManually?: Maybe<Scalars["Boolean"]>;
   title?: Maybe<Scalars["String"]>;
   additionalFiles?: Maybe<Array<Maybe<Scalars["ID"]>>>;
   background?: Maybe<Scalars["String"]>;
   summary?: Maybe<Scalars["String"]>;
-  plans?: Maybe<Array<Maybe<Scalars["ID"]>>>;
   emailViews?: Maybe<Scalars["Int"]>;
+  isHidden?: Maybe<Scalars["Boolean"]>;
+  plans?: Maybe<Array<Maybe<Scalars["ID"]>>>;
+  committee?: Maybe<Scalars["ID"]>;
 };
 
 export type Morph =
   | EmailMeetingPayload
   | UsersPermissionsMe
   | UsersPermissionsMeRole
+  | UsersPermissionsLoginPayload
   | Area
   | CreateAreaPayload
   | UpdateAreaPayload
@@ -891,10 +945,12 @@ export type Morph =
   | CommentConnectionTitle
   | CommentConnectionName
   | CommentConnectionContent
-  | CommentConnectionPlan
   | CommentConnectionCreatedAt
   | CommentConnectionParent
   | CommentConnectionUser
+  | CommentConnectionIsHidden
+  | CommentConnectionIsPinned
+  | CommentConnectionPlan
   | CommentConnection_Id
   | CommentConnectionId
   | CommentConnectionUpdatedAt
@@ -908,6 +964,7 @@ export type Morph =
   | CommitteeConnectionSid
   | CommitteeConnectionParent
   | CommitteeConnectionArea
+  | CommitteeConnectionIsHidden
   | CommitteeConnection_Id
   | CommitteeConnectionId
   | CommitteeConnectionCreatedAt
@@ -929,12 +986,13 @@ export type Morph =
   | MeetingConnectionProtocol
   | MeetingConnectionTranscript
   | MeetingConnectionSid
-  | MeetingConnectionCommittee
   | MeetingConnectionAddedManually
   | MeetingConnectionTitle
   | MeetingConnectionBackground
   | MeetingConnectionSummary
   | MeetingConnectionEmailViews
+  | MeetingConnectionIsHidden
+  | MeetingConnectionCommittee
   | MeetingConnection_Id
   | MeetingConnectionId
   | MeetingConnectionCreatedAt
@@ -956,6 +1014,7 @@ export type Morph =
   | ParserConnectionMethod
   | ParserConnectionRequestParams
   | ParserConnectionRunInterval
+  | ParserConnectionFileFields
   | ParserConnection_Id
   | ParserConnectionId
   | ParserConnectionCreatedAt
@@ -987,6 +1046,7 @@ export type Morph =
   | PlanConnectionAddedManually
   | PlanConnectionStreet
   | PlanConnectionHouseNumber
+  | PlanConnectionCommentsAreLocked
   | PlanConnection_Id
   | PlanConnectionId
   | PlanConnectionCreatedAt
@@ -1003,7 +1063,7 @@ export type Morph =
   | UploadFileConnectionSize
   | UploadFileConnectionUrl
   | UploadFileConnectionProvider
-  | UploadFileConnectionPublic_Id
+  | UploadFileConnectionProvider_Metadata
   | UploadFileConnection_Id
   | UploadFileConnectionId
   | UploadFileConnectionCreatedAt
@@ -1077,10 +1137,14 @@ export type Mutation = {
   updateUser?: Maybe<UpdateUserPayload>;
   /** Delete an existing user */
   deleteUser?: Maybe<DeleteUserPayload>;
+  updateMyComment?: Maybe<UpdateCommentPayload>;
   emailMeeting?: Maybe<EmailMeetingPayload>;
   updateMyMeeting?: Maybe<UpdateMeetingPayload>;
+  updateMyPlan?: Maybe<UpdatePlanPayload>;
   upload: UploadFile;
   multipleUpload: Array<Maybe<UploadFile>>;
+  login: UsersPermissionsLoginPayload;
+  register: UsersPermissionsLoginPayload;
   updateMe?: Maybe<UpdateUserPayload>;
 };
 
@@ -1180,12 +1244,20 @@ export type MutationDeleteUserArgs = {
   input?: Maybe<DeleteUserInput>;
 };
 
+export type MutationUpdateMyCommentArgs = {
+  input?: Maybe<UpdateCommentInput>;
+};
+
 export type MutationEmailMeetingArgs = {
   input: EmailMeetingInput;
 };
 
 export type MutationUpdateMyMeetingArgs = {
   input?: Maybe<UpdateMeetingInput>;
+};
+
+export type MutationUpdateMyPlanArgs = {
+  input?: Maybe<UpdatePlanInput>;
 };
 
 export type MutationUploadArgs = {
@@ -1204,6 +1276,14 @@ export type MutationMultipleUploadArgs = {
   files: Array<Maybe<Scalars["Upload"]>>;
 };
 
+export type MutationLoginArgs = {
+  input: UsersPermissionsLoginInput;
+};
+
+export type MutationRegisterArgs = {
+  input: UserInput;
+};
+
 export type MutationUpdateMeArgs = {
   input?: Maybe<UpdateUserInput>;
 };
@@ -1220,6 +1300,7 @@ export type Parser = {
   method?: Maybe<Enum_Parser_Method>;
   requestParams?: Maybe<Scalars["String"]>;
   runInterval?: Maybe<Enum_Parser_Runinterval>;
+  fileFields?: Maybe<Scalars["String"]>;
   _id: Scalars["ID"];
   id: Scalars["ID"];
   createdAt: Scalars["DateTime"];
@@ -1259,6 +1340,12 @@ export type ParserConnectionCreatedAt = {
 
 export type ParserConnectionFields = {
   __typename?: "ParserConnectionFields";
+  key?: Maybe<Scalars["String"]>;
+  connection?: Maybe<ParserConnection>;
+};
+
+export type ParserConnectionFileFields = {
+  __typename?: "ParserConnectionFileFields";
   key?: Maybe<Scalars["String"]>;
   connection?: Maybe<ParserConnection>;
 };
@@ -1335,6 +1422,7 @@ export type ParserGroupBy = {
   method?: Maybe<Array<Maybe<ParserConnectionMethod>>>;
   requestParams?: Maybe<Array<Maybe<ParserConnectionRequestParams>>>;
   runInterval?: Maybe<Array<Maybe<ParserConnectionRunInterval>>>;
+  fileFields?: Maybe<Array<Maybe<ParserConnectionFileFields>>>;
   _id?: Maybe<Array<Maybe<ParserConnection_Id>>>;
   id?: Maybe<Array<Maybe<ParserConnectionId>>>;
   createdAt?: Maybe<Array<Maybe<ParserConnectionCreatedAt>>>;
@@ -1352,6 +1440,7 @@ export type ParserInput = {
   method?: Maybe<Enum_Parser_Method>;
   requestParams?: Maybe<Scalars["String"]>;
   runInterval?: Maybe<Enum_Parser_Runinterval>;
+  fileFields?: Maybe<Scalars["String"]>;
 };
 
 export type Plan = {
@@ -1372,9 +1461,10 @@ export type Plan = {
   addedManually?: Maybe<Scalars["Boolean"]>;
   street?: Maybe<Scalars["String"]>;
   houseNumber?: Maybe<Scalars["Int"]>;
+  commentsAreLocked?: Maybe<Scalars["Boolean"]>;
   attachedFiles?: Maybe<Array<Maybe<UploadFile>>>;
-  comments?: Maybe<Array<Maybe<Comment>>>;
   meetings?: Maybe<Array<Maybe<Meeting>>>;
+  comments?: Maybe<Array<Maybe<Comment>>>;
   _id: Scalars["ID"];
   id: Scalars["ID"];
   createdAt: Scalars["DateTime"];
@@ -1388,14 +1478,14 @@ export type PlanAttachedFilesArgs = {
   where?: Maybe<Scalars["JSON"]>;
 };
 
-export type PlanCommentsArgs = {
+export type PlanMeetingsArgs = {
   sort?: Maybe<Scalars["String"]>;
   limit?: Maybe<Scalars["Int"]>;
   start?: Maybe<Scalars["Int"]>;
   where?: Maybe<Scalars["JSON"]>;
 };
 
-export type PlanMeetingsArgs = {
+export type PlanCommentsArgs = {
   sort?: Maybe<Scalars["String"]>;
   limit?: Maybe<Scalars["Int"]>;
   start?: Maybe<Scalars["Int"]>;
@@ -1451,6 +1541,12 @@ export type PlanConnection_Id = {
 
 export type PlanConnectionAddedManually = {
   __typename?: "PlanConnectionAddedManually";
+  key?: Maybe<Scalars["Boolean"]>;
+  connection?: Maybe<PlanConnection>;
+};
+
+export type PlanConnectionCommentsAreLocked = {
+  __typename?: "PlanConnectionCommentsAreLocked";
   key?: Maybe<Scalars["Boolean"]>;
   connection?: Maybe<PlanConnection>;
 };
@@ -1581,6 +1677,7 @@ export type PlanGroupBy = {
   addedManually?: Maybe<Array<Maybe<PlanConnectionAddedManually>>>;
   street?: Maybe<Array<Maybe<PlanConnectionStreet>>>;
   houseNumber?: Maybe<Array<Maybe<PlanConnectionHouseNumber>>>;
+  commentsAreLocked?: Maybe<Array<Maybe<PlanConnectionCommentsAreLocked>>>;
   _id?: Maybe<Array<Maybe<PlanConnection_Id>>>;
   id?: Maybe<Array<Maybe<PlanConnectionId>>>;
   createdAt?: Maybe<Array<Maybe<PlanConnectionCreatedAt>>>;
@@ -1605,8 +1702,9 @@ export type PlanInput = {
   attachedFiles?: Maybe<Array<Maybe<Scalars["ID"]>>>;
   street?: Maybe<Scalars["String"]>;
   houseNumber?: Maybe<Scalars["Int"]>;
-  comments?: Maybe<Array<Maybe<Scalars["ID"]>>>;
   meetings?: Maybe<Array<Maybe<Scalars["ID"]>>>;
+  commentsAreLocked?: Maybe<Scalars["Boolean"]>;
+  comments?: Maybe<Array<Maybe<Scalars["ID"]>>>;
 };
 
 export type Query = {
@@ -1897,7 +1995,7 @@ export type UploadFile = {
   size: Scalars["String"];
   url: Scalars["String"];
   provider: Scalars["String"];
-  public_id?: Maybe<Scalars["String"]>;
+  provider_metadata?: Maybe<Scalars["JSON"]>;
   related?: Maybe<Array<Maybe<Morph>>>;
   _id: Scalars["ID"];
   id: Scalars["ID"];
@@ -1973,9 +2071,9 @@ export type UploadFileConnectionProvider = {
   connection?: Maybe<UploadFileConnection>;
 };
 
-export type UploadFileConnectionPublic_Id = {
-  __typename?: "UploadFileConnectionPublic_id";
-  key?: Maybe<Scalars["String"]>;
+export type UploadFileConnectionProvider_Metadata = {
+  __typename?: "UploadFileConnectionProvider_metadata";
+  key?: Maybe<Scalars["JSON"]>;
   connection?: Maybe<UploadFileConnection>;
 };
 
@@ -2013,7 +2111,9 @@ export type UploadFileGroupBy = {
   size?: Maybe<Array<Maybe<UploadFileConnectionSize>>>;
   url?: Maybe<Array<Maybe<UploadFileConnectionUrl>>>;
   provider?: Maybe<Array<Maybe<UploadFileConnectionProvider>>>;
-  public_id?: Maybe<Array<Maybe<UploadFileConnectionPublic_Id>>>;
+  provider_metadata?: Maybe<
+    Array<Maybe<UploadFileConnectionProvider_Metadata>>
+  >;
   _id?: Maybe<Array<Maybe<UploadFileConnection_Id>>>;
   id?: Maybe<Array<Maybe<UploadFileConnectionId>>>;
   createdAt?: Maybe<Array<Maybe<UploadFileConnectionCreatedAt>>>;
@@ -2034,10 +2134,22 @@ export type UserInput = {
   city?: Maybe<Scalars["String"]>;
   organization?: Maybe<Scalars["String"]>;
   job?: Maybe<Scalars["String"]>;
-  committees?: Maybe<Array<Maybe<Scalars["ID"]>>>;
   userImage?: Maybe<Scalars["ID"]>;
-  comments?: Maybe<Array<Maybe<Scalars["ID"]>>>;
+  committees?: Maybe<Array<Maybe<Scalars["ID"]>>>;
   subscribedCommittees?: Maybe<Array<Maybe<Scalars["ID"]>>>;
+  comments?: Maybe<Array<Maybe<Scalars["ID"]>>>;
+};
+
+export type UsersPermissionsLoginInput = {
+  identifier: Scalars["String"];
+  password: Scalars["String"];
+  provider?: Maybe<Scalars["String"]>;
+};
+
+export type UsersPermissionsLoginPayload = {
+  __typename?: "UsersPermissionsLoginPayload";
+  jwt: Scalars["String"];
+  user: UsersPermissionsUser;
 };
 
 export type UsersPermissionsMe = {
@@ -2164,8 +2276,8 @@ export type UsersPermissionsUser = {
   job?: Maybe<Scalars["String"]>;
   userImage?: Maybe<UploadFile>;
   committees?: Maybe<Array<Maybe<Committee>>>;
-  comments?: Maybe<Array<Maybe<Comment>>>;
   subscribedCommittees?: Maybe<Array<Maybe<Committee>>>;
+  comments?: Maybe<Array<Maybe<Comment>>>;
   _id: Scalars["ID"];
   id: Scalars["ID"];
   createdAt: Scalars["DateTime"];
@@ -2179,14 +2291,14 @@ export type UsersPermissionsUserCommitteesArgs = {
   where?: Maybe<Scalars["JSON"]>;
 };
 
-export type UsersPermissionsUserCommentsArgs = {
+export type UsersPermissionsUserSubscribedCommitteesArgs = {
   sort?: Maybe<Scalars["String"]>;
   limit?: Maybe<Scalars["Int"]>;
   start?: Maybe<Scalars["Int"]>;
   where?: Maybe<Scalars["JSON"]>;
 };
 
-export type UsersPermissionsUserSubscribedCommitteesArgs = {
+export type UsersPermissionsUserCommentsArgs = {
   sort?: Maybe<Scalars["String"]>;
   limit?: Maybe<Scalars["Int"]>;
   start?: Maybe<Scalars["Int"]>;
