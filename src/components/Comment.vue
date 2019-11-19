@@ -30,6 +30,25 @@
       <p tabindex="0" class="body-1 whitespace-preline my-1">
         {{ comment.visibleContent }}
       </p>
+      <v-row v-if="comment.files && comment.files.length">
+        <v-col>
+          <h5
+            class="subtitle-2 font-weight-semibold primary--text"
+            tabindex="0"
+          >
+            קבצים מצורפים
+          </h5>
+          <a
+            class="me-2"
+            target="blank"
+            v-for="(file, i) in comment.files"
+            :key="i"
+            :href="generateUrlFromFile(file)"
+          >
+            {{ shortenFilename(file.name) }}
+          </a>
+        </v-col>
+      </v-row>
       <v-row>
         <v-col cols="auto" v-if="!comment.isFullContentVisible">
           <a
@@ -159,6 +178,24 @@ export default class Comment extends Vue {
       !!this.comment.user &&
       this.comment.user.id == this.currentUser.id
     );
+  }
+
+  generateUrlFromFile(file) {
+    return filesEndpoint + file.url;
+  }
+
+  /**
+   * Shortens long file names (i.e. "a-very-long-file-name.pdf" -> "a-very-lon...pdf")
+   * @param {string} filename
+   */
+  shortenFilename(filename) {
+    if (filename.length < 15) {
+      return filename;
+    }
+    return `${filename.slice(0, 11)}...${filename.slice(
+      filename.length - 3,
+      filename.length
+    )}`;
   }
 }
 </script>
