@@ -148,6 +148,10 @@ export function getCommentsByPlan(id) {
           url
         }
       }
+      files {
+        name
+        url
+      }
       children(where: { isHidden_ne: true }) {
         id
         title
@@ -155,6 +159,10 @@ export function getCommentsByPlan(id) {
         content
         isHidden
         createdAt
+        files {
+          name
+          url
+        }
         user {
           firstName
           lastName

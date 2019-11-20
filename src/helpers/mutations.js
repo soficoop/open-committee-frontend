@@ -184,10 +184,21 @@ export const createComment = `mutation createComment(
   $plan: ID!
   $parent: ID
   $user: ID
+  $files: [ID]
 ) {
   createComment(
     input: {
-      data: { title: $title, name: $name, content: $content, plan: $plan, user: $user, parent: $parent, isPinned: false, isHidden: false }
+      data: {
+        title: $title
+        name: $name
+        content: $content
+        plan: $plan
+        user: $user
+        parent: $parent
+        isPinned: false
+        isHidden: false
+        files: $files
+      }
     }
   ) {
     comment {

@@ -508,7 +508,7 @@ export default class ManageMeeting extends Vue {
       return "";
     }
     if (file.size) {
-      return (await uploadFile(file, this.jwt)).id;
+      return (await uploadFile(file)).id;
     }
     return file.id;
   }
