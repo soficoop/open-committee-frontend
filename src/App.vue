@@ -19,6 +19,9 @@
       @openChanged="value => (isNavOpen = value)"
     ></Navigation>
     <v-content class="background">
+      <v-overlay v-model="isLoading" z-index="99999999">
+        <v-progress-circular indeterminate size="64"></v-progress-circular>
+      </v-overlay>
       <v-fade-transition mode="out-in">
         <router-view></router-view>
       </v-fade-transition>
@@ -40,7 +43,7 @@ import Navigation from "./components/Navigation";
 import Component from "vue-class-component";
 import Vue from "vue";
 import { ActionTypes } from "./helpers/constants";
-import { Action } from "vuex-class";
+import { Action, Getter } from "vuex-class";
 
 @Component({
   components: {
@@ -50,6 +53,7 @@ import { Action } from "vuex-class";
 export default class App extends Vue {
   @Action(ActionTypes.FETCH_UPCOMING_MEETINGS) fetchUpcomingMeetings;
   @Action(ActionTypes.REFRESH_USER) refreshUser;
+  @Getter isLoading;
   mounted() {
     this.fetchUpcomingMeetings();
     this.refreshUser();

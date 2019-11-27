@@ -35,7 +35,8 @@ export default new Vuex.Store({
     /**@type {import("../../graphql/types").UsersPermissionsUser} */
     user: null,
     /** @type {import("../../graphql/types").Meeting[]} */
-    managableMeetings: []
+    managableMeetings: [],
+    isLoading: false
   },
   mutations: {
     /**
@@ -99,6 +100,9 @@ export default new Vuex.Store({
     },
     [MutationTypes.SET_MANAGABLE_MEETINGS](state, meetings) {
       state.managableMeetings = meetings;
+    },
+    setLoading(state, value) {
+      state.isLoading = value;
     }
   },
   getters: {
@@ -122,6 +126,9 @@ export default new Vuex.Store({
     },
     [Getters.MANAGABLE_MEETINGS](state) {
       return state.managableMeetings;
+    },
+    isLoading(state) {
+      return state.isLoading;
     }
   },
   actions: {

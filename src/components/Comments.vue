@@ -73,9 +73,6 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-overlay v-model="loader" z-index="9999">
-      <v-progress-circular indeterminate size="64"></v-progress-circular>
-    </v-overlay>
   </div>
 </template>
 
@@ -84,7 +81,7 @@ import Component from "vue-class-component";
 import Vue from "vue";
 import NewComment from "./NewComment";
 import Comment from "./Comment";
-import { Getter } from "vuex-class";
+import { Getter, Mutation } from "vuex-class";
 import { Getters } from "../helpers/constants";
 import { getCommentsByPlan } from "../helpers/queries";
 import { updateComment, hideMyComment } from "../helpers/mutations";
@@ -99,10 +96,10 @@ export default class Comments extends Vue {
   @Getter(Getters.JWT) jwt;
   /** @type {import("../../graphql/types").Plan} */
   @Getter(Getters.SELECTED_PLAN) plan;
+  @Mutation setLoading;
   /** @type {import("../../graphql/types").Comment[]} */
   comments = [];
   isCreatingNewComment = false;
-  loader = false;
 
   @Prop(Array) privilegedUsers;
   @Prop(Boolean) commentsAreLocked;
@@ -133,7 +130,7 @@ export default class Comments extends Vue {
    * @param {import("../helpers/typings").CommentModel} comment comment to pin
    */
   async removeComment(comment) {
-    this.loader = true;
+    this.setLoading(true);
     let query;
     let variables = { id: comment.id };
     if (this.isCurrentUserCommentsAdmin) {
@@ -144,7 +141,7 @@ export default class Comments extends Vue {
     }
     const res = await makeGqlRequest(query, variables, this.jwt);
     await this.fetchComments();
-    this.loader = !res;
+    this.setLoading(!res);
   }
 
   /**
@@ -152,7 +149,7 @@ export default class Comments extends Vue {
    * @param {import("../helpers/typings").CommentModel} comment comment to pin
    */
   async pinComment(comment) {
-    this.loader = true;
+    this.setLoading(true);
     const res = await makeGqlRequest(
       updateComment,
       {
@@ -162,7 +159,7 @@ export default class Comments extends Vue {
       this.jwt
     );
     comment.isPinned = !comment.isPinned;
-    this.loader = !res;
+    this.setLoading(!res);
   }
 
   /**

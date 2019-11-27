@@ -158,9 +158,6 @@
         >
       </v-col>
     </v-row>
-    <v-overlay v-model="loader" z-index="9999">
-      <v-progress-circular indeterminate size="64"></v-progress-circular>
-    </v-overlay>
   </v-container>
 </template>
 
@@ -189,8 +186,6 @@ export default class Plan extends Vue {
   /** @type {import("../../graphql/types").Meeting[]} */
   @Getter(Getters.MANAGABLE_MEETINGS) managableMeetings;
   @Action(ActionTypes.UPDATE_PLAN) updatePlanAction;
-
-  loader = false;
   lockCommentLoader = false;
   lockCommentErrMessage = "";
 

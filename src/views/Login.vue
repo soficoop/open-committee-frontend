@@ -272,21 +272,19 @@
         </v-layout>
       </v-flex>
     </v-layout>
-    <v-overlay v-model="loader" z-index="9999">
-      <v-progress-circular indeterminate size="64"></v-progress-circular>
-    </v-overlay>
   </v-container>
 </template>
 
 <script>
 import { Component, Watch } from "vue-property-decorator";
 import Vue from "vue";
-import { Action } from "vuex-class";
+import { Action, Mutation } from "vuex-class";
 import { ActionTypes } from "../helpers/constants";
 import { sendForgotenPasswordEmail } from "../helpers/functions";
 
 @Component()
 export default class Login extends Vue {
+  @Mutation setLoading;
   loginData = {
     email: "",
     password: "",
@@ -310,7 +308,6 @@ export default class Login extends Vue {
   authenticationFailed = false;
   userIsNotConfirmedMsg = "";
   dialog = false;
-  loader = false;
   registrationSuccess = false;
 
   @Watch("dialog") onPropertyChanged() {
@@ -329,10 +326,10 @@ export default class Login extends Vue {
   }
 
   async signUp(user) {
-    this.loader = true;
+    this.setLoading(true);
     this.registrationSuccess = await this.signUpAction(user);
     this.authenticationFailed = !this.registrationSuccess;
-    this.loader = false;
+    this.setLoading(false);
   }
 
   async logIn(user) {
@@ -341,11 +338,11 @@ export default class Login extends Vue {
   }
 
   async sendRecoveryMail(userMail) {
-    this.loader = true;
+    this.setLoading(true);
     this.forgotPasswordData.mailSent = await sendForgotenPasswordEmail(
       userMail
     );
-    this.loader = false;
+    this.setLoading(false);
   }
 
   handleAuthentication(isSuccessful, message) {
