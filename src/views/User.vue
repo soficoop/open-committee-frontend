@@ -208,7 +208,6 @@
 import Component from "vue-class-component";
 import Vue from "vue";
 import { Getter, Action } from "vuex-class";
-import { Getters } from "../helpers/constants";
 import { filesEndpoint } from "../helpers/constants";
 import { uploadUserImage } from "../helpers/functions";
 
@@ -217,7 +216,7 @@ export default class User extends Vue {
   /**
    * @type {import("../../graphql/types").UsersPermissionsUser}
    */
-  @Getter(Getters.USER) user;
+  @Getter user;
   @Getter jwt;
   @Action updateUser;
 

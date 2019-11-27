@@ -1,7 +1,6 @@
 import Vue from "vue";
 import { shallowMount } from "@vue/test-utils";
 import Navigation from "@/components/Navigation.vue";
-import { Getters } from "@/helpers/constants";
 import Vuetify from "vuetify";
 Vue.use(Vuetify);
 
@@ -10,7 +9,7 @@ describe("Navigation.vue", () => {
   let wrapper;
   let mocks = {
     $store: {
-      getters: { jwt: "", [Getters.USER]: { role: "" } }
+      getters: { jwt: "", user: { role: "" } }
     }
   };
   beforeEach(() => {
@@ -37,7 +36,7 @@ describe("Navigation.vue", () => {
     expect(wrapper.html()).not.toContain("manage");
   });
   it("contains admin links for a logged in admin", () => {
-    mocks.$store.getters[Getters.USER].role = { name: "Administrator" };
+    mocks.$store.getters.user.role = { name: "Administrator" };
     expect(wrapper.html()).toContain("manage");
   });
 });

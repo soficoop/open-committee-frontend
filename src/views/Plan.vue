@@ -164,7 +164,6 @@
 <script>
 import Component from "vue-class-component";
 import Vue from "vue";
-import { Getters } from "../helpers/constants";
 import { Getter, Action, Mutation } from "vuex-class";
 import MeetingCards from "../components/MeetingCards.vue";
 import FileCards from "../components/FileCards.vue";
@@ -181,7 +180,7 @@ export default class Plan extends Vue {
   /**
    * @type {import("../../graphql/types").UsersPermissionsUser}
    */
-  @Getter(Getters.USER) currentUser;
+  @Getter user;
   /** @type {import("../../graphql/types").Plan} */
   @Getter selectedPlan;
   /** @type {import("../../graphql/types").Meeting[]} */
@@ -250,9 +249,7 @@ export default class Plan extends Vue {
   }
 
   get isUserCommentsAdmin() {
-    return (
-      this.currentUser && this.privilegedUsers.includes(this.currentUser.id)
-    );
+    return this.user && this.privilegedUsers.includes(this.user.id);
   }
 
   get planInformation() {

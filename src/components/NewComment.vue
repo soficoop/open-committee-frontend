@@ -76,7 +76,6 @@
 import Component from "vue-class-component";
 import Vue from "vue";
 import { Getter } from "vuex-class";
-import { Getters } from "../helpers/constants";
 import { makeGqlRequest, uploadFile } from "../helpers/functions";
 import { createComment } from "../helpers/mutations";
 import { Prop } from "vue-property-decorator";
@@ -86,7 +85,7 @@ export default class NewComment extends Vue {
   /** @type {import("../../graphql/types").Plan} */
   @Getter selectedPlan;
   /** @type {import("../../graphql/types").UsersPermissionsUser} */
-  @Getter(Getters.USER) user;
+  @Getter user;
   @Prop(String) parent;
   content = "";
   isCreatingNewComment = false;

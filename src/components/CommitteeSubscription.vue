@@ -93,7 +93,6 @@
 import Component from "vue-class-component";
 import Vue from "vue";
 import { Getter, Action, Mutation } from "vuex-class";
-import { Getters } from "../helpers/constants";
 
 @Component()
 export default class CommitteeSubscription extends Vue {
@@ -103,7 +102,7 @@ export default class CommitteeSubscription extends Vue {
   /**
    * @type {import("../../graphql/types").UsersPermissionsUser}
    */
-  @Getter(Getters.USER) user;
+  @Getter user;
   /** @type {string} */
   @Getter jwt;
   /** @type {import("../../graphql/types").Committee[]} */

@@ -1,7 +1,6 @@
 import Vue from "vue";
 import { shallowMount } from "@vue/test-utils";
 import NewComment from "@/components/NewComment.vue";
-import { Getters } from "@/helpers/constants";
 import Vuetify from "vuetify";
 Vue.use(Vuetify);
 
@@ -16,7 +15,7 @@ describe("NewComment.vue", () => {
     $store: {
       getters: {
         selectedPlan: plan,
-        [Getters.USER]: user
+        user
       }
     }
   };
@@ -34,9 +33,9 @@ describe("NewComment.vue", () => {
   });
   it("disables name input if a user is logged in", () => {
     expect(wrapper.find("[label=שם]").props("disabled")).toBeTruthy();
-    mocks.$store.getters[Getters.USER] = null;
+    mocks.$store.getters.user = null;
     expect(wrapper.find("[label=שם]").props("disabled")).toBeFalsy();
-    mocks.$store.getters[Getters.USER] = user;
+    mocks.$store.getters.user = user;
   });
   it("computes canSubmit correctly", () => {
     wrapper.vm.name = "";

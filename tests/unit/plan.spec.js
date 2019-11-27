@@ -1,7 +1,6 @@
 import Vue from "vue";
 import { shallowMount } from "@vue/test-utils";
 import Plan from "@/views/Plan.vue";
-import { Getters } from "@/helpers/constants";
 import Vuetify from "vuetify";
 Vue.use(Vuetify);
 
@@ -198,7 +197,7 @@ describe("Plan.vue", () => {
     $store: {
       getters: {
         selectedPlan: plan,
-        [Getters.USER]: currentUser,
+        user: currentUser,
         managableMeetings: []
       }
     },

@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import createPersistedState from "vuex-persistedstate";
-import { Getters, authEndpoint } from "../helpers/constants";
+import { authEndpoint } from "../helpers/constants";
 import { dateTimeRevive, makeGqlRequest } from "../helpers/functions";
 import {
   getMeetings,
@@ -116,7 +116,7 @@ const storeOptions = {
     jwt(state) {
       return state.jwt;
     },
-    [Getters.USER](state) {
+    user(state) {
       return state.user;
     },
     managableMeetings(state) {
@@ -285,7 +285,7 @@ const storeOptions = {
      * @param {import("vuex").Store} context the store object
      */
     async fetchUserSubscriptions(context) {
-      const storeUser = context.getters[Getters.USER];
+      const storeUser = context.getters.user;
       const result = await makeGqlRequest(
         getUserSubscriptions,
         { id: storeUser.id },

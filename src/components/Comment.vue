@@ -106,7 +106,7 @@ import Component from "vue-class-component";
 import Vue from "vue";
 import NewComment from "./NewComment";
 import { Getter } from "vuex-class";
-import { Getters, filesEndpoint } from "../helpers/constants";
+import { filesEndpoint } from "../helpers/constants";
 import { Prop } from "vue-property-decorator";
 
 @Component({ components: { NewComment } })
@@ -114,7 +114,7 @@ export default class Comment extends Vue {
   /**
    * @type {import("../../graphql/types").UsersPermissionsUser}
    */
-  @Getter(Getters.USER) currentUser;
+  @Getter user;
   isReplying = false;
   /** @type {import("../helpers/typings").CommentModel} */
   @Prop(Object) comment;
@@ -174,9 +174,7 @@ export default class Comment extends Vue {
    */
   get isUserCommentOwner() {
     return (
-      !!this.currentUser &&
-      !!this.comment.user &&
-      this.comment.user.id == this.currentUser.id
+      !!this.user && !!this.comment.user && this.comment.user.id == this.user.id
     );
   }
 

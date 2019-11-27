@@ -1,7 +1,6 @@
 import Vue from "vue";
 import { shallowMount } from "@vue/test-utils";
 import ManageMeeting from "@/views/ManageMeeting.vue";
-import { Getters } from "@/helpers/constants";
 import Vuetify from "vuetify";
 Vue.use(Vuetify);
 
@@ -10,7 +9,7 @@ describe("ManageMeeting.vue", () => {
   let wrapper;
   let mocks = {
     $store: {
-      getters: { [Getters.USER]: "", jwt: "" }
+      getters: { user: "", jwt: "" }
     },
     $route: {
       params: {}

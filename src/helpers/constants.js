@@ -1,8 +1,3 @@
-export const ActionTypes = Object.freeze({});
-export const Getters = Object.freeze({
-  USER: "USER"
-});
-
 export const apiEndpoint =
   `${process.env.VUE_APP_API_ENDPOINT}` || "http://localhost:1337";
 

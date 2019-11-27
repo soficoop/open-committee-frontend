@@ -1,7 +1,7 @@
 import Vue from "vue";
 import { shallowMount } from "@vue/test-utils";
 import Comment from "@/components/Comment.vue";
-import { Getters, filesEndpoint } from "@/helpers/constants";
+import { filesEndpoint } from "@/helpers/constants";
 import Vuetify from "vuetify";
 Vue.use(Vuetify);
 
@@ -41,7 +41,7 @@ describe("Comment.vue", () => {
       mocks: {
         $store: {
           getters: {
-            [Getters.USER]: user
+            user
           }
         }
       },
