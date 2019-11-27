@@ -279,14 +279,29 @@ export const updateMyPlan = `mutation updateMyPlan(
   ) {
     plan {
       id
+      sid
+      stype
+      number
+      addedManually
+      lastUpdate
+      location
+      status
+      sections
+      name
+      municipality
+      settlement
+      street
+      houseNumber
+      targets
       type
       commentsAreLocked
-      meetings {
+      meetings(where: { isHidden_ne: true }) {
         id
         date
+        number
         committee {
-          sid,
-          id,
+          sid
+          id
           users {
             id
           }
@@ -296,6 +311,7 @@ export const updateMyPlan = `mutation updateMyPlan(
         id
         name
         url
+        size
       }
     }
   }
