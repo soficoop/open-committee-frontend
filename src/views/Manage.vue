@@ -21,22 +21,21 @@
 import Component from "vue-class-component";
 import Vue from "vue";
 import MeetingCards from "../components/MeetingCards";
-import { ActionTypes, Getters } from "../helpers/constants";
-import store from "../plugins/store";
-import { Getter } from "vuex-class";
+import { Getter, Action } from "vuex-class";
 
 @Component({ components: { MeetingCards } })
 export default class Manage extends Vue {
+  @Action fetchManagableMeetings;
   /** @type {import("../../graphql/types").Meeting[]} */
-  @Getter(Getters.MANAGABLE_MEETINGS) _meetings;
-  async beforeRouteEnter(to, from, next) {
-    await store.dispatch(ActionTypes.FETCH_MANAGABLE_MEETINGS);
-    next();
+  @Getter managableMeetings;
+
+  async mounted() {
+    await this.fetchManagableMeetings();
   }
 
   /** @returns {import("../helpers/typings").MeetingCard[]} */
   get meetings() {
-    return this._meetings.map(meeting => ({
+    return this.managableMeetings.map(meeting => ({
       headline: meeting.committee.sid,
       id: meeting.id,
       date: meeting.date,

@@ -32,7 +32,7 @@ import { Getters, ActionTypes } from "../helpers/constants";
 
 @Component
 export default class SubscriptionToggle extends Vue {
-  @Action(ActionTypes.FETCH_USER_SUBSCRIPTIONS) fetchUserSubscriptions;
+  @Action fetchUserSubscriptions;
   @Action(ActionTypes.UPDATE_USER) updateUser;
   /** @type {import("../../graphql/types").UsersPermissionsUser} */
   @Getter(Getters.USER) user;

@@ -51,7 +51,7 @@ import { Action, Getter } from "vuex-class";
   }
 })
 export default class App extends Vue {
-  @Action(ActionTypes.FETCH_UPCOMING_MEETINGS) fetchUpcomingMeetings;
+  @Action fetchUpcomingMeetings;
   @Action(ActionTypes.REFRESH_USER) refreshUser;
   @Getter isLoading;
   mounted() {

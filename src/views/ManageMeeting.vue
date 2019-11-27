@@ -313,7 +313,7 @@ export default class ManageMeeting extends Vue {
   /** @type {import("../../graphql/types").UsersPermissionsUser} */
   @Getter(Getters.USER) user;
   /** @type {string} */
-  @Getter(Getters.JWT) jwt;
+  @Getter jwt;
   addedManually = true;
   submittedMeetingId = "";
   background = "";

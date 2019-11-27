@@ -1,7 +1,6 @@
 import Vue from "vue";
 import { shallowMount } from "@vue/test-utils";
 import Manage from "@/views/Manage.vue";
-import { Getters } from "@/helpers/constants";
 import Vuetify from "vuetify";
 Vue.use(Vuetify);
 
@@ -10,19 +9,20 @@ describe("Manage.vue", () => {
   let wrapper;
   let mocks = {
     $store: {
-      getters: { [Getters.MANAGABLE_MEETINGS]: [] }
+      getters: { managableMeetings: [] }
     }
   };
   beforeEach(() => {
     wrapper = shallowMount(Manage, {
-      mocks
+      mocks,
+      methods: { fetchManagableMeetings: () => [] }
     });
   });
   it("loads empty state.", () => {
     expect(wrapper.html()).toContain("אין ישיבות");
   });
   it("loads meetings.", () => {
-    mocks.$store.getters[Getters.MANAGABLE_MEETINGS] = [
+    mocks.$store.getters.managableMeetings = [
       {
         id: "5d428452454ad41498dd73a1",
         number: 1,

@@ -82,7 +82,6 @@ import Vue from "vue";
 import NewComment from "./NewComment";
 import Comment from "./Comment";
 import { Getter, Mutation } from "vuex-class";
-import { Getters } from "../helpers/constants";
 import { getCommentsByPlan } from "../helpers/queries";
 import { updateComment, hideMyComment } from "../helpers/mutations";
 import { makeGqlRequest } from "../helpers/functions";
@@ -93,9 +92,9 @@ export default class Comments extends Vue {
   /**
    * @type {import("../../graphql/types").UsersPermissionsUser}
    */
-  @Getter(Getters.JWT) jwt;
+  @Getter jwt;
   /** @type {import("../../graphql/types").Plan} */
-  @Getter(Getters.SELECTED_PLAN) plan;
+  @Getter selectedPlan;
   @Mutation setLoading;
   /** @type {import("../../graphql/types").Comment[]} */
   comments = [];
@@ -113,7 +112,9 @@ export default class Comments extends Vue {
    * Fetches comments for the selected plan
    */
   async fetchComments() {
-    const { comments } = await makeGqlRequest(getCommentsByPlan(this.plan.id));
+    const { comments } = await makeGqlRequest(
+      getCommentsByPlan(this.selectedPlan.id)
+    );
     this.comments = this.mapApiComments(comments);
   }
 

@@ -57,16 +57,16 @@ import MeetingCards from "../components/MeetingCards";
 import Component from "vue-class-component";
 import Vue from "vue";
 import { Getter, Action } from "vuex-class";
-import { Getters, ActionTypes } from "../helpers/constants";
+import { Getters } from "../helpers/constants";
 @Component({
   components: { MeetingCards }
 })
 export default class Home extends Vue {
-  @Action(ActionTypes.FETCH_MANAGABLE_MEETINGS) fetchManagableMeetings;
+  @Action fetchManagableMeetings;
   /** @type {import("../../graphql/types").Meeting[]} */
-  @Getter(Getters.UPCOMING_MEETINGS) upcomingMeetings;
+  @Getter upcomingMeetings;
   /** @type {import("../../graphql/types").Meeting[]} */
-  @Getter(Getters.MANAGABLE_MEETINGS) managableMeetings;
+  @Getter managableMeetings;
   @Getter(Getters.USER) user;
   async mounted() {
     await this.fetchManagableMeetings();

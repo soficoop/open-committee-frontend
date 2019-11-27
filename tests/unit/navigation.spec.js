@@ -10,7 +10,7 @@ describe("Navigation.vue", () => {
   let wrapper;
   let mocks = {
     $store: {
-      getters: { [Getters.JWT]: "", [Getters.USER]: { role: "" } }
+      getters: { jwt: "", [Getters.USER]: { role: "" } }
     }
   };
   beforeEach(() => {
@@ -31,7 +31,7 @@ describe("Navigation.vue", () => {
     expect(wrapper.html()).toContain("login");
   });
   it("contains links for a logged in user", () => {
-    mocks.$store.getters[Getters.JWT] = "12345";
+    mocks.$store.getters.jwt = "12345";
     expect(wrapper.html()).toContain("login");
     expect(wrapper.html()).toContain("subscriptions");
     expect(wrapper.html()).not.toContain("manage");

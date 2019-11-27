@@ -197,16 +197,17 @@ describe("Plan.vue", () => {
   let mocks = {
     $store: {
       getters: {
-        [Getters.SELECTED_PLAN]: plan,
+        selectedPlan: plan,
         [Getters.USER]: currentUser,
-        [Getters.MANAGABLE_MEETINGS]: []
+        managableMeetings: []
       }
     }
   };
   beforeEach(() => {
     wrapper = shallowMount(Plan, {
       mocks,
-      vuetify: new Vuetify()
+      vuetify: new Vuetify(),
+      methods: { fetchManagableMeetings: () => [] }
     });
   });
   it("loads plan and managable meetings from the store", () => {

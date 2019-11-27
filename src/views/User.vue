@@ -218,7 +218,7 @@ export default class User extends Vue {
    * @type {import("../../graphql/types").UsersPermissionsUser}
    */
   @Getter(Getters.USER) user;
-  @Getter(Getters.JWT) jwt;
+  @Getter jwt;
   @Action(ActionTypes.UPDATE_USER) updateUserAction;
 
   userInfoData = {};

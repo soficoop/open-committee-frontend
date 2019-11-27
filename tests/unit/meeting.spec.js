@@ -2,7 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import { shallowMount } from "@vue/test-utils";
 import Meeting from "@/views/Meeting.vue";
-import { Getters, ActionTypes } from "@/helpers/constants";
+import { ActionTypes } from "@/helpers/constants";
 import Vuetify from "vuetify";
 Vue.use(Vuetify);
 
@@ -168,15 +168,15 @@ describe("Meeting.vue", () => {
   let managableMeetings = [];
   let actions = {
     [ActionTypes.FETCH_MEETING]: jest.fn(),
-    [ActionTypes.FETCH_MANAGABLE_MEETINGS]: jest.fn()
+    fetchManagableMeetings: jest.fn()
   };
   let store = new Vuex.Store({
     state: { meeting },
     getters: {
-      [Getters.MANAGABLE_MEETINGS]() {
+      managableMeetings() {
         return managableMeetings;
       },
-      [Getters.SELECTED_MEETING]() {
+      selectedMeeting() {
         return meeting;
       }
     },

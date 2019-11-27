@@ -10,7 +10,7 @@ describe("ManageMeeting.vue", () => {
   let wrapper;
   let mocks = {
     $store: {
-      getters: { [Getters.USER]: "", [Getters.JWT]: "" }
+      getters: { [Getters.USER]: "", jwt: "" }
     },
     $route: {
       params: {}

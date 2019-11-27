@@ -47,7 +47,7 @@ import { Getters, ActionTypes } from "../helpers/constants";
   props: { isOpen: Boolean }
 })
 export default class Navigation extends Vue {
-  @Getter(Getters.JWT) jwt;
+  @Getter jwt;
   @Getter(Getters.USER) user;
   @Action(ActionTypes.SIGN_OUT) signOut;
 

@@ -1,7 +1,6 @@
 import Vue from "vue";
 import { shallowMount } from "@vue/test-utils";
 import Comments from "@/components/Comments.vue";
-import { Getters } from "@/helpers/constants";
 import Vuetify from "vuetify";
 Vue.use(Vuetify);
 
@@ -256,7 +255,7 @@ describe("Comments.vue", () => {
   let mocks = {
     $store: {
       getters: {
-        [Getters.SELECTED_PLAN]: plan
+        selectedPlan: plan
       }
     }
   };

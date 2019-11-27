@@ -177,14 +177,15 @@ import SubscriptionToggle from "../components/SubscriptionToggle.vue";
   components: { MeetingCards, FileCards, Map, Comments, SubscriptionToggle }
 })
 export default class Plan extends Vue {
+  @Action fetchManagableMeetings;
   /**
    * @type {import("../../graphql/types").UsersPermissionsUser}
    */
   @Getter(Getters.USER) currentUser;
   /** @type {import("../../graphql/types").Plan} */
-  @Getter(Getters.SELECTED_PLAN) plan;
+  @Getter selectedPlan;
   /** @type {import("../../graphql/types").Meeting[]} */
-  @Getter(Getters.MANAGABLE_MEETINGS) managableMeetings;
+  @Getter managableMeetings;
   @Action(ActionTypes.UPDATE_PLAN) updatePlanAction;
   lockCommentLoader = false;
   lockCommentErrMessage = "";
@@ -194,9 +195,10 @@ export default class Plan extends Vue {
     commentsAreLocked: ""
   };
 
-  mounted() {
+  async mounted() {
     this.planData.id = this.plan.id;
     this.planData.commentsAreLocked = this.plan.commentsAreLocked;
+    await this.fetchManagableMeetings();
   }
 
   async switchCommentsLockState(lock) {
@@ -215,6 +217,10 @@ export default class Plan extends Vue {
     this.lockCommentLoader = false;
   }
 
+  get plan() {
+    return this.selectedPlan;
+  }
+
   /** @returns {import("../helpers/typings").MeetingCard[]} */
   get planMeetings() {
     return this.plan.meetings.map(meeting => ({
@@ -230,7 +236,9 @@ export default class Plan extends Vue {
   get privilegedUsers() {
     const users = [];
     for (const meeting of this.plan.meetings) {
-      for (const user of meeting.committee.users) {
+      const committeeUsers =
+        (meeting.committee && meeting.committee.users) || [];
+      for (const user of committeeUsers) {
         users.push(user.id);
       }
     }
@@ -278,7 +286,6 @@ export default class Plan extends Vue {
 
   async beforeRouteEnter(to, from, next) {
     await store.dispatch(ActionTypes.FETCH_PLAN, to.params.planId);
-    await store.dispatch(ActionTypes.FETCH_MANAGABLE_MEETINGS);
     next();
   }
 }

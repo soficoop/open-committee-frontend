@@ -84,7 +84,7 @@ import { Prop } from "vue-property-decorator";
 @Component
 export default class NewComment extends Vue {
   /** @type {import("../../graphql/types").Plan} */
-  @Getter(Getters.SELECTED_PLAN) plan;
+  @Getter selectedPlan;
   /** @type {import("../../graphql/types").UsersPermissionsUser} */
   @Getter(Getters.USER) user;
   @Prop(String) parent;
@@ -113,7 +113,7 @@ export default class NewComment extends Vue {
     this.isSubmitting = true;
     const files = await this.uploadFiles();
     await makeGqlRequest(createComment, {
-      plan: this.plan.id,
+      plan: this.selectedPlan.id,
       name: this.name,
       title: this.title,
       content: this.content,

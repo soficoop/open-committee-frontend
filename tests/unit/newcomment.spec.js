@@ -15,7 +15,7 @@ describe("NewComment.vue", () => {
   let mocks = {
     $store: {
       getters: {
-        [Getters.SELECTED_PLAN]: plan,
+        selectedPlan: plan,
         [Getters.USER]: user
       }
     }

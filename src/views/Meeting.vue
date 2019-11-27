@@ -110,7 +110,7 @@
 <script>
 import Component from "vue-class-component";
 import Vue from "vue";
-import { ActionTypes, Getters } from "../helpers/constants";
+import { ActionTypes } from "../helpers/constants";
 import { makeGqlRequest } from "../helpers/functions";
 import { hideMeeting } from "../helpers/mutations";
 import store from "../plugins/store";
@@ -124,15 +124,20 @@ import SubscriptionToggle from "../components/SubscriptionToggle.vue";
   components: { MeetingCards, AgendaCards, FileCards, SubscriptionToggle }
 })
 export default class Meeting extends Vue {
-  @Action(ActionTypes.FETCH_MANAGABLE_MEETINGS) fetchManagableMeetings;
+  @Action fetchManagableMeetings;
   /**@type {import("../../graphql/types").Meeting} */
-  @Getter(Getters.SELECTED_MEETING) meeting;
+  @Getter selectedMeeting;
   /**@type {import("../../graphql/types").Meeting[]} */
-  @Getter(Getters.MANAGABLE_MEETINGS) managableMeetings;
-  @Getter(Getters.JWT) jwt;
+  @Getter managableMeetings;
+  @Getter jwt;
   hoveredPlan = "";
   dialog = false;
   errorOccurred = false;
+
+  get meeting() {
+    return this.selectedMeeting;
+  }
+
   get meetingFiles() {
     let result = [
       {

@@ -47,19 +47,10 @@
 <script>
 import Component from "vue-class-component";
 import Vue from "vue";
-import { Getter, Action } from "vuex-class";
-import { Getters, ActionTypes } from "../helpers/constants";
 import CommitteeSubscription from "../components/CommitteeSubscription.vue";
 
 @Component({ components: { CommitteeSubscription } })
 export default class Subscriptions extends Vue {
-  @Action(ActionTypes.UPDATE_USER) updateUser;
-  /**
-   * @type {import("../../graphql/types").UsersPermissionsUser}
-   */
-  @Getter(Getters.USER) user;
-  /** @type {string} */
-  @Getter(Getters.JWT) jwt;
   currentTab = 0;
 }
 </script>
