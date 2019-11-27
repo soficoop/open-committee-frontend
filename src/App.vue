@@ -42,7 +42,6 @@ body.using-mouse :focus {
 import Navigation from "./components/Navigation";
 import Component from "vue-class-component";
 import Vue from "vue";
-import { ActionTypes } from "./helpers/constants";
 import { Action, Getter } from "vuex-class";
 
 @Component({
@@ -52,7 +51,7 @@ import { Action, Getter } from "vuex-class";
 })
 export default class App extends Vue {
   @Action fetchUpcomingMeetings;
-  @Action(ActionTypes.REFRESH_USER) refreshUser;
+  @Action refreshUser;
   @Getter isLoading;
   mounted() {
     this.fetchUpcomingMeetings();

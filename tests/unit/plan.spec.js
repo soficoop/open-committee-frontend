@@ -201,13 +201,18 @@ describe("Plan.vue", () => {
         [Getters.USER]: currentUser,
         managableMeetings: []
       }
-    }
+    },
+    $route: { params: { planId: plan.id } }
   };
   beforeEach(() => {
     wrapper = shallowMount(Plan, {
       mocks,
       vuetify: new Vuetify(),
-      methods: { fetchManagableMeetings: () => [] }
+      methods: {
+        fetchManagableMeetings: () => [],
+        fetchPlan: () => {},
+        setLoading: () => {}
+      }
     });
   });
   it("loads plan and managable meetings from the store", () => {

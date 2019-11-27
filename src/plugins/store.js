@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import createPersistedState from "vuex-persistedstate";
-import { ActionTypes, Getters, authEndpoint } from "../helpers/constants";
+import { Getters, authEndpoint } from "../helpers/constants";
 import { dateTimeRevive, makeGqlRequest } from "../helpers/functions";
 import {
   getMeetings,
@@ -150,7 +150,7 @@ const storeOptions = {
      * Sign ups a user
      * @param {import("../../graphql/types").UsersPermissionsUser} user
      */
-    async [ActionTypes.SIGN_UP](context, user) {
+    async signUp(context, user) {
       user.username = user.email;
       const res = await fetch(`${authEndpoint}/register`, {
         method: "post",
@@ -165,7 +165,7 @@ const storeOptions = {
      * @param {import("vuex").Store} context The store object
      * @param {import("../../graphql/types").UsersPermissionsUser} user user to sign in
      */
-    async [ActionTypes.SIGN_IN](context, user) {
+    async signIn(context, user) {
       const res = await fetch(`${authEndpoint}`, {
         method: "post",
         body: JSON.stringify({
@@ -186,7 +186,7 @@ const storeOptions = {
     /**
      * Signs out the user by removing the user-related data from the store
      */
-    [ActionTypes.SIGN_OUT](context) {
+    signOut(context) {
       context.commit(storeOptions.mutations.setJwt.name, "");
       context.commit(storeOptions.mutations.setUser.name, null);
       context.commit(storeOptions.mutations.setManagableMeetings.name, []);
@@ -196,7 +196,7 @@ const storeOptions = {
      * @param {import("vuex").Store} context the store object
      * @param {stirng} id ID of meeting to fetch
      */
-    async [ActionTypes.FETCH_MEETING](context, id) {
+    async fetchMeeting(context, id) {
       const { meeting } = await makeGqlRequest(getMeeting(id));
       context.commit(storeOptions.mutations.setSelectedMeeting.name, meeting);
     },
@@ -205,7 +205,7 @@ const storeOptions = {
      * @param {import("vuex").Store} context the store object
      * @param {string} id ID of plan to fetch
      */
-    async [ActionTypes.FETCH_PLAN](context, id) {
+    async fetchPlan(context, id) {
       const { plan } = await makeGqlRequest(getPlan, { id: id });
       context.commit(storeOptions.mutations.setSelectedPlan.name, plan);
     },
@@ -236,7 +236,7 @@ const storeOptions = {
      * Refreshes current user
      * @param {import("vuex").Store} context the store object
      */
-    async [ActionTypes.REFRESH_USER](context) {
+    async refreshUser(context) {
       if (!context.state.user) return;
       const { user } = await makeGqlRequest(
         findUser,
@@ -250,7 +250,7 @@ const storeOptions = {
      * @param {import("vuex").Store} context the store object
      * @param {import("../../graphql/types").UsersPermissionsUser} updatedUserFields
      */
-    async [ActionTypes.UPDATE_USER](context, updatedUserFields) {
+    async updateUser(context, updatedUserFields) {
       updatedUserFields.id = context.state.user.id;
       const res = await makeGqlRequest(
         updateMe,
@@ -264,7 +264,7 @@ const storeOptions = {
      * @param {import("vuex").Store} context the store object
      * @param {import("../../graphql/types").Plan} updatedPlanFields
      */
-    async [ActionTypes.UPDATE_PLAN](context, updatedPlanFields) {
+    async updatePlan(context, updatedPlanFields) {
       try {
         const res = await makeGqlRequest(
           updateMyPlan,

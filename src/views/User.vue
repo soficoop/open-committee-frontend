@@ -208,7 +208,7 @@
 import Component from "vue-class-component";
 import Vue from "vue";
 import { Getter, Action } from "vuex-class";
-import { Getters, ActionTypes } from "../helpers/constants";
+import { Getters } from "../helpers/constants";
 import { filesEndpoint } from "../helpers/constants";
 import { uploadUserImage } from "../helpers/functions";
 
@@ -219,7 +219,7 @@ export default class User extends Vue {
    */
   @Getter(Getters.USER) user;
   @Getter jwt;
-  @Action(ActionTypes.UPDATE_USER) updateUserAction;
+  @Action updateUser;
 
   userInfoData = {};
   tab = null;
@@ -236,7 +236,7 @@ export default class User extends Vue {
   }
 
   async updateInfo() {
-    await this.updateUserAction(this.userInfoData);
+    await this.updateUser(this.userInfoData);
     this.dialog = false;
   }
 
@@ -247,7 +247,7 @@ export default class User extends Vue {
       this.user.id
     );
 
-    await this.updateUserAction({
+    await this.updateUser({
       userImage: uploadedFile.id
     });
   }
@@ -273,7 +273,7 @@ export default class User extends Vue {
   }
 
   async removeUserImage() {
-    await this.updateUserAction({ userImage: "" });
+    await this.updateUser({ userImage: "" });
   }
 
   get hasImage() {

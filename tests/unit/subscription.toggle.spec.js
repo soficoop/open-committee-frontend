@@ -1,7 +1,7 @@
 import Vue from "vue";
 import { shallowMount } from "@vue/test-utils";
 import SubscriptionToggle from "@/components/SubscriptionToggle.vue";
-import { Getters, ActionTypes } from "@/helpers/constants";
+import { Getters } from "@/helpers/constants";
 import Vuetify from "vuetify";
 Vue.use(Vuetify);
 
@@ -41,7 +41,7 @@ describe("SubscriptionToggle.vue", () => {
         [Getters.USER]: user
       },
       actions: {
-        [ActionTypes.UPDATE_USER]: jest.fn
+        updateUser: jest.fn
       }
     }
   };

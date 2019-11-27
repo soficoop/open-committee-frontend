@@ -1,13 +1,4 @@
-export const ActionTypes = Object.freeze({
-  FETCH_MEETING: "FETCH_MEETING",
-  FETCH_PLAN: "FETCH_PLAN",
-  REFRESH_USER: "REFRESH_USER",
-  SIGN_UP: "SIGN_UP",
-  SIGN_IN: "SIGN_IN",
-  SIGN_OUT: "SIGN_OUT",
-  UPDATE_USER: "UPDATE_USER",
-  UPDATE_PLAN: "UPDATE_PLAN"
-});
+export const ActionTypes = Object.freeze({});
 export const Getters = Object.freeze({
   USER: "USER"
 });

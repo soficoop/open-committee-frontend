@@ -113,7 +113,7 @@
                   large
                   color="secondary"
                   :disabled="!isSignUpFormValid"
-                  @click="signUp(signupData)"
+                  @click="executeSignUp(signupData)"
                   >הרשמה</v-btn
                 >
                 <v-expand-transition>
@@ -279,7 +279,6 @@
 import { Component, Watch } from "vue-property-decorator";
 import Vue from "vue";
 import { Action, Mutation } from "vuex-class";
-import { ActionTypes } from "../helpers/constants";
 import { sendForgotenPasswordEmail } from "../helpers/functions";
 
 @Component()
@@ -314,8 +313,8 @@ export default class Login extends Vue {
     this.forgotPasswordData.email = this.loginData.email;
   }
 
-  @Action(ActionTypes.SIGN_UP) signUpAction;
-  @Action(ActionTypes.SIGN_IN) loginAction;
+  @Action signUp;
+  @Action signIn;
 
   created() {
     this.tab = this.isUserConfirmed ? 1 : 0;
@@ -325,15 +324,15 @@ export default class Login extends Vue {
     return this.$route.path === "/login/user-is-confirmed";
   }
 
-  async signUp(user) {
+  async executeSignUp(user) {
     this.setLoading(true);
-    this.registrationSuccess = await this.signUpAction(user);
+    this.registrationSuccess = await this.signUp(user);
     this.authenticationFailed = !this.registrationSuccess;
     this.setLoading(false);
   }
 
   async logIn(user) {
-    const result = await this.loginAction(user);
+    const result = await this.signIn(user);
     this.handleAuthentication(result.status, result.message);
   }
 

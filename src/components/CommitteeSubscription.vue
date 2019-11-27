@@ -93,13 +93,13 @@
 import Component from "vue-class-component";
 import Vue from "vue";
 import { Getter, Action, Mutation } from "vuex-class";
-import { Getters, ActionTypes } from "../helpers/constants";
+import { Getters } from "../helpers/constants";
 
 @Component()
 export default class CommitteeSubscription extends Vue {
   @Action fetchCommittees;
   @Action fetchUserSubscriptions;
-  @Action(ActionTypes.UPDATE_USER) updateUser;
+  @Action updateUser;
   /**
    * @type {import("../../graphql/types").UsersPermissionsUser}
    */

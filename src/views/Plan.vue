@@ -164,9 +164,8 @@
 <script>
 import Component from "vue-class-component";
 import Vue from "vue";
-import { ActionTypes, Getters } from "../helpers/constants";
-import store from "../plugins/store";
-import { Getter, Action } from "vuex-class";
+import { Getters } from "../helpers/constants";
+import { Getter, Action, Mutation } from "vuex-class";
 import MeetingCards from "../components/MeetingCards.vue";
 import FileCards from "../components/FileCards.vue";
 import Map from "../components/Map.vue";
@@ -178,6 +177,7 @@ import SubscriptionToggle from "../components/SubscriptionToggle.vue";
 })
 export default class Plan extends Vue {
   @Action fetchManagableMeetings;
+  @Action fetchPlan;
   /**
    * @type {import("../../graphql/types").UsersPermissionsUser}
    */
@@ -186,7 +186,8 @@ export default class Plan extends Vue {
   @Getter selectedPlan;
   /** @type {import("../../graphql/types").Meeting[]} */
   @Getter managableMeetings;
-  @Action(ActionTypes.UPDATE_PLAN) updatePlanAction;
+  @Action updatePlan;
+  @Mutation setLoading;
   lockCommentLoader = false;
   lockCommentErrMessage = "";
 
@@ -196,6 +197,9 @@ export default class Plan extends Vue {
   };
 
   async mounted() {
+    this.setLoading(true);
+    await this.fetchPlan(this.$route.params.planId);
+    this.setLoading(false);
     this.planData.id = this.plan.id;
     this.planData.commentsAreLocked = this.plan.commentsAreLocked;
     await this.fetchManagableMeetings();
@@ -203,7 +207,7 @@ export default class Plan extends Vue {
 
   async switchCommentsLockState(lock) {
     this.lockCommentLoader = true;
-    const res = await this.updatePlanAction({
+    const res = await this.updatePlan({
       id: this.planData.id,
       commentsAreLocked: lock
     });
@@ -282,11 +286,6 @@ export default class Plan extends Vue {
 
   get planTypeFirstWord() {
     return this.plan.type.split()[0];
-  }
-
-  async beforeRouteEnter(to, from, next) {
-    await store.dispatch(ActionTypes.FETCH_PLAN, to.params.planId);
-    next();
   }
 }
 </script>

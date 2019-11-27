@@ -110,11 +110,9 @@
 <script>
 import Component from "vue-class-component";
 import Vue from "vue";
-import { ActionTypes } from "../helpers/constants";
 import { makeGqlRequest } from "../helpers/functions";
 import { hideMeeting } from "../helpers/mutations";
-import store from "../plugins/store";
-import { Getter, Action } from "vuex-class";
+import { Getter, Action, Mutation } from "vuex-class";
 import AgendaCards from "../components/AgendaCards.vue";
 import FileCards from "../components/FileCards.vue";
 import MeetingCards from "../components/MeetingCards.vue";
@@ -124,11 +122,13 @@ import SubscriptionToggle from "../components/SubscriptionToggle.vue";
   components: { MeetingCards, AgendaCards, FileCards, SubscriptionToggle }
 })
 export default class Meeting extends Vue {
+  @Action fetchMeeting;
   @Action fetchManagableMeetings;
   /**@type {import("../../graphql/types").Meeting} */
   @Getter selectedMeeting;
   /**@type {import("../../graphql/types").Meeting[]} */
   @Getter managableMeetings;
+  @Mutation setLoading;
   @Getter jwt;
   hoveredPlan = "";
   dialog = false;
@@ -196,7 +196,9 @@ export default class Meeting extends Vue {
         { key: "סטטוס", value: plan.status },
         {
           key: "עדכון אחרון",
-          value: plan.lastUpdate && plan.lastUpdate.toLocaleDateString("he")
+          value:
+            plan.lastUpdate instanceof Date &&
+            plan.lastUpdate.toLocaleDateString("he")
         },
         { key: "מיקום", value: plan.location }
       ],
@@ -219,18 +221,11 @@ export default class Meeting extends Vue {
     return this.$route.params.meetingId;
   }
 
-  async beforeRouteEnter(to, from, next) {
-    await store.dispatch(ActionTypes.FETCH_MEETING, to.params.meetingId);
-    next();
-  }
-
-  async beforeRouteUpdate(to, from, next) {
-    await store.dispatch(ActionTypes.FETCH_MEETING, to.params.meetingId);
-    next();
-  }
-
   async mounted() {
+    this.setLoading(true);
+    await this.fetchMeeting(this.meetingId);
     await this.fetchManagableMeetings();
+    this.setLoading(false);
   }
 
   async deleteMeeting() {

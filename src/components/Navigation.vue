@@ -41,7 +41,7 @@
 import Component from "vue-class-component";
 import Vue from "vue";
 import { Getter, Action } from "vuex-class";
-import { Getters, ActionTypes } from "../helpers/constants";
+import { Getters } from "../helpers/constants";
 
 @Component({
   props: { isOpen: Boolean }
@@ -49,7 +49,7 @@ import { Getters, ActionTypes } from "../helpers/constants";
 export default class Navigation extends Vue {
   @Getter jwt;
   @Getter(Getters.USER) user;
-  @Action(ActionTypes.SIGN_OUT) signOut;
+  @Action signOut;
 
   /**@type {import("../helpers/typings").NavItem[]} */
   get navItems() {

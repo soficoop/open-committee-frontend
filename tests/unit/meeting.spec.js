@@ -2,9 +2,9 @@ import Vue from "vue";
 import Vuex from "vuex";
 import { shallowMount } from "@vue/test-utils";
 import Meeting from "@/views/Meeting.vue";
-import { ActionTypes } from "@/helpers/constants";
 import Vuetify from "vuetify";
 Vue.use(Vuetify);
+Vue.use(Vuex);
 
 describe("Meeting.vue", () => {
   /** @type {import("@vue/test-utils").Wrapper} */
@@ -167,7 +167,7 @@ describe("Meeting.vue", () => {
   };
   let managableMeetings = [];
   let actions = {
-    [ActionTypes.FETCH_MEETING]: jest.fn(),
+    fetchMeeting: jest.fn(),
     fetchManagableMeetings: jest.fn()
   };
   let store = new Vuex.Store({
@@ -180,7 +180,8 @@ describe("Meeting.vue", () => {
         return meeting;
       }
     },
-    actions
+    actions,
+    mutations: { setLoading: () => {} }
   });
   beforeEach(() => {
     wrapper = shallowMount(Meeting, {
