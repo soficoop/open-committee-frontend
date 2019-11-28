@@ -1,44 +1,75 @@
 <template>
-  <v-layout wrap>
-    <v-flex xs12 md6 pa-1>
-      <v-text-field
-        outlined
-        hide-details
-        label="נושא"
-        v-model="title"
-      ></v-text-field>
-    </v-flex>
-    <v-flex xs12 md6 pa-1>
-      <v-text-field
-        :disabled="this.user ? true : false"
-        outlined
-        hide-details
-        label="שם"
-        v-model="name"
-      ></v-text-field>
-    </v-flex>
-    <v-flex pa-1>
-      <v-textarea
-        outlined
-        hide-details
-        maxlength="1000"
-        label="תוכן ההתייחסות"
-        v-model="content"
-      ></v-textarea>
-    </v-flex>
-    <v-flex xs12 pa-1>
-      <v-btn
-        block
-        color="primary"
-        @click="submit"
-        :loading="isSubmitting"
-        :disabled="!canSubmit"
-      >
-        שליחה
-        <v-icon class="mdi-flip-h" right>mdi-send</v-icon>
-      </v-btn>
-    </v-flex>
-  </v-layout>
+  <v-container>
+    <v-row dense>
+      <v-col cols="12" md="6">
+        <v-text-field
+          outlined
+          hide-details
+          label="נושא"
+          v-model="title"
+        ></v-text-field>
+      </v-col>
+      <v-col cols="12" md="6">
+        <v-text-field
+          :disabled="this.user ? true : false"
+          outlined
+          hide-details
+          label="שם"
+          v-model="name"
+        ></v-text-field>
+      </v-col>
+    </v-row>
+    <v-row dense>
+      <v-col>
+        <v-textarea
+          outlined
+          hide-details
+          maxlength="1000"
+          label="תוכן ההתייחסות"
+          v-model="content"
+        ></v-textarea>
+      </v-col>
+    </v-row>
+    <v-row dense>
+      <v-col>
+        <v-file-input
+          label="קבצים מצורפים"
+          hide
+          hide-details
+          outlined
+          rounded
+          multiple
+          v-model="files"
+        >
+          <template v-slot:selection="{ text, index }">
+            <v-chip
+              small
+              label
+              close
+              color="primary"
+              @click:close="files.splice(index, 1)"
+            >
+              {{ text }}
+            </v-chip>
+          </template>
+        </v-file-input>
+      </v-col>
+    </v-row>
+    <v-row dense>
+      <v-col>
+        <v-btn
+          block
+          color="primary"
+          @click="submit"
+          :loading="isSubmitting"
+          :disabled="!canSubmit"
+        >
+          שליחה
+          <v-icon class="mdi-flip-h" right>mdi-send</v-icon>
+        </v-btn>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -46,7 +77,7 @@ import Component from "vue-class-component";
 import Vue from "vue";
 import { Getter } from "vuex-class";
 import { Getters } from "../helpers/constants";
-import { makeGqlRequest } from "../helpers/functions";
+import { makeGqlRequest, uploadFile } from "../helpers/functions";
 import { createComment } from "../helpers/mutations";
 import { Prop } from "vue-property-decorator";
 
@@ -62,6 +93,8 @@ export default class NewComment extends Vue {
   isSubmitting = false;
   name = "";
   title = "";
+  /** @type {File[]} */
+  files = [];
 
   created() {
     if (this.user) {
@@ -78,6 +111,7 @@ export default class NewComment extends Vue {
    */
   async submit() {
     this.isSubmitting = true;
+    const files = await this.uploadFiles();
     await makeGqlRequest(createComment, {
       plan: this.plan.id,
       name: this.name,
@@ -86,10 +120,19 @@ export default class NewComment extends Vue {
       user: this.user && this.user.id,
       parent: this.parent,
       isPinned: false,
-      isHidden: false
+      isHidden: false,
+      files
     });
     this.$emit("submit");
     this.isSubmitting = false;
+  }
+
+  async uploadFiles() {
+    let files = [];
+    for (const file of this.files) {
+      files.push(await uploadFile(file));
+    }
+    return files.map(file => file.id);
   }
 }
 </script>

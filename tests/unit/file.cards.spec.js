@@ -1,7 +1,7 @@
 import Vue from "vue";
 import { shallowMount } from "@vue/test-utils";
 import FileCards from "@/components/FileCards.vue";
-import { apiEndpoint } from "@/helpers/constants";
+import { filesEndpoint } from "@/helpers/constants";
 import Vuetify from "vuetify";
 Vue.use(Vuetify);
 
@@ -56,7 +56,7 @@ describe("FileCards class", () => {
           .findAll("v-btn-stub")
           .at(i)
           .attributes().href
-      ).toBe(apiEndpoint + fileUrl);
+      ).toBe(filesEndpoint + fileUrl);
     }
   });
 });

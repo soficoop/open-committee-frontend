@@ -209,7 +209,7 @@ import Component from "vue-class-component";
 import Vue from "vue";
 import { Getter, Action } from "vuex-class";
 import { Getters, ActionTypes } from "../helpers/constants";
-import { apiEndpoint } from "../helpers/constants";
+import { filesEndpoint } from "../helpers/constants";
 import { uploadUserImage } from "../helpers/functions";
 
 @Component()
@@ -254,7 +254,7 @@ export default class User extends Vue {
 
   get userImageUrl() {
     if (this.user.userImage != null) {
-      return apiEndpoint + this.user.userImage.url;
+      return filesEndpoint + this.user.userImage.url;
     }
     return "/img/userImage.svg";
   }

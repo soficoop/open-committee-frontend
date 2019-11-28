@@ -14,15 +14,11 @@
             >
               <v-icon left>mdi-plus</v-icon>צור התייחסות חדשה
             </v-btn>
-            <div v-if="isCreatingNewComment" class="pa-1"></div>
             <v-expand-transition>
-              <NewComment
-                class="px-1"
-                v-if="isCreatingNewComment"
-                @submit="handleCommentSubmitted"
-              />
+              <div v-if="isCreatingNewComment">
+                <NewComment @submit="handleCommentSubmitted" />
+              </div>
             </v-expand-transition>
-            <div v-if="isCreatingNewComment" class="pa-1"></div>
           </v-card>
         </v-expand-transition>
       </v-col>

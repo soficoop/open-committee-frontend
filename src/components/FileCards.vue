@@ -32,14 +32,14 @@
 import Component from "vue-class-component";
 import Vue from "vue";
 import { Prop } from "vue-property-decorator";
-import { apiEndpoint } from "../helpers/constants";
+import { filesEndpoint } from "../helpers/constants";
 
 @Component
 export default class FileCards extends Vue {
   @Prop(Array) files;
 
   generateUrlFromFile(file) {
-    return apiEndpoint + file.url;
+    return filesEndpoint + file.url;
   }
 }
 </script>

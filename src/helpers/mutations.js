@@ -184,10 +184,21 @@ export const createComment = `mutation createComment(
   $plan: ID!
   $parent: ID
   $user: ID
+  $files: [ID]
 ) {
   createComment(
     input: {
-      data: { title: $title, name: $name, content: $content, plan: $plan, user: $user, parent: $parent, isPinned: false, isHidden: false }
+      data: {
+        title: $title
+        name: $name
+        content: $content
+        plan: $plan
+        user: $user
+        parent: $parent
+        isPinned: false
+        isHidden: false
+        files: $files
+      }
     }
   ) {
     comment {
@@ -268,14 +279,29 @@ export const updateMyPlan = `mutation updateMyPlan(
   ) {
     plan {
       id
+      sid
+      stype
+      number
+      addedManually
+      lastUpdate
+      location
+      status
+      sections
+      name
+      municipality
+      settlement
+      street
+      houseNumber
+      targets
       type
       commentsAreLocked
-      meetings {
+      meetings(where: { isHidden_ne: true }) {
         id
         date
+        number
         committee {
-          sid,
-          id,
+          sid
+          id
           users {
             id
           }
@@ -285,6 +311,7 @@ export const updateMyPlan = `mutation updateMyPlan(
         id
         name
         url
+        size
       }
     }
   }
