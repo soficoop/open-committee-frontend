@@ -20,10 +20,10 @@
           mdi-shield-check
         </v-icon>
         <span class="me-1" tabindex="0"> {{ commenter }} • </span>
-        <span class="me-1" v-if="comment.user.job">
+        <span class="me-1" v-if="comment.user && comment.user.job">
           {{ comment.user.job }} •
         </span>
-        <span class="me-1" v-if="comment.user.organization">
+        <span class="me-1" v-if="comment.user && comment.user.organization">
           {{ comment.user.organization }} •
         </span>
         <span tabindex="0">
