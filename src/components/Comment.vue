@@ -20,8 +20,11 @@
           mdi-shield-check
         </v-icon>
         <span class="me-1" tabindex="0"> {{ commenter }} • </span>
-        <span class="me-1" v-if="isCommenterAdmin && comment.user.job">
+        <span class="me-1" v-if="comment.user.job">
           {{ comment.user.job }} •
+        </span>
+        <span class="me-1" v-if="comment.user.organization">
+          {{ comment.user.organization }} •
         </span>
         <span tabindex="0">
           {{ comment.createdAt.toLocaleDateString("he") }}
