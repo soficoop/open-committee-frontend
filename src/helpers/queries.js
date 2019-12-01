@@ -144,6 +144,7 @@ export function getCommentsByPlan(id) {
         lastName
         id
         job
+        organization
         userImage {
           url
         }
