@@ -5,5 +5,6 @@ module.exports = {
         data: `@import "~@/main.scss"`
       }
     }
-  }
+  },
+  transpileDependencies: ["vuetify"]
 };
