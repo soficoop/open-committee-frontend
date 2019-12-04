@@ -79,7 +79,6 @@ export default class Navigation extends Vue {
         }
       },
       { icon: "mdi-school", text: "אודות", to: "/about" },
-      { icon: "mdi-magnify", text: "חיפוש", to: "/search" },
       {
         icon: "mdi-tune",
         text: "ניהול ישיבות",
