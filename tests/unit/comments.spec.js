@@ -280,9 +280,9 @@ describe("Comments.vue", () => {
     expect(newCommentButton.attributes("disabled")).toBeTruthy();
   });
   it("displays NewComment component when it should", () => {
-    expect(wrapper.find("NewComment-stub").exists()).toBeFalsy();
-    wrapper.vm.isCreatingNewComment = true;
     expect(wrapper.find("NewComment-stub").exists()).toBeTruthy();
+    wrapper.vm.isCreatingNewComment = false;
+    expect(wrapper.find("NewComment-stub").exists()).toBeFalsy();
   });
   it("generates correct root comments", () => {
     expect(wrapper.vm.rootComments).toHaveLength(

@@ -228,10 +228,10 @@ describe("Plan.vue", () => {
     expect(wrapper.vm.planMeetings).toHaveLength(0);
   });
   it("loads plan status when it exists", () => {
-    expect(wrapper.find("v-icon-stub").exists()).toBeTruthy();
+    expect(wrapper.findAll("v-icon-stub")).toHaveLength(2);
     expect(wrapper.find("v-icon-stub").text()).toBe("mdi-update");
     plan.status = "";
-    expect(wrapper.find("v-icon-stub").exists()).toBeFalsy();
+    expect(wrapper.findAll("v-icon-stub")).toHaveLength(1);
   });
   it("loads plan number when it exists", () => {
     expect(wrapper.text()).toContain(plan.number);

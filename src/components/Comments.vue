@@ -101,7 +101,7 @@ export default class Comments extends Vue {
   @Getter(Getters.SELECTED_PLAN) plan;
   /** @type {import("../../graphql/types").Comment[]} */
   comments = [];
-  isCreatingNewComment = false;
+  isCreatingNewComment = true;
   loader = false;
 
   @Prop(Array) privilegedUsers;
