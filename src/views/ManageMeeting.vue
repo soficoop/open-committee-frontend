@@ -29,7 +29,6 @@
           label="מספר/כותרת ישיבה"
           hide-details
           outlined
-          :disabled="!addedManually"
         ></v-text-field>
       </v-col>
     </v-row>
