@@ -75,7 +75,7 @@
         </v-dialog>
       </v-col>
     </v-row>
-    <v-row v-if="addedManually">
+    <v-row>
       <v-col cols="12" md="8">
         <v-autocomplete
           label="קישור לתכניות"
@@ -93,7 +93,7 @@
           :search-input.sync="planSearch"
         ></v-autocomplete>
       </v-col>
-      <v-col cols="12" md="4">
+      <v-col cols="12" md="4" v-if="addedManually">
         <v-btn
           color="secondary"
           height="56px"
@@ -168,7 +168,7 @@
       :items="agendaItems"
       @cardRemove="handleAgendaItemRemoveClicked"
       @cardEdit="handleAgendaItemEditClicked"
-      :areCardsRemovable="addedManually"
+      areCardsRemovable
     ></AgendaCards>
     <v-row>
       <v-col cols="12" md="4">
@@ -538,6 +538,7 @@ export default class ManageMeeting extends Vue {
     const uploadedFiles = await this.uploadFiles();
     let meeting = {
       additionalFiles: uploadedFiles.additionalFiles,
+      addedManually: this.addedManually,
       background: this.background,
       committee: this.committee,
       date: this.meetingDateString,

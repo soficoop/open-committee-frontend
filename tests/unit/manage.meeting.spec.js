@@ -113,10 +113,6 @@ describe("ManageMeeting.vue", () => {
     expect(
       wrapper.find('[label="מספר/כותרת ישיבה"]').props("disabled")
     ).toBeTruthy();
-    expect(wrapper.find('[label="קישור לתכניות"]').exists()).toBeFalsy();
     expect(wrapper.html()).not.toContain("הוספת נושא");
-    expect(
-      wrapper.find("AgendaCards-stub").props("areCardsRemovable")
-    ).toBeFalsy();
   });
 });
