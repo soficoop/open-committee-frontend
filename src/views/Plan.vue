@@ -54,27 +54,39 @@
         </v-row>
       </v-col>
       <v-col>
-        <v-card flat class="pa-4">
-          <h4 class="title primary--text" tabindex="0">נתונים</h4>
-          <Map
-            class="my-3"
-            :query="planLocationQuery"
-            v-if="planLocationQuery"
-          />
-          <v-row
-            v-for="infoItem in planInformation"
-            :key="infoItem.key"
-            no-gutters
-            class="py-1"
-          >
-            <v-col cols="4" class="font-weight-semibold">
-              <span tabindex="0">{{ infoItem.key }}</span>
-            </v-col>
-            <v-col cols="7" offset="1">
-              <span tabindex="0">{{ infoItem.value }}</span>
-            </v-col>
-          </v-row>
-        </v-card>
+        <v-row no-gutters>
+          <v-col>
+            <v-btn color="secondary" block large href="#comments">
+              <v-icon left>mdi-plus</v-icon>
+              התייחסות חדשה
+            </v-btn>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <v-card flat class="pa-4">
+              <h4 class="title primary--text" tabindex="0">נתונים</h4>
+              <Map
+                class="my-3"
+                :query="planLocationQuery"
+                v-if="planLocationQuery"
+              />
+              <v-row
+                v-for="infoItem in planInformation"
+                :key="infoItem.key"
+                no-gutters
+                class="py-1"
+              >
+                <v-col cols="4" class="font-weight-semibold">
+                  <span tabindex="0">{{ infoItem.key }}</span>
+                </v-col>
+                <v-col cols="7" offset="1">
+                  <span tabindex="0">{{ infoItem.value }}</span>
+                </v-col>
+              </v-row>
+            </v-card>
+          </v-col>
+        </v-row>
       </v-col>
     </v-row>
     <v-row v-else>
@@ -102,7 +114,11 @@
       <v-col>
         <v-row justify="space-between" align="center">
           <v-col cols="auto">
-            <h4 class="title primary--text d-inline-block" tabindex="0">
+            <h4
+              class="title primary--text d-inline-block"
+              tabindex="0"
+              id="comments"
+            >
               התייחסויות
             </h4>
           </v-col>
