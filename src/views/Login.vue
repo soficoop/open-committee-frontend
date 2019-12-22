@@ -384,7 +384,8 @@ export default class Login extends Vue {
       !!this.isEmailValid(this.signupData.email) &&
       !!this.signupData.firstName &&
       !!this.signupData.lastName &&
-      !!this.signupData.password
+      !!this.signupData.password &&
+      this.signupData.password.length > 7
     );
   }
 }
