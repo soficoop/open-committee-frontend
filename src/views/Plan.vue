@@ -123,49 +123,45 @@
       </v-col>
     </v-row>
     <v-row py-3 justify="space-between" align="center">
-      <v-col>
-        <v-row justify="space-between" align="center">
-          <v-col cols="auto">
-            <h4
-              class="title primary--text d-inline-block"
-              tabindex="0"
-              id="comments"
-            >
-              התייחסויות
-            </h4>
-          </v-col>
-          <v-col v-if="isUserCommentsAdmin" cols="auto" class="py-0">
-            <v-btn
-              color="primary"
-              outlined
-              small
-              :loading="lockCommentLoader"
-              @click="switchCommentsLockState(true)"
-              v-if="!planData.commentsAreLocked"
-            >
-              נעילת התייחסויות
-            </v-btn>
-            <v-btn
-              v-else
-              small
-              :loading="lockCommentLoader"
-              color="primary"
-              class="text--white"
-              @click="switchCommentsLockState(false)"
-            >
-              <v-icon small left>mdi-lock</v-icon>
-              ההתייחסויות נעולות
-            </v-btn>
-            <span class="error--text d-block" v-if="lockCommentErrMessage">
-              {{ lockCommentErrMessage }}
-            </span>
-          </v-col>
-          <v-col v-else-if="planData.commentsAreLocked" cols="auto">
-            <v-chip color="orange" text-color="white">
-              הוספה של התייחסויות ותגובות חדשות ננעלה
-            </v-chip>
-          </v-col>
-        </v-row>
+      <v-col cols="auto" class="pb-0">
+        <h4
+          class="title primary--text d-inline-block"
+          tabindex="0"
+          id="comments"
+        >
+          התייחסויות
+        </h4>
+      </v-col>
+      <v-col v-if="isUserCommentsAdmin" cols="auto" class="pb-0">
+        <v-btn
+          color="primary"
+          outlined
+          small
+          :loading="lockCommentLoader"
+          @click="switchCommentsLockState(true)"
+          v-if="!planData.commentsAreLocked"
+        >
+          נעילת התייחסויות
+        </v-btn>
+        <v-btn
+          v-else
+          small
+          :loading="lockCommentLoader"
+          color="primary"
+          class="text--white"
+          @click="switchCommentsLockState(false)"
+        >
+          <v-icon small left>mdi-lock</v-icon>
+          ההתייחסויות נעולות
+        </v-btn>
+        <span class="error--text d-block" v-if="lockCommentErrMessage">
+          {{ lockCommentErrMessage }}
+        </span>
+      </v-col>
+      <v-col v-else-if="planData.commentsAreLocked" cols="auto">
+        <v-chip color="orange" text-color="white">
+          הוספה של התייחסויות ותגובות חדשות ננעלה
+        </v-chip>
       </v-col>
       <v-col cols="12" class="pt-0">
         <Comments
@@ -213,7 +209,7 @@ export default class Plan extends Vue {
 
   planData = {
     id: "",
-    commentsAreLocked: ""
+    commentsAreLocked: false
   };
 
   mounted() {
