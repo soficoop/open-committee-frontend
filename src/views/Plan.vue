@@ -102,6 +102,18 @@
         <FileCards class="py-1" :files="plan.attachedFiles" />
       </v-col>
     </v-row>
+    <v-row v-if="!plan.addedManually">
+      <v-col>
+        <a
+          :href="iplanUrl"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="secondary--text font-weight-bold px-1"
+        >
+          למידע נוסף באתר מנהל התכנון
+        </a>
+      </v-col>
+    </v-row>
     <v-row v-if="planMeetings && planMeetings.length">
       <v-col>
         <h4 class="title primary--text" tabindex="0">
@@ -161,17 +173,6 @@
           :commentsAreLocked="planData.commentsAreLocked"
           :isCurrentUserCommentsAdmin="isUserCommentsAdmin"
         ></Comments>
-      </v-col>
-    </v-row>
-    <v-row v-if="!plan.addedManually">
-      <v-col>
-        <a
-          :href="iplanUrl"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="secondary--text font-weight-bold px-1"
-          >למידע נוסף באתר מנהל התכנון</a
-        >
       </v-col>
     </v-row>
     <v-overlay v-model="loader" z-index="9999">
