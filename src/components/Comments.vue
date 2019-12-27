@@ -85,7 +85,7 @@ import { Getter, Mutation } from "vuex-class";
 import { getCommentsByPlan } from "../helpers/queries";
 import { updateComment, hideMyComment } from "../helpers/mutations";
 import { makeGqlRequest } from "../helpers/functions";
-import { Prop } from "vue-property-decorator";
+import { Prop, Watch } from "vue-property-decorator";
 
 @Component({ components: { NewComment, Comment } })
 export default class Comments extends Vue {
@@ -98,14 +98,24 @@ export default class Comments extends Vue {
   @Mutation setLoading;
   /** @type {import("../../graphql/types").Comment[]} */
   comments = [];
-  isCreatingNewComment = false;
+  isCreatingNewComment = true;
 
   @Prop(Array) privilegedUsers;
   @Prop(Boolean) commentsAreLocked;
   @Prop(Boolean) isCurrentUserCommentsAdmin;
 
+  @Watch("commentsAreLocked")
+  onCommentsLockedChanged(value) {
+    if (value) {
+      this.isCreatingNewComment = false;
+    }
+  }
+
   created() {
     this.fetchComments();
+    if (this.commentsAreLocked) {
+      this.isCreatingNewComment = false;
+    }
   }
 
   /**

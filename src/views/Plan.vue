@@ -54,27 +54,39 @@
         </v-row>
       </v-col>
       <v-col>
-        <v-card flat class="pa-4">
-          <h4 class="title primary--text" tabindex="0">נתונים</h4>
-          <Map
-            class="my-3"
-            :query="planLocationQuery"
-            v-if="planLocationQuery"
-          />
-          <v-row
-            v-for="infoItem in planInformation"
-            :key="infoItem.key"
-            no-gutters
-            class="py-1"
-          >
-            <v-col cols="4" class="font-weight-semibold">
-              <span tabindex="0">{{ infoItem.key }}</span>
-            </v-col>
-            <v-col cols="7" offset="1">
-              <span tabindex="0">{{ infoItem.value }}</span>
-            </v-col>
-          </v-row>
-        </v-card>
+        <v-row no-gutters>
+          <v-col>
+            <v-btn color="secondary" block large href="#comments">
+              <v-icon left>mdi-plus</v-icon>
+              התייחסות חדשה
+            </v-btn>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <v-card flat class="pa-4">
+              <h4 class="title primary--text" tabindex="0">נתונים</h4>
+              <Map
+                class="my-3"
+                :query="planLocationQuery"
+                v-if="planLocationQuery"
+              />
+              <v-row
+                v-for="infoItem in planInformation"
+                :key="infoItem.key"
+                no-gutters
+                class="py-1"
+              >
+                <v-col cols="4" class="font-weight-semibold">
+                  <span tabindex="0">{{ infoItem.key }}</span>
+                </v-col>
+                <v-col cols="7" offset="1">
+                  <span tabindex="0">{{ infoItem.value }}</span>
+                </v-col>
+              </v-row>
+            </v-card>
+          </v-col>
+        </v-row>
       </v-col>
     </v-row>
     <v-row v-else>
@@ -90,6 +102,18 @@
         <FileCards class="py-1" :files="plan.attachedFiles" />
       </v-col>
     </v-row>
+    <v-row v-if="!plan.addedManually">
+      <v-col>
+        <a
+          :href="iplanUrl"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="secondary--text font-weight-bold px-1"
+        >
+          למידע נוסף באתר מנהל התכנון
+        </a>
+      </v-col>
+    </v-row>
     <v-row v-if="planMeetings && planMeetings.length">
       <v-col>
         <h4 class="title primary--text" tabindex="0">
@@ -99,45 +123,45 @@
       </v-col>
     </v-row>
     <v-row py-3 justify="space-between" align="center">
-      <v-col>
-        <v-row justify="space-between" align="center">
-          <v-col cols="auto">
-            <h4 class="title primary--text d-inline-block" tabindex="0">
-              התייחסויות
-            </h4>
-          </v-col>
-          <v-col v-if="isUserCommentsAdmin" cols="auto" class="py-0">
-            <v-btn
-              color="primary"
-              outlined
-              small
-              :loading="lockCommentLoader"
-              @click="switchCommentsLockState(true)"
-              v-if="!planData.commentsAreLocked"
-            >
-              נעילת התייחסויות
-            </v-btn>
-            <v-btn
-              v-else
-              small
-              :loading="lockCommentLoader"
-              color="primary"
-              class="text--white"
-              @click="switchCommentsLockState(false)"
-            >
-              <v-icon small left>mdi-lock</v-icon>
-              ההתייחסויות נעולות
-            </v-btn>
-            <span class="error--text d-block" v-if="lockCommentErrMessage">
-              {{ lockCommentErrMessage }}
-            </span>
-          </v-col>
-          <v-col v-else-if="planData.commentsAreLocked" cols="auto">
-            <v-chip color="orange" text-color="white">
-              הוספה של התייחסויות ותגובות חדשות ננעלה
-            </v-chip>
-          </v-col>
-        </v-row>
+      <v-col cols="auto" class="pb-0">
+        <h4
+          class="title primary--text d-inline-block"
+          tabindex="0"
+          id="comments"
+        >
+          התייחסויות
+        </h4>
+      </v-col>
+      <v-col v-if="isUserCommentsAdmin" cols="auto" class="pb-0">
+        <v-btn
+          color="primary"
+          outlined
+          small
+          :loading="lockCommentLoader"
+          @click="switchCommentsLockState(true)"
+          v-if="!planData.commentsAreLocked"
+        >
+          נעילת התייחסויות
+        </v-btn>
+        <v-btn
+          v-else
+          small
+          :loading="lockCommentLoader"
+          color="primary"
+          class="text--white"
+          @click="switchCommentsLockState(false)"
+        >
+          <v-icon small left>mdi-lock</v-icon>
+          ההתייחסויות נעולות
+        </v-btn>
+        <span class="error--text d-block" v-if="lockCommentErrMessage">
+          {{ lockCommentErrMessage }}
+        </span>
+      </v-col>
+      <v-col v-else-if="planData.commentsAreLocked" cols="auto">
+        <v-chip color="orange" text-color="white">
+          הוספה של התייחסויות ותגובות חדשות ננעלה
+        </v-chip>
       </v-col>
       <v-col cols="12" class="pt-0">
         <Comments
@@ -147,17 +171,9 @@
         ></Comments>
       </v-col>
     </v-row>
-    <v-row v-if="!plan.addedManually">
-      <v-col>
-        <a
-          :href="iplanUrl"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="secondary--text font-weight-bold px-1"
-          >למידע נוסף באתר מנהל התכנון</a
-        >
-      </v-col>
-    </v-row>
+    <v-overlay v-model="loader" z-index="9999">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
   </v-container>
 </template>
 
@@ -192,7 +208,7 @@ export default class Plan extends Vue {
 
   planData = {
     id: "",
-    commentsAreLocked: ""
+    commentsAreLocked: false
   };
 
   async mounted() {

@@ -89,6 +89,7 @@ export const createSubject = `mutation createSubject(
 
 export const updateMyMeeting = `mutation udpateMyMeeting(
   $id: ID!
+  $addedManually: Boolean
   $background: String
   $summary: String
   $committee: ID!
@@ -116,7 +117,7 @@ export const updateMyMeeting = `mutation udpateMyMeeting(
         transcript: $transcript
         additionalFiles: $additionalFiles
         plans: $plans
-        addedManually: true
+        addedManually: $addedManually
       }
     }
   ) {

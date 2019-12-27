@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-expand-transition>
-      <v-row v-if="subscribedCommittees.length">
+      <v-row v-if="subscribedCommittees && subscribedCommittees.length">
         <v-col>
           <v-row>
             <v-col>
@@ -118,8 +118,9 @@ export default class CommitteeSubscription extends Vue {
   ];
 
   checkIfSubscribed(committeeId) {
-    return this.subscribedCommittees.some(
-      committee => committee.id == committeeId
+    return (
+      this.subscribedCommittees &&
+      this.subscribedCommittees.some(committee => committee.id == committeeId)
     );
   }
 
@@ -127,7 +128,7 @@ export default class CommitteeSubscription extends Vue {
     this.setLoading(true);
     await this.fetchCommittees();
     await this.fetchUserSubscriptions();
-    this.subscribedCommittees = this.user.subscribedCommittees;
+    this.subscribedCommittees = this.user && this.user.subscribedCommittees;
     this.setLoading(false);
   }
 

@@ -20,6 +20,7 @@ describe("Comment.vue", () => {
       lastName: "כץ",
       id: "5d8359f6be96155b71f5c6f9",
       job: "מתכנת",
+      organization: "קואופרטיב סופי",
       userImage: { url: "/uploads/2d08922d359742249508cbb37b34e658.jpeg" }
     },
     children: [],
@@ -54,6 +55,9 @@ describe("Comment.vue", () => {
     expect(text).toContain(comment.title);
     expect(text).toContain(comment.name);
     expect(text).toContain(comment.visibleContent);
+    expect(text).toContain(comment.user.job);
+    expect(text).toContain(comment.user.organization);
+    expect(text).toContain(comment.createdAt.toLocaleDateString());
   });
   it("displays only allowed actions", () => {
     const text = wrapper.text();

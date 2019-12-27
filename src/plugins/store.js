@@ -286,6 +286,9 @@ const storeOptions = {
      */
     async fetchUserSubscriptions(context) {
       const storeUser = context.getters.user;
+      if (!storeUser) {
+        return;
+      }
       const result = await makeGqlRequest(
         getUserSubscriptions,
         { id: storeUser.id },
