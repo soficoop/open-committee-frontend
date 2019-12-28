@@ -87,9 +87,6 @@
         </v-col>
       </v-row>
     </v-layout>
-    <v-overlay v-model="loader" z-index="9999">
-      <v-progress-circular indeterminate size="64"></v-progress-circular>
-    </v-overlay>
   </v-container>
 </template>
 
@@ -97,15 +94,16 @@
 import Component from "vue-class-component";
 import Vue from "vue";
 import { resetPassword } from "../helpers/functions";
+import { Mutation } from "vuex-class";
 
 @Component()
 export default class ResetPassword extends Vue {
+  @Mutation setLoading;
   resetPasswordData = {
     password: "",
     passwordConfirmation: "",
     showPassword: false
   };
-  loader = false;
   passwordReseted = "";
 
   get isRestFormValid() {
@@ -118,10 +116,10 @@ export default class ResetPassword extends Vue {
   }
 
   async resetUserPassword(resetPasswordData) {
-    this.loader = true;
+    this.setLoading(true);
     resetPasswordData.code = this.$route.params.code;
     this.passwordReseted = await resetPassword(resetPasswordData);
-    this.loader = false;
+    this.setLoading(false);
   }
 }
 </script>

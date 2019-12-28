@@ -1,12 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import createPersistedState from "vuex-persistedstate";
-import {
-  MutationTypes,
-  ActionTypes,
-  Getters,
-  authEndpoint
-} from "../helpers/constants";
+import { authEndpoint } from "../helpers/constants";
 import { dateTimeRevive, makeGqlRequest } from "../helpers/functions";
 import {
   getMeetings,
@@ -21,7 +16,7 @@ import { updateMe, updateMyPlan } from "../helpers/mutations.js";
 
 Vue.use(Vuex);
 
-export default new Vuex.Store({
+const storeOptions = {
   state: {
     /**@type {import("../../graphql/types").Committee[]} */
     committees: [],
@@ -35,7 +30,8 @@ export default new Vuex.Store({
     /**@type {import("../../graphql/types").UsersPermissionsUser} */
     user: null,
     /** @type {import("../../graphql/types").Meeting[]} */
-    managableMeetings: []
+    managableMeetings: [],
+    isLoading: false
   },
   mutations: {
     /**
@@ -43,7 +39,7 @@ export default new Vuex.Store({
      * @param {any} state The current state
      * @param {import("../../graphql/types").Committee[]} committees
      */
-    [MutationTypes.SET_COMMITTEES](state, committees) {
+    setCommittees(state, committees) {
       state.committees = committees;
     },
     /**
@@ -51,7 +47,7 @@ export default new Vuex.Store({
      * @param {any} state The current state
      * @param {import("../../graphql/types").UsersPermissionsUser} user
      */
-    [MutationTypes.SET_USER](state, user) {
+    setUser(state, user) {
       state.user = user;
     },
     /**
@@ -59,7 +55,7 @@ export default new Vuex.Store({
      * @param {any} state The current state
      * @param {import("../../graphql/types").Meeting[]} payload Meetings to set as upcoming meetings
      */
-    [MutationTypes.SET_UPCOMING_MEETINGS](state, payload) {
+    setUpcomingMeetings(state, payload) {
       state.upcomingMeetigs = payload;
     },
     /**
@@ -67,7 +63,7 @@ export default new Vuex.Store({
      * @param {any} state The current state
      * @param {import("../../graphql/types").Meeting} meeting Meeting to set as the selected meeting
      */
-    [MutationTypes.SET_SELECTED_MEETING](state, meeting) {
+    setSelectedMeeting(state, meeting) {
       const meetingIndexInState = state.upcomingMeetigs.findIndex(
         m => m.id == meeting.id
       );
@@ -85,7 +81,7 @@ export default new Vuex.Store({
      * @param {any} state The current state
      * @param {import("../../graphql/types").Plan} plan Plan to set as the selected plan
      */
-    [MutationTypes.SET_SELECTED_PLAN](state, plan) {
+    setSelectedPlan(state, plan) {
       const planIndexInState = state.plans.findIndex(p => p.sid == plan.sid);
       if (planIndexInState == -1) {
         state.plans.push(plan);
@@ -94,34 +90,40 @@ export default new Vuex.Store({
       }
       state.selectedPlan = plan;
     },
-    [MutationTypes.SET_JWT](state, jwt) {
+    setJwt(state, jwt) {
       state.jwt = jwt;
     },
-    [MutationTypes.SET_MANAGABLE_MEETINGS](state, meetings) {
+    setManagableMeetings(state, meetings) {
       state.managableMeetings = meetings;
+    },
+    setLoading(state, value) {
+      state.isLoading = value;
     }
   },
   getters: {
-    [Getters.COMMITTEES](state) {
+    committees(state) {
       return state.committees;
     },
-    [Getters.UPCOMING_MEETINGS](state) {
+    upcomingMeetings(state) {
       return state.upcomingMeetigs;
     },
-    [Getters.SELECTED_MEETING](state) {
+    selectedMeeting(state) {
       return state.selectedMeeting;
     },
-    [Getters.SELECTED_PLAN](state) {
+    selectedPlan(state) {
       return state.selectedPlan;
     },
-    [Getters.JWT](state) {
+    jwt(state) {
       return state.jwt;
     },
-    [Getters.USER](state) {
+    user(state) {
       return state.user;
     },
-    [Getters.MANAGABLE_MEETINGS](state) {
+    managableMeetings(state) {
       return state.managableMeetings;
+    },
+    isLoading(state) {
+      return state.isLoading;
     }
   },
   actions: {
@@ -129,29 +131,26 @@ export default new Vuex.Store({
      * Fetches all committees
      * @param {import("vuex").Store} context the store object
      */
-    async [ActionTypes.FETCH_COMMITTEES](context) {
+    async fetchCommittees(context) {
       const { committees } = await makeGqlRequest(getAllCommittees);
-      context.commit(MutationTypes.SET_COMMITTEES, committees);
+      context.commit(storeOptions.mutations.setCommittees.name, committees);
     },
     /**
      * Fetches upcoming meeting (partial)
      * @param {import("vuex").Store} context The store object
      */
-    async [ActionTypes.FETCH_UPCOMING_MEETINGS](context) {
+    async fetchUpcomingMeetings(context) {
       let date = new Date();
       date.setHours(0);
       const res = await makeGqlRequest(getMeetings(date));
       let meetings = res.meetings.filter(meeting => meeting.committee);
-      context.commit(MutationTypes.SET_UPCOMING_MEETINGS, meetings);
-    },
-    [ActionTypes.SET_MEETING](context, meeting) {
-      context.commit(MutationTypes.SET_SELECTED_MEETING, meeting);
+      context.commit(storeOptions.mutations.setUpcomingMeetings.name, meetings);
     },
     /**
      * Sign ups a user
      * @param {import("../../graphql/types").UsersPermissionsUser} user
      */
-    async [ActionTypes.SIGN_UP](context, user) {
+    async signUp(context, user) {
       user.username = user.email;
       const res = await fetch(`${authEndpoint}/register`, {
         method: "post",
@@ -166,7 +165,7 @@ export default new Vuex.Store({
      * @param {import("vuex").Store} context The store object
      * @param {import("../../graphql/types").UsersPermissionsUser} user user to sign in
      */
-    async [ActionTypes.SIGN_IN](context, user) {
+    async signIn(context, user) {
       const res = await fetch(`${authEndpoint}`, {
         method: "post",
         body: JSON.stringify({
@@ -178,8 +177,8 @@ export default new Vuex.Store({
       const result = await res.json();
 
       if (result.jwt) {
-        context.commit(MutationTypes.SET_JWT, result.jwt);
-        context.commit(MutationTypes.SET_USER, result.user);
+        context.commit(storeOptions.mutations.setJwt.name, result.jwt);
+        context.commit(storeOptions.mutations.setUser.name, result.user);
         return { status: true };
       }
       return { status: false, message: result.message };
@@ -187,34 +186,34 @@ export default new Vuex.Store({
     /**
      * Signs out the user by removing the user-related data from the store
      */
-    [ActionTypes.SIGN_OUT](context) {
-      context.commit(MutationTypes.SET_JWT, "");
-      context.commit(MutationTypes.SET_USER, null);
-      context.commit(MutationTypes.SET_MANAGABLE_MEETINGS, []);
+    signOut(context) {
+      context.commit(storeOptions.mutations.setJwt.name, "");
+      context.commit(storeOptions.mutations.setUser.name, null);
+      context.commit(storeOptions.mutations.setManagableMeetings.name, []);
     },
     /**
      * Fetches a meeting by its ID
      * @param {import("vuex").Store} context the store object
      * @param {stirng} id ID of meeting to fetch
      */
-    async [ActionTypes.FETCH_MEETING](context, id) {
+    async fetchMeeting(context, id) {
       const { meeting } = await makeGqlRequest(getMeeting(id));
-      context.commit(MutationTypes.SET_SELECTED_MEETING, meeting);
+      context.commit(storeOptions.mutations.setSelectedMeeting.name, meeting);
     },
     /**
      * Fetches a plan by its ID
      * @param {import("vuex").Store} context the store object
      * @param {string} id ID of plan to fetch
      */
-    async [ActionTypes.FETCH_PLAN](context, id) {
+    async fetchPlan(context, id) {
       const { plan } = await makeGqlRequest(getPlan, { id: id });
-      context.commit(MutationTypes.SET_SELECTED_PLAN, plan);
+      context.commit(storeOptions.mutations.setSelectedPlan.name, plan);
     },
     /**
      * Fetches managable meetings
      * @param {import("vuex").Store} context the store object
      */
-    async [ActionTypes.FETCH_MANAGABLE_MEETINGS](context) {
+    async fetchManagableMeetings(context) {
       if (
         !context.state.user ||
         context.state.user.role.name != "Administrator"
@@ -228,48 +227,54 @@ export default new Vuex.Store({
       );
       /** @type {import("../../graphql/types").Meeting[]} */
       const meetings = res.meetings;
-      context.commit(MutationTypes.SET_MANAGABLE_MEETINGS, meetings);
+      context.commit(
+        storeOptions.mutations.setManagableMeetings.name,
+        meetings
+      );
     },
     /**
      * Refreshes current user
      * @param {import("vuex").Store} context the store object
      */
-    async [ActionTypes.REFRESH_USER](context) {
+    async refreshUser(context) {
       if (!context.state.user) return;
       const { user } = await makeGqlRequest(
         findUser,
         { id: context.state.user.id },
         context.state.jwt
       );
-      context.commit(MutationTypes.SET_USER, user);
+      context.commit(storeOptions.mutations.setUser.name, user);
     },
     /**
      * Update user
      * @param {import("vuex").Store} context the store object
      * @param {import("../../graphql/types").UsersPermissionsUser} updatedUserFields
      */
-    async [ActionTypes.UPDATE_USER](context, updatedUserFields) {
+    async updateUser(context, updatedUserFields) {
       updatedUserFields.id = context.state.user.id;
       const res = await makeGqlRequest(
         updateMe,
         updatedUserFields,
         context.state.jwt
       );
-      context.commit(MutationTypes.SET_USER, res.updateMe.user);
+      context.commit(storeOptions.mutations.setUser.name, res.updateMe.user);
     },
     /**
      * Update plan
      * @param {import("vuex").Store} context the store object
      * @param {import("../../graphql/types").Plan} updatedPlanFields
      */
-    async [ActionTypes.UPDATE_PLAN](context, updatedPlanFields) {
+    async updatePlan(context, updatedPlanFields) {
       try {
         const res = await makeGqlRequest(
           updateMyPlan,
           updatedPlanFields,
           context.state.jwt
         );
-        context.commit(MutationTypes.SET_SELECTED_PLAN, res.updateMyPlan.plan);
+        context.commit(
+          storeOptions.mutations.setSelectedPlan.name,
+          res.updateMyPlan.plan
+        );
         return { status: true };
       } catch (e) {
         return { status: false, message: "שגיאה בשרת" };
@@ -279,17 +284,17 @@ export default new Vuex.Store({
      * Fetches user subscriptions and updates user accordingly
      * @param {import("vuex").Store} context the store object
      */
-    async [ActionTypes.FETCH_USER_SUBSCRIPTIONS](context) {
-      const storeUser = context.getters[Getters.USER];
+    async fetchUserSubscriptions(context) {
+      const storeUser = context.getters.user;
       if (!storeUser) {
         return;
       }
       const result = await makeGqlRequest(
         getUserSubscriptions,
         { id: storeUser.id },
-        context.getters[Getters.JWT]
+        context.getters.jwt
       );
-      context.commit(MutationTypes.SET_USER, {
+      context.commit(storeOptions.mutations.setUser.name, {
         ...storeUser,
         subscribedCommittees: result.user.subscribedCommittees
       });
@@ -303,4 +308,6 @@ export default new Vuex.Store({
       }
     })
   ]
-});
+};
+
+export default new Vuex.Store(storeOptions);

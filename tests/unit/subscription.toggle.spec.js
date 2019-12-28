@@ -1,7 +1,6 @@
 import Vue from "vue";
 import { shallowMount } from "@vue/test-utils";
 import SubscriptionToggle from "@/components/SubscriptionToggle.vue";
-import { Getters, ActionTypes } from "@/helpers/constants";
 import Vuetify from "vuetify";
 Vue.use(Vuetify);
 
@@ -38,10 +37,10 @@ describe("SubscriptionToggle.vue", () => {
   let mocks = {
     $store: {
       getters: {
-        [Getters.USER]: user
+        user
       },
       actions: {
-        [ActionTypes.UPDATE_USER]: jest.fn
+        updateUser: jest.fn
       }
     }
   };

@@ -1,7 +1,6 @@
 import Vue from "vue";
 import { shallowMount } from "@vue/test-utils";
 import User from "@/views/User.vue";
-import { Getters } from "@/helpers/constants";
 import Vuetify from "vuetify";
 Vue.use(Vuetify);
 
@@ -55,7 +54,7 @@ describe("User.vue", () => {
   let mocks = {
     $store: {
       getters: {
-        [Getters.USER]: user
+        user
       }
     }
   };

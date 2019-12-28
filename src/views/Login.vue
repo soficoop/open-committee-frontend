@@ -113,7 +113,7 @@
                   large
                   color="secondary"
                   :disabled="!isSignUpFormValid"
-                  @click="signUp(signupData)"
+                  @click="executeSignUp(signupData)"
                   >הרשמה</v-btn
                 >
                 <v-expand-transition>
@@ -272,21 +272,18 @@
         </v-layout>
       </v-flex>
     </v-layout>
-    <v-overlay v-model="loader" z-index="9999">
-      <v-progress-circular indeterminate size="64"></v-progress-circular>
-    </v-overlay>
   </v-container>
 </template>
 
 <script>
 import { Component, Watch } from "vue-property-decorator";
 import Vue from "vue";
-import { Action } from "vuex-class";
-import { ActionTypes } from "../helpers/constants";
+import { Action, Mutation } from "vuex-class";
 import { sendForgotenPasswordEmail } from "../helpers/functions";
 
 @Component()
 export default class Login extends Vue {
+  @Mutation setLoading;
   loginData = {
     email: "",
     password: "",
@@ -310,15 +307,14 @@ export default class Login extends Vue {
   authenticationFailed = false;
   userIsNotConfirmedMsg = "";
   dialog = false;
-  loader = false;
   registrationSuccess = false;
 
   @Watch("dialog") onPropertyChanged() {
     this.forgotPasswordData.email = this.loginData.email;
   }
 
-  @Action(ActionTypes.SIGN_UP) signUpAction;
-  @Action(ActionTypes.SIGN_IN) loginAction;
+  @Action signUp;
+  @Action signIn;
 
   created() {
     this.tab = this.isUserConfirmed ? 1 : 0;
@@ -328,24 +324,24 @@ export default class Login extends Vue {
     return this.$route.path === "/login/user-is-confirmed";
   }
 
-  async signUp(user) {
-    this.loader = true;
-    this.registrationSuccess = await this.signUpAction(user);
+  async executeSignUp(user) {
+    this.setLoading(true);
+    this.registrationSuccess = await this.signUp(user);
     this.authenticationFailed = !this.registrationSuccess;
-    this.loader = false;
+    this.setLoading(false);
   }
 
   async logIn(user) {
-    const result = await this.loginAction(user);
+    const result = await this.signIn(user);
     this.handleAuthentication(result.status, result.message);
   }
 
   async sendRecoveryMail(userMail) {
-    this.loader = true;
+    this.setLoading(true);
     this.forgotPasswordData.mailSent = await sendForgotenPasswordEmail(
       userMail
     );
-    this.loader = false;
+    this.setLoading(false);
   }
 
   handleAuthentication(isSuccessful, message) {
