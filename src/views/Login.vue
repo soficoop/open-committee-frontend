@@ -278,7 +278,7 @@
 <script>
 import { Component, Watch } from "vue-property-decorator";
 import Vue from "vue";
-import { Action, Mutation } from "vuex-class";
+import { Action, Mutation, Getter } from "vuex-class";
 import { sendForgotenPasswordEmail } from "../helpers/functions";
 
 @Component()
@@ -315,6 +315,7 @@ export default class Login extends Vue {
 
   @Action signUp;
   @Action signIn;
+  @Getter user;
 
   created() {
     this.tab = this.isUserConfirmed ? 1 : 0;
@@ -346,7 +347,11 @@ export default class Login extends Vue {
 
   handleAuthentication(isSuccessful, message) {
     if (isSuccessful) {
-      this.$router.push("/");
+      const nextRoute =
+        this.user && this.user.subscribedCommittees.length
+          ? "/"
+          : "/subscriptions";
+      this.$router.push(nextRoute);
     } else {
       this.userIsNotConfirmedMsg =
         message === "Your account email is not confirmed."

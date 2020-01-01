@@ -58,7 +58,6 @@ export default class App extends Vue {
 
   async mounted() {
     this.setKeyboardAccessibility();
-    this.setLoading(true);
     await this.fetchUpcomingMeetings();
     await this.refreshUser();
     this.setLoading(false);
