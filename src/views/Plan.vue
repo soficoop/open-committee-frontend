@@ -171,9 +171,6 @@
         ></Comments>
       </v-col>
     </v-row>
-    <v-overlay v-model="loader" z-index="9999">
-      <v-progress-circular indeterminate size="64"></v-progress-circular>
-    </v-overlay>
   </v-container>
 </template>
 
