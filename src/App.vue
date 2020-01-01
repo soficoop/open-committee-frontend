@@ -42,7 +42,7 @@ body.using-mouse :focus {
 import Navigation from "./components/Navigation";
 import Component from "vue-class-component";
 import Vue from "vue";
-import { Action, Getter } from "vuex-class";
+import { Action, Getter, Mutation } from "vuex-class";
 
 @Component({
   components: {
@@ -53,10 +53,21 @@ export default class App extends Vue {
   @Action fetchUpcomingMeetings;
   @Action refreshUser;
   @Getter isLoading;
-  mounted() {
-    this.fetchUpcomingMeetings();
-    this.refreshUser();
-    // prevent tabindex accessibility feature from hurting ux
+  @Mutation setLoading;
+  isNavOpen = this.$vuetify.breakpoint.mdAndUp;
+
+  async mounted() {
+    this.setKeyboardAccessibility();
+    this.setLoading(true);
+    await this.fetchUpcomingMeetings();
+    await this.refreshUser();
+    this.setLoading(false);
+  }
+
+  /**
+   * prevents tabindex accessibility feature from hurting ux
+   */
+  setKeyboardAccessibility() {
     document.addEventListener("mousedown", () =>
       document.body.classList.add("using-mouse")
     );
@@ -64,6 +75,5 @@ export default class App extends Vue {
       document.body.classList.remove("using-mouse")
     );
   }
-  isNavOpen = this.$vuetify.breakpoint.mdAndUp;
 }
 </script>

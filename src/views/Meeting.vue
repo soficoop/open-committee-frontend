@@ -222,8 +222,21 @@ export default class Meeting extends Vue {
   }
 
   async mounted() {
+    this.loadMeeting(this.meetingId);
+  }
+
+  async beforeRouteUpdate(to, from, next) {
+    this.loadMeeting(to.params.meetingId);
+    next();
+  }
+
+  /**
+   * Loads a meeting by a given ID
+   * @param {string} id Meeting ID
+   */
+  async loadMeeting(id) {
     this.setLoading(true);
-    await this.fetchMeeting(this.meetingId);
+    await this.fetchMeeting(id);
     await this.fetchManagableMeetings();
     this.setLoading(false);
   }
