@@ -1,7 +1,6 @@
 import Vue from "vue";
 import { shallowMount } from "@vue/test-utils";
 import Plan from "@/views/Plan.vue";
-import { Getters } from "@/helpers/constants";
 import Vuetify from "vuetify";
 Vue.use(Vuetify);
 
@@ -197,16 +196,22 @@ describe("Plan.vue", () => {
   let mocks = {
     $store: {
       getters: {
-        [Getters.SELECTED_PLAN]: plan,
-        [Getters.USER]: currentUser,
-        [Getters.MANAGABLE_MEETINGS]: []
+        selectedPlan: plan,
+        user: currentUser,
+        managableMeetings: []
       }
-    }
+    },
+    $route: { params: { planId: plan.id } }
   };
   beforeEach(() => {
     wrapper = shallowMount(Plan, {
       mocks,
-      vuetify: new Vuetify()
+      vuetify: new Vuetify(),
+      methods: {
+        fetchManagableMeetings: () => [],
+        fetchPlan: () => {},
+        setLoading: () => {}
+      }
     });
   });
   it("loads plan and managable meetings from the store", () => {

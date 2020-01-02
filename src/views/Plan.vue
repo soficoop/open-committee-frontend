@@ -171,18 +171,13 @@
         ></Comments>
       </v-col>
     </v-row>
-    <v-overlay v-model="loader" z-index="9999">
-      <v-progress-circular indeterminate size="64"></v-progress-circular>
-    </v-overlay>
   </v-container>
 </template>
 
 <script>
 import Component from "vue-class-component";
 import Vue from "vue";
-import { ActionTypes, Getters } from "../helpers/constants";
-import store from "../plugins/store";
-import { Getter, Action } from "vuex-class";
+import { Getter, Action, Mutation } from "vuex-class";
 import MeetingCards from "../components/MeetingCards.vue";
 import FileCards from "../components/FileCards.vue";
 import Map from "../components/Map.vue";
@@ -193,17 +188,18 @@ import SubscriptionToggle from "../components/SubscriptionToggle.vue";
   components: { MeetingCards, FileCards, Map, Comments, SubscriptionToggle }
 })
 export default class Plan extends Vue {
+  @Action fetchManagableMeetings;
+  @Action fetchPlan;
   /**
    * @type {import("../../graphql/types").UsersPermissionsUser}
    */
-  @Getter(Getters.USER) currentUser;
+  @Getter user;
   /** @type {import("../../graphql/types").Plan} */
-  @Getter(Getters.SELECTED_PLAN) plan;
+  @Getter selectedPlan;
   /** @type {import("../../graphql/types").Meeting[]} */
-  @Getter(Getters.MANAGABLE_MEETINGS) managableMeetings;
-  @Action(ActionTypes.UPDATE_PLAN) updatePlanAction;
-
-  loader = false;
+  @Getter managableMeetings;
+  @Action updatePlan;
+  @Mutation setLoading;
   lockCommentLoader = false;
   lockCommentErrMessage = "";
 
@@ -212,14 +208,18 @@ export default class Plan extends Vue {
     commentsAreLocked: false
   };
 
-  mounted() {
+  async mounted() {
+    this.setLoading(true);
+    await this.fetchPlan(this.$route.params.planId);
+    this.setLoading(false);
     this.planData.id = this.plan.id;
     this.planData.commentsAreLocked = this.plan.commentsAreLocked;
+    await this.fetchManagableMeetings();
   }
 
   async switchCommentsLockState(lock) {
     this.lockCommentLoader = true;
-    const res = await this.updatePlanAction({
+    const res = await this.updatePlan({
       id: this.planData.id,
       commentsAreLocked: lock
     });
@@ -231,6 +231,10 @@ export default class Plan extends Vue {
       this.planData.commentsAreLocked = lock;
     }
     this.lockCommentLoader = false;
+  }
+
+  get plan() {
+    return this.selectedPlan;
   }
 
   /** @returns {import("../helpers/typings").MeetingCard[]} */
@@ -248,7 +252,9 @@ export default class Plan extends Vue {
   get privilegedUsers() {
     const users = [];
     for (const meeting of this.plan.meetings) {
-      for (const user of meeting.committee.users) {
+      const committeeUsers =
+        (meeting.committee && meeting.committee.users) || [];
+      for (const user of committeeUsers) {
         users.push(user.id);
       }
     }
@@ -256,9 +262,7 @@ export default class Plan extends Vue {
   }
 
   get isUserCommentsAdmin() {
-    return (
-      this.currentUser && this.privilegedUsers.includes(this.currentUser.id)
-    );
+    return this.user && this.privilegedUsers.includes(this.user.id);
   }
 
   get planInformation() {
@@ -292,12 +296,6 @@ export default class Plan extends Vue {
 
   get planTypeFirstWord() {
     return this.plan.type.split()[0];
-  }
-
-  async beforeRouteEnter(to, from, next) {
-    await store.dispatch(ActionTypes.FETCH_PLAN, to.params.planId);
-    await store.dispatch(ActionTypes.FETCH_MANAGABLE_MEETINGS);
-    next();
   }
 }
 </script>

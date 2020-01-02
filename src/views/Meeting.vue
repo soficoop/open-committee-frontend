@@ -110,11 +110,9 @@
 <script>
 import Component from "vue-class-component";
 import Vue from "vue";
-import { ActionTypes, Getters } from "../helpers/constants";
 import { makeGqlRequest } from "../helpers/functions";
 import { hideMeeting } from "../helpers/mutations";
-import store from "../plugins/store";
-import { Getter, Action } from "vuex-class";
+import { Getter, Action, Mutation } from "vuex-class";
 import AgendaCards from "../components/AgendaCards.vue";
 import FileCards from "../components/FileCards.vue";
 import MeetingCards from "../components/MeetingCards.vue";
@@ -124,15 +122,22 @@ import SubscriptionToggle from "../components/SubscriptionToggle.vue";
   components: { MeetingCards, AgendaCards, FileCards, SubscriptionToggle }
 })
 export default class Meeting extends Vue {
-  @Action(ActionTypes.FETCH_MANAGABLE_MEETINGS) fetchManagableMeetings;
+  @Action fetchMeeting;
+  @Action fetchManagableMeetings;
   /**@type {import("../../graphql/types").Meeting} */
-  @Getter(Getters.SELECTED_MEETING) meeting;
+  @Getter selectedMeeting;
   /**@type {import("../../graphql/types").Meeting[]} */
-  @Getter(Getters.MANAGABLE_MEETINGS) managableMeetings;
-  @Getter(Getters.JWT) jwt;
+  @Getter managableMeetings;
+  @Mutation setLoading;
+  @Getter jwt;
   hoveredPlan = "";
   dialog = false;
   errorOccurred = false;
+
+  get meeting() {
+    return this.selectedMeeting;
+  }
+
   get meetingFiles() {
     let result = [
       {
@@ -191,7 +196,9 @@ export default class Meeting extends Vue {
         { key: "סטטוס", value: plan.status },
         {
           key: "עדכון אחרון",
-          value: plan.lastUpdate && plan.lastUpdate.toLocaleDateString("he")
+          value:
+            plan.lastUpdate instanceof Date &&
+            plan.lastUpdate.toLocaleDateString("he")
         },
         { key: "מיקום", value: plan.location }
       ],
@@ -214,18 +221,24 @@ export default class Meeting extends Vue {
     return this.$route.params.meetingId;
   }
 
-  async beforeRouteEnter(to, from, next) {
-    await store.dispatch(ActionTypes.FETCH_MEETING, to.params.meetingId);
-    next();
+  async mounted() {
+    this.loadMeeting(this.meetingId);
   }
 
   async beforeRouteUpdate(to, from, next) {
-    await store.dispatch(ActionTypes.FETCH_MEETING, to.params.meetingId);
+    this.loadMeeting(to.params.meetingId);
     next();
   }
 
-  async mounted() {
+  /**
+   * Loads a meeting by a given ID
+   * @param {string} id Meeting ID
+   */
+  async loadMeeting(id) {
+    this.setLoading(true);
+    await this.fetchMeeting(id);
     await this.fetchManagableMeetings();
+    this.setLoading(false);
   }
 
   async deleteMeeting() {

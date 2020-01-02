@@ -296,7 +296,6 @@ import Component from "vue-class-component";
 import AgendaCards from "../components/AgendaCards";
 import Vue from "vue";
 import { Getter } from "vuex-class";
-import { Getters } from "../helpers/constants";
 import {
   createMeeting,
   createSubject,
@@ -310,9 +309,9 @@ import { makeGqlRequest, uploadFile } from "../helpers/functions";
 @Component({ components: { AgendaCards } })
 export default class ManageMeeting extends Vue {
   /** @type {import("../../graphql/types").UsersPermissionsUser} */
-  @Getter(Getters.USER) user;
+  @Getter user;
   /** @type {string} */
-  @Getter(Getters.JWT) jwt;
+  @Getter jwt;
   addedManually = true;
   submittedMeetingId = "";
   background = "";
