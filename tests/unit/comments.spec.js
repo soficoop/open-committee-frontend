@@ -268,6 +268,9 @@ describe("Comments.vue", () => {
           this.comments = this.mapApiComments(plan.comments);
         }
       },
+      mounted() {
+        this.fetchComments();
+      },
       vuetify: new Vuetify()
     });
   });

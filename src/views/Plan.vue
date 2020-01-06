@@ -202,7 +202,6 @@ export default class Plan extends Vue {
   @Mutation setLoading;
   lockCommentLoader = false;
   lockCommentErrMessage = "";
-
   planData = {
     id: "",
     commentsAreLocked: false
