@@ -113,7 +113,6 @@ export default class Comments extends Vue {
 
   @Watch("selectedPlan")
   onSelectedPlanChanged() {
-    console.info("selectedPlanChanged");
     this.fetchComments();
   }
 
