@@ -111,8 +111,13 @@ export default class Comments extends Vue {
     }
   }
 
-  created() {
+  @Watch("selectedPlan")
+  onSelectedPlanChanged() {
+    console.info("selectedPlanChanged");
     this.fetchComments();
+  }
+
+  created() {
     if (this.commentsAreLocked) {
       this.isCreatingNewComment = false;
     }
