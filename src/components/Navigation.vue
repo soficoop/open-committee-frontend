@@ -84,9 +84,9 @@ export default class Navigation extends Vue {
         to: "/manage",
         visible() {
           return (
-            this.$vuetify.breakpoint.mdAndUp &&
+            (this.$vuetify.breakpoint.mdAndUp &&
             this.user &&
-            this.user.role.name == "Administrator"
+            this.user.role.name == "Administrator")
           );
         }
       },
