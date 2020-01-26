@@ -325,3 +325,20 @@ export const hideMyComment = `mutation hideMyComment($id: ID!) {
     }
   }
 }`;
+
+export const createContactApplication = `mutation createContactApplication(
+  $name: String!
+  $email: String!
+  $message: String!
+) {
+  createContactApplication(
+    input: { data: { name: $name, email: $email, message: $message } }
+  ) {
+    contactApplication {
+      id
+      name
+      email
+      message
+    }
+  }
+}`;
