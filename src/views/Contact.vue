@@ -112,7 +112,7 @@ export default class Contact extends Vue {
       });
       this.hasSentApplication = true;
     } catch (e) {
-      this.hasApplicationFailed;
+      this.hasApplicationFailed = true;
       console.error(e);
     } finally {
       this.isSendingApplication = false;
