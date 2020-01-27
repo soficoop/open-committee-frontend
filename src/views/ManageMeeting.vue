@@ -539,7 +539,7 @@ export default class ManageMeeting extends Vue {
       addedManually: this.addedManually,
       background: this.background,
       committee: this.committee,
-      date: this.meetingDateString,
+      date: new Date(this.meetingDateString).toISOString(),
       decisions: uploadedFiles.decisions,
       number: !isNaN(this.meetingNumber) ? parseInt(this.meetingNumber) : null,
       plans: this.agendaItems.map(i => i.id),

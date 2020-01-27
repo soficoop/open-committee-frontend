@@ -10,6 +10,7 @@ const ManageMeeting = () => import("../views/ManageMeeting.vue");
 const User = () => import("../views/User.vue");
 const Subscriptions = () => import("../views/Subscriptions.vue");
 const ResetPassword = () => import("../views/ResetPassword.vue");
+const Contact = () => import("../views/Contact.vue");
 
 Vue.use(Router);
 
@@ -75,6 +76,10 @@ export default new Router({
     {
       path: "/reset-password/:code",
       component: ResetPassword
+    },
+    {
+      path: "/contact",
+      component: Contact
     }
   ],
   scrollBehavior() {
