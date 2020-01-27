@@ -16,6 +16,7 @@
           <v-img
             src="img/illustrations/undraw_shared_workspace.svg"
             alt="thank-you"
+            eager
           ></v-img>
           <h2 class="headline pa-3 text-center text--secondary">
             פנייתכם התקבלה
