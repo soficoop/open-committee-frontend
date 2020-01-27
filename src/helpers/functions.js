@@ -116,3 +116,14 @@ export async function resetPassword(resetPassworddata) {
 
   return !!result.jwt;
 }
+
+/**
+ * Checks whether a given string represents a valid email address
+ * @param {string} email a given email string
+ * @returns {boolean} true if the email is valid, false otherwise
+ */
+export function checkIfEmailIsValid(email) {
+  return email.match(
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+  );
+}

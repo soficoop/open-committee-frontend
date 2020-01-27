@@ -279,7 +279,10 @@
 import { Component, Watch } from "vue-property-decorator";
 import Vue from "vue";
 import { Action, Mutation, Getter } from "vuex-class";
-import { sendForgotenPasswordEmail } from "../helpers/functions";
+import {
+  sendForgotenPasswordEmail,
+  checkIfEmailIsValid
+} from "../helpers/functions";
 
 @Component()
 export default class Login extends Vue {
@@ -308,6 +311,7 @@ export default class Login extends Vue {
   userIsNotConfirmedMsg = "";
   dialog = false;
   registrationSuccess = false;
+  isEmailValid = checkIfEmailIsValid;
 
   @Watch("dialog") onPropertyChanged() {
     this.forgotPasswordData.email = this.loginData.email;
@@ -365,12 +369,6 @@ export default class Login extends Vue {
     this.dialog = false;
     this.forgotPasswordData.mailSent = "";
     this.forgotPasswordData.email = "";
-  }
-
-  isEmailValid(email) {
-    return email.match(
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    );
   }
 
   get canLogin() {
