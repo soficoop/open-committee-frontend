@@ -47,6 +47,7 @@
                         label="שם מלא"
                         :rules="[value => !!value]"
                         v-model="name"
+                        :disabled="!!user"
                         hide-details
                       ></v-text-field>
                     </v-col>
@@ -55,6 +56,7 @@
                         outlined
                         label="אימייל"
                         v-model="email"
+                        :disabled="!!user"
                         hide-details
                         :error="email.length > 0 && !isEmailValid(email)"
                         :rules="[value => !!value]"
@@ -108,8 +110,11 @@ import Component from "vue-class-component";
 import Vue from "vue";
 import { checkIfEmailIsValid, makeGqlRequest } from "../helpers/functions";
 import { createContactApplication } from "../helpers/mutations";
+import { Getter } from "vuex-class";
 @Component()
 export default class Contact extends Vue {
+  /** @type {import("../../graphql/types").UsersPermissionsUser}*/
+  @Getter user;
   isEmailValid = checkIfEmailIsValid;
   /** @type {string} */
   name = "";
@@ -120,6 +125,13 @@ export default class Contact extends Vue {
   isSendingApplication = false;
   hasSentApplication = false;
   hasApplicationFailed = false;
+
+  mounted() {
+    if (this.user) {
+      this.name = `${this.user.firstName} ${this.user.lastName}`;
+      this.email = this.user.email;
+    }
+  }
 
   get canSendApplication() {
     return this.name && this.isEmailValid(this.email) && this.message;
