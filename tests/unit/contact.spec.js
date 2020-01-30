@@ -9,7 +9,8 @@ describe("Contact.vue", () => {
   let wrapper;
   beforeEach(() => {
     wrapper = shallowMount(Contact, {
-      vuetify: new Vuetify()
+      vuetify: new Vuetify(),
+      mocks: { $store: { getters: { user: null } } }
     });
   });
   it("computes canSendApplication correctly", () => {
@@ -28,5 +29,25 @@ describe("Contact.vue", () => {
   it("displays correct success message", () => {
     wrapper.vm.hasSentApplication = true;
     expect(wrapper.text()).toContain("פנייתכם התקבלה");
+  });
+  it("displays name and email of current user", () => {
+    expect(wrapper.vm.name).toBe("");
+    expect(wrapper.vm.email).toBe("");
+    wrapper = shallowMount(Contact, {
+      vuetify: new Vuetify(),
+      mocks: {
+        $store: {
+          getters: {
+            user: {
+              firstName: "Testy",
+              lastName: "Tester",
+              email: "test@test.com"
+            }
+          }
+        }
+      }
+    });
+    expect(wrapper.vm.name).toBe("Testy Tester");
+    expect(wrapper.vm.email).toBe("test@test.com");
   });
 });
