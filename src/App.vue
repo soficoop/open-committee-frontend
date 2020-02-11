@@ -52,6 +52,7 @@ import { Action, Getter, Mutation } from "vuex-class";
 export default class App extends Vue {
   @Action fetchUpcomingMeetings;
   @Action refreshUser;
+  @Action signOut;
   @Getter isLoading;
   @Mutation setLoading;
   isNavOpen = this.$vuetify.breakpoint.mdAndUp;
@@ -59,8 +60,14 @@ export default class App extends Vue {
   async mounted() {
     this.setKeyboardAccessibility();
     await this.fetchUpcomingMeetings();
-    await this.refreshUser();
-    this.setLoading(false);
+    try {
+      await this.refreshUser();
+    } catch (e) {
+      this.signOut();
+      this.$router.push("/login");
+    } finally {
+      this.setLoading(false);
+    }
   }
 
   /**
