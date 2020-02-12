@@ -107,6 +107,10 @@
                   v-model="signupData.job"
                   name="job"
                 ></v-text-field>
+                <p class="caption text-center">
+                  עם ההרשמה אני מאשר/ת את
+                  <a href="/terms" target="blank"> תנאי השימוש</a>
+                </p>
                 <v-btn
                   id="submit-button"
                   block
