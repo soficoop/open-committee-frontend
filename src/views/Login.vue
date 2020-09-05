@@ -338,6 +338,12 @@ export default class Login extends Vue {
     this.registrationSuccess = await this.signUp(user);
     this.authenticationFailed = !this.registrationSuccess;
     this.setLoading(false);
+    try {
+      // eslint-disable-next-line no-undef
+      fbq("trackCustom", "SubscribedCommittee");
+    } catch (e) {
+      console.warn(e);
+    }
   }
 
   async logIn(user) {
