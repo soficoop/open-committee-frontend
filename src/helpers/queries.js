@@ -50,6 +50,7 @@ export function getMeeting(id) {
         attachedFiles {
           id
           name
+          ext
         }
         type
         name
@@ -62,6 +63,7 @@ export function getMeeting(id) {
       protocol {
         id
         name
+        ext
         url
       }
       transcript {
@@ -72,11 +74,13 @@ export function getMeeting(id) {
       decisions {
         id
         name
+        ext
         url
           }
       additionalFiles {
         id
         name
+        ext
         url
       }
     }
@@ -116,6 +120,7 @@ export const getPlan = `query getPlan($id: ID!) {
     }
     attachedFiles {
       id
+      ext
       name
       url
       size
@@ -150,6 +155,7 @@ export function getCommentsByPlan(id) {
         }
       }
       files {
+        ext
         name
         url
       }
@@ -161,6 +167,7 @@ export function getCommentsByPlan(id) {
         isHidden
         createdAt
         files {
+          ext
           name
           url
         }
