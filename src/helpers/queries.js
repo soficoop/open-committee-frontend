@@ -37,7 +37,7 @@ export function getMeeting(id) {
         parent {
           sid
         }
-        meetings(sort: "date:desc" where: {_id_ne: "${id}", isHidden_ne: true}) {
+        meetings(sort: "date:desc" where: {id_ne: "${id}", isHidden_ne: true}) {
           id
           date
           number
