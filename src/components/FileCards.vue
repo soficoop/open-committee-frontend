@@ -11,7 +11,7 @@
     >
       <v-card color="grey lighten-4">
         <v-card-text class="text-center pt-2 pb-0" tabindex="0">
-          {{ file.name }}
+          {{ file.name }}{{ file.ext }}
         </v-card-text>
         <v-card-actions>
           <v-btn

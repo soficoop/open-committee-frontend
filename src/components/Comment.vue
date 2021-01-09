@@ -48,7 +48,7 @@
             :key="i"
             :href="generateUrlFromFile(file)"
           >
-            {{ shortenFilename(file.name) }}
+            {{ shortenFilename(file.name) }}{{ file.ext }}
           </a>
         </v-col>
       </v-row>
