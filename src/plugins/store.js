@@ -158,7 +158,7 @@ const storeOptions = {
         headers: { "Content-Type": "application/json" }
       });
       const result = await res.json();
-      return !!result.jwt;
+      return !!result.user;
     },
     /**
      * Performs sign in
