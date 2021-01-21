@@ -326,7 +326,12 @@ export default class Login extends Vue {
   @Getter user;
 
   created() {
-    this.tab = this.isUserConfirmed ? 1 : 0;
+    this.tab = this.initialTab;
+  }
+
+  get initialTab() {
+    const tabParam = this.$route.params.tab || 0;
+    return this.isUserConfirmed ? 1 : tabParam;
   }
 
   get isUserConfirmed() {
