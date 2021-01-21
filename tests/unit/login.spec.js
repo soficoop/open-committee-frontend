@@ -16,7 +16,7 @@ describe("Login.vue", () => {
   beforeEach(() => {
     wrapper = shallowMount(Login, {
       mocks: {
-        $route: {}
+        $route: { params: {} }
       },
       loginData,
       vuetify: new Vuetify()
@@ -50,13 +50,35 @@ describe("Login.vue", () => {
   it("displays login form on email confirmation", () => {
     wrapper = shallowMount(Login, {
       mocks: {
-        $route: { path: "/login/user-is-confirmed" }
+        $route: { path: "/login/user-is-confirmed", params: {} }
       },
       loginData,
       vuetify: new Vuetify()
     });
     expect(wrapper.vm.isUserConfirmed).toBeTruthy();
     expect(wrapper.text()).toContain("ההרשמה הושלמה, כעת ניתן להתחבר למערכת");
+    expect(wrapper.vm.tab).toEqual(1);
+    expect(
+      wrapper.findAll("v-btn").filter(btn => btn.isVisible())
+    ).toHaveLength(0);
+  });
+  it("displays initial tab by tab route param", () => {
+    wrapper = shallowMount(Login, {
+      mocks: {
+        $route: { params: { tab: 0 } }
+      },
+      loginData,
+      vuetify: new Vuetify()
+    });
+    expect(wrapper.vm.tab).toEqual(0);
+    expect(wrapper.find("#submit-button").exists()).toBeTruthy();
+    wrapper = shallowMount(Login, {
+      mocks: {
+        $route: { params: { tab: 1 } }
+      },
+      loginData,
+      vuetify: new Vuetify()
+    });
     expect(wrapper.vm.tab).toEqual(1);
     expect(
       wrapper.findAll("v-btn").filter(btn => btn.isVisible())

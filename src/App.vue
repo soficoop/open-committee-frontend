@@ -18,14 +18,34 @@
       :isOpen="isNavOpen"
       @openChanged="value => (isNavOpen = value)"
     ></Navigation>
-    <v-content class="background">
+    <v-bottom-sheet v-model="isLoginSheetVisible">
+      <v-sheet class="pa-3">
+        <v-row justify="center" class="py-1">
+          <div class="flex-shrink-1">
+            <h3 class="text-h6 my-2" tabindex="0">
+              התחברו כדי להישאר מעודכנים!
+            </h3>
+            <v-btn
+              block
+              class="my-2"
+              depressed
+              color="secondary"
+              @click="goToLogin"
+            >
+              התחברות
+            </v-btn>
+          </div>
+        </v-row>
+      </v-sheet>
+    </v-bottom-sheet>
+    <v-main class="background">
       <v-overlay v-model="isLoading" z-index="99999999">
         <v-progress-circular indeterminate size="64"></v-progress-circular>
       </v-overlay>
       <v-fade-transition mode="out-in">
         <router-view></router-view>
       </v-fade-transition>
-    </v-content>
+    </v-main>
   </v-app>
 </template>
 <style>
@@ -43,6 +63,7 @@ import Navigation from "./components/Navigation";
 import Component from "vue-class-component";
 import Vue from "vue";
 import { Action, Getter, Mutation } from "vuex-class";
+import { Watch } from "vue-property-decorator";
 
 @Component({
   components: {
@@ -54,17 +75,37 @@ export default class App extends Vue {
   @Action refreshUser;
   @Action signOut;
   @Getter isLoading;
+  @Getter user;
   @Mutation setLoading;
   isNavOpen = this.$vuetify.breakpoint.mdAndUp;
+  isLoginSheetVisible = false;
+
+  @Watch("$route")
+  handleRouteChanged() {
+    if (this.$route.path.startsWith("/login")) {
+      this.isLoginSheetVisible = false;
+    }
+  }
+
+  goToLogin() {
+    this.isLoginSheetVisible = false;
+    this.$router.push({
+      name: "login",
+      params: {
+        tab: 1
+      }
+    });
+  }
 
   async mounted() {
     this.setKeyboardAccessibility();
-    await this.fetchUpcomingMeetings();
+    this.fetchUpcomingMeetings();
     try {
       await this.refreshUser();
+      this.isLoginSheetVisible = !this.user;
     } catch (e) {
       this.signOut();
-      this.$router.push("/login");
+      this.goToLogin();
     } finally {
       this.setLoading(false);
     }
