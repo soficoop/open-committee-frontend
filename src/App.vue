@@ -18,14 +18,14 @@
       :isOpen="isNavOpen"
       @openChanged="value => (isNavOpen = value)"
     ></Navigation>
-    <v-content class="background">
+    <v-main class="background">
       <v-overlay v-model="isLoading" z-index="99999999">
         <v-progress-circular indeterminate size="64"></v-progress-circular>
       </v-overlay>
       <v-fade-transition mode="out-in">
         <router-view></router-view>
       </v-fade-transition>
-    </v-content>
+    </v-main>
   </v-app>
 </template>
 <style>
