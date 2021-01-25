@@ -22,6 +22,13 @@
       <v-sheet class="pa-3">
         <v-row justify="center" class="py-1">
           <div class="flex-shrink-1">
+            <v-btn
+              icon
+              class="p-absolute s-close-login-sheet ma-1"
+              @click="isLoginSheetVisible = false"
+            >
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
             <h3 class="text-h6 my-2" tabindex="0">
               התחברו כדי להישאר מעודכנים!
             </h3>
@@ -55,6 +62,9 @@ body.using-mouse :focus {
 .s-border-bottom {
   border-bottom: 1px solid;
   border-color: var(--v-background-base);
+}
+.s-close-login-sheet {
+  left: 0;
 }
 </style>
 
