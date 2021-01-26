@@ -61,7 +61,7 @@
                   <v-icon small>mdi-clipboard-text</v-icon>
                   {{ item.headline }}
                 </v-card-text>
-                <v-card-title class="title" tabindex="0">
+                <v-card-title class="title text-break" tabindex="0">
                   {{ item.description }}
                 </v-card-title>
               </v-layout>
