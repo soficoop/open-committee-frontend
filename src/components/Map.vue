@@ -1,8 +1,8 @@
 <template>
   <div v-if="center">
-    <Leaflet :center="center" @fullscreenToggle="switchDialog" class="h-150" />
+    <Leaflet :center="center" @fullscreenToggle="togglehDialog" class="h-150" />
     <v-dialog v-model="dialog" fullscreen>
-      <Leaflet :center="center" @fullscreenToggle="switchDialog" />
+      <Leaflet :center="center" @fullscreenToggle="togglehDialog" />
     </v-dialog>
   </div>
 </template>
@@ -11,7 +11,7 @@ import Component from "vue-class-component";
 import Vue from "vue";
 import { OpenStreetMapProvider } from "leaflet-geosearch";
 import Leaflet from "./Leaflet";
-import { Prop } from "vue-property-decorator";
+import { Prop, Watch } from "vue-property-decorator";
 
 @Component({
   components: {
@@ -22,16 +22,23 @@ export default class Map extends Vue {
   @Prop(String) query;
   dialog = false;
   center = null;
-  async mounted() {
-    const query = this.query;
-    const provider = new OpenStreetMapProvider();
-    const results = await provider.search({ query });
+  /** @type {OpenStreetMapProvider} */
+  provider = null;
+
+  @Watch("query")
+  async handleQueryChanged() {
+    const results = await this.provider.search({ query: this.query });
     if (results.length) {
       this.center = { lon: results[0].x, lat: results[0].y };
     }
   }
 
-  switchDialog() {
+  async mounted() {
+    this.provider = new OpenStreetMapProvider();
+    this.handleQueryChanged();
+  }
+
+  togglehDialog() {
     this.dialog = !this.dialog;
   }
 }
