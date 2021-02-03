@@ -112,15 +112,22 @@ export default class App extends Vue {
     this.fetchUpcomingMeetings();
     try {
       await this.refreshUser();
-      setTimeout(() => {
-        this.isLoginSheetVisible = !this.user;
-      }, 3000);
+      this.promptLoginTwice();
     } catch (e) {
       this.signOut();
       this.goToLogin();
     } finally {
       this.setLoading(false);
     }
+  }
+
+  promptLoginTwice() {
+    setTimeout(() => {
+      this.isLoginSheetVisible = !this.user;
+    }, 5000);
+    setTimeout(() => {
+      this.isLoginSheetVisible = !this.user;
+    }, 60000);
   }
 
   /**
