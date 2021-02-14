@@ -123,10 +123,12 @@ export default class App extends Vue {
 
   promptLoginTwice() {
     setTimeout(() => {
-      this.isLoginSheetVisible = !this.user;
+      this.isLoginSheetVisible =
+        !this.$route.path.startsWith("/login") && !this.user;
     }, 5000);
     setTimeout(() => {
-      this.isLoginSheetVisible = !this.user;
+      this.isLoginSheetVisible =
+        !this.$route.path.startsWith("/login") && !this.user;
     }, 60000);
   }
 
