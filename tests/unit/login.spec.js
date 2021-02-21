@@ -22,12 +22,6 @@ describe("Login.vue", () => {
       vuetify: new Vuetify()
     });
   });
-  it("renders correct fields", () => {
-    expect(wrapper.find("[name='login-email']").exists()).toBeTruthy();
-    expect(wrapper.find("[name='login-password']").exists()).toBeFalsy();
-    wrapper.setData({ loginData: { email: "asdasd@asda.com" } });
-    expect(wrapper.find("[name='login-password']").exists()).toBeTruthy();
-  });
   it("has the same email value in login and recovery", () => {
     wrapper.setData({ loginData: { email: "asdasd@asda.com" } });
     wrapper.vm.dialog = true;
