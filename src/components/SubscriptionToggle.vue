@@ -6,9 +6,6 @@
     >
       <span v-if="isUserSubscribed">התראות על הועדה הופעלו</span>
       <span v-else>התראות על הועדה כובו</span>
-      <v-btn icon @click="hasToggledSubscription = false" color="warning">
-        <v-icon>mdi-close</v-icon>
-      </v-btn>
     </v-snackbar>
     <v-btn
       fixed
