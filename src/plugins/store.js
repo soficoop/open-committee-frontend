@@ -12,7 +12,7 @@ import {
   getAllCommittees,
   findUser
 } from "../helpers/queries.js";
-import { updateMe, updateMyPlan } from "../helpers/mutations.js";
+import { updateMe, updateMyPlan, tokenSignIn } from "../helpers/mutations.js";
 
 Vue.use(Vuex);
 
@@ -218,6 +218,7 @@ const storeOptions = {
         !context.state.user ||
         context.state.user.role.name != "Administrator"
       ) {
+        context.commit(storeOptions.mutations.setManagableMeetings.name, []);
         return;
       }
       const res = await makeGqlRequest(
@@ -235,15 +236,23 @@ const storeOptions = {
     /**
      * Refreshes current user
      * @param {import("vuex").Store} context the store object
+     * @param {string} token a refresh token (optional)
      */
-    async refreshUser(context) {
-      if (!context.state.user) return;
+    async refreshUser(context, token) {
+      let id = context.state.user && context.state.user.id;
+      if (token) {
+        context.commit(storeOptions.mutations.setJwt.name, token);
+        const result = await makeGqlRequest(tokenSignIn, { token });
+        id = result.tokenSignIn.user.id;
+      }
+      if (!id) return;
       const { user } = await makeGqlRequest(
         findUser,
-        { id: context.state.user.id },
+        { id },
         context.state.jwt
       );
       context.commit(storeOptions.mutations.setUser.name, user);
+      await context.dispatch(storeOptions.actions.fetchManagableMeetings.name);
     },
     /**
      * Update user

@@ -78,7 +78,7 @@ import Vue from "vue";
 import { Getter } from "vuex-class";
 import { makeGqlRequest, uploadFile } from "../helpers/functions";
 import { createComment } from "../helpers/mutations";
-import { Prop } from "vue-property-decorator";
+import { Prop, Watch } from "vue-property-decorator";
 
 @Component
 export default class NewComment extends Vue {
@@ -95,7 +95,16 @@ export default class NewComment extends Vue {
   /** @type {File[]} */
   files = [];
 
+  @Watch("user")
+  onUserChanged() {
+    this.setNameByUser();
+  }
+
   created() {
+    this.setNameByUser();
+  }
+
+  setNameByUser() {
     if (this.user) {
       this.name = `${this.user.firstName} ${this.user.lastName}`;
     }

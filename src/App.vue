@@ -91,7 +91,12 @@ export default class App extends Vue {
   isLoginSheetVisible = false;
 
   @Watch("$route")
-  handleRouteChanged() {
+  async handleRouteChanged() {
+    if (this.$route.query.token) {
+      await this.refreshUser(this.$route.query.token);
+      this.$router.push({ query: undefined });
+      return;
+    }
     if (this.$route.path.startsWith("/login")) {
       this.isLoginSheetVisible = false;
     }
