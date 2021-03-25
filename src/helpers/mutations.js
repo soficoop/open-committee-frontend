@@ -342,3 +342,11 @@ export const createContactApplication = `mutation createContactApplication(
     }
   }
 }`;
+
+export const tokenSignIn = `mutation tokenSignIn($token: String!) {
+  tokenSignIn(token: $token) {
+    user {
+      id
+    }
+  }
+}`;
