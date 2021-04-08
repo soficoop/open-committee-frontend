@@ -290,15 +290,16 @@
             color="white"
             :href="getLoginLink('google')"
           >
-            <v-row class="overflow-visible">
-              <v-col cols="3" />
-              <v-col cols="6" class="overflow-visible">
+            <v-row>
+              <v-col cols="3">
                 <img
                   src="/img/icons/google.svg"
                   height="24"
                   style="vertical-align:middle"
-                  class="me-2 overflow-visible"
+                  class="me-2"
                 />
+              </v-col>
+              <v-col cols="6" class="d-flex align-center justify-center">
                 כניסה עם google
               </v-col>
               <v-col cols="3" />
@@ -311,9 +312,10 @@
             :href="getLoginLink('facebook')"
           >
             <v-row>
-              <v-col cols="3" />
-              <v-col cols="6">
+              <v-col cols="3">
                 <v-icon class="me-2">mdi-facebook</v-icon>
+              </v-col>
+              <v-col cols="6" class="d-flex align-center justify-center">
                 כניסה עם facebook
               </v-col>
               <v-col cols="3" />
