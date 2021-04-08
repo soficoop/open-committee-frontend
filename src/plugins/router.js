@@ -12,6 +12,7 @@ const Subscriptions = () => import("../views/Subscriptions.vue");
 const ResetPassword = () => import("../views/ResetPassword.vue");
 const Contact = () => import("../views/Contact.vue");
 const Terms = () => import("../views/Terms.vue");
+const PrivacyPolicy = () => import("../views/PrivacyPolicy.vue");
 
 Vue.use(Router);
 
@@ -85,6 +86,10 @@ export default new Router({
     {
       path: "/terms",
       component: Terms
+    },
+    {
+      path: "/privacy-policy",
+      component: PrivacyPolicy
     }
   ],
   scrollBehavior() {
