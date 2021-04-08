@@ -8,8 +8,7 @@ export const graphqlEndpoint =
   "http://localhost:1337/graphql";
 
 export const authEndpoint =
-  `${process.env.VUE_APP_API_ENDPOINT}/auth/local` ||
-  "http://localhost:1337/auth/local";
+  `${process.env.VUE_APP_API_ENDPOINT}/auth` || "http://localhost:1337/auth";
 
 export const uploadEndpoint =
   `${process.env.VUE_APP_API_ENDPOINT}/upload` ||

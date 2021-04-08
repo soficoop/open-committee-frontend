@@ -152,7 +152,7 @@ const storeOptions = {
      */
     async signUp(context, user) {
       user.username = user.email;
-      const res = await fetch(`${authEndpoint}/register`, {
+      const res = await fetch(`${authEndpoint}/local/register`, {
         method: "post",
         body: JSON.stringify(user),
         headers: { "Content-Type": "application/json" }
@@ -166,7 +166,7 @@ const storeOptions = {
      * @param {import("../../graphql/types").UsersPermissionsUser} user user to sign in
      */
     async signIn(context, user) {
-      const res = await fetch(`${authEndpoint}`, {
+      const res = await fetch(`${authEndpoint}/local`, {
         method: "post",
         body: JSON.stringify({
           identifier: user.email,

@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Router from "vue-router";
+import { authEndpoint } from "../helpers/constants";
 import Home from "../views/Home.vue";
 const About = () => import("../views/About.vue");
 const Login = () => import("../views/Login.vue");
@@ -42,7 +43,19 @@ export default new Router({
     {
       path: "/login",
       name: "login",
-      component: Login
+      component: Login,
+      children: [
+        {
+          path: ":providerName",
+          async beforeEnter(to, from, next) {
+            const res = await fetch(
+              `${authEndpoint}/${to.params.providerName}/callback${window.location.search}`
+            );
+            const json = await res.json();
+            next({ path: "/", query: { token: json.jwt } });
+          }
+        }
+      ]
     },
     {
       path: "/login/user-is-confirmed",
