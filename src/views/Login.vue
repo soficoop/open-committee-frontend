@@ -277,6 +277,48 @@
               </v-expand-transition>
             </v-tab-item>
           </v-tabs-items>
+          <v-row class="my-1">
+            <v-col class="d-flex align-center"><v-divider /></v-col>
+            <v-col class="d-flex shrink">
+              <span>או</span>
+            </v-col>
+            <v-col class="d-flex align-center"><v-divider /></v-col>
+          </v-row>
+          <v-btn
+            class="my-1"
+            large
+            color="white"
+            :href="getLoginLink('google')"
+          >
+            <v-row class="overflow-visible">
+              <v-col cols="3" />
+              <v-col cols="6" class="overflow-visible">
+                <img
+                  src="/img/icons/google.svg"
+                  height="24"
+                  style="vertical-align:middle"
+                  class="me-2 overflow-visible"
+                />
+                כניסה עם google
+              </v-col>
+              <v-col cols="3" />
+            </v-row>
+          </v-btn>
+          <v-btn
+            class="my-1"
+            large
+            color="primary"
+            :href="getLoginLink('facebook')"
+          >
+            <v-row>
+              <v-col cols="3" />
+              <v-col cols="6">
+                <v-icon class="me-2">mdi-facebook</v-icon>
+                כניסה עם facebook
+              </v-col>
+              <v-col cols="3" />
+            </v-row>
+          </v-btn>
         </v-layout>
       </v-flex>
     </v-layout>
@@ -291,6 +333,7 @@ import {
   sendForgotenPasswordEmail,
   checkIfEmailIsValid
 } from "../helpers/functions";
+import { apiEndpoint } from "../helpers/constants";
 
 @Component()
 export default class Login extends Vue {
@@ -371,6 +414,10 @@ export default class Login extends Vue {
       userMail
     );
     this.setLoading(false);
+  }
+
+  getLoginLink(provider) {
+    return apiEndpoint + "/connect/" + provider;
   }
 
   handleAuthentication(isSuccessful, message) {
