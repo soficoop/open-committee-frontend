@@ -22,6 +22,7 @@
           <v-icon right color="primary">mdi-update</v-icon>
           <span tabindex="0">{{ plan.status }}</span>
         </h5>
+        <PlanTags :tags="plan.tags" />
       </v-col>
     </v-row>
     <v-row v-if="plan.targets || plan.sections">
@@ -182,10 +183,18 @@ import MeetingCards from "../components/MeetingCards.vue";
 import FileCards from "../components/FileCards.vue";
 import Map from "../components/Map.vue";
 import Comments from "../components/Comments.vue";
+import PlanTags from "../components/PlanTags.vue";
 import SubscriptionToggle from "../components/SubscriptionToggle.vue";
 
 @Component({
-  components: { MeetingCards, FileCards, Map, Comments, SubscriptionToggle }
+  components: {
+    Comments,
+    FileCards,
+    Map,
+    MeetingCards,
+    PlanTags,
+    SubscriptionToggle
+  }
 })
 export default class Plan extends Vue {
   @Action fetchManagableMeetings;
