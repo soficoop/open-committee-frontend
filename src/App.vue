@@ -50,8 +50,25 @@
         <v-progress-circular indeterminate size="64"></v-progress-circular>
       </v-overlay>
       <v-fade-transition mode="out-in">
-        <router-view></router-view>
+        <router-view class="flex-grow-1"></router-view>
       </v-fade-transition>
+      <v-footer padless>
+        <v-container>
+          <v-row>
+            <v-col class="d-flex justify-center align-center ">
+              <h4
+                class="subtitle-1 primary--text text-center mx-3"
+                tabindex="0"
+              >
+                © 2021 חיים וסביבה
+              </h4>
+              <router-link to="/terms">תנאי השימוש</router-link>
+              <v-divider vertical class="mx-2" />
+              <router-link to="/privacy-policy">מדיניות הפרטיות</router-link>
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-footer>
     </v-main>
   </v-app>
 </template>
@@ -65,6 +82,11 @@ body.using-mouse :focus {
 }
 .s-close-login-sheet {
   left: 0;
+}
+.v-main__wrap {
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
 }
 </style>
 
