@@ -332,7 +332,7 @@ import { Component, Watch } from "vue-property-decorator";
 import Vue from "vue";
 import { Action, Mutation, Getter } from "vuex-class";
 import {
-  sendForgotenPasswordEmail,
+  sendForgotPasswordEmail,
   checkIfEmailIsValid
 } from "../helpers/functions";
 import { apiEndpoint } from "../helpers/constants";
@@ -412,9 +412,7 @@ export default class Login extends Vue {
 
   async sendRecoveryMail(userMail) {
     this.setLoading(true);
-    this.forgotPasswordData.mailSent = await sendForgotenPasswordEmail(
-      userMail
-    );
+    this.forgotPasswordData.mailSent = await sendForgotPasswordEmail(userMail);
     this.setLoading(false);
   }
 
