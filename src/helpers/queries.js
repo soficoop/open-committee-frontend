@@ -263,6 +263,13 @@ export const getAllCommittees = `query committees {
   }
 }`;
 
+export const getAllTags = `query tags {
+  tags {
+    id
+    name
+  }
+}`;
+
 export const findUser = `query findUser($id: ID!) {
   user(id: $id) {
     id

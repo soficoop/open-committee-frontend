@@ -66,6 +66,9 @@ body.using-mouse :focus {
 .s-close-login-sheet {
   left: 0;
 }
+.s-pointer-events-none {
+  pointer-events: none;
+}
 </style>
 
 <script>
