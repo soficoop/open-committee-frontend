@@ -76,7 +76,7 @@ export async function uploadUserImage(file, jwt, userId) {
  * Sends an email to a user with the link to the reset password page
  * @param {string} userMail user mail
  */
-export async function sendForgotenPasswordEmail(userMail) {
+export async function sendForgotPasswordEmail(userMail) {
   let data = {
     email: userMail
   };

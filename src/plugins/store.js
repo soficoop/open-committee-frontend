@@ -10,9 +10,15 @@ import {
   getCommitteeMeetings,
   getUserSubscriptions,
   getAllCommittees,
-  findUser
+  findUser,
+  getAllTags
 } from "../helpers/queries.js";
-import { updateMe, updateMyPlan, tokenSignIn } from "../helpers/mutations.js";
+import {
+  updateMe,
+  updateMyPlan,
+  tokenSignIn,
+  tagPlan
+} from "../helpers/mutations.js";
 
 Vue.use(Vuex);
 
@@ -20,18 +26,20 @@ const storeOptions = {
   state: {
     /**@type {import("../../graphql/types").Committee[]} */
     committees: [],
-    /**@type {import("../../graphql/types").Meeting[]} */
-    upcomingMeetigs: [],
-    /**@type {import("../../graphql/types").Meeting} */
-    selectedMeeting: null,
-    plans: [],
-    selectedPlan: null,
+    isLoading: false,
     jwt: "",
-    /**@type {import("../../graphql/types").UsersPermissionsUser} */
-    user: null,
     /** @type {import("../../graphql/types").Meeting[]} */
     managableMeetings: [],
-    isLoading: false
+    plans: [],
+    /**@type {import("../../graphql/types").Meeting} */
+    selectedMeeting: null,
+    selectedPlan: null,
+    /** @type {import("../../graphql/types").Tag[]} */
+    tags: [],
+    /**@type {import("../../graphql/types").Meeting[]} */
+    upcomingMeetigs: [],
+    /**@type {import("../../graphql/types").UsersPermissionsUser} */
+    user: null
   },
   mutations: {
     /**
@@ -41,6 +49,14 @@ const storeOptions = {
      */
     setCommittees(state, committees) {
       state.committees = committees;
+    },
+    /**
+     * Sets the current tags by the given ones
+     * @param {import("../helpers/typings").StoreState} state
+     * @param {import("../../graphql/types").Tag[]} tags
+     */
+    setTags(state, tags) {
+      state.tags = tags;
     },
     /**
      * Sets the current user by the given user
@@ -104,8 +120,14 @@ const storeOptions = {
     committees(state) {
       return state.committees;
     },
-    upcomingMeetings(state) {
-      return state.upcomingMeetigs;
+    isLoading(state) {
+      return state.isLoading;
+    },
+    jwt(state) {
+      return state.jwt;
+    },
+    managableMeetings(state) {
+      return state.managableMeetings;
     },
     selectedMeeting(state) {
       return state.selectedMeeting;
@@ -113,17 +135,14 @@ const storeOptions = {
     selectedPlan(state) {
       return state.selectedPlan;
     },
-    jwt(state) {
-      return state.jwt;
+    tags(state) {
+      return state.tags;
+    },
+    upcomingMeetings(state) {
+      return state.upcomingMeetigs;
     },
     user(state) {
       return state.user;
-    },
-    managableMeetings(state) {
-      return state.managableMeetings;
-    },
-    isLoading(state) {
-      return state.isLoading;
     }
   },
   actions: {
@@ -145,6 +164,14 @@ const storeOptions = {
       const res = await makeGqlRequest(getMeetings(date));
       let meetings = res.meetings.filter(meeting => meeting.committee);
       context.commit(storeOptions.mutations.setUpcomingMeetings.name, meetings);
+    },
+    /**
+     * Fetches all tags
+     * @param {import("vuex").Store<import("../helpers/typings").StoreState>} context
+     */
+    async fetchTags(context) {
+      const { tags } = await makeGqlRequest(getAllTags);
+      context.commit(storeOptions.mutations.setTags.name, tags);
     },
     /**
      * Sign ups a user
@@ -253,6 +280,35 @@ const storeOptions = {
       );
       context.commit(storeOptions.mutations.setUser.name, user);
       await context.dispatch(storeOptions.actions.fetchManagableMeetings.name);
+    },
+    /**
+     * adds multiple tags to the selected plan (in the store state)
+     * @param {import("vuex").Store<import("../helpers/typings").StoreState>} context the store object
+     * @param {string[]} tags tags to add
+     */
+    async tagSelectedPlan(context, tags) {
+      const selectedPlan = context.state.selectedPlan;
+      if (!selectedPlan || !selectedPlan.id) {
+        return;
+      }
+      try {
+        const res = await makeGqlRequest(
+          tagPlan,
+          {
+            planId: selectedPlan.id,
+            tags
+          },
+          context.state.jwt
+        );
+        context.commit(storeOptions.mutations.setSelectedPlan.name, {
+          ...selectedPlan,
+          ...res.tagPlan.plan
+        });
+        return true;
+      } catch (e) {
+        console.error(e);
+        return false;
+      }
     },
     /**
      * Update user
