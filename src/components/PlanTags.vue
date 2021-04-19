@@ -44,7 +44,7 @@
           >
             הצעות
           </h4>
-          <v-list>
+          <v-list v-if="optionalTags.length">
             <v-list-item
               v-for="tag in optionalTags"
               :key="tag"
@@ -53,6 +53,9 @@
               <v-list-item-title tabindex="0" v-text="tag"></v-list-item-title>
             </v-list-item>
           </v-list>
+          <h4 v-else class="subtitle-2 px-4" tabindex="0">
+            לחצו אנטר ליצירת תגית חדשה
+          </h4>
         </v-card-text>
         <v-card-actions>
           <v-spacer />
