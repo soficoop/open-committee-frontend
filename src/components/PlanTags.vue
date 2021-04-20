@@ -128,6 +128,7 @@ export default class PlanTags extends Vue {
     await this.tagSelectedPlan(this.selectedTags);
     this.closeDialog();
     this.setLoading(false);
+    await this.fetchTags();
   }
 
   /**
