@@ -88,6 +88,9 @@ body.using-mouse :focus {
   flex-direction: column;
   justify-content: stretch;
 }
+.s-pointer-events-none {
+  pointer-events: none;
+}
 </style>
 
 <script>

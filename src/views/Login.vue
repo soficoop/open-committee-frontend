@@ -31,6 +31,50 @@
               התחברות
             </v-tab>
           </v-tabs>
+          <v-btn
+            class="my-1"
+            large
+            color="white"
+            :href="getLoginLink('google')"
+          >
+            <v-row>
+              <v-col cols="3">
+                <img
+                  src="/img/icons/google.svg"
+                  height="24"
+                  style="vertical-align:middle"
+                  class="me-2"
+                />
+              </v-col>
+              <v-col cols="6" class="d-flex align-center justify-center">
+                כניסה עם google
+              </v-col>
+              <v-col cols="3" />
+            </v-row>
+          </v-btn>
+          <v-btn
+            class="my-1"
+            large
+            color="primary"
+            :href="getLoginLink('facebook')"
+          >
+            <v-row>
+              <v-col cols="3">
+                <v-icon class="me-2">mdi-facebook</v-icon>
+              </v-col>
+              <v-col cols="6" class="d-flex align-center justify-center">
+                כניסה עם facebook
+              </v-col>
+              <v-col cols="3" />
+            </v-row>
+          </v-btn>
+          <v-row class="my-1">
+            <v-col class="d-flex align-center"><v-divider /></v-col>
+            <v-col class="d-flex shrink">
+              <span>או</span>
+            </v-col>
+            <v-col class="d-flex align-center"><v-divider /></v-col>
+          </v-row>
           <v-tabs-items v-model="tab" class="overflow-hidden pa-1 transparent">
             <v-tab-item>
               <div v-if="registrationSuccess">
@@ -288,9 +332,10 @@ import { Component, Watch } from "vue-property-decorator";
 import Vue from "vue";
 import { Action, Mutation, Getter } from "vuex-class";
 import {
-  sendForgotenPasswordEmail,
+  sendForgotPasswordEmail,
   checkIfEmailIsValid
 } from "../helpers/functions";
+import { apiEndpoint } from "../helpers/constants";
 
 @Component()
 export default class Login extends Vue {
@@ -367,10 +412,12 @@ export default class Login extends Vue {
 
   async sendRecoveryMail(userMail) {
     this.setLoading(true);
-    this.forgotPasswordData.mailSent = await sendForgotenPasswordEmail(
-      userMail
-    );
+    this.forgotPasswordData.mailSent = await sendForgotPasswordEmail(userMail);
     this.setLoading(false);
+  }
+
+  getLoginLink(provider) {
+    return apiEndpoint + "/connect/" + provider;
   }
 
   handleAuthentication(isSuccessful, message) {

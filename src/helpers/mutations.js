@@ -87,6 +87,21 @@ export const createSubject = `mutation createSubject(
   }
 }`;
 
+export const tagPlan = `mutation tagPlan($planId:ID! $tags: [String!]!) {
+  tagPlan(
+    planId: $planId
+    tags: $tags
+  ) {
+    plan {
+      id
+      tags {
+        id
+        name
+      }
+    }
+  }
+}`;
+
 export const updateMyMeeting = `mutation udpateMyMeeting(
   $id: ID!
   $addedManually: Boolean

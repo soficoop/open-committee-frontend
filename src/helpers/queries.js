@@ -106,6 +106,10 @@ export const getPlan = `query getPlan($id: ID!) {
     targets
     type
     commentsAreLocked
+    tags {
+      name
+      id
+    }
     meetings(where: { isHidden_ne: true }) {
       id
       date
@@ -256,6 +260,13 @@ export const getAllCommittees = `query committees {
       id
       sid
     }
+  }
+}`;
+
+export const getAllTags = `query tags {
+  tags {
+    id
+    name
   }
 }`;
 

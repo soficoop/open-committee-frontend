@@ -58,4 +58,18 @@
  * @property {string} passwordConfirmation
  */
 
+/**
+ * @typedef StoreState
+ * @property {import("../../graphql/types").Committee[]} committees
+ * @property {boolean} isLoading
+ * @property {strign} jwt
+ * @property {import("../../graphql/types").Meeting[]} managableMeetings
+ * @property {import("../../graphql/types").Plan[]} plans
+ * @property {import("../../graphql/types").Meeting | null} selectedMeeting
+ * @property {import("../../graphql/types").Plan | null} selectedPlan
+ * @property {import("../../graphql/types").Tag[]} tags
+ * @property {import("../../graphql/types").Meeting[]} upcomingMeetigs
+ * @property {import("../../graphql/types").UsersPermissionsUser | null} user
+ */
+
 export {};
