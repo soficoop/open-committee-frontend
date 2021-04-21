@@ -31,7 +31,7 @@
               התחברות
             </v-tab>
           </v-tabs>
-          <!-- <v-btn
+          <v-btn
             class="my-1"
             large
             color="white"
@@ -74,7 +74,7 @@
               <span>או</span>
             </v-col>
             <v-col class="d-flex align-center"><v-divider /></v-col>
-          </v-row> -->
+          </v-row>
           <v-tabs-items v-model="tab" class="overflow-hidden pa-1 transparent">
             <v-tab-item>
               <div v-if="registrationSuccess">
