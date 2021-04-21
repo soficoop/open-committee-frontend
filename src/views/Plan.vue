@@ -22,7 +22,7 @@
           <v-icon right color="primary">mdi-update</v-icon>
           <span tabindex="0">{{ plan.status }}</span>
         </h5>
-        <PlanTags :planTags="plan.tags" />
+        <!-- <PlanTags :planTags="plan.tags" /> -->
       </v-col>
     </v-row>
     <v-row v-if="plan.targets || plan.sections">
