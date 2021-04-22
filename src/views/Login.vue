@@ -31,6 +31,50 @@
               התחברות
             </v-tab>
           </v-tabs>
+          <v-btn
+            class="my-1"
+            large
+            color="white"
+            :href="getLoginLink('google')"
+          >
+            <v-row>
+              <v-col cols="3">
+                <img
+                  src="/img/icons/google.svg"
+                  height="24"
+                  style="vertical-align:middle"
+                  class="me-2"
+                />
+              </v-col>
+              <v-col cols="6" class="d-flex align-center justify-center">
+                כניסה עם google
+              </v-col>
+              <v-col cols="3" />
+            </v-row>
+          </v-btn>
+          <v-btn
+            class="my-1"
+            large
+            color="primary"
+            :href="getLoginLink('facebook')"
+          >
+            <v-row>
+              <v-col cols="3">
+                <v-icon class="me-2">mdi-facebook</v-icon>
+              </v-col>
+              <v-col cols="6" class="d-flex align-center justify-center">
+                כניסה עם facebook
+              </v-col>
+              <v-col cols="3" />
+            </v-row>
+          </v-btn>
+          <v-row class="my-1">
+            <v-col class="d-flex align-center"><v-divider /></v-col>
+            <v-col class="d-flex shrink">
+              <span>או</span>
+            </v-col>
+            <v-col class="d-flex align-center"><v-divider /></v-col>
+          </v-row>
           <v-tabs-items v-model="tab" class="overflow-hidden pa-1 transparent">
             <v-tab-item>
               <div v-if="registrationSuccess">
@@ -277,50 +321,6 @@
               </v-expand-transition>
             </v-tab-item>
           </v-tabs-items>
-          <v-row class="my-1">
-            <v-col class="d-flex align-center"><v-divider /></v-col>
-            <v-col class="d-flex shrink">
-              <span>או</span>
-            </v-col>
-            <v-col class="d-flex align-center"><v-divider /></v-col>
-          </v-row>
-          <v-btn
-            class="my-1"
-            large
-            color="white"
-            :href="getLoginLink('google')"
-          >
-            <v-row>
-              <v-col cols="3">
-                <img
-                  src="/img/icons/google.svg"
-                  height="24"
-                  style="vertical-align:middle"
-                  class="me-2"
-                />
-              </v-col>
-              <v-col cols="6" class="d-flex align-center justify-center">
-                כניסה עם google
-              </v-col>
-              <v-col cols="3" />
-            </v-row>
-          </v-btn>
-          <v-btn
-            class="my-1"
-            large
-            color="primary"
-            :href="getLoginLink('facebook')"
-          >
-            <v-row>
-              <v-col cols="3">
-                <v-icon class="me-2">mdi-facebook</v-icon>
-              </v-col>
-              <v-col cols="6" class="d-flex align-center justify-center">
-                כניסה עם facebook
-              </v-col>
-              <v-col cols="3" />
-            </v-row>
-          </v-btn>
         </v-layout>
       </v-flex>
     </v-layout>
