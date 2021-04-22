@@ -24,36 +24,10 @@
     </v-row>
     <v-row>
       <v-col>
-        <v-tabs background-color="transparent" v-model="currentTab">
-          <v-tab class="title" tabindex="0">לפי ועדה</v-tab>
-          <v-tab class="title" tabindex="0">לפי מיקום</v-tab>
-          <v-tab class="title" tabindex="0" disabled>לפי נושא (בקרוב)</v-tab>
-          <v-tabs-items v-model="currentTab" class="transparent">
-            <v-tab-item>
-              <CommitteeSubscription />
-            </v-tab-item>
-            <v-tab-item>
-              <v-row>
-                <v-col>
-                  <h4 class="title primary--text" tabindex="0">
-                    התראות לפי מיקום זמינות במערכת "מעירים".
-                  </h4>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col>
-                  <a
-                    href="https://meirim.org"
-                    target="blank"
-                    class="secondary--text"
-                  >
-                    למעבר לאתר מעירים
-                  </a>
-                </v-col>
-              </v-row>
-            </v-tab-item>
-          </v-tabs-items>
-        </v-tabs>
+        <h2 class="headline primary--text font-weight-bold my-3" tabindex="0">
+          לפי ועדה
+        </h2>
+        <CommitteeSubscription />
       </v-col>
     </v-row>
   </v-container>
@@ -68,7 +42,6 @@ import { Getter } from "vuex-class";
 @Component({ components: { CommitteeSubscription } })
 export default class Subscriptions extends Vue {
   @Getter user;
-  currentTab = 0;
   showLoginDialog = false;
   mounted() {
     this.showLoginDialog = !this.user;
