@@ -24,10 +24,15 @@
     </v-row>
     <v-row>
       <v-col>
-        <h2 class="headline primary--text font-weight-bold my-3" tabindex="0">
+        <h2 class="headline primary--text font-weight-bold my-6" tabindex="0">
           לפי ועדה
         </h2>
-        <CommitteeSubscription />
+        <CommitteeSubscription v-if="!this.isLoading" />
+        <div class="pa-6" />
+        <h2 class="headline primary--text font-weight-bold my-6" tabindex="0">
+          לפי תגיות
+        </h2>
+        <TagSubscription v-if="!this.isLoading" />
       </v-col>
     </v-row>
   </v-container>
@@ -37,14 +42,25 @@
 import Component from "vue-class-component";
 import Vue from "vue";
 import CommitteeSubscription from "../components/CommitteeSubscription.vue";
-import { Getter } from "vuex-class";
+import TagSubscription from "../components/TagSubscription.vue";
+import { Action, Getter, Mutation } from "vuex-class";
 
-@Component({ components: { CommitteeSubscription } })
+@Component({ components: { CommitteeSubscription, TagSubscription } })
 export default class Subscriptions extends Vue {
+  @Action fetchUserSubscriptions;
+  @Getter isLoading;
   @Getter user;
+  @Mutation setLoading;
   showLoginDialog = false;
-  mounted() {
-    this.showLoginDialog = !this.user;
+
+  async mounted() {
+    if (this.user) {
+      this.setLoading(true);
+      await this.fetchUserSubscriptions();
+      this.setLoading(false);
+    } else {
+      this.showLoginDialog = true;
+    }
   }
 }
 </script>

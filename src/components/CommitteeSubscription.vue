@@ -43,12 +43,11 @@
 <script>
 import Component from "vue-class-component";
 import Vue from "vue";
-import { Getter, Action, Mutation } from "vuex-class";
+import { Getter, Action } from "vuex-class";
 
 @Component()
 export default class CommitteeSubscription extends Vue {
   @Action fetchCommittees;
-  @Action fetchUserSubscriptions;
   @Action updateUser;
   /**
    * @type {import("../../graphql/types").UsersPermissionsUser}
@@ -58,7 +57,6 @@ export default class CommitteeSubscription extends Vue {
   @Getter jwt;
   /** @type {import("../../graphql/types").Committee[]} */
   @Getter committees;
-  @Mutation setLoading;
   subscribedCommittees = [];
 
   checkIfSubscribed(committeeId) {
@@ -69,11 +67,8 @@ export default class CommitteeSubscription extends Vue {
   }
 
   async mounted() {
-    this.setLoading(true);
     await this.fetchCommittees();
-    await this.fetchUserSubscriptions();
     this.subscribedCommittees = this.user && this.user.subscribedCommittees;
-    this.setLoading(false);
   }
 
   subscribeToCommittee(committee) {
@@ -83,7 +78,6 @@ export default class CommitteeSubscription extends Vue {
 
   async subscribeToCommitteeBySearchString(value) {
     const committee = this.committees.find(c => c.id === value);
-    console.info(committee);
     await this.subscribeToCommittee(committee);
   }
 
