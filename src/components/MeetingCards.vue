@@ -1,14 +1,16 @@
 <template>
-  <v-layout column>
-    <v-flex v-for="(item, i) in meetings" :key="i" xs12>
+  <v-row>
+    <v-col cols="12">
       <v-card
-        class="my-1"
+        class="my-2"
         hover
         :to="'/meeting/' + item.id"
         v-ripple="{ class: `secondary--text` }"
+        v-for="(item, i) in meetings"
+        :key="i"
       >
         <v-card-text>
-          <v-layout align-center>
+          <div class="d-flex align-center">
             <h3 class="subtitle-1" v-if="item.headline" tabindex="0">
               {{ item.headline }}
             </h3>
@@ -16,7 +18,7 @@
             <h3
               class="subtitle-1 align-self-center text-no-wrap"
               tabindex="0"
-              v-if="item.date && typeof item.date != 'string'"
+              v-if="item.date && item.date.toLocaleDateString"
             >
               {{ item.date.toLocaleDateString("he") }}
             </h3>
@@ -32,11 +34,11 @@
               <v-icon>mdi-pencil</v-icon>
             </v-btn>
             <v-icon>mdi-arrow-left</v-icon>
-          </v-layout>
+          </div>
         </v-card-text>
       </v-card>
-    </v-flex>
-  </v-layout>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
