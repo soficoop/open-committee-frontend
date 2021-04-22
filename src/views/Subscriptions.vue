@@ -22,17 +22,17 @@
         </h1>
       </v-col>
     </v-row>
-    <v-row>
+    <v-row v-if="!this.isLoading">
       <v-col>
         <h2 class="headline primary--text font-weight-bold my-6" tabindex="0">
           לפי ועדה
         </h2>
-        <CommitteeSubscription v-if="!this.isLoading" />
+        <CommitteeSubscription />
         <div class="pa-6" />
         <h2 class="headline primary--text font-weight-bold my-6" tabindex="0">
           לפי תגיות
         </h2>
-        <TagSubscription v-if="!this.isLoading" />
+        <TagSubscription />
       </v-col>
     </v-row>
   </v-container>
