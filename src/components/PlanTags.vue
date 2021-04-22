@@ -12,7 +12,7 @@
       class="mx-1"
       color="primary"
       @click="dialog = true"
-      v-if="this.jwt"
+      v-if="this.canUserAddTag"
     >
       <v-icon left>mdi-plus</v-icon>
       <span tabindex="0">הוספת תגית</span>
@@ -84,6 +84,8 @@ export default class PlanTags extends Vue {
   @Action tagSelectedPlan;
   @Getter tags;
   @Getter jwt;
+  /** @type {import('../../graphql/types').UsersPermissionsMe}*/
+  @Getter user;
   @Mutation setLoading;
   /**
    * @type {import("../../graphql/types").Tag[]}
@@ -125,6 +127,11 @@ export default class PlanTags extends Vue {
     await this.tagSelectedPlan(this.selectedTags);
     this.closeDialog();
     this.setLoading(false);
+  }
+
+  /** @type {boolean} */
+  get canUserAddTag() {
+    return !!this.jwt && !!this.user && this.user.role.name === "Administrator";
   }
 
   /**
