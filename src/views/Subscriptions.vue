@@ -24,15 +24,15 @@
     </v-row>
     <v-row v-if="!this.isLoading">
       <v-col>
+        <div class="pa-6" />
+        <h2 class="headline primary--text font-weight-bold my-6" tabindex="0">
+          לפי נושא
+        </h2>
+        <TagSubscription />
         <h2 class="headline primary--text font-weight-bold my-6" tabindex="0">
           לפי ועדה
         </h2>
         <CommitteeSubscription />
-        <div class="pa-6" />
-        <h2 class="headline primary--text font-weight-bold my-6" tabindex="0">
-          לפי תגיות
-        </h2>
-        <TagSubscription />
       </v-col>
     </v-row>
   </v-container>

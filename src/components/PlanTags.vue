@@ -15,7 +15,7 @@
       v-if="this.canUserAddTag"
     >
       <v-icon left>mdi-plus</v-icon>
-      <span tabindex="0">הוספת תגית</span>
+      <span tabindex="0">הוספת נושא</span>
     </v-chip>
     <v-dialog
       v-model="dialog"
@@ -54,7 +54,7 @@
             </v-list-item>
           </v-list>
           <h4 v-else class="subtitle-2 px-4" tabindex="0">
-            לחצו אנטר ליצירת תגית חדשה
+            לחצו אנטר ליצירת נושא חדש
           </h4>
         </v-card-text>
         <v-card-actions>
