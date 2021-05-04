@@ -361,7 +361,8 @@ const storeOptions = {
       );
       context.commit(storeOptions.mutations.setUser.name, {
         ...storeUser,
-        subscribedCommittees: result.user.subscribedCommittees
+        subscribedCommittees: result.user.subscribedCommittees,
+        subscribedTags: result.user.subscribedTags
       });
     }
   },

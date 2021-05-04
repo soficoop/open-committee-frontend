@@ -1,88 +1,39 @@
 <template>
   <div>
-    <v-expand-transition>
-      <v-row v-if="subscribedCommittees && subscribedCommittees.length">
-        <v-col>
-          <v-row>
-            <v-col>
-              <h4 class="title primary--text d-inline-block right" tabindex="0">
-                אני מקבל/ת התראות על הועדות:
-              </h4>
-            </v-col>
-          </v-row>
-          <v-slide-y-transition group tag="div" class="row">
-            <v-col
-              v-for="item in subscribedCommittees"
-              :key="item.id"
-              cols="12"
-              sm="4"
-            >
-              <v-card height="100%" v-if="item.id" color="accent" dark>
-                <v-card-text class="subtitle-1">
-                  <v-row>
-                    <v-col tabindex="0">
-                      {{ item.sid }}
-                    </v-col>
-                    <v-col class="shrink py-0 px-1">
-                      <v-btn icon @click="unsubscribeFromCommittee(item.id)">
-                        <v-icon>mdi-close</v-icon>
-                      </v-btn>
-                    </v-col>
-                  </v-row>
-                </v-card-text>
-              </v-card>
-            </v-col>
-          </v-slide-y-transition>
-        </v-col>
-      </v-row>
-    </v-expand-transition>
     <v-row>
       <v-col>
-        <v-card flat class="pa-4">
-          <v-row>
-            <v-col cols="12" md="8">
-              <h4 class="title primary--text" tabindex="0">
-                בחירת ועדות להתראות
-              </h4>
-            </v-col>
-            <v-col>
-              <v-text-field
-                hide-details
-                label="חיפוש"
-                append-icon="mdi-magnify"
-                v-model="committeeSearch"
-                class="pt-0"
-              ></v-text-field>
-            </v-col>
-          </v-row>
-          <v-data-table
-            :headers="committeeHeaders"
-            :items="committees"
-            :search="committeeSearch"
-          >
-            <template v-slot:item.action="{ item }">
-              <v-btn
-                color="secondary"
-                small
-                depressed
-                @click="subscribeToCommittee(item)"
-                v-if="!checkIfSubscribed(item.id)"
-              >
-                <v-icon small left>mdi-plus</v-icon>
-                הוספה
-              </v-btn>
-              <v-btn
-                v-else
-                small
-                color="primary"
-                text
-                @click="unsubscribeFromCommittee(item.id)"
-              >
-                <v-icon small left>mdi-check</v-icon>
-                נוסף
-              </v-btn>
-            </template>
-          </v-data-table>
+        <v-autocomplete
+          hide-details
+          outlined
+          label="חיפוש"
+          :items="committeeSuggestions"
+          @change="subscribeToCommitteeBySearchString"
+          item-text="sid"
+          item-value="id"
+        ></v-autocomplete>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <v-card
+          class="my-2"
+          v-for="committee in subscribedCommittees"
+          :key="committee.id"
+        >
+          <v-card-text class="d-flex align-center">
+            <h3 class="subtitle-1" tabindex="0">
+              {{ committee.sid }}
+            </h3>
+            <v-spacer></v-spacer>
+            <v-btn
+              color="primary"
+              class="font-weight-semibold"
+              @click="unsubscribeFromCommittee(committee.id)"
+              text
+            >
+              הסרה
+            </v-btn>
+          </v-card-text>
         </v-card>
       </v-col>
     </v-row>
@@ -92,12 +43,11 @@
 <script>
 import Component from "vue-class-component";
 import Vue from "vue";
-import { Getter, Action, Mutation } from "vuex-class";
+import { Getter, Action } from "vuex-class";
 
 @Component()
 export default class CommitteeSubscription extends Vue {
   @Action fetchCommittees;
-  @Action fetchUserSubscriptions;
   @Action updateUser;
   /**
    * @type {import("../../graphql/types").UsersPermissionsUser}
@@ -107,15 +57,7 @@ export default class CommitteeSubscription extends Vue {
   @Getter jwt;
   /** @type {import("../../graphql/types").Committee[]} */
   @Getter committees;
-  @Mutation setLoading;
-  committeeSearch = "";
   subscribedCommittees = [];
-  tab = null;
-  committeeHeaders = [
-    { text: "שם ועדה", value: "sid" },
-    { text: "מחוז", value: "area.sid" },
-    { text: "הוספה", value: "action", sortable: false }
-  ];
 
   checkIfSubscribed(committeeId) {
     return (
@@ -125,16 +67,18 @@ export default class CommitteeSubscription extends Vue {
   }
 
   async mounted() {
-    this.setLoading(true);
-    await this.fetchCommittees();
-    await this.fetchUserSubscriptions();
     this.subscribedCommittees = this.user && this.user.subscribedCommittees;
-    this.setLoading(false);
+    await this.fetchCommittees();
   }
 
   subscribeToCommittee(committee) {
     this.subscribedCommittees.push(committee);
     this.updateSubscriptions();
+  }
+
+  async subscribeToCommitteeBySearchString(value) {
+    const committee = this.committees.find(c => c.id === value);
+    await this.subscribeToCommittee(committee);
   }
 
   async updateSubscriptions() {
@@ -153,6 +97,10 @@ export default class CommitteeSubscription extends Vue {
       1
     );
     this.updateSubscriptions();
+  }
+  /** @type {import("../../graphql/types").Committee[]} */
+  get committeeSuggestions() {
+    return this.committees.filter(c => !this.checkIfSubscribed(c.id));
   }
 }
 </script>

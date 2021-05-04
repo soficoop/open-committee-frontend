@@ -246,6 +246,10 @@ export const getUserSubscriptions = `query getUserSubscriptions($id: ID!) {
       id
       sid
     }
+    subscribedTags {
+      id
+      name
+    }
   }
 }`;
 

@@ -12,10 +12,10 @@
       class="mx-1"
       color="primary"
       @click="dialog = true"
-      v-if="this.jwt"
+      v-if="this.canUserAddTag"
     >
       <v-icon left>mdi-plus</v-icon>
-      <span tabindex="0">הוספת תגית</span>
+      <span tabindex="0">הוספת נושא</span>
     </v-chip>
     <v-dialog
       v-model="dialog"
@@ -54,7 +54,7 @@
             </v-list-item>
           </v-list>
           <h4 v-else class="subtitle-2 px-4" tabindex="0">
-            לחצו אנטר ליצירת תגית חדשה
+            לחצו אנטר ליצירת נושא חדש
           </h4>
         </v-card-text>
         <v-card-actions>
@@ -87,6 +87,8 @@ export default class PlanTags extends Vue {
   @Action tagSelectedPlan;
   @Getter tags;
   @Getter jwt;
+  /** @type {import('../../graphql/types').UsersPermissionsMe}*/
+  @Getter user;
   @Mutation setLoading;
   /**
    * @type {import("../../graphql/types").Tag[]}
@@ -129,6 +131,11 @@ export default class PlanTags extends Vue {
     this.closeDialog();
     this.setLoading(false);
     await this.fetchTags();
+  }
+
+  /** @type {boolean} */
+  get canUserAddTag() {
+    return !!this.jwt && !!this.user && this.user.role.name === "Administrator";
   }
 
   /**

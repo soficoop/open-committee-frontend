@@ -22,38 +22,17 @@
         </h1>
       </v-col>
     </v-row>
-    <v-row>
+    <v-row v-if="!this.isLoading">
       <v-col>
-        <v-tabs background-color="transparent" v-model="currentTab">
-          <v-tab class="title" tabindex="0">לפי ועדה</v-tab>
-          <v-tab class="title" tabindex="0">לפי מיקום</v-tab>
-          <v-tab class="title" tabindex="0" disabled>לפי נושא (בקרוב)</v-tab>
-          <v-tabs-items v-model="currentTab" class="transparent">
-            <v-tab-item>
-              <CommitteeSubscription />
-            </v-tab-item>
-            <v-tab-item>
-              <v-row>
-                <v-col>
-                  <h4 class="title primary--text" tabindex="0">
-                    התראות לפי מיקום זמינות במערכת "מעירים".
-                  </h4>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col>
-                  <a
-                    href="https://meirim.org"
-                    target="blank"
-                    class="secondary--text"
-                  >
-                    למעבר לאתר מעירים
-                  </a>
-                </v-col>
-              </v-row>
-            </v-tab-item>
-          </v-tabs-items>
-        </v-tabs>
+        <div class="pa-6" />
+        <h2 class="headline primary--text font-weight-bold my-6" tabindex="0">
+          לפי נושא
+        </h2>
+        <TagSubscription />
+        <h2 class="headline primary--text font-weight-bold my-6" tabindex="0">
+          לפי ועדה
+        </h2>
+        <CommitteeSubscription />
       </v-col>
     </v-row>
   </v-container>
@@ -63,15 +42,25 @@
 import Component from "vue-class-component";
 import Vue from "vue";
 import CommitteeSubscription from "../components/CommitteeSubscription.vue";
-import { Getter } from "vuex-class";
+import TagSubscription from "../components/TagSubscription.vue";
+import { Action, Getter, Mutation } from "vuex-class";
 
-@Component({ components: { CommitteeSubscription } })
+@Component({ components: { CommitteeSubscription, TagSubscription } })
 export default class Subscriptions extends Vue {
+  @Action fetchUserSubscriptions;
+  @Getter isLoading;
   @Getter user;
-  currentTab = 0;
+  @Mutation setLoading;
   showLoginDialog = false;
-  mounted() {
-    this.showLoginDialog = !this.user;
+
+  async mounted() {
+    if (this.user) {
+      this.setLoading(true);
+      await this.fetchUserSubscriptions();
+      this.setLoading(false);
+    } else {
+      this.showLoginDialog = true;
+    }
   }
 }
 </script>
