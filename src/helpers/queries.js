@@ -279,7 +279,9 @@ export const getAllTags = `query tags {
 }`;
 
 export const getAllMunicipalities = `query municipalities {
-  municipalities {
+  municipalities(
+    where: { isHidden_ne: true }
+  ) {
     id
     sid
   }
