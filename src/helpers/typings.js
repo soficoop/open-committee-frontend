@@ -64,6 +64,7 @@
  * @property {boolean} isLoading
  * @property {strign} jwt
  * @property {import("../../graphql/types").Meeting[]} managableMeetings
+ * @property {import("../../graphql/types").Municipality[]} municipalities
  * @property {import("../../graphql/types").Plan[]} plans
  * @property {import("../../graphql/types").Meeting | null} selectedMeeting
  * @property {import("../../graphql/types").Plan | null} selectedPlan

@@ -152,6 +152,7 @@ export const updateMe = `mutation UpdateMe(
   $userImage: ID
   $subscribedCommittees: [ID]
   $subscribedTags: [ID]
+  $subscribedMunicipalities: [ID]
 ) {
   updateMe(
     input: {
@@ -165,6 +166,7 @@ export const updateMe = `mutation UpdateMe(
         userImage: $userImage
         subscribedCommittees: $subscribedCommittees
         subscribedTags: $subscribedTags
+        subscribedMunicipalities: $subscribedMunicipalities
       }
     }
   ) {

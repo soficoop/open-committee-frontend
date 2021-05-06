@@ -30,6 +30,10 @@
         </h2>
         <TagSubscription />
         <h2 class="headline primary--text font-weight-bold my-6" tabindex="0">
+          לפי ישוב
+        </h2>
+        <MunicipalitySubscription />
+        <h2 class="headline primary--text font-weight-bold my-6" tabindex="0">
           לפי ועדה
         </h2>
         <CommitteeSubscription />
@@ -43,9 +47,16 @@ import Component from "vue-class-component";
 import Vue from "vue";
 import CommitteeSubscription from "../components/CommitteeSubscription.vue";
 import TagSubscription from "../components/TagSubscription.vue";
+import MunicipalitySubscription from "../components/MunicipalitySubscription.vue";
 import { Action, Getter, Mutation } from "vuex-class";
 
-@Component({ components: { CommitteeSubscription, TagSubscription } })
+@Component({
+  components: {
+    CommitteeSubscription,
+    TagSubscription,
+    MunicipalitySubscription
+  }
+})
 export default class Subscriptions extends Vue {
   @Action fetchUserSubscriptions;
   @Getter isLoading;

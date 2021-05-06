@@ -250,6 +250,10 @@ export const getUserSubscriptions = `query getUserSubscriptions($id: ID!) {
       id
       name
     }
+    subscribedMunicipalities {
+      id
+      sid
+    }
   }
 }`;
 
@@ -271,6 +275,13 @@ export const getAllTags = `query tags {
   tags {
     id
     name
+  }
+}`;
+
+export const getAllMunicipalities = `query municipalities {
+  municipalities {
+    id
+    sid
   }
 }`;
 
