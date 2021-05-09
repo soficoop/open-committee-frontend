@@ -55,9 +55,9 @@ export default class MunicipalitySubscription extends Vue {
   }
 
   async mounted() {
-    await this.fetchMunicipalities();
     this.subscribedMunicipalities =
       this.user && this.user.subscribedMunicipalities;
+    await this.fetchMunicipalities();
   }
 
   subscribeToMunicipality(municipality) {

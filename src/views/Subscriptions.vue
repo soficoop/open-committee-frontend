@@ -22,23 +22,25 @@
         </h1>
       </v-col>
     </v-row>
-    <v-row v-if="!this.isLoading && this.user">
-      <v-col>
-        <div class="pa-6" />
-        <h2 class="headline primary--text font-weight-bold my-6" tabindex="0">
-          לפי נושא
-        </h2>
-        <TagSubscription />
-        <h2 class="headline primary--text font-weight-bold my-6" tabindex="0">
-          לפי ישוב
-        </h2>
-        <MunicipalitySubscription />
-        <h2 class="headline primary--text font-weight-bold my-6" tabindex="0">
-          לפי ועדה
-        </h2>
-        <CommitteeSubscription />
-      </v-col>
-    </v-row>
+    <v-fade-transition>
+      <v-row v-if="showSubscriptions">
+        <v-col>
+          <div class="pa-6" />
+          <h2 class="headline primary--text font-weight-bold my-6" tabindex="0">
+            לפי נושא
+          </h2>
+          <TagSubscription />
+          <h2 class="headline primary--text font-weight-bold my-6" tabindex="0">
+            לפי ישוב
+          </h2>
+          <MunicipalitySubscription />
+          <h2 class="headline primary--text font-weight-bold my-6" tabindex="0">
+            לפי ועדה
+          </h2>
+          <CommitteeSubscription />
+        </v-col>
+      </v-row>
+    </v-fade-transition>
   </v-container>
 </template>
 
@@ -63,6 +65,7 @@ export default class Subscriptions extends Vue {
   @Getter user;
   @Mutation setLoading;
   showLoginDialog = false;
+  showSubscriptions = false;
 
   async mounted() {
     if (this.user) {
@@ -72,6 +75,7 @@ export default class Subscriptions extends Vue {
     } else {
       this.showLoginDialog = true;
     }
+    this.showSubscriptions = true;
   }
 }
 </script>

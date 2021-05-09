@@ -67,8 +67,8 @@ export default class CommitteeSubscription extends Vue {
   }
 
   async mounted() {
-    await this.fetchCommittees();
     this.subscribedCommittees = this.user && this.user.subscribedCommittees;
+    await this.fetchCommittees();
   }
 
   subscribeToCommittee(committee) {
