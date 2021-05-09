@@ -22,7 +22,7 @@
         </h1>
       </v-col>
     </v-row>
-    <v-row v-if="!this.isLoading">
+    <v-row v-if="!this.isLoading && this.user">
       <v-col>
         <div class="pa-6" />
         <h2 class="headline primary--text font-weight-bold my-6" tabindex="0">
