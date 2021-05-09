@@ -54,8 +54,8 @@ export default class TagSubscription extends Vue {
   }
 
   async mounted() {
-    this.subscribedTags = this.user && this.user.subscribedTags;
     await this.fetchTags();
+    this.subscribedTags = this.user && this.user.subscribedTags;
   }
 
   subscribeToTag(tag) {
