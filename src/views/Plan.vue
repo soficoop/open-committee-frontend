@@ -12,7 +12,10 @@
           <span v-if="plan.name" tabindex="0">{{ plan.name }}</span>
         </h3>
         <h4 class="title primary--text">
-          <span v-if="plan.municipality" tabindex="0">
+          <span
+            v-if="plan.municipality && plan.municipality !== '&nbsp;'"
+            tabindex="0"
+          >
             {{ plan.municipality }}
           </span>
           <span v-if="plan.municipality && plan.location"> • </span>
