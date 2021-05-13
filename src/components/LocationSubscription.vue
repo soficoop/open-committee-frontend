@@ -50,21 +50,29 @@
           v-for="location in subscribedLocations"
           :key="location.name"
         >
-          <v-card-text class="d-flex align-center">
-            <h3 class="subtitle-1" tabindex="0">
-              {{ location.name }}
-            </h3>
-            <v-spacer></v-spacer>
-            <h3 class="subtitle-1" tabindex="0">{{ location.radius }} ק"מ</h3>
-            <v-spacer></v-spacer>
-            <v-btn
-              color="primary"
-              class="font-weight-semibold"
-              @click="unsubscribeFromLocation(location)"
-              text
-            >
-              הסרה
-            </v-btn>
+          <v-card-text>
+            <v-row align="center">
+              <v-col cols="6">
+                <h3 class="subtitle-1" tabindex="0">
+                  {{ location.name }}
+                </h3>
+              </v-col>
+              <v-col>
+                <h3 class="subtitle-1" tabindex="0">
+                  {{ location.radius }} ק"מ
+                </h3>
+              </v-col>
+              <v-col cols="1">
+                <v-btn
+                  color="primary"
+                  class="font-weight-semibold"
+                  @click="unsubscribeFromLocation(location)"
+                  text
+                >
+                  הסרה
+                </v-btn>
+              </v-col>
+            </v-row>
           </v-card-text>
         </v-card>
       </v-col>
