@@ -1,5 +1,8 @@
 <template>
   <div>
+    <h2 class="headline primary--text font-weight-bold my-6" tabindex="0">
+      לפי נושא
+    </h2>
     <v-row>
       <v-col>
         <v-autocomplete

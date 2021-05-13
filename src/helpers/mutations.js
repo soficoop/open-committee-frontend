@@ -144,30 +144,12 @@ export const updateMyMeeting = `mutation udpateMyMeeting(
 
 export const updateMe = `mutation UpdateMe(
   $id: ID!
-  $firstName: String
-  $lastName: String
-  $job: String
-  $organization: String
-  $city: String
-  $userImage: ID
-  $subscribedCommittees: [ID]
-  $subscribedTags: [ID]
-  $subscribedMunicipalities: [ID]
+  $data: editUserInput!
 ) {
   updateMe(
     input: {
       where: { id: $id }
-      data: {
-        firstName: $firstName
-        lastName: $lastName
-        job: $job
-        organization: $organization
-        city: $city
-        userImage: $userImage
-        subscribedCommittees: $subscribedCommittees
-        subscribedTags: $subscribedTags
-        subscribedMunicipalities: $subscribedMunicipalities
-      }
+      data: $data
     }
   ) {
     user {

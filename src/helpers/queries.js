@@ -254,6 +254,13 @@ export const getUserSubscriptions = `query getUserSubscriptions($id: ID!) {
       id
       sid
     }
+    subscribedLocations {
+      id
+      name
+      lat
+      lng
+      radius
+    }
   }
 }`;
 

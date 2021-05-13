@@ -25,19 +25,10 @@
     <v-fade-transition>
       <v-row v-if="showSubscriptions">
         <v-col>
-          <div class="pa-6" />
-          <h2 class="headline primary--text font-weight-bold my-6" tabindex="0">
-            לפי נושא
-          </h2>
-          <TagSubscription />
-          <h2 class="headline primary--text font-weight-bold my-6" tabindex="0">
-            לפי ישוב
-          </h2>
-          <MunicipalitySubscription />
-          <h2 class="headline primary--text font-weight-bold my-6" tabindex="0">
-            לפי ועדה
-          </h2>
-          <CommitteeSubscription />
+          <TagSubscription class="py-6" />
+          <MunicipalitySubscription class="py-6" />
+          <LocationSubscription class="py-6" />
+          <CommitteeSubscription class="py-6" />
         </v-col>
       </v-row>
     </v-fade-transition>
@@ -50,11 +41,13 @@ import Vue from "vue";
 import CommitteeSubscription from "../components/CommitteeSubscription.vue";
 import TagSubscription from "../components/TagSubscription.vue";
 import MunicipalitySubscription from "../components/MunicipalitySubscription.vue";
+import LocationSubscription from "../components/LocationSubscription.vue";
 import { Action, Getter, Mutation } from "vuex-class";
 
 @Component({
   components: {
     CommitteeSubscription,
+    LocationSubscription,
     TagSubscription,
     MunicipalitySubscription
   }

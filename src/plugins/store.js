@@ -339,13 +339,15 @@ const storeOptions = {
     /**
      * Update user
      * @param {import("vuex").Store} context the store object
-     * @param {import("../../graphql/types").UsersPermissionsUser} updatedUserFields
+     * @param {import("../../graphql/types").EditUserInput} updatedUserFields
      */
     async updateUser(context, updatedUserFields) {
-      updatedUserFields.id = context.state.user.id;
       const res = await makeGqlRequest(
         updateMe,
-        updatedUserFields,
+        {
+          id: context.state.user.id,
+          data: updatedUserFields
+        },
         context.state.jwt
       );
       context.commit(storeOptions.mutations.setUser.name, res.updateMe.user);
@@ -388,6 +390,7 @@ const storeOptions = {
       context.commit(storeOptions.mutations.setUser.name, {
         ...storeUser,
         subscribedCommittees: result.user.subscribedCommittees,
+        subscribedLocations: result.user.subscribedLocations,
         subscribedMunicipalities: result.user.subscribedMunicipalities,
         subscribedTags: result.user.subscribedTags
       });
