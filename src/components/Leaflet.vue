@@ -1,8 +1,19 @@
 <template>
   <l-map :zoom="15" :center="center" class="l-map">
-    <l-marker :lat-lng="center"></l-marker>
+    <l-marker :lat-lng="marker" v-if="marker"></l-marker>
     <l-tile-layer url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"></l-tile-layer>
-    <l-control position="bottomleft" class="leaflet-bar">
+    <l-circle
+      v-for="(circle, i) in circles"
+      :key="i"
+      :lat-lng="circle"
+      :radius="circle.radius * 1000"
+      color="#12cdd4"
+    />
+    <l-control
+      position="bottomleft"
+      class="leaflet-bar"
+      v-if="$listeners.fullscreenToggle"
+    >
       <a @click="$emit('fullscreenToggle')">
         <v-icon color="primary">mdi-fullscreen</v-icon>
       </a>
@@ -12,7 +23,7 @@
 <script>
 import Component from "vue-class-component";
 import Vue from "vue";
-import { LMap, LTileLayer, LMarker, LControl } from "vue2-leaflet";
+import { LMap, LTileLayer, LMarker, LControl, LCircle } from "vue2-leaflet";
 import { Prop } from "vue-property-decorator";
 
 @Component({
@@ -20,11 +31,14 @@ import { Prop } from "vue-property-decorator";
     LMap,
     LTileLayer,
     LMarker,
-    LControl
+    LControl,
+    LCircle
   }
 })
 export default class Map extends Vue {
   @Prop(Object) center;
+  @Prop(Object) marker;
+  @Prop(Array) circles;
 }
 </script>
 <style scoped>

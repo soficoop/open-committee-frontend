@@ -1,8 +1,16 @@
 <template>
-  <div v-if="center">
-    <Leaflet :center="center" @fullscreenToggle="toggleDialog" class="h-150" />
+  <div v-if="center" class="h-150px">
+    <Leaflet
+      :center="center"
+      :marker="center"
+      @fullscreenToggle="toggleDialog"
+    />
     <v-dialog v-model="dialog" fullscreen>
-      <Leaflet :center="center" @fullscreenToggle="toggleDialog" />
+      <Leaflet
+        :center="center"
+        :marker="center"
+        @fullscreenToggle="toggleDialog"
+      />
     </v-dialog>
   </div>
 </template>
@@ -43,8 +51,3 @@ export default class Map extends Vue {
   }
 }
 </script>
-<style scoped>
-.h-150 {
-  height: 150px;
-}
-</style>

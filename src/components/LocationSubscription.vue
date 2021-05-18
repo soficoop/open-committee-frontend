@@ -45,6 +45,13 @@
     </v-row>
     <v-row>
       <v-col>
+        <v-card flat class="h-450px">
+          <Leaflet :center="mapCenter" :circles="subscribedLocations" />
+        </v-card>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
         <v-card
           class="my-2"
           v-for="location in subscribedLocations"
@@ -52,7 +59,7 @@
         >
           <v-card-text>
             <v-row align="center">
-              <v-col cols="6">
+              <v-col md="6">
                 <h3 class="subtitle-1" tabindex="0">
                   {{ location.name }}
                 </h3>
@@ -62,7 +69,7 @@
                   {{ location.radius }} ק"מ
                 </h3>
               </v-col>
-              <v-col cols="1">
+              <v-col class="d-flex justify-end">
                 <v-btn
                   color="primary"
                   class="font-weight-semibold"
@@ -86,8 +93,13 @@ import Vue from "vue";
 import { Getter, Action } from "vuex-class";
 import { EsriProvider } from "leaflet-geosearch";
 import { Watch } from "vue-property-decorator";
+import Leaflet from "./Leaflet";
 
-@Component()
+@Component({
+  components: {
+    Leaflet
+  }
+})
 export default class LocationSubscription extends Vue {
   @Action updateUser;
   /**
@@ -161,6 +173,12 @@ export default class LocationSubscription extends Vue {
       1
     );
     this.updateSubscriptions();
+  }
+
+  get mapCenter() {
+    return this.subscribedLocations.length
+      ? this.subscribedLocations[0]
+      : { lat: 32.0853, lng: 34.7818 };
   }
 }
 </script>
