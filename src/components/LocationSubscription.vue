@@ -46,7 +46,11 @@
     <v-row>
       <v-col>
         <v-card flat class="h-450px">
-          <Leaflet :center="mapCenter" :circles="subscribedLocations" />
+          <Leaflet
+            :center="mapCenter"
+            :circles="subscribedLocations"
+            zoom="12"
+          />
         </v-card>
       </v-col>
     </v-row>

@@ -1,5 +1,5 @@
 <template>
-  <l-map :zoom="15" :center="center" class="l-map">
+  <l-map :zoom="zoom" :center="center" class="l-map">
     <l-marker :lat-lng="marker" v-if="marker"></l-marker>
     <l-tile-layer url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"></l-tile-layer>
     <l-circle
@@ -39,6 +39,7 @@ export default class Map extends Vue {
   @Prop(Object) center;
   @Prop(Object) marker;
   @Prop(Array) circles;
+  @Prop({ type: Number, default: 15 }) zoom;
 }
 </script>
 <style scoped>
