@@ -10,7 +10,7 @@
           hide-details
           no-filter
           outlined
-          label="חיפוש"
+          label="חיפוש כתובת"
           :loading="isLoading"
           :search-input.sync="query"
           :items="suggestedLocations"
@@ -21,8 +21,10 @@
       </v-col>
       <v-col align-self="center">
         <v-slider
+          label='ק"מ'
+          inverse-label
           hide-details
-          thumb-label
+          thumb-label="always"
           min="0"
           max="15"
           value="5"
@@ -41,17 +43,6 @@
         >
           הוספה
         </v-btn>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col>
-        <v-card flat class="h-450px">
-          <Leaflet
-            :center="mapCenter"
-            :circles="subscribedLocations"
-            zoom="12"
-          />
-        </v-card>
       </v-col>
     </v-row>
     <v-row>
@@ -85,6 +76,17 @@
               </v-col>
             </v-row>
           </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <v-card outlined class="h-450px">
+          <Leaflet
+            :center="mapCenter"
+            :circles="subscribedLocations"
+            :zoom="12"
+          />
         </v-card>
       </v-col>
     </v-row>
@@ -155,9 +157,11 @@ export default class LocationSubscription extends Vue {
     this.provider = new EsriProvider();
   }
 
-  subscribeToLocation() {
+  async subscribeToLocation() {
     this.subscribedLocations.push(this.locationToAdd);
-    this.updateSubscriptions();
+    await this.updateSubscriptions();
+    this.locationToAdd = null;
+    this.query = "";
   }
 
   async subscribeToCommitteeBySearchString(value) {
