@@ -82,11 +82,7 @@
     <v-row>
       <v-col>
         <v-card outlined class="h-450px">
-          <Leaflet
-            :center="mapCenter"
-            :circles="subscribedLocations"
-            :zoom="12"
-          />
+          <Leaflet :center="mapCenter" :circles="mapCircles" :zoom="12" />
         </v-card>
       </v-col>
     </v-row>
@@ -184,9 +180,16 @@ export default class LocationSubscription extends Vue {
   }
 
   get mapCenter() {
-    return this.subscribedLocations.length
-      ? this.subscribedLocations[0]
+    return this.mapCircles.length
+      ? this.mapCircles[0]
       : { lat: 32.0853, lng: 34.7818 };
+  }
+
+  get mapCircles() {
+    if (this.locationToAdd) {
+      return [this.locationToAdd, ...this.subscribedLocations];
+    }
+    return this.subscribedLocations;
   }
 }
 </script>
