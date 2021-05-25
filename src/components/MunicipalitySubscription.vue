@@ -6,13 +6,15 @@
     <v-row>
       <v-col>
         <v-autocomplete
-          hide-details
-          outlined
-          label="חיפוש"
           :items="municipalitySuggestions"
           @change="subscribeToMunicipalityBySearchString"
+          @focus="handleInputFocus"
+          class="scrollable"
+          hide-details
           item-text="sid"
           item-value="id"
+          label="חיפוש"
+          outlined
         ></v-autocomplete>
       </v-col>
     </v-row>
@@ -36,6 +38,7 @@
 import Component from "vue-class-component";
 import Vue from "vue";
 import { Getter, Action } from "vuex-class";
+import { scrollToFocusedElement } from "../helpers/functions";
 
 @Component()
 export default class MunicipalitySubscription extends Vue {
@@ -55,6 +58,10 @@ export default class MunicipalitySubscription extends Vue {
       this.subscribedMunicipalities &&
       this.subscribedMunicipalities.some(m => m.id == id)
     );
+  }
+
+  handleInputFocus() {
+    scrollToFocusedElement();
   }
 
   async mounted() {

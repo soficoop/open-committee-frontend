@@ -6,13 +6,15 @@
     <v-row>
       <v-col>
         <v-autocomplete
-          hide-details
-          outlined
-          label="חיפוש"
           :items="tagSuggestions"
           @change="subscribeToTagBySearchString"
+          @focus="handleInputFocused"
+          class="scrollable"
+          hide-details
           item-text="name"
           item-value="id"
+          label="חיפוש"
+          outlined
         ></v-autocomplete>
       </v-col>
     </v-row>
@@ -36,6 +38,7 @@
 import Component from "vue-class-component";
 import Vue from "vue";
 import { Getter, Action } from "vuex-class";
+import { scrollToFocusedElement } from "../helpers/functions";
 
 @Component()
 export default class TagSubscription extends Vue {
@@ -54,6 +57,10 @@ export default class TagSubscription extends Vue {
 
   checkIfSubscribed(id) {
     return this.subscribedTags && this.subscribedTags.some(tag => tag.id == id);
+  }
+
+  handleInputFocused() {
+    scrollToFocusedElement();
   }
 
   async mounted() {

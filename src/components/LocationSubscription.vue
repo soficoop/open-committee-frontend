@@ -4,22 +4,24 @@
       לפי מיקום
     </h2>
     <v-row>
-      <v-col>
+      <v-col cols="12" sm="5">
         <v-autocomplete
-          append-icon
-          hide-details
-          no-filter
-          outlined
-          label="חיפוש כתובת"
+          :items="suggestedLocations"
           :loading="isLoading"
           :search-input.sync="query"
-          :items="suggestedLocations"
           @change="handleLocationSelected"
+          @focus="handleInputFocus"
+          append-icon
+          class="scrollable"
+          hide-details
           item-text="label"
+          label="חיפוש כתובת"
+          no-filter
+          outlined
           return-object
         ></v-autocomplete>
       </v-col>
-      <v-col align-self="center">
+      <v-col align-self="center" cols="12" sm="5">
         <v-slider
           label='ק"מ'
           inverse-label
@@ -32,7 +34,7 @@
           @change="handleSliderChange"
         />
       </v-col>
-      <v-col cols="2">
+      <v-col cols="12" sm="2">
         <v-btn
           block
           x-large
@@ -96,6 +98,7 @@ import { Getter, Action } from "vuex-class";
 import { EsriProvider } from "leaflet-geosearch";
 import { Watch } from "vue-property-decorator";
 import Leaflet from "./Leaflet";
+import { scrollToFocusedElement } from "../helpers/functions";
 
 @Component({
   components: {
@@ -129,6 +132,10 @@ export default class LocationSubscription extends Vue {
         : [];
       this.isLoading = false;
     }, 200);
+  }
+
+  handleInputFocus() {
+    scrollToFocusedElement();
   }
 
   handleLocationSelected(location) {
