@@ -9,11 +9,13 @@
           :items="suggestedLocations"
           :loading="isLoading"
           :search-input.sync="query"
+          :menu-props="autocompleteMenuProps"
           @change="handleLocationSelected"
-          @focus="handleInputFocus"
+          @focus="handleInputFocused"
           append-icon
           class="scrollable"
           hide-details
+          hide-no-data
           item-text="label"
           label="חיפוש כתובת"
           no-filter
@@ -98,7 +100,7 @@ import { Getter, Action } from "vuex-class";
 import { EsriProvider } from "leaflet-geosearch";
 import { Watch } from "vue-property-decorator";
 import Leaflet from "./Leaflet";
-import { scrollToFocusedElement } from "../helpers/functions";
+import { delayScrollToFocusedElement } from "../helpers/functions";
 
 @Component({
   components: {
@@ -134,9 +136,9 @@ export default class LocationSubscription extends Vue {
     }, 200);
   }
 
-  handleInputFocus() {
+  handleInputFocused() {
     if (this.$vuetify.breakpoint.smAndDown) {
-      scrollToFocusedElement();
+      delayScrollToFocusedElement();
     }
   }
 
@@ -186,6 +188,19 @@ export default class LocationSubscription extends Vue {
       1
     );
     this.updateSubscriptions();
+  }
+
+  get autocompleteMenuProps() {
+    if (this.$vuetify.breakpoint.smAndDown) {
+      return {
+        bottom: true,
+        offsetY: true,
+        offsetOverflow: false,
+        allowOverflow: true,
+        openOnFocus: true
+      };
+    }
+    return undefined;
   }
 
   get mapCenter() {

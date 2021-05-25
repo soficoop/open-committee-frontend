@@ -7,6 +7,7 @@
       <v-col>
         <v-autocomplete
           :items="tagSuggestions"
+          :menu-props="autocompleteMenuProps"
           @change="subscribeToTagBySearchString"
           @focus="handleInputFocused"
           class="scrollable"
@@ -38,7 +39,7 @@
 import Component from "vue-class-component";
 import Vue from "vue";
 import { Getter, Action } from "vuex-class";
-import { scrollToFocusedElement } from "../helpers/functions";
+import { delayScrollToFocusedElement } from "../helpers/functions";
 
 @Component()
 export default class TagSubscription extends Vue {
@@ -61,7 +62,7 @@ export default class TagSubscription extends Vue {
 
   handleInputFocused() {
     if (this.$vuetify.breakpoint.smAndDown) {
-      scrollToFocusedElement();
+      delayScrollToFocusedElement();
     }
   }
 
@@ -92,6 +93,18 @@ export default class TagSubscription extends Vue {
       1
     );
     this.updateSubscriptions();
+  }
+  get autocompleteMenuProps() {
+    if (this.$vuetify.breakpoint.smAndDown) {
+      return {
+        bottom: true,
+        offsetY: true,
+        offsetOverflow: false,
+        allowOverflow: true,
+        openOnFocus: true
+      };
+    }
+    return undefined;
   }
   /** @type {import("../../graphql/types").Tag[]} */
   get tagSuggestions() {

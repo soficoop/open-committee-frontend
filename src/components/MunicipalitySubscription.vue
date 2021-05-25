@@ -8,7 +8,8 @@
         <v-autocomplete
           :items="municipalitySuggestions"
           @change="subscribeToMunicipalityBySearchString"
-          @focus="handleInputFocus"
+          :menu-props="autocompleteMenuProps"
+          @focus="handleInputFocused"
           class="scrollable"
           hide-details
           item-text="sid"
@@ -38,7 +39,7 @@
 import Component from "vue-class-component";
 import Vue from "vue";
 import { Getter, Action } from "vuex-class";
-import { scrollToFocusedElement } from "../helpers/functions";
+import { delayScrollToFocusedElement } from "../helpers/functions";
 
 @Component()
 export default class MunicipalitySubscription extends Vue {
@@ -60,9 +61,9 @@ export default class MunicipalitySubscription extends Vue {
     );
   }
 
-  handleInputFocus() {
+  handleInputFocused() {
     if (this.$vuetify.breakpoint.smAndDown) {
-      scrollToFocusedElement();
+      delayScrollToFocusedElement();
     }
   }
 
@@ -94,6 +95,18 @@ export default class MunicipalitySubscription extends Vue {
       1
     );
     this.updateSubscriptions();
+  }
+  get autocompleteMenuProps() {
+    if (this.$vuetify.breakpoint.smAndDown) {
+      return {
+        bottom: true,
+        offsetY: true,
+        offsetOverflow: false,
+        allowOverflow: true,
+        openOnFocus: true
+      };
+    }
+    return undefined;
   }
   /** @type {import("../../graphql/types").Municipality[]} */
   get municipalitySuggestions() {

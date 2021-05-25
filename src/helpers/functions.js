@@ -128,10 +128,13 @@ export function checkIfEmailIsValid(email) {
   );
 }
 
-export function scrollToFocusedElement() {
-  setTimeout(() => {
-    document.activeElement.scrollIntoView({
-      behavior: "smooth"
-    });
-  }, 300);
+export async function delayScrollToFocusedElement() {
+  return new Promise(resolve =>
+    setTimeout(() => {
+      document.activeElement.scrollIntoView({
+        behavior: "smooth"
+      });
+      resolve();
+    }, 300)
+  );
 }
