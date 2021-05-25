@@ -60,7 +60,9 @@ export default class TagSubscription extends Vue {
   }
 
   handleInputFocused() {
-    scrollToFocusedElement();
+    if (this.$vuetify.breakpoint.smAndDown) {
+      scrollToFocusedElement();
+    }
   }
 
   async mounted() {

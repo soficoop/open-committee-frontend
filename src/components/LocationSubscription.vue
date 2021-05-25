@@ -26,7 +26,7 @@
           label='ק"מ'
           inverse-label
           hide-details
-          thumb-label="always"
+          :thumb-label="$vuetify.breakpoint.smAndUp ? 'always' : true"
           min="0"
           max="15"
           value="5"
@@ -135,7 +135,9 @@ export default class LocationSubscription extends Vue {
   }
 
   handleInputFocus() {
-    scrollToFocusedElement();
+    if (this.$vuetify.breakpoint.smAndDown) {
+      scrollToFocusedElement();
+    }
   }
 
   handleLocationSelected(location) {

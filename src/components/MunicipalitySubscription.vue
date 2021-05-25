@@ -61,7 +61,9 @@ export default class MunicipalitySubscription extends Vue {
   }
 
   handleInputFocus() {
-    scrollToFocusedElement();
+    if (this.$vuetify.breakpoint.smAndDown) {
+      scrollToFocusedElement();
+    }
   }
 
   async mounted() {
