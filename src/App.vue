@@ -18,33 +18,38 @@
       :isOpen="isNavOpen"
       @openChanged="value => (isNavOpen = value)"
     ></Navigation>
-    <v-bottom-sheet v-model="isLoginSheetVisible">
-      <v-sheet class="pa-3">
-        <v-row justify="center" class="py-1">
-          <div class="flex-shrink-1">
-            <v-btn
-              icon
-              class="p-absolute s-close-login-sheet ma-1"
-              @click="isLoginSheetVisible = false"
-            >
-              <v-icon>mdi-close</v-icon>
-            </v-btn>
-            <h3 class="text-h6 my-2" tabindex="0">
-              התחברו כדי להישאר מעודכנים!
-            </h3>
-            <v-btn
-              block
-              class="my-2"
-              depressed
-              color="secondary"
-              @click="goToLogin"
-            >
-              התחברות
-            </v-btn>
-          </div>
-        </v-row>
-      </v-sheet>
-    </v-bottom-sheet>
+    <v-snackbar
+      :timeout="-1"
+      :value="isLoginPromptVisible"
+      bottom
+      :right="$vuetify.breakpoint.smAndUp"
+      light
+      multi-line
+    >
+      <v-row justify="center" class="py-1">
+        <div class="flex-shrink-1">
+          <v-btn
+            icon
+            class="p-absolute s-close-login-prompt"
+            @click="isLoginPromptVisible = false"
+          >
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+          <h3 class="text-h6 my-2" tabindex="0">
+            התחברו כדי להישאר מעודכנים!
+          </h3>
+          <v-btn
+            block
+            class="my-2"
+            depressed
+            color="secondary"
+            @click="goToLogin"
+          >
+            התחברות
+          </v-btn>
+        </div>
+      </v-row>
+    </v-snackbar>
     <v-main class="background">
       <v-overlay v-model="isLoading" z-index="99999999">
         <v-progress-circular indeterminate size="64"></v-progress-circular>
@@ -80,7 +85,7 @@ body.using-mouse :focus {
   border-bottom: 1px solid;
   border-color: var(--v-background-base);
 }
-.s-close-login-sheet {
+.s-close-login-prompt {
   left: 0;
 }
 .v-main__wrap {
@@ -113,7 +118,7 @@ export default class App extends Vue {
   @Getter user;
   @Mutation setLoading;
   isNavOpen = this.$vuetify.breakpoint.mdAndUp;
-  isLoginSheetVisible = false;
+  isLoginPromptVisible = false;
 
   @Watch("$route")
   async handleRouteChanged() {
@@ -123,12 +128,12 @@ export default class App extends Vue {
       return;
     }
     if (this.$route.path.startsWith("/login")) {
-      this.isLoginSheetVisible = false;
+      this.isLoginPromptVisible = false;
     }
   }
 
   goToLogin() {
-    this.isLoginSheetVisible = false;
+    this.isLoginPromptVisible = false;
     this.$router.push({
       name: "login",
       params: {
@@ -142,24 +147,16 @@ export default class App extends Vue {
     this.fetchUpcomingMeetings();
     try {
       await this.refreshUser();
-      this.promptLoginTwice();
+      setTimeout(() => {
+        this.isLoginPromptVisible =
+          !this.$route.path.startsWith("/login") && !this.user;
+      }, 5000);
     } catch (e) {
       this.signOut();
       this.goToLogin();
     } finally {
       this.setLoading(false);
     }
-  }
-
-  promptLoginTwice() {
-    setTimeout(() => {
-      this.isLoginSheetVisible =
-        !this.$route.path.startsWith("/login") && !this.user;
-    }, 5000);
-    setTimeout(() => {
-      this.isLoginSheetVisible =
-        !this.$route.path.startsWith("/login") && !this.user;
-    }, 60000);
   }
 
   /**
