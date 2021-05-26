@@ -22,19 +22,16 @@
         </h1>
       </v-col>
     </v-row>
-    <v-row v-if="!this.isLoading">
-      <v-col>
-        <div class="pa-6" />
-        <h2 class="headline primary--text font-weight-bold my-6" tabindex="0">
-          לפי נושא
-        </h2>
-        <TagSubscription />
-        <h2 class="headline primary--text font-weight-bold my-6" tabindex="0">
-          לפי ועדה
-        </h2>
-        <CommitteeSubscription />
-      </v-col>
-    </v-row>
+    <v-fade-transition>
+      <v-row v-if="showSubscriptions">
+        <v-col>
+          <TagSubscription class="py-6" />
+          <MunicipalitySubscription class="py-6" />
+          <LocationSubscription class="py-6" />
+          <CommitteeSubscription class="py-6" />
+        </v-col>
+      </v-row>
+    </v-fade-transition>
   </v-container>
 </template>
 
@@ -43,15 +40,25 @@ import Component from "vue-class-component";
 import Vue from "vue";
 import CommitteeSubscription from "../components/CommitteeSubscription.vue";
 import TagSubscription from "../components/TagSubscription.vue";
+import MunicipalitySubscription from "../components/MunicipalitySubscription.vue";
+import LocationSubscription from "../components/LocationSubscription.vue";
 import { Action, Getter, Mutation } from "vuex-class";
 
-@Component({ components: { CommitteeSubscription, TagSubscription } })
+@Component({
+  components: {
+    CommitteeSubscription,
+    LocationSubscription,
+    TagSubscription,
+    MunicipalitySubscription
+  }
+})
 export default class Subscriptions extends Vue {
   @Action fetchUserSubscriptions;
   @Getter isLoading;
   @Getter user;
   @Mutation setLoading;
   showLoginDialog = false;
+  showSubscriptions = false;
 
   async mounted() {
     if (this.user) {
@@ -61,6 +68,7 @@ export default class Subscriptions extends Vue {
     } else {
       this.showLoginDialog = true;
     }
+    this.showSubscriptions = true;
   }
 }
 </script>

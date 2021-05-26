@@ -10,6 +10,7 @@ import {
   getCommitteeMeetings,
   getUserSubscriptions,
   getAllCommittees,
+  getAllMunicipalities,
   findUser,
   getAllTags
 } from "../helpers/queries.js";
@@ -23,6 +24,7 @@ import {
 Vue.use(Vuex);
 
 const storeOptions = {
+  /**@type {import("../helpers/typings").StoreState} */
   state: {
     /**@type {import("../../graphql/types").Committee[]} */
     committees: [],
@@ -30,6 +32,8 @@ const storeOptions = {
     jwt: "",
     /** @type {import("../../graphql/types").Meeting[]} */
     managableMeetings: [],
+    /** @type {import("../../graphql/types").Municipality[]} */
+    municipalities: [],
     plans: [],
     /**@type {import("../../graphql/types").Meeting} */
     selectedMeeting: null,
@@ -49,6 +53,14 @@ const storeOptions = {
      */
     setCommittees(state, committees) {
       state.committees = committees;
+    },
+    /**
+     * Sets the current municipalities by the given ones
+     * @param {import("../helpers/typings").StoreState} state
+     * @param {import("../../graphql/types").Municipality[]} municipalities
+     */
+    setMunicipalities(state, municipalities) {
+      state.municipalities = municipalities;
     },
     /**
      * Sets the current tags by the given ones
@@ -129,6 +141,9 @@ const storeOptions = {
     managableMeetings(state) {
       return state.managableMeetings;
     },
+    municipalities(state) {
+      return state.municipalities;
+    },
     selectedMeeting(state) {
       return state.selectedMeeting;
     },
@@ -153,6 +168,17 @@ const storeOptions = {
     async fetchCommittees(context) {
       const { committees } = await makeGqlRequest(getAllCommittees);
       context.commit(storeOptions.mutations.setCommittees.name, committees);
+    },
+    /**
+     * Fetches all municipalities
+     * @param {import("vuex").Store<import("../helpers/typings").StoreState>} context
+     */
+    async fetchMunicipalities(context) {
+      const { municipalities } = await makeGqlRequest(getAllMunicipalities);
+      context.commit(
+        storeOptions.mutations.setMunicipalities.name,
+        municipalities
+      );
     },
     /**
      * Fetches upcoming meeting (partial)
@@ -313,13 +339,15 @@ const storeOptions = {
     /**
      * Update user
      * @param {import("vuex").Store} context the store object
-     * @param {import("../../graphql/types").UsersPermissionsUser} updatedUserFields
+     * @param {import("../../graphql/types").EditUserInput} updatedUserFields
      */
     async updateUser(context, updatedUserFields) {
-      updatedUserFields.id = context.state.user.id;
       const res = await makeGqlRequest(
         updateMe,
-        updatedUserFields,
+        {
+          id: context.state.user.id,
+          data: updatedUserFields
+        },
         context.state.jwt
       );
       context.commit(storeOptions.mutations.setUser.name, res.updateMe.user);
@@ -362,6 +390,8 @@ const storeOptions = {
       context.commit(storeOptions.mutations.setUser.name, {
         ...storeUser,
         subscribedCommittees: result.user.subscribedCommittees,
+        subscribedLocations: result.user.subscribedLocations,
+        subscribedMunicipalities: result.user.subscribedMunicipalities,
         subscribedTags: result.user.subscribedTags
       });
     }

@@ -250,6 +250,17 @@ export const getUserSubscriptions = `query getUserSubscriptions($id: ID!) {
       id
       name
     }
+    subscribedMunicipalities {
+      id
+      sid
+    }
+    subscribedLocations {
+      id
+      name
+      lat
+      lng
+      radius
+    }
   }
 }`;
 
@@ -271,6 +282,15 @@ export const getAllTags = `query tags {
   tags {
     id
     name
+  }
+}`;
+
+export const getAllMunicipalities = `query municipalities {
+  municipalities(
+    where: { isHidden_ne: true }
+  ) {
+    id
+    sid
   }
 }`;
 

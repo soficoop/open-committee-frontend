@@ -127,3 +127,14 @@ export function checkIfEmailIsValid(email) {
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   );
 }
+
+export async function delayScrollToFocusedElement() {
+  return new Promise(resolve =>
+    setTimeout(() => {
+      document.activeElement.scrollIntoView({
+        behavior: "smooth"
+      });
+      resolve();
+    }, 300)
+  );
+}

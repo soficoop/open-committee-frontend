@@ -400,6 +400,21 @@ export type CommitteeInput = {
   updated_by?: Maybe<Scalars['ID']>,
 };
 
+export type ComponentMiscLocation = {
+  __typename?: 'ComponentMiscLocation',
+  id: Scalars['ID'],
+  _id: Scalars['ID'],
+  lat: Scalars['Float'],
+  lng: Scalars['Float'],
+  radius?: Maybe<Scalars['Float']>,
+};
+
+export type ComponentMiscLocationInput = {
+  lat: Scalars['Float'],
+  lng: Scalars['Float'],
+  radius?: Maybe<Scalars['Float']>,
+};
+
 export type ContactApplicationInput = {
   name: Scalars['String'],
   email: Scalars['String'],
@@ -530,6 +545,15 @@ export type CreateMeetingPayload = {
   meeting?: Maybe<Meeting>,
 };
 
+export type CreateMunicipalityInput = {
+  data?: Maybe<MunicipalityInput>,
+};
+
+export type CreateMunicipalityPayload = {
+  __typename?: 'createMunicipalityPayload',
+  municipality?: Maybe<Municipality>,
+};
+
 export type CreateParserInput = {
   data?: Maybe<ParserInput>,
 };
@@ -631,6 +655,15 @@ export type DeleteMeetingPayload = {
   meeting?: Maybe<Meeting>,
 };
 
+export type DeleteMunicipalityInput = {
+  where?: Maybe<InputId>,
+};
+
+export type DeleteMunicipalityPayload = {
+  __typename?: 'deleteMunicipalityPayload',
+  municipality?: Maybe<Municipality>,
+};
+
 export type DeleteParserInput = {
   where?: Maybe<InputId>,
 };
@@ -711,6 +744,13 @@ export type EditCommitteeInput = {
   updated_by?: Maybe<Scalars['ID']>,
 };
 
+export type EditComponentMiscLocationInput = {
+  id?: Maybe<Scalars['ID']>,
+  lat?: Maybe<Scalars['Float']>,
+  lng?: Maybe<Scalars['Float']>,
+  radius?: Maybe<Scalars['Float']>,
+};
+
 export type EditContactApplicationInput = {
   name?: Maybe<Scalars['String']>,
   email?: Maybe<Scalars['String']>,
@@ -759,6 +799,15 @@ export type EditMeetingInput = {
   updated_by?: Maybe<Scalars['ID']>,
 };
 
+export type EditMunicipalityInput = {
+  sid?: Maybe<Scalars['String']>,
+  plans?: Maybe<Array<Maybe<Scalars['ID']>>>,
+  subscribedUsers?: Maybe<Array<Maybe<Scalars['ID']>>>,
+  isHidden?: Maybe<Scalars['Boolean']>,
+  created_by?: Maybe<Scalars['ID']>,
+  updated_by?: Maybe<Scalars['ID']>,
+};
+
 export type EditParserInput = {
   for?: Maybe<Enum_Parser_For>,
   url?: Maybe<Scalars['String']>,
@@ -770,6 +819,7 @@ export type EditParserInput = {
   method?: Maybe<Enum_Parser_Method>,
   requestParams?: Maybe<Scalars['String']>,
   fileFields?: Maybe<Scalars['String']>,
+  isJson?: Maybe<Scalars['Boolean']>,
   created_by?: Maybe<Scalars['ID']>,
   updated_by?: Maybe<Scalars['ID']>,
 };
@@ -796,6 +846,8 @@ export type EditPlanInput = {
   commentsAreLocked?: Maybe<Scalars['Boolean']>,
   comments?: Maybe<Array<Maybe<Scalars['ID']>>>,
   tags?: Maybe<Array<Maybe<Scalars['ID']>>>,
+  municipalities?: Maybe<Array<Maybe<Scalars['ID']>>>,
+  geometry?: Maybe<Scalars['JSON']>,
   created_by?: Maybe<Scalars['ID']>,
   updated_by?: Maybe<Scalars['ID']>,
 };
@@ -813,6 +865,7 @@ export type EditRoleInput = {
 export type EditTagInput = {
   name?: Maybe<Scalars['String']>,
   plans?: Maybe<Array<Maybe<Scalars['ID']>>>,
+  subscribedUsers?: Maybe<Array<Maybe<Scalars['ID']>>>,
   created_by?: Maybe<Scalars['ID']>,
   updated_by?: Maybe<Scalars['ID']>,
 };
@@ -836,6 +889,9 @@ export type EditUserInput = {
   committees?: Maybe<Array<Maybe<Scalars['ID']>>>,
   subscribedCommittees?: Maybe<Array<Maybe<Scalars['ID']>>>,
   comments?: Maybe<Array<Maybe<Scalars['ID']>>>,
+  subscribedTags?: Maybe<Array<Maybe<Scalars['ID']>>>,
+  subscribedMunicipalities?: Maybe<Array<Maybe<Scalars['ID']>>>,
+  subscribedLocations?: Maybe<Array<Maybe<EditComponentMiscLocationInput>>>,
   created_by?: Maybe<Scalars['ID']>,
   updated_by?: Maybe<Scalars['ID']>,
 };
@@ -854,7 +910,8 @@ export enum Enum_Parser_For {
   Area = 'area',
   Committee = 'committee',
   Meeting = 'meeting',
-  Plan = 'plan'
+  Plan = 'plan',
+  Municipality = 'municipality'
 }
 
 export enum Enum_Parser_Method {
@@ -1125,7 +1182,103 @@ export type MeetingInput = {
   updated_by?: Maybe<Scalars['ID']>,
 };
 
-export type Morph = EmailMeetingPayload | UsersPermissionsMe | UsersPermissionsMeRole | UsersPermissionsLoginPayload | UserPermissionsPasswordPayload | Area | AreaConnection | AreaAggregator | AreaGroupBy | AreaConnectionId | AreaConnection_Id | AreaConnectionCreatedAt | AreaConnectionUpdatedAt | AreaConnectionSid | CreateAreaPayload | UpdateAreaPayload | DeleteAreaPayload | Comment | CommentConnection | CommentAggregator | CommentGroupBy | CommentConnectionId | CommentConnection_Id | CommentConnectionCreatedAt | CommentConnectionUpdatedAt | CommentConnectionTitle | CommentConnectionName | CommentConnectionContent | CommentConnectionParent | CommentConnectionUser | CommentConnectionIsHidden | CommentConnectionIsPinned | CommentConnectionPlan | CreateCommentPayload | UpdateCommentPayload | DeleteCommentPayload | Committee | CommitteeConnection | CommitteeAggregator | CommitteeGroupBy | CommitteeConnectionId | CommitteeConnection_Id | CommitteeConnectionCreatedAt | CommitteeConnectionUpdatedAt | CommitteeConnectionSid | CommitteeConnectionParent | CommitteeConnectionArea | CommitteeConnectionIsHidden | CreateCommitteePayload | UpdateCommitteePayload | DeleteCommitteePayload | ContactApplications | ContactApplicationsConnection | ContactApplicationsAggregator | ContactApplicationsGroupBy | ContactApplicationsConnectionId | ContactApplicationsConnection_Id | ContactApplicationsConnectionCreatedAt | ContactApplicationsConnectionUpdatedAt | ContactApplicationsConnectionName | ContactApplicationsConnectionEmail | ContactApplicationsConnectionMessage | CreateContactApplicationPayload | UpdateContactApplicationPayload | DeleteContactApplicationPayload | Meeting | MeetingConnection | MeetingAggregator | MeetingAggregatorSum | MeetingAggregatorAvg | MeetingAggregatorMin | MeetingAggregatorMax | MeetingGroupBy | MeetingConnectionId | MeetingConnection_Id | MeetingConnectionCreatedAt | MeetingConnectionUpdatedAt | MeetingConnectionDate | MeetingConnectionNumber | MeetingConnectionDecisions | MeetingConnectionProtocol | MeetingConnectionTranscript | MeetingConnectionSid | MeetingConnectionAddedManually | MeetingConnectionTitle | MeetingConnectionBackground | MeetingConnectionSummary | MeetingConnectionEmailViews | MeetingConnectionIsHidden | MeetingConnectionCommittee | CreateMeetingPayload | UpdateMeetingPayload | DeleteMeetingPayload | Parser | ParserConnection | ParserAggregator | ParserGroupBy | ParserConnectionId | ParserConnection_Id | ParserConnectionCreatedAt | ParserConnectionUpdatedAt | ParserConnectionFor | ParserConnectionUrl | ParserConnectionActive | ParserConnectionObjectSelector | ParserConnectionSidMatch | ParserConnectionFields | ParserConnectionUrlByExistingItem | ParserConnectionMethod | ParserConnectionRequestParams | ParserConnectionFileFields | CreateParserPayload | UpdateParserPayload | DeleteParserPayload | Plan | PlanConnection | PlanAggregator | PlanAggregatorSum | PlanAggregatorAvg | PlanAggregatorMin | PlanAggregatorMax | PlanGroupBy | PlanConnectionId | PlanConnection_Id | PlanConnectionCreatedAt | PlanConnectionUpdatedAt | PlanConnectionName | PlanConnectionStatus | PlanConnectionLastUpdate | PlanConnectionLocation | PlanConnectionMunicipality | PlanConnectionSettlement | PlanConnectionSections | PlanConnectionType | PlanConnectionSid | PlanConnectionTargets | PlanConnectionNumber | PlanConnectionSubmission | PlanConnectionStype | PlanConnectionAddedManually | PlanConnectionStreet | PlanConnectionHouseNumber | PlanConnectionCommentsAreLocked | CreatePlanPayload | UpdatePlanPayload | DeletePlanPayload | Tag | TagConnection | TagAggregator | TagGroupBy | TagConnectionId | TagConnection_Id | TagConnectionCreatedAt | TagConnectionUpdatedAt | TagConnectionName | CreateTagPayload | UpdateTagPayload | DeleteTagPayload | UploadFile | UploadFileConnection | UploadFileAggregator | UploadFileAggregatorSum | UploadFileAggregatorAvg | UploadFileAggregatorMin | UploadFileAggregatorMax | UploadFileGroupBy | UploadFileConnectionId | UploadFileConnection_Id | UploadFileConnectionCreatedAt | UploadFileConnectionUpdatedAt | UploadFileConnectionName | UploadFileConnectionAlternativeText | UploadFileConnectionCaption | UploadFileConnectionWidth | UploadFileConnectionHeight | UploadFileConnectionFormats | UploadFileConnectionHash | UploadFileConnectionExt | UploadFileConnectionMime | UploadFileConnectionSize | UploadFileConnectionUrl | UploadFileConnectionPreviewUrl | UploadFileConnectionProvider | UploadFileConnectionProvider_Metadata | DeleteFilePayload | UsersPermissionsPermission | UsersPermissionsRole | UsersPermissionsRoleConnection | UsersPermissionsRoleAggregator | UsersPermissionsRoleGroupBy | UsersPermissionsRoleConnectionId | UsersPermissionsRoleConnection_Id | UsersPermissionsRoleConnectionName | UsersPermissionsRoleConnectionDescription | UsersPermissionsRoleConnectionType | CreateRolePayload | UpdateRolePayload | DeleteRolePayload | UsersPermissionsUser | UsersPermissionsUserConnection | UsersPermissionsUserAggregator | UsersPermissionsUserGroupBy | UsersPermissionsUserConnectionId | UsersPermissionsUserConnection_Id | UsersPermissionsUserConnectionCreatedAt | UsersPermissionsUserConnectionUpdatedAt | UsersPermissionsUserConnectionUsername | UsersPermissionsUserConnectionEmail | UsersPermissionsUserConnectionProvider | UsersPermissionsUserConnectionConfirmed | UsersPermissionsUserConnectionBlocked | UsersPermissionsUserConnectionRole | UsersPermissionsUserConnectionFirstName | UsersPermissionsUserConnectionLastName | UsersPermissionsUserConnectionCity | UsersPermissionsUserConnectionOrganization | UsersPermissionsUserConnectionJob | UsersPermissionsUserConnectionUserImage | CreateUserPayload | UpdateUserPayload | DeleteUserPayload;
+export type Morph = UsersPermissionsMe | UsersPermissionsMeRole | UsersPermissionsLoginPayload | UserPermissionsPasswordPayload | EmailMeetingPayload | Area | AreaConnection | AreaAggregator | AreaGroupBy | AreaConnectionId | AreaConnection_Id | AreaConnectionCreatedAt | AreaConnectionUpdatedAt | AreaConnectionSid | CreateAreaPayload | UpdateAreaPayload | DeleteAreaPayload | Comment | CommentConnection | CommentAggregator | CommentGroupBy | CommentConnectionId | CommentConnection_Id | CommentConnectionCreatedAt | CommentConnectionUpdatedAt | CommentConnectionTitle | CommentConnectionName | CommentConnectionContent | CommentConnectionParent | CommentConnectionUser | CommentConnectionIsHidden | CommentConnectionIsPinned | CommentConnectionPlan | CreateCommentPayload | UpdateCommentPayload | DeleteCommentPayload | Committee | CommitteeConnection | CommitteeAggregator | CommitteeGroupBy | CommitteeConnectionId | CommitteeConnection_Id | CommitteeConnectionCreatedAt | CommitteeConnectionUpdatedAt | CommitteeConnectionSid | CommitteeConnectionParent | CommitteeConnectionArea | CommitteeConnectionIsHidden | CreateCommitteePayload | UpdateCommitteePayload | DeleteCommitteePayload | ContactApplications | ContactApplicationsConnection | ContactApplicationsAggregator | ContactApplicationsGroupBy | ContactApplicationsConnectionId | ContactApplicationsConnection_Id | ContactApplicationsConnectionCreatedAt | ContactApplicationsConnectionUpdatedAt | ContactApplicationsConnectionName | ContactApplicationsConnectionEmail | ContactApplicationsConnectionMessage | CreateContactApplicationPayload | UpdateContactApplicationPayload | DeleteContactApplicationPayload | Meeting | MeetingConnection | MeetingAggregator | MeetingAggregatorSum | MeetingAggregatorAvg | MeetingAggregatorMin | MeetingAggregatorMax | MeetingGroupBy | MeetingConnectionId | MeetingConnection_Id | MeetingConnectionCreatedAt | MeetingConnectionUpdatedAt | MeetingConnectionDate | MeetingConnectionNumber | MeetingConnectionDecisions | MeetingConnectionProtocol | MeetingConnectionTranscript | MeetingConnectionSid | MeetingConnectionAddedManually | MeetingConnectionTitle | MeetingConnectionBackground | MeetingConnectionSummary | MeetingConnectionEmailViews | MeetingConnectionIsHidden | MeetingConnectionCommittee | CreateMeetingPayload | UpdateMeetingPayload | DeleteMeetingPayload | Municipality | MunicipalityConnection | MunicipalityAggregator | MunicipalityGroupBy | MunicipalityConnectionId | MunicipalityConnection_Id | MunicipalityConnectionCreatedAt | MunicipalityConnectionUpdatedAt | MunicipalityConnectionSid | MunicipalityConnectionIsHidden | CreateMunicipalityPayload | UpdateMunicipalityPayload | DeleteMunicipalityPayload | Parser | ParserConnection | ParserAggregator | ParserGroupBy | ParserConnectionId | ParserConnection_Id | ParserConnectionCreatedAt | ParserConnectionUpdatedAt | ParserConnectionFor | ParserConnectionUrl | ParserConnectionActive | ParserConnectionObjectSelector | ParserConnectionSidMatch | ParserConnectionFields | ParserConnectionUrlByExistingItem | ParserConnectionMethod | ParserConnectionRequestParams | ParserConnectionFileFields | ParserConnectionIsJson | CreateParserPayload | UpdateParserPayload | DeleteParserPayload | Plan | PlanConnection | PlanAggregator | PlanAggregatorSum | PlanAggregatorAvg | PlanAggregatorMin | PlanAggregatorMax | PlanGroupBy | PlanConnectionId | PlanConnection_Id | PlanConnectionCreatedAt | PlanConnectionUpdatedAt | PlanConnectionName | PlanConnectionStatus | PlanConnectionLastUpdate | PlanConnectionLocation | PlanConnectionMunicipality | PlanConnectionSettlement | PlanConnectionSections | PlanConnectionType | PlanConnectionSid | PlanConnectionTargets | PlanConnectionNumber | PlanConnectionSubmission | PlanConnectionStype | PlanConnectionAddedManually | PlanConnectionStreet | PlanConnectionHouseNumber | PlanConnectionCommentsAreLocked | PlanConnectionGeometry | CreatePlanPayload | UpdatePlanPayload | DeletePlanPayload | Tag | TagConnection | TagAggregator | TagGroupBy | TagConnectionId | TagConnection_Id | TagConnectionCreatedAt | TagConnectionUpdatedAt | TagConnectionName | CreateTagPayload | UpdateTagPayload | DeleteTagPayload | UploadFile | UploadFileConnection | UploadFileAggregator | UploadFileAggregatorSum | UploadFileAggregatorAvg | UploadFileAggregatorMin | UploadFileAggregatorMax | UploadFileGroupBy | UploadFileConnectionId | UploadFileConnection_Id | UploadFileConnectionCreatedAt | UploadFileConnectionUpdatedAt | UploadFileConnectionName | UploadFileConnectionAlternativeText | UploadFileConnectionCaption | UploadFileConnectionWidth | UploadFileConnectionHeight | UploadFileConnectionFormats | UploadFileConnectionHash | UploadFileConnectionExt | UploadFileConnectionMime | UploadFileConnectionSize | UploadFileConnectionUrl | UploadFileConnectionPreviewUrl | UploadFileConnectionProvider | UploadFileConnectionProvider_Metadata | DeleteFilePayload | UsersPermissionsPermission | UsersPermissionsRole | UsersPermissionsRoleConnection | UsersPermissionsRoleAggregator | UsersPermissionsRoleGroupBy | UsersPermissionsRoleConnectionId | UsersPermissionsRoleConnection_Id | UsersPermissionsRoleConnectionName | UsersPermissionsRoleConnectionDescription | UsersPermissionsRoleConnectionType | CreateRolePayload | UpdateRolePayload | DeleteRolePayload | UsersPermissionsUser | UsersPermissionsUserConnection | UsersPermissionsUserAggregator | UsersPermissionsUserGroupBy | UsersPermissionsUserConnectionId | UsersPermissionsUserConnection_Id | UsersPermissionsUserConnectionCreatedAt | UsersPermissionsUserConnectionUpdatedAt | UsersPermissionsUserConnectionUsername | UsersPermissionsUserConnectionEmail | UsersPermissionsUserConnectionProvider | UsersPermissionsUserConnectionConfirmed | UsersPermissionsUserConnectionBlocked | UsersPermissionsUserConnectionRole | UsersPermissionsUserConnectionFirstName | UsersPermissionsUserConnectionLastName | UsersPermissionsUserConnectionCity | UsersPermissionsUserConnectionOrganization | UsersPermissionsUserConnectionJob | UsersPermissionsUserConnectionUserImage | CreateUserPayload | UpdateUserPayload | DeleteUserPayload | ComponentMiscLocation;
+
+export type Municipality = {
+  __typename?: 'Municipality',
+  id: Scalars['ID'],
+  _id: Scalars['ID'],
+  createdAt: Scalars['DateTime'],
+  updatedAt: Scalars['DateTime'],
+  sid: Scalars['String'],
+  isHidden?: Maybe<Scalars['Boolean']>,
+  plans?: Maybe<Array<Maybe<Plan>>>,
+  subscribedUsers?: Maybe<Array<Maybe<UsersPermissionsUser>>>,
+};
+
+
+export type MunicipalityPlansArgs = {
+  sort?: Maybe<Scalars['String']>,
+  limit?: Maybe<Scalars['Int']>,
+  start?: Maybe<Scalars['Int']>,
+  where?: Maybe<Scalars['JSON']>
+};
+
+
+export type MunicipalitySubscribedUsersArgs = {
+  sort?: Maybe<Scalars['String']>,
+  limit?: Maybe<Scalars['Int']>,
+  start?: Maybe<Scalars['Int']>,
+  where?: Maybe<Scalars['JSON']>
+};
+
+export type MunicipalityAggregator = {
+  __typename?: 'MunicipalityAggregator',
+  count?: Maybe<Scalars['Int']>,
+  totalCount?: Maybe<Scalars['Int']>,
+};
+
+export type MunicipalityConnection = {
+  __typename?: 'MunicipalityConnection',
+  values?: Maybe<Array<Maybe<Municipality>>>,
+  groupBy?: Maybe<MunicipalityGroupBy>,
+  aggregate?: Maybe<MunicipalityAggregator>,
+};
+
+export type MunicipalityConnection_Id = {
+  __typename?: 'MunicipalityConnection_id',
+  key?: Maybe<Scalars['ID']>,
+  connection?: Maybe<MunicipalityConnection>,
+};
+
+export type MunicipalityConnectionCreatedAt = {
+  __typename?: 'MunicipalityConnectionCreatedAt',
+  key?: Maybe<Scalars['DateTime']>,
+  connection?: Maybe<MunicipalityConnection>,
+};
+
+export type MunicipalityConnectionId = {
+  __typename?: 'MunicipalityConnectionId',
+  key?: Maybe<Scalars['ID']>,
+  connection?: Maybe<MunicipalityConnection>,
+};
+
+export type MunicipalityConnectionIsHidden = {
+  __typename?: 'MunicipalityConnectionIsHidden',
+  key?: Maybe<Scalars['Boolean']>,
+  connection?: Maybe<MunicipalityConnection>,
+};
+
+export type MunicipalityConnectionSid = {
+  __typename?: 'MunicipalityConnectionSid',
+  key?: Maybe<Scalars['String']>,
+  connection?: Maybe<MunicipalityConnection>,
+};
+
+export type MunicipalityConnectionUpdatedAt = {
+  __typename?: 'MunicipalityConnectionUpdatedAt',
+  key?: Maybe<Scalars['DateTime']>,
+  connection?: Maybe<MunicipalityConnection>,
+};
+
+export type MunicipalityGroupBy = {
+  __typename?: 'MunicipalityGroupBy',
+  id?: Maybe<Array<Maybe<MunicipalityConnectionId>>>,
+  _id?: Maybe<Array<Maybe<MunicipalityConnection_Id>>>,
+  createdAt?: Maybe<Array<Maybe<MunicipalityConnectionCreatedAt>>>,
+  updatedAt?: Maybe<Array<Maybe<MunicipalityConnectionUpdatedAt>>>,
+  sid?: Maybe<Array<Maybe<MunicipalityConnectionSid>>>,
+  isHidden?: Maybe<Array<Maybe<MunicipalityConnectionIsHidden>>>,
+};
+
+export type MunicipalityInput = {
+  sid: Scalars['String'],
+  plans?: Maybe<Array<Maybe<Scalars['ID']>>>,
+  subscribedUsers?: Maybe<Array<Maybe<Scalars['ID']>>>,
+  isHidden?: Maybe<Scalars['Boolean']>,
+  created_by?: Maybe<Scalars['ID']>,
+  updated_by?: Maybe<Scalars['ID']>,
+};
 
 export type Mutation = {
   __typename?: 'Mutation',
@@ -1144,6 +1297,9 @@ export type Mutation = {
   createMeeting?: Maybe<CreateMeetingPayload>,
   updateMeeting?: Maybe<UpdateMeetingPayload>,
   deleteMeeting?: Maybe<DeleteMeetingPayload>,
+  createMunicipality?: Maybe<CreateMunicipalityPayload>,
+  updateMunicipality?: Maybe<UpdateMunicipalityPayload>,
+  deleteMunicipality?: Maybe<DeleteMunicipalityPayload>,
   createParser?: Maybe<CreateParserPayload>,
   updateParser?: Maybe<UpdateParserPayload>,
   deleteParser?: Maybe<DeleteParserPayload>,
@@ -1167,11 +1323,6 @@ export type Mutation = {
   updateUser?: Maybe<UpdateUserPayload>,
   /** Delete an existing user */
   deleteUser?: Maybe<DeleteUserPayload>,
-  updateMyComment?: Maybe<UpdateCommentPayload>,
-  emailMeeting?: Maybe<EmailMeetingPayload>,
-  updateMyMeeting?: Maybe<UpdateMeetingPayload>,
-  updateMyPlan?: Maybe<UpdatePlanPayload>,
-  tagPlan?: Maybe<UpdatePlanPayload>,
   upload: UploadFile,
   multipleUpload: Array<Maybe<UploadFile>>,
   updateFileInfo: UploadFile,
@@ -1182,6 +1333,11 @@ export type Mutation = {
   emailConfirmation?: Maybe<UsersPermissionsLoginPayload>,
   updateMe?: Maybe<UpdateUserPayload>,
   tokenSignIn: UsersPermissionsLoginPayload,
+  updateMyComment?: Maybe<UpdateCommentPayload>,
+  emailMeeting?: Maybe<EmailMeetingPayload>,
+  updateMyMeeting?: Maybe<UpdateMeetingPayload>,
+  updateMyPlan?: Maybe<UpdatePlanPayload>,
+  tagPlan?: Maybe<UpdatePlanPayload>,
 };
 
 
@@ -1257,6 +1413,21 @@ export type MutationUpdateMeetingArgs = {
 
 export type MutationDeleteMeetingArgs = {
   input?: Maybe<DeleteMeetingInput>
+};
+
+
+export type MutationCreateMunicipalityArgs = {
+  input?: Maybe<CreateMunicipalityInput>
+};
+
+
+export type MutationUpdateMunicipalityArgs = {
+  input?: Maybe<UpdateMunicipalityInput>
+};
+
+
+export type MutationDeleteMunicipalityArgs = {
+  input?: Maybe<DeleteMunicipalityInput>
 };
 
 
@@ -1340,32 +1511,6 @@ export type MutationDeleteUserArgs = {
 };
 
 
-export type MutationUpdateMyCommentArgs = {
-  input?: Maybe<UpdateCommentInput>
-};
-
-
-export type MutationEmailMeetingArgs = {
-  input: EmailMeetingInput
-};
-
-
-export type MutationUpdateMyMeetingArgs = {
-  input?: Maybe<UpdateMeetingInput>
-};
-
-
-export type MutationUpdateMyPlanArgs = {
-  input?: Maybe<UpdatePlanInput>
-};
-
-
-export type MutationTagPlanArgs = {
-  tag: Scalars['String'],
-  planId: Scalars['ID']
-};
-
-
 export type MutationUploadArgs = {
   refId?: Maybe<Scalars['ID']>,
   ref?: Maybe<Scalars['String']>,
@@ -1427,6 +1572,32 @@ export type MutationTokenSignInArgs = {
   token: Scalars['String']
 };
 
+
+export type MutationUpdateMyCommentArgs = {
+  input?: Maybe<UpdateCommentInput>
+};
+
+
+export type MutationEmailMeetingArgs = {
+  input: EmailMeetingInput
+};
+
+
+export type MutationUpdateMyMeetingArgs = {
+  input?: Maybe<UpdateMeetingInput>
+};
+
+
+export type MutationUpdateMyPlanArgs = {
+  input?: Maybe<UpdatePlanInput>
+};
+
+
+export type MutationTagPlanArgs = {
+  tags: Array<Scalars['String']>,
+  planId: Scalars['ID']
+};
+
 export type Parser = {
   __typename?: 'Parser',
   id: Scalars['ID'],
@@ -1443,6 +1614,7 @@ export type Parser = {
   method?: Maybe<Enum_Parser_Method>,
   requestParams?: Maybe<Scalars['String']>,
   fileFields?: Maybe<Scalars['String']>,
+  isJson: Scalars['Boolean'],
 };
 
 export type ParserAggregator = {
@@ -1497,6 +1669,12 @@ export type ParserConnectionFor = {
 export type ParserConnectionId = {
   __typename?: 'ParserConnectionId',
   key?: Maybe<Scalars['ID']>,
+  connection?: Maybe<ParserConnection>,
+};
+
+export type ParserConnectionIsJson = {
+  __typename?: 'ParserConnectionIsJson',
+  key?: Maybe<Scalars['Boolean']>,
   connection?: Maybe<ParserConnection>,
 };
 
@@ -1558,6 +1736,7 @@ export type ParserGroupBy = {
   method?: Maybe<Array<Maybe<ParserConnectionMethod>>>,
   requestParams?: Maybe<Array<Maybe<ParserConnectionRequestParams>>>,
   fileFields?: Maybe<Array<Maybe<ParserConnectionFileFields>>>,
+  isJson?: Maybe<Array<Maybe<ParserConnectionIsJson>>>,
 };
 
 export type ParserInput = {
@@ -1571,6 +1750,7 @@ export type ParserInput = {
   method?: Maybe<Enum_Parser_Method>,
   requestParams?: Maybe<Scalars['String']>,
   fileFields?: Maybe<Scalars['String']>,
+  isJson?: Maybe<Scalars['Boolean']>,
   created_by?: Maybe<Scalars['ID']>,
   updated_by?: Maybe<Scalars['ID']>,
 };
@@ -1598,10 +1778,12 @@ export type Plan = {
   street?: Maybe<Scalars['String']>,
   houseNumber?: Maybe<Scalars['Int']>,
   commentsAreLocked?: Maybe<Scalars['Boolean']>,
+  geometry?: Maybe<Scalars['JSON']>,
   attachedFiles?: Maybe<Array<Maybe<UploadFile>>>,
   meetings?: Maybe<Array<Maybe<Meeting>>>,
   comments?: Maybe<Array<Maybe<Comment>>>,
   tags?: Maybe<Array<Maybe<Tag>>>,
+  municipalities?: Maybe<Array<Maybe<Municipality>>>,
 };
 
 
@@ -1630,6 +1812,14 @@ export type PlanCommentsArgs = {
 
 
 export type PlanTagsArgs = {
+  sort?: Maybe<Scalars['String']>,
+  limit?: Maybe<Scalars['Int']>,
+  start?: Maybe<Scalars['Int']>,
+  where?: Maybe<Scalars['JSON']>
+};
+
+
+export type PlanMunicipalitiesArgs = {
   sort?: Maybe<Scalars['String']>,
   limit?: Maybe<Scalars['Int']>,
   start?: Maybe<Scalars['Int']>,
@@ -1698,6 +1888,12 @@ export type PlanConnectionCommentsAreLocked = {
 export type PlanConnectionCreatedAt = {
   __typename?: 'PlanConnectionCreatedAt',
   key?: Maybe<Scalars['DateTime']>,
+  connection?: Maybe<PlanConnection>,
+};
+
+export type PlanConnectionGeometry = {
+  __typename?: 'PlanConnectionGeometry',
+  key?: Maybe<Scalars['JSON']>,
   connection?: Maybe<PlanConnection>,
 };
 
@@ -1826,6 +2022,7 @@ export type PlanGroupBy = {
   street?: Maybe<Array<Maybe<PlanConnectionStreet>>>,
   houseNumber?: Maybe<Array<Maybe<PlanConnectionHouseNumber>>>,
   commentsAreLocked?: Maybe<Array<Maybe<PlanConnectionCommentsAreLocked>>>,
+  geometry?: Maybe<Array<Maybe<PlanConnectionGeometry>>>,
 };
 
 export type PlanInput = {
@@ -1850,6 +2047,8 @@ export type PlanInput = {
   commentsAreLocked?: Maybe<Scalars['Boolean']>,
   comments?: Maybe<Array<Maybe<Scalars['ID']>>>,
   tags?: Maybe<Array<Maybe<Scalars['ID']>>>,
+  municipalities?: Maybe<Array<Maybe<Scalars['ID']>>>,
+  geometry?: Maybe<Scalars['JSON']>,
   created_by?: Maybe<Scalars['ID']>,
   updated_by?: Maybe<Scalars['ID']>,
 };
@@ -1876,6 +2075,9 @@ export type Query = {
   meeting?: Maybe<Meeting>,
   meetings?: Maybe<Array<Maybe<Meeting>>>,
   meetingsConnection?: Maybe<MeetingConnection>,
+  municipality?: Maybe<Municipality>,
+  municipalities?: Maybe<Array<Maybe<Municipality>>>,
+  municipalitiesConnection?: Maybe<MunicipalityConnection>,
   parser?: Maybe<Parser>,
   parsers?: Maybe<Array<Maybe<Parser>>>,
   parsersConnection?: Maybe<ParserConnection>,
@@ -2006,6 +2208,29 @@ export type QueryMeetingsArgs = {
 
 
 export type QueryMeetingsConnectionArgs = {
+  sort?: Maybe<Scalars['String']>,
+  limit?: Maybe<Scalars['Int']>,
+  start?: Maybe<Scalars['Int']>,
+  where?: Maybe<Scalars['JSON']>
+};
+
+
+export type QueryMunicipalityArgs = {
+  id: Scalars['ID'],
+  publicationState?: Maybe<PublicationState>
+};
+
+
+export type QueryMunicipalitiesArgs = {
+  sort?: Maybe<Scalars['String']>,
+  limit?: Maybe<Scalars['Int']>,
+  start?: Maybe<Scalars['Int']>,
+  where?: Maybe<Scalars['JSON']>,
+  publicationState?: Maybe<PublicationState>
+};
+
+
+export type QueryMunicipalitiesConnectionArgs = {
   sort?: Maybe<Scalars['String']>,
   limit?: Maybe<Scalars['Int']>,
   start?: Maybe<Scalars['Int']>,
@@ -2162,10 +2387,19 @@ export type Tag = {
   updatedAt: Scalars['DateTime'],
   name: Scalars['String'],
   plans?: Maybe<Array<Maybe<Plan>>>,
+  subscribedUsers?: Maybe<Array<Maybe<UsersPermissionsUser>>>,
 };
 
 
 export type TagPlansArgs = {
+  sort?: Maybe<Scalars['String']>,
+  limit?: Maybe<Scalars['Int']>,
+  start?: Maybe<Scalars['Int']>,
+  where?: Maybe<Scalars['JSON']>
+};
+
+
+export type TagSubscribedUsersArgs = {
   sort?: Maybe<Scalars['String']>,
   limit?: Maybe<Scalars['Int']>,
   start?: Maybe<Scalars['Int']>,
@@ -2227,6 +2461,7 @@ export type TagGroupBy = {
 export type TagInput = {
   name: Scalars['String'],
   plans?: Maybe<Array<Maybe<Scalars['ID']>>>,
+  subscribedUsers?: Maybe<Array<Maybe<Scalars['ID']>>>,
   created_by?: Maybe<Scalars['ID']>,
   updated_by?: Maybe<Scalars['ID']>,
 };
@@ -2280,6 +2515,16 @@ export type UpdateMeetingInput = {
 export type UpdateMeetingPayload = {
   __typename?: 'updateMeetingPayload',
   meeting?: Maybe<Meeting>,
+};
+
+export type UpdateMunicipalityInput = {
+  where?: Maybe<InputId>,
+  data?: Maybe<EditMunicipalityInput>,
+};
+
+export type UpdateMunicipalityPayload = {
+  __typename?: 'updateMunicipalityPayload',
+  municipality?: Maybe<Municipality>,
 };
 
 export type UpdateParserInput = {
@@ -2558,6 +2803,9 @@ export type UserInput = {
   committees?: Maybe<Array<Maybe<Scalars['ID']>>>,
   subscribedCommittees?: Maybe<Array<Maybe<Scalars['ID']>>>,
   comments?: Maybe<Array<Maybe<Scalars['ID']>>>,
+  subscribedTags?: Maybe<Array<Maybe<Scalars['ID']>>>,
+  subscribedMunicipalities?: Maybe<Array<Maybe<Scalars['ID']>>>,
+  subscribedLocations?: Maybe<Array<Maybe<ComponentMiscLocationInput>>>,
   created_by?: Maybe<Scalars['ID']>,
   updated_by?: Maybe<Scalars['ID']>,
 };
@@ -2712,9 +2960,12 @@ export type UsersPermissionsUser = {
   organization?: Maybe<Scalars['String']>,
   job?: Maybe<Scalars['String']>,
   userImage?: Maybe<UploadFile>,
+  subscribedLocations?: Maybe<Array<Maybe<ComponentMiscLocation>>>,
   committees?: Maybe<Array<Maybe<Committee>>>,
   subscribedCommittees?: Maybe<Array<Maybe<Committee>>>,
   comments?: Maybe<Array<Maybe<Comment>>>,
+  subscribedTags?: Maybe<Array<Maybe<Tag>>>,
+  subscribedMunicipalities?: Maybe<Array<Maybe<Municipality>>>,
 };
 
 
@@ -2735,6 +2986,22 @@ export type UsersPermissionsUserSubscribedCommitteesArgs = {
 
 
 export type UsersPermissionsUserCommentsArgs = {
+  sort?: Maybe<Scalars['String']>,
+  limit?: Maybe<Scalars['Int']>,
+  start?: Maybe<Scalars['Int']>,
+  where?: Maybe<Scalars['JSON']>
+};
+
+
+export type UsersPermissionsUserSubscribedTagsArgs = {
+  sort?: Maybe<Scalars['String']>,
+  limit?: Maybe<Scalars['Int']>,
+  start?: Maybe<Scalars['Int']>,
+  where?: Maybe<Scalars['JSON']>
+};
+
+
+export type UsersPermissionsUserSubscribedMunicipalitiesArgs = {
   sort?: Maybe<Scalars['String']>,
   limit?: Maybe<Scalars['Int']>,
   start?: Maybe<Scalars['Int']>,
