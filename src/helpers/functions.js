@@ -138,3 +138,12 @@ export async function delayScrollToFocusedElement() {
     }, 300)
   );
 }
+
+export async function debounce(callback, timeout = 500) {
+  if (window.debounceTimeoutId) {
+    clearTimeout(window.debounceTimeoutId);
+  }
+  window.debounceTimeoutId = setTimeout(async () => {
+    await callback();
+  }, timeout);
+}

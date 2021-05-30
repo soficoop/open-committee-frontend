@@ -12,6 +12,7 @@ const User = () => import("../views/User.vue");
 const Subscriptions = () => import("../views/Subscriptions.vue");
 const ResetPassword = () => import("../views/ResetPassword.vue");
 const Contact = () => import("../views/Contact.vue");
+const Search = () => import("../views/Search.vue");
 const Terms = () => import("../views/Terms.vue");
 const PrivacyPolicy = () => import("../views/PrivacyPolicy.vue");
 
@@ -95,6 +96,10 @@ export default new Router({
     {
       path: "/contact",
       component: Contact
+    },
+    {
+      path: "/search",
+      component: Search
     },
     {
       path: "/terms",

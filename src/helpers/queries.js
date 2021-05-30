@@ -316,3 +316,46 @@ export const findUser = `query findUser($id: ID!) {
     }
   }
 }`;
+
+export const searchPlansAndComments = `query searchPlansAndComments(
+  $text: String!
+) {
+  
+  plans(
+    limit: 20
+    where: {
+      _or: [
+        { name_contains: $text },
+        { targets_contains: $text },
+        { number_contains: $text },
+        { municipality_contains: $text },
+        { sections_contains: $text }
+      ]
+    }
+  ) {
+    id
+    lastUpdate
+    location
+    name
+    number
+    status
+    type
+  }
+
+  comments(
+    limit: 20
+    where: {
+      _or: [
+        { title_contains: $text },
+        { content_contains: $text },
+        { name_contains: $text }
+      ]
+    }
+  ) {
+    id
+    createdAt
+    name
+    title
+    content
+  }
+}`;
