@@ -11,6 +11,7 @@
       <v-col>
         <v-text-field
           outlined
+          :loading="loading"
           label="חיפוש"
           append-icon="mdi-magnify"
           @input="handleQueryChanged"
@@ -46,6 +47,7 @@ import Comment from "../components/Comment.vue";
 })
 export default class Search extends Vue {
   comments = [];
+  loading = false;
   /** @type {import('../../graphql/types').Plan[]} */
   plans = [];
 
@@ -58,6 +60,7 @@ export default class Search extends Vue {
   }
 
   async searchPlansAndComments(text) {
+    this.loading = true;
     const { comments, plans } = await makeGqlRequest(searchPlansAndComments, {
       text
     });
@@ -92,6 +95,7 @@ export default class Search extends Vue {
         children: []
       };
     });
+    this.loading = false;
   }
 }
 </script>
