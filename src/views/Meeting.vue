@@ -15,7 +15,7 @@
           <span v-else>ישיבה מספר {{ meeting.number }}</span>
         </h4>
       </v-col>
-      <v-col v-if="meeting.date && typeof meeting.date != 'string'">
+      <v-col v-if="meeting.date && meeting.date.toLocaleDateString">
         <h5 class="subtitle-1 primary--text d-inline-block" tabindex="0">
           <v-icon color="primary">mdi-calendar-blank</v-icon>
           {{ meeting.date.toLocaleDateString("he") }}
