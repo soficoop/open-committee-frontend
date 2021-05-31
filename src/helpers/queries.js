@@ -317,37 +317,65 @@ export const findUser = `query findUser($id: ID!) {
   }
 }`;
 
-export const searchPlansAndComments = `query searchPlansAndComments(
-  $text: String!
-) {
-  
+export const searchPlansAndComments = `query searchPlansAndComments($text: String!) {
+  plansConnection(
+    where: {
+      _or: [
+        { name_contains: $text }
+        { targets_contains: $text }
+        { number_contains: $text }
+        { municipality_contains: $text }
+        { sections_contains: $text }
+      ]
+    }
+  ) {
+    aggregate {
+      count
+    }
+  }
+  commentsConnection(
+    where: {
+      _or: [
+        { title_contains: $text }
+        { content_contains: $text }
+        { name_contains: $text }
+      ]
+    }
+  ) {
+    aggregate {
+      count
+    }
+  }
   plans(
     limit: 20
     where: {
       _or: [
-        { name_contains: $text },
-        { targets_contains: $text },
-        { number_contains: $text },
-        { municipality_contains: $text },
+        { name_contains: $text }
+        { targets_contains: $text }
+        { number_contains: $text }
+        { municipality_contains: $text }
         { sections_contains: $text }
       ]
     }
   ) {
     id
     lastUpdate
-    location
+    municipality
     name
     number
-    status
     type
+    tags {
+      name
+      id
+    }
   }
 
   comments(
     limit: 20
     where: {
       _or: [
-        { title_contains: $text },
-        { content_contains: $text },
+        { title_contains: $text }
+        { content_contains: $text }
         { name_contains: $text }
       ]
     }
