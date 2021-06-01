@@ -20,7 +20,7 @@
       </v-col>
     </v-row>
     <v-row v-if="plansCountText">
-      <v-col> <v-divider /> </v-col>
+      <v-col />
     </v-row>
     <v-row>
       <v-col>
