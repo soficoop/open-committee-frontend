@@ -19,9 +19,7 @@
         />
       </v-col>
     </v-row>
-    <v-row v-if="plansCountText">
-      <v-col />
-    </v-row>
+    <div class="pa-5" />
     <v-row>
       <v-col>
         <p class="grey--text" v-if="plansCountText">
