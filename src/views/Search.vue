@@ -14,6 +14,7 @@
           :loading="loading"
           label="חיפוש"
           append-icon="mdi-magnify"
+          v-model="searchText"
           @input="handleQueryChanged"
           hide-details
         />
@@ -45,7 +46,7 @@
           rounded="lg"
         >
           <v-card-text>
-            <Comment :comment="comment" />
+            <Comment :comment="comment" :bold="searchText" />
           </v-card-text>
         </v-card>
       </v-col>
@@ -70,27 +71,28 @@ export default class Search extends Vue {
   /** @type {import('../../graphql/types').Plan[]} */
   plans = [];
   plansCountText = "";
+  searchText = "";
 
   handlePlanClicked(plan) {
     this.$router.push(`/plan/${plan.id}`);
   }
 
-  handleQueryChanged(value) {
-    debounce(this.searchPlansAndComments.bind(this, value));
+  handleQueryChanged() {
+    debounce(this.searchPlansAndComments.bind(this));
   }
 
   mounted() {
     this.searchPlansAndComments("");
   }
 
-  async searchPlansAndComments(text) {
+  async searchPlansAndComments() {
     this.loading = true;
     const result = await makeGqlRequest(searchPlansAndComments, {
-      text
+      text: this.searchText
     });
     this.comments = mapApiComments(result.comments);
     this.plans = result.plans;
-    if (!text) {
+    if (!this.searchText) {
       this.plansCountText = "תכניות חדשות במערכת";
       this.commentsCountText = "התייחסויות חדשות במערכת";
     } else {
