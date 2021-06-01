@@ -3,13 +3,13 @@
     <v-fade-transition group leave-absolute>
       <v-row v-for="plan in plans" :key="plan.id" dense>
         <v-col>
-          <v-card :to="'/plan/' + plan.id" hover>
+          <v-card :to="'/plan/' + plan.id" hover rounded="lg">
             <v-card-subtitle
               tabindex="0"
-              v-if="plan.lastUpdate && plan.lastUpdate.getTime() > 0"
+              v-if="plan.createdAt && plan.createdAt.getTime() > 0"
               class="pb-0"
             >
-              {{ plan.lastUpdate.toLocaleDateString("he") }}
+              {{ plan.createdAt.toLocaleDateString("he") }}
             </v-card-subtitle>
             <v-card-title
               tabindex="0"
@@ -28,7 +28,7 @@
                 {{ plan.municipality }}
               </span>
             </v-card-text>
-            <v-card-text class="pt-0">
+            <v-card-text>
               <v-chip
                 class="mx-1 s-pointer-events-none"
                 :key="tag.id"

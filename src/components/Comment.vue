@@ -57,7 +57,7 @@
           <a
             href="javascript:void(0)"
             class="me-2"
-            @click="showFullComment(comment)"
+            @click.stop="showFullComment(comment)"
           >
             קרא עוד
           </a>
@@ -88,6 +88,15 @@
           >
             מחק
           </a>
+        </v-col>
+      </v-row>
+
+      <v-row v-if="comment.plan && comment.plan.name">
+        <v-col>
+          <div class="my-1" />
+          <h4 class="subtitle-1 font-weight-semibold primary--text">
+            {{ comment.plan.name }}
+          </h4>
         </v-col>
       </v-row>
 

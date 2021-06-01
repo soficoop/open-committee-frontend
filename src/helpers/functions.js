@@ -147,3 +147,29 @@ export async function debounce(callback, timeout = 500) {
     await callback();
   }, timeout);
 }
+
+/**
+ * Maps comments that returned from the API to CommentModel array
+ * @param {import("../../graphql/types").Comment[]} comments API comments
+ * @returns {import("../helpers/typings").CommentModel[]}
+ */
+export function mapApiComments(comments) {
+  return (
+    comments &&
+    comments.map(c => {
+      let visibleContent = c.content;
+      let isFullContentVisible = true;
+      let words = c.content.split(" ");
+      if (words.length > 50) {
+        visibleContent = words.slice(0, 50).join(" ") + "...";
+        isFullContentVisible = false;
+      }
+      return {
+        ...c,
+        isFullContentVisible,
+        visibleContent,
+        children: mapApiComments(c.children)
+      };
+    })
+  );
+}

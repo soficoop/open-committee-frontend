@@ -1,5 +1,6 @@
 import Vue from "vue";
 import { shallowMount } from "@vue/test-utils";
+import { mapApiComments } from "@/helpers/functions";
 import Comments from "@/components/Comments.vue";
 import Vuetify from "vuetify";
 Vue.use(Vuetify);
@@ -265,7 +266,7 @@ describe("Comments.vue", () => {
       propsData: { privilegedUsers, commentsAreLocked },
       methods: {
         fetchComments() {
-          this.comments = this.mapApiComments(plan.comments);
+          this.comments = mapApiComments(plan.comments);
         }
       },
       mounted() {

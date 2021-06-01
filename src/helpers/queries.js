@@ -348,6 +348,7 @@ export const searchPlansAndComments = `query searchPlansAndComments($text: Strin
   }
   plans(
     limit: 20
+    sort: "createdAt:desc"
     where: {
       _or: [
         { name_contains: $text }
@@ -359,7 +360,7 @@ export const searchPlansAndComments = `query searchPlansAndComments($text: Strin
     }
   ) {
     id
-    lastUpdate
+    createdAt
     municipality
     name
     number
@@ -371,6 +372,7 @@ export const searchPlansAndComments = `query searchPlansAndComments($text: Strin
   }
 
   comments(
+    sort: "createdAt:desc"
     limit: 20
     where: {
       _or: [
@@ -385,5 +387,9 @@ export const searchPlansAndComments = `query searchPlansAndComments($text: Strin
     name
     title
     content
+    plan {
+      id
+      name
+    }
   }
 }`;

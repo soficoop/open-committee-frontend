@@ -15,8 +15,12 @@
           label="חיפוש"
           append-icon="mdi-magnify"
           @input="handleQueryChanged"
+          hide-details
         />
       </v-col>
+    </v-row>
+    <v-row v-if="plansCountText">
+      <v-col> <v-divider /> </v-col>
     </v-row>
     <v-row>
       <v-col>
@@ -26,12 +30,22 @@
         <PlanCards :plans="plans" />
       </v-col>
     </v-row>
+    <v-row v-if="commentsCountText">
+      <v-col> <v-divider /> </v-col>
+    </v-row>
     <v-row>
-      <v-col cols="12">
+      <v-col>
         <p class="grey--text" v-if="commentsCountText">
           {{ commentsCountText }}
         </p>
-        <v-card v-for="(comment, i) in comments" :key="i" class="my-3" flat>
+        <v-card
+          v-for="(comment, i) in comments"
+          :key="i"
+          class="my-2"
+          :to="comment.plan && `/plan/${comment.plan.id}`"
+          hover
+          rounded="lg"
+        >
           <v-card-text>
             <Comment :comment="comment" />
           </v-card-text>
@@ -44,7 +58,7 @@
 <script>
 import Component from "vue-class-component";
 import Vue from "vue";
-import { debounce, makeGqlRequest } from "../helpers/functions";
+import { debounce, makeGqlRequest, mapApiComments } from "../helpers/functions";
 import { searchPlansAndComments } from "../helpers/queries";
 import PlanCards from "../components/PlanCards.vue";
 import Comment from "../components/Comment.vue";
@@ -67,28 +81,30 @@ export default class Search extends Vue {
     debounce(this.searchPlansAndComments.bind(this, value));
   }
 
+  mounted() {
+    this.searchPlansAndComments("");
+  }
+
   async searchPlansAndComments(text) {
-    if (!text) {
-      this.plans = [];
-      this.comments = [];
-      this.plansCountText = null;
-      this.commentsCountText = null;
-      return;
-    }
     this.loading = true;
     const result = await makeGqlRequest(searchPlansAndComments, {
       text
     });
-    this.comments = result.comments;
+    this.comments = mapApiComments(result.comments);
     this.plans = result.plans;
-    const commentsCount = result.commentsConnection.aggregate.count;
-    this.commentsCountText = commentsCount
-      ? commentsCount + " התייחסויות נמצאו"
-      : "לא נמצאו התייחסויות";
-    const plansCount = result.plansConnection.aggregate.count;
-    this.plansCountText = plansCount
-      ? plansCount + " התייחסויות נמצאו"
-      : "לא נמצאו תכניות";
+    if (!text) {
+      this.plansCountText = "תכניות חדשות במערכת";
+      this.commentsCountText = "התייחסויות חדשות במערכת";
+    } else {
+      const commentsCount = result.commentsConnection.aggregate.count;
+      this.commentsCountText = commentsCount
+        ? commentsCount + " התייחסויות נמצאו"
+        : "לא נמצאו התייחסויות";
+      const plansCount = result.plansConnection.aggregate.count;
+      this.plansCountText = plansCount
+        ? plansCount + " תכניות נמצאו"
+        : "לא נמצאו תכניות";
+    }
     this.loading = false;
   }
 }

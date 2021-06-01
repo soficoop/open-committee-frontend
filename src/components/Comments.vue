@@ -84,7 +84,7 @@ import Comment from "./Comment";
 import { Getter, Mutation } from "vuex-class";
 import { getCommentsByPlan } from "../helpers/queries";
 import { updateComment, hideMyComment } from "../helpers/mutations";
-import { makeGqlRequest } from "../helpers/functions";
+import { makeGqlRequest, mapApiComments } from "../helpers/functions";
 import { Prop, Watch } from "vue-property-decorator";
 
 @Component({ components: { NewComment, Comment } })
@@ -129,7 +129,7 @@ export default class Comments extends Vue {
     const { comments } = await makeGqlRequest(
       getCommentsByPlan(this.selectedPlan.id)
     );
-    this.comments = this.mapApiComments(comments);
+    this.comments = mapApiComments(comments);
   }
 
   /**
@@ -175,32 +175,6 @@ export default class Comments extends Vue {
     );
     comment.isPinned = !comment.isPinned;
     this.setLoading(!res);
-  }
-
-  /**
-   * Maps fetched comments to CommentModel array
-   * @param {import("../../graphql/types").Comment[]} comments Fetched comments
-   * @returns {import("../helpers/typings").CommentModel[]}
-   */
-  mapApiComments(comments) {
-    return (
-      comments &&
-      comments.map(c => {
-        let visibleContent = c.content;
-        let isFullContentVisible = true;
-        let words = c.content.split(" ");
-        if (words.length > 50) {
-          visibleContent = words.slice(0, 50).join(" ") + "...";
-          isFullContentVisible = false;
-        }
-        return {
-          ...c,
-          isFullContentVisible,
-          visibleContent,
-          children: this.mapApiComments(c.children)
-        };
-      })
-    );
   }
 
   /**
