@@ -53,10 +53,10 @@
       <v-col>
         <v-card
           class="my-2"
-          v-for="location in subscribedLocations"
-          :key="location.name"
+          v-for="(location, i) in subscribedLocations"
+          :key="i"
         >
-          <v-card-text>
+          <v-card-text v-if="location">
             <v-row align="center">
               <v-col md="6">
                 <h3 class="subtitle-1" tabindex="0">

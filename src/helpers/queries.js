@@ -1,3 +1,5 @@
+import { PlansOrComments } from "./enums";
+
 /**
  * Gets meetings with date greater than given date
  * @param {Date} date meetings start date
@@ -86,6 +88,33 @@ export function getMeeting(id) {
     }
   }`;
 }
+
+export const autocompletePlansAndComments = `query autocompletePlansAndComments($text: String!) {
+  plans(
+    limit: 10
+    sort: "createdAt:desc"
+    where: {
+      name_contains: $text 
+    }
+  ) {
+    id
+    name
+  }
+
+  comments(
+    sort: "createdAt:desc"
+    limit: 10
+    where: {
+      title_contains: $text
+    }
+  ) {
+    id
+    title
+    plan {
+      id
+    }
+  }
+}`;
 
 export const getPlan = `query getPlan($id: ID!) {
   plan(id: $id) {
@@ -317,79 +346,89 @@ export const findUser = `query findUser($id: ID!) {
   }
 }`;
 
-export const searchPlansAndComments = `query searchPlansAndComments($text: String!) {
-  plansConnection(
-    where: {
-      _or: [
-        { name_contains: $text }
-        { targets_contains: $text }
-        { number_contains: $text }
-        { municipality_contains: $text }
-        { sections_contains: $text }
-      ]
+export function searchPlansAndComments(mode) {
+  let query = "query searchPlansAndComments($text: String!, $start: Int) {";
+  if (mode !== PlansOrComments.COMMENTS) {
+    query += `
+    plansConnection(
+      where: {
+        _or: [
+          { name_contains: $text }
+          { targets_contains: $text }
+          { number_contains: $text }
+          { municipality_contains: $text }
+          { sections_contains: $text }
+        ]
+      }
+    ) {
+      aggregate {
+        count
+      }
     }
-  ) {
-    aggregate {
-      count
-    }
-  }
-  commentsConnection(
-    where: {
-      _or: [
-        { title_contains: $text }
-        { content_contains: $text }
-        { name_contains: $text }
-      ]
-    }
-  ) {
-    aggregate {
-      count
-    }
-  }
-  plans(
-    limit: 20
-    sort: "createdAt:desc"
-    where: {
-      _or: [
-        { name_contains: $text }
-        { targets_contains: $text }
-        { number_contains: $text }
-        { municipality_contains: $text }
-        { sections_contains: $text }
-      ]
-    }
-  ) {
-    id
-    createdAt
-    municipality
-    name
-    number
-    type
-    tags {
-      name
+    plans(
+      limit: 20
+      start: $start
+      sort: "createdAt:desc"
+      where: {
+        _or: [
+          { name_contains: $text }
+          { targets_contains: $text }
+          { number_contains: $text }
+          { municipality_contains: $text }
+          { sections_contains: $text }
+        ]
+      }
+    ) {
       id
-    }
-  }
-
-  comments(
-    sort: "createdAt:desc"
-    limit: 20
-    where: {
-      _or: [
-        { title_contains: $text }
-        { content_contains: $text }
-        { name_contains: $text }
-      ]
-    }
-  ) {
-    id
-    createdAt
-    name
-    title
-    content
-    plan {
-      id
+      createdAt
+      municipality
       name
-    }
+      number
+      type
+      tags {
+        name
+        id
+      }
+    }`;
   }
-}`;
+  if (mode !== PlansOrComments.PLANS) {
+    query += `
+    commentsConnection(
+      where: {
+        _or: [
+          { title_contains: $text }
+          { content_contains: $text }
+          { name_contains: $text }
+        ]
+      }
+    ) {
+      aggregate {
+        count
+      }
+    }
+    comments(
+      sort: "createdAt:desc"
+      limit: 20
+      start: $start
+      where: {
+        _or: [
+          { title_contains: $text }
+          { content_contains: $text }
+          { name_contains: $text }
+        ]
+      }
+    ) {
+      id
+      createdAt
+      name
+      title
+      content
+      plan {
+        id
+        name
+      }
+    }`;
+  }
+  query += "}";
+  return query;
+}
