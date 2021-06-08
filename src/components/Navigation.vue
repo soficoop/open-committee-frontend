@@ -53,6 +53,7 @@ export default class Navigation extends Vue {
   /**@type {import("../helpers/typings").NavItem[]} */
   get navItems() {
     return [
+      { icon: "mdi-magnify", text: "חיפוש במערכת", to: "/search" },
       {
         icon: "mdi-account-circle",
         text: "הרשמה / התחברות",
