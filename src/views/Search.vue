@@ -8,6 +8,16 @@
       </v-col>
     </v-row>
     <v-row dense>
+      <v-col v-if="$vuetify.breakpoint.mdAndUp" cols="2">
+        <v-select
+          :items="searchModes"
+          :value="0"
+          v-model="searchMode"
+          @change="runSearch"
+          hide-details
+          outlined
+        ></v-select>
+      </v-col>
       <v-col>
         <v-combobox
           outlined
@@ -22,9 +32,10 @@
           hide-details
         />
       </v-col>
-      <v-col v-if="$vuetify.breakpoint.mdAndUp">
+      <v-col v-if="$vuetify.breakpoint.mdAndUp" cols="2">
         <v-btn
           x-large
+          block
           color="secondary"
           @click="runSearch"
           class="font-weight-semibold h-100"
@@ -34,50 +45,54 @@
       </v-col>
     </v-row>
     <div class="pa-5" />
-    <v-row>
-      <v-col>
-        <p class="grey--text" v-if="plansCountText">
-          {{ plansCountText }}
-        </p>
-        <PlanCards :plans="plans" />
-      </v-col>
-    </v-row>
-    <v-row v-if="plansCount && plans.length !== plansCount">
-      <v-col class="text-center">
-        <v-btn text x-large @click="loadMore(1)" :loading="loading">
-          עוד תכניות
-        </v-btn>
-      </v-col>
-    </v-row>
-    <v-row v-if="commentsCountText">
+    <div v-if="searchMode !== 2">
+      <v-row>
+        <v-col>
+          <p class="grey--text" v-if="plansCountText">
+            {{ plansCountText }}
+          </p>
+          <PlanCards :plans="plans" />
+        </v-col>
+      </v-row>
+      <v-row v-if="plansCount && plans.length !== plansCount">
+        <v-col class="text-center">
+          <v-btn text x-large @click="loadMore(1)" :loading="loading">
+            עוד תכניות
+          </v-btn>
+        </v-col>
+      </v-row>
+    </div>
+    <v-row v-if="searchMode === 0 && commentsCountText">
       <v-col> <v-divider /> </v-col>
     </v-row>
-    <v-row>
-      <v-col>
-        <p class="grey--text" v-if="commentsCountText">
-          {{ commentsCountText }}
-        </p>
-        <v-card
-          v-for="(comment, i) in comments"
-          :key="i"
-          class="my-2"
-          :to="comment.plan && `/plan/${comment.plan.id}`"
-          hover
-          rounded="lg"
-        >
-          <v-card-text>
-            <Comment :comment="comment" :bold="searchText" />
-          </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
-    <v-row v-if="commentsCount && comments.length !== commentsCount">
-      <v-col class="text-center">
-        <v-btn text x-large @click="loadMore(2)" :loading="loading">
-          עוד התייחסויות
-        </v-btn>
-      </v-col>
-    </v-row>
+    <div v-if="searchMode !== 1">
+      <v-row>
+        <v-col>
+          <p class="grey--text" v-if="commentsCountText">
+            {{ commentsCountText }}
+          </p>
+          <v-card
+            v-for="(comment, i) in comments"
+            :key="i"
+            class="my-2"
+            :to="comment.plan && `/plan/${comment.plan.id}`"
+            hover
+            rounded="lg"
+          >
+            <v-card-text>
+              <Comment :comment="comment" :bold="searchText" />
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
+      <v-row v-if="commentsCount && comments.length !== commentsCount">
+        <v-col class="text-center">
+          <v-btn text x-large @click="loadMore(2)" :loading="loading">
+            עוד התייחסויות
+          </v-btn>
+        </v-col>
+      </v-row>
+    </div>
   </v-container>
 </template>
 
@@ -104,6 +119,11 @@ export default class Search extends Vue {
   plans = [];
   plansCount = null;
   searchMode = PlansOrComments.BOTH;
+  searchModes = [
+    { text: "הכל", value: PlansOrComments.BOTH },
+    { text: "תכניות", value: PlansOrComments.PLANS },
+    { text: "התייחסויות", value: PlansOrComments.COMMENTS }
+  ];
   searchSuggestions = [];
   searchText = "";
 
@@ -129,8 +149,10 @@ export default class Search extends Vue {
   }
 
   async fetchPlansAndComments(mode, start) {
+    this.commentsCount = null;
+    this.plansCount = null;
     const result = await makeGqlRequest(searchPlansAndComments(mode), {
-      text: this.searchText,
+      text: this.searchText || "",
       start
     });
     if (mode !== PlansOrComments.COMMENTS) {
@@ -171,32 +193,32 @@ export default class Search extends Vue {
     this.runSearch();
   }
 
-  async runSearch(mode = this.searchMode) {
+  async runSearch() {
     this.loading = true;
     this.plans = [];
     this.comments = [];
-    await this.fetchPlansAndComments(mode);
+    await this.fetchPlansAndComments(this.searchMode);
     this.loading = false;
   }
 
   get commentsCountText() {
     if (this.commentsCount === null) {
-      return "התייחסויות אחרונות במערכת";
+      return !this.loading && "התייחסויות אחרונות במערכת";
     }
     if (this.commentsCount === 0) {
       return "לא נמצאו התייחסויות";
     }
-    return this.commentsCount + "התייחסויות נמצאו";
+    return this.commentsCount + " התייחסויות נמצאו";
   }
 
   get plansCountText() {
     if (this.plansCount === null) {
-      return "תכניות אחרונות במערכת";
+      return !this.loading && "תכניות אחרונות במערכת";
     }
     if (this.plansCount === 0) {
       return "לא נמצאו תכניות";
     }
-    return this.plansCount + "תכניות נמצאו";
+    return this.plansCount + " תכניות נמצאו";
   }
 }
 </script>
