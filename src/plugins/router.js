@@ -15,6 +15,7 @@ const Contact = () => import("../views/Contact.vue");
 const Search = () => import("../views/Search.vue");
 const Terms = () => import("../views/Terms.vue");
 const PrivacyPolicy = () => import("../views/PrivacyPolicy.vue");
+const Unsubscribe = () => import("../views/Unsubscribe.vue");
 
 Vue.use(Router);
 
@@ -105,6 +106,10 @@ export default new Router({
     {
       path: "/privacy-policy",
       component: PrivacyPolicy
+    },
+    {
+      path: "/unsubscribe",
+      component: Unsubscribe
     }
   ],
   scrollBehavior() {
