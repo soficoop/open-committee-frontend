@@ -47,6 +47,7 @@ export default new Router({
       name: "login",
       component: Login,
       children: [
+        { path: "user-is-confirmed" },
         {
           path: ":providerName",
           async beforeEnter(to, from, next) {
@@ -58,10 +59,6 @@ export default new Router({
           }
         }
       ]
-    },
-    {
-      path: "/login/user-is-confirmed",
-      component: Login
     },
     {
       path: "/manage",
