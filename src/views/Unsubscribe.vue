@@ -34,17 +34,26 @@
 import Component from "vue-class-component";
 import Vue from "vue";
 import { Action, Getter } from "vuex-class";
+import { Watch } from "vue-property-decorator";
 
 @Component()
 export default class Unsubscribe extends Vue {
   @Action updateUser;
   @Getter user;
-  mounted() {
-    if (this.user) {
-      this.updateSubscriptions();
-    }
+
+  @Watch("$route")
+  handleRouteChanged() {
+    this.updateSubscriptions();
   }
+
+  mounted() {
+    this.updateSubscriptions();
+  }
+
   async updateSubscriptions() {
+    if (!this.user) {
+      return;
+    }
     await this.updateUser({
       subscribedCommittees: [],
       subscribedMunicipalities: [],
