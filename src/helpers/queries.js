@@ -139,15 +139,19 @@ export const getPlan = `query getPlan($id: ID!) {
       name
       id
     }
-    meetings(where: { isHidden_ne: true }) {
+    meetings(where: { isHidden_ne: true }, sort: "date:asc") {
       id
       date
       number
       committee {
         sid
         id
+        pageUrl
         users {
           id
+          firstName
+          lastName
+          organization
         }
       }
     }

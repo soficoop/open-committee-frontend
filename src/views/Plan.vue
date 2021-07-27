@@ -1,7 +1,7 @@
 <template>
   <v-container class="pa-md-12">
     <SubscriptionToggle
-      v-if="plan.meetings.length == 1"
+      v-if="plan.meetings.length == 1 && plan.meetings[0].committee"
       :committeeId="plan.meetings[0].committee.id"
     />
     <v-row>
@@ -26,6 +26,35 @@
           <span tabindex="0">{{ plan.status }}</span>
         </h5>
         <PlanTags :planTags="plan.tags" />
+      </v-col>
+    </v-row>
+    <v-row dense v-if="nextPlanMeeting && nextPlanMeeting.committee">
+      <v-col>
+        <v-alert type="info" color="primary" border="left" text>
+          <div tabindex="0">
+            התכנית תעלה לדיון בתאריך
+            {{ nextPlanMeeting.date.toLocaleDateString("he") }}
+            ב{{ nextPlanMeeting.committee.sid }}.
+          </div>
+          <div v-if="nextPlanMeeting.committee.users.length" tabindex="0">
+            הנציג/ה בועדה:
+            {{ nextPlanMeeting.committee.users[0].firstName }}
+            {{ nextPlanMeeting.committee.users[0].lastName }}
+            מ{{ nextPlanMeeting.committee.users[0].organization }}
+          </div>
+          <div v-else tabindex="0">
+            דיון זה יתקיים ללא נוכחות נציג/ת ארגון סביבתי בישיבה.
+          </div>
+          <div v-if="nextPlanMeeting.committee.pageUrl">
+            <a
+              :href="nextPlanMeeting.committee.pageUrl"
+              target="blank"
+              tabindex="0"
+            >
+              מידע נוסף
+            </a>
+          </div>
+        </v-alert>
       </v-col>
     </v-row>
     <v-row v-if="plan.targets || plan.sections">
@@ -242,6 +271,10 @@ export default class Plan extends Vue {
       this.planData.commentsAreLocked = lock;
     }
     this.lockCommentLoader = false;
+  }
+
+  get nextPlanMeeting() {
+    return this.plan.meetings.find(m => m.date >= new Date());
   }
 
   get plan() {
