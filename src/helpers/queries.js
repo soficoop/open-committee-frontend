@@ -147,11 +147,9 @@ export const getPlan = `query getPlan($id: ID!) {
         sid
         id
         pageUrl
+        representative
         users {
           id
-          firstName
-          lastName
-          organization
         }
       }
     }

@@ -34,25 +34,21 @@
           <div tabindex="0">
             התכנית תעלה לדיון בתאריך
             {{ nextPlanMeeting.date.toLocaleDateString("he") }}
-            ב{{ nextPlanMeeting.committee.sid }}.
+            <a
+              :href="nextPlanMeeting.committee.pageUrl"
+              tabindex="0"
+              v-if="nextPlanMeeting.committee.pageUrl"
+            >
+              ב{{ nextPlanMeeting.committee.sid }}.
+            </a>
+            <span v-else>ב{{ nextPlanMeeting.committee.sid }}.</span>
           </div>
-          <div v-if="nextPlanMeeting.committee.users.length" tabindex="0">
+          <div v-if="nextPlanMeeting.committee.representative" tabindex="0">
             הנציג/ה בועדה:
-            {{ nextPlanMeeting.committee.users[0].firstName }}
-            {{ nextPlanMeeting.committee.users[0].lastName }}
-            מ{{ nextPlanMeeting.committee.users[0].organization }}
+            {{ nextPlanMeeting.committee.representative }}
           </div>
           <div v-else tabindex="0">
             דיון זה יתקיים ללא נוכחות נציג/ת ארגון סביבתי בישיבה.
-          </div>
-          <div v-if="nextPlanMeeting.committee.pageUrl">
-            <a
-              :href="nextPlanMeeting.committee.pageUrl"
-              target="blank"
-              tabindex="0"
-            >
-              מידע נוסף
-            </a>
           </div>
         </v-alert>
       </v-col>
