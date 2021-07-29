@@ -36,6 +36,7 @@
             {{ nextPlanMeeting.date.toLocaleDateString("he") }}
             <a
               :href="nextPlanMeeting.committee.pageUrl"
+              target="blank"
               tabindex="0"
               v-if="nextPlanMeeting.committee.pageUrl"
             >
