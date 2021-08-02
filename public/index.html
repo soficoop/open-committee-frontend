@@ -10,17 +10,20 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@latest/css/materialdesignicons.min.css">
     <!-- #region Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-80VTC96CXZ"></script>
+    <% if (typeof VUE_APP_GTAG_ID !== "undefined") { %>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=<%= VUE_APP_GTAG_ID %>"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
     
-      gtag('config', 'G-80VTC96CXZ');
+      gtag('config', '<%= VUE_APP_GTAG_ID %>');
     </script>
+    <% } %>
     <!-- #endregion -->
     <!-- Facebook Pixel Code -->
-    <script>
+    <% if (typeof VUE_APP_PIXEL_ID !== "undefined") { %>
+      <script>
       !function(f,b,e,v,n,t,s)
       {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
       n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -29,12 +32,13 @@
       t.src=v;s=b.getElementsByTagName(e)[0];
       s.parentNode.insertBefore(t,s)}(window, document,'script',
       'https://connect.facebook.net/en_US/fbevents.js');
-      fbq('init', '2191084880963827');
+      fbq('init', '<%= VUE_APP_PIXEL_ID %>');
       fbq('track', 'PageView');
     </script>
     <noscript><img height="1" width="1" style="display:none"
-      src="https://www.facebook.com/tr?id=2191084880963827&ev=PageView&noscript=1"
+      src="https://www.facebook.com/tr?id=<%= VUE_APP_PIXEL_ID %>&ev=PageView&noscript=1"
     /></noscript>
+    <% } %>
     <!-- End Facebook Pixel Code -->
   </head>
   <body>
