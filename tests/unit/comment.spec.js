@@ -57,7 +57,7 @@ describe("Comment.vue", () => {
     expect(text).toContain(comment.visibleContent);
     expect(text).toContain(comment.user.job);
     expect(text).toContain(comment.user.organization);
-    expect(text).toContain(comment.createdAt.toLocaleDateString());
+    expect(text).toContain(comment.createdAt.toLocaleDateString("he"));
   });
   it("displays only allowed actions", () => {
     const text = wrapper.text();
