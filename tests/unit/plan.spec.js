@@ -219,6 +219,8 @@ describe("Plan.vue", () => {
     expect(wrapper.vm.managableMeetings).not.toBeUndefined();
   });
   it("generates valid plan meetings", () => {
+    expect(wrapper.find("MeetingCards-stub").exists()).toBeFalsy();
+    wrapper.vm.areMeetingsVisible = true;
     expect(wrapper.find("MeetingCards-stub").exists()).toBeTruthy();
     expect(wrapper.vm.planMeetings).toHaveLength(1);
     const planMeeting = wrapper.vm.planMeetings[0];

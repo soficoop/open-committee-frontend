@@ -120,10 +120,23 @@
     </v-row>
     <v-row v-if="planMeetings && planMeetings.length">
       <v-col>
-        <h4 class="title primary--text" tabindex="0">
-          היסטוריית הדיונים ב{{ planTypeFirstWord }}
-        </h4>
-        <MeetingCards :meetings="planMeetings"></MeetingCards>
+        <v-slide-y-transition mode="out-in">
+          <v-btn
+            class="my-2"
+            outlined
+            @click="areMeetingsVisible = true"
+            v-if="!areMeetingsVisible"
+          >
+            הצגת היסטוריית הדיונים
+            <v-icon right>mdi-eye</v-icon>
+          </v-btn>
+          <div v-else>
+            <h4 class="title primary--text" tabindex="0">
+              היסטוריית הדיונים ב{{ planTypeFirstWord }}
+            </h4>
+            <MeetingCards :meetings="planMeetings"></MeetingCards>
+          </div>
+        </v-slide-y-transition>
       </v-col>
     </v-row>
     <v-row py-3 justify="space-between" align="center">
@@ -212,6 +225,7 @@ export default class Plan extends Vue {
   @Getter managableMeetings;
   @Action updatePlan;
   @Mutation setLoading;
+  areMeetingsVisible = false;
   lockCommentLoader = false;
   lockCommentErrMessage = "";
   planData = {
