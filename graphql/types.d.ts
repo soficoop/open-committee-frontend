@@ -276,6 +276,8 @@ export type Committee = {
   parent?: Maybe<Committee>,
   area?: Maybe<Area>,
   isHidden?: Maybe<Scalars['Boolean']>,
+  pageUrl?: Maybe<Scalars['String']>,
+  representative?: Maybe<Scalars['String']>,
   children?: Maybe<Array<Maybe<Committee>>>,
   users?: Maybe<Array<Maybe<UsersPermissionsUser>>>,
   subscribedUsers?: Maybe<Array<Maybe<UsersPermissionsUser>>>,
@@ -357,9 +359,21 @@ export type CommitteeConnectionIsHidden = {
   connection?: Maybe<CommitteeConnection>,
 };
 
+export type CommitteeConnectionPageUrl = {
+  __typename?: 'CommitteeConnectionPageUrl',
+  key?: Maybe<Scalars['String']>,
+  connection?: Maybe<CommitteeConnection>,
+};
+
 export type CommitteeConnectionParent = {
   __typename?: 'CommitteeConnectionParent',
   key?: Maybe<Scalars['ID']>,
+  connection?: Maybe<CommitteeConnection>,
+};
+
+export type CommitteeConnectionRepresentative = {
+  __typename?: 'CommitteeConnectionRepresentative',
+  key?: Maybe<Scalars['String']>,
   connection?: Maybe<CommitteeConnection>,
 };
 
@@ -385,6 +399,8 @@ export type CommitteeGroupBy = {
   parent?: Maybe<Array<Maybe<CommitteeConnectionParent>>>,
   area?: Maybe<Array<Maybe<CommitteeConnectionArea>>>,
   isHidden?: Maybe<Array<Maybe<CommitteeConnectionIsHidden>>>,
+  pageUrl?: Maybe<Array<Maybe<CommitteeConnectionPageUrl>>>,
+  representative?: Maybe<Array<Maybe<CommitteeConnectionRepresentative>>>,
 };
 
 export type CommitteeInput = {
@@ -396,6 +412,8 @@ export type CommitteeInput = {
   subscribedUsers?: Maybe<Array<Maybe<Scalars['ID']>>>,
   meetings?: Maybe<Array<Maybe<Scalars['ID']>>>,
   isHidden?: Maybe<Scalars['Boolean']>,
+  pageUrl?: Maybe<Scalars['String']>,
+  representative?: Maybe<Scalars['String']>,
   created_by?: Maybe<Scalars['ID']>,
   updated_by?: Maybe<Scalars['ID']>,
 };
@@ -407,12 +425,14 @@ export type ComponentMiscLocation = {
   lat: Scalars['Float'],
   lng: Scalars['Float'],
   radius?: Maybe<Scalars['Float']>,
+  name: Scalars['String'],
 };
 
 export type ComponentMiscLocationInput = {
   lat: Scalars['Float'],
   lng: Scalars['Float'],
   radius?: Maybe<Scalars['Float']>,
+  name: Scalars['String'],
 };
 
 export type ContactApplicationInput = {
@@ -590,6 +610,15 @@ export type CreateTagPayload = {
   tag?: Maybe<Tag>,
 };
 
+export type CreateTermInput = {
+  data?: Maybe<TermInput>,
+};
+
+export type CreateTermPayload = {
+  __typename?: 'createTermPayload',
+  term?: Maybe<Term>,
+};
+
 export type CreateUserInput = {
   data?: Maybe<UserInput>,
 };
@@ -700,6 +729,15 @@ export type DeleteTagPayload = {
   tag?: Maybe<Tag>,
 };
 
+export type DeleteTermInput = {
+  where?: Maybe<InputId>,
+};
+
+export type DeleteTermPayload = {
+  __typename?: 'deleteTermPayload',
+  term?: Maybe<Term>,
+};
+
 export type DeleteUserInput = {
   where?: Maybe<InputId>,
 };
@@ -740,6 +778,8 @@ export type EditCommitteeInput = {
   subscribedUsers?: Maybe<Array<Maybe<Scalars['ID']>>>,
   meetings?: Maybe<Array<Maybe<Scalars['ID']>>>,
   isHidden?: Maybe<Scalars['Boolean']>,
+  pageUrl?: Maybe<Scalars['String']>,
+  representative?: Maybe<Scalars['String']>,
   created_by?: Maybe<Scalars['ID']>,
   updated_by?: Maybe<Scalars['ID']>,
 };
@@ -749,6 +789,7 @@ export type EditComponentMiscLocationInput = {
   lat?: Maybe<Scalars['Float']>,
   lng?: Maybe<Scalars['Float']>,
   radius?: Maybe<Scalars['Float']>,
+  name?: Maybe<Scalars['String']>,
 };
 
 export type EditContactApplicationInput = {
@@ -866,6 +907,14 @@ export type EditTagInput = {
   name?: Maybe<Scalars['String']>,
   plans?: Maybe<Array<Maybe<Scalars['ID']>>>,
   subscribedUsers?: Maybe<Array<Maybe<Scalars['ID']>>>,
+  created_by?: Maybe<Scalars['ID']>,
+  updated_by?: Maybe<Scalars['ID']>,
+};
+
+export type EditTermInput = {
+  phrase?: Maybe<Scalars['String']>,
+  description?: Maybe<Scalars['String']>,
+  published_at?: Maybe<Scalars['DateTime']>,
   created_by?: Maybe<Scalars['ID']>,
   updated_by?: Maybe<Scalars['ID']>,
 };
@@ -1182,7 +1231,7 @@ export type MeetingInput = {
   updated_by?: Maybe<Scalars['ID']>,
 };
 
-export type Morph = UsersPermissionsMe | UsersPermissionsMeRole | UsersPermissionsLoginPayload | UserPermissionsPasswordPayload | EmailMeetingPayload | Area | AreaConnection | AreaAggregator | AreaGroupBy | AreaConnectionId | AreaConnection_Id | AreaConnectionCreatedAt | AreaConnectionUpdatedAt | AreaConnectionSid | CreateAreaPayload | UpdateAreaPayload | DeleteAreaPayload | Comment | CommentConnection | CommentAggregator | CommentGroupBy | CommentConnectionId | CommentConnection_Id | CommentConnectionCreatedAt | CommentConnectionUpdatedAt | CommentConnectionTitle | CommentConnectionName | CommentConnectionContent | CommentConnectionParent | CommentConnectionUser | CommentConnectionIsHidden | CommentConnectionIsPinned | CommentConnectionPlan | CreateCommentPayload | UpdateCommentPayload | DeleteCommentPayload | Committee | CommitteeConnection | CommitteeAggregator | CommitteeGroupBy | CommitteeConnectionId | CommitteeConnection_Id | CommitteeConnectionCreatedAt | CommitteeConnectionUpdatedAt | CommitteeConnectionSid | CommitteeConnectionParent | CommitteeConnectionArea | CommitteeConnectionIsHidden | CreateCommitteePayload | UpdateCommitteePayload | DeleteCommitteePayload | ContactApplications | ContactApplicationsConnection | ContactApplicationsAggregator | ContactApplicationsGroupBy | ContactApplicationsConnectionId | ContactApplicationsConnection_Id | ContactApplicationsConnectionCreatedAt | ContactApplicationsConnectionUpdatedAt | ContactApplicationsConnectionName | ContactApplicationsConnectionEmail | ContactApplicationsConnectionMessage | CreateContactApplicationPayload | UpdateContactApplicationPayload | DeleteContactApplicationPayload | Meeting | MeetingConnection | MeetingAggregator | MeetingAggregatorSum | MeetingAggregatorAvg | MeetingAggregatorMin | MeetingAggregatorMax | MeetingGroupBy | MeetingConnectionId | MeetingConnection_Id | MeetingConnectionCreatedAt | MeetingConnectionUpdatedAt | MeetingConnectionDate | MeetingConnectionNumber | MeetingConnectionDecisions | MeetingConnectionProtocol | MeetingConnectionTranscript | MeetingConnectionSid | MeetingConnectionAddedManually | MeetingConnectionTitle | MeetingConnectionBackground | MeetingConnectionSummary | MeetingConnectionEmailViews | MeetingConnectionIsHidden | MeetingConnectionCommittee | CreateMeetingPayload | UpdateMeetingPayload | DeleteMeetingPayload | Municipality | MunicipalityConnection | MunicipalityAggregator | MunicipalityGroupBy | MunicipalityConnectionId | MunicipalityConnection_Id | MunicipalityConnectionCreatedAt | MunicipalityConnectionUpdatedAt | MunicipalityConnectionSid | MunicipalityConnectionIsHidden | CreateMunicipalityPayload | UpdateMunicipalityPayload | DeleteMunicipalityPayload | Parser | ParserConnection | ParserAggregator | ParserGroupBy | ParserConnectionId | ParserConnection_Id | ParserConnectionCreatedAt | ParserConnectionUpdatedAt | ParserConnectionFor | ParserConnectionUrl | ParserConnectionActive | ParserConnectionObjectSelector | ParserConnectionSidMatch | ParserConnectionFields | ParserConnectionUrlByExistingItem | ParserConnectionMethod | ParserConnectionRequestParams | ParserConnectionFileFields | ParserConnectionIsJson | CreateParserPayload | UpdateParserPayload | DeleteParserPayload | Plan | PlanConnection | PlanAggregator | PlanAggregatorSum | PlanAggregatorAvg | PlanAggregatorMin | PlanAggregatorMax | PlanGroupBy | PlanConnectionId | PlanConnection_Id | PlanConnectionCreatedAt | PlanConnectionUpdatedAt | PlanConnectionName | PlanConnectionStatus | PlanConnectionLastUpdate | PlanConnectionLocation | PlanConnectionMunicipality | PlanConnectionSettlement | PlanConnectionSections | PlanConnectionType | PlanConnectionSid | PlanConnectionTargets | PlanConnectionNumber | PlanConnectionSubmission | PlanConnectionStype | PlanConnectionAddedManually | PlanConnectionStreet | PlanConnectionHouseNumber | PlanConnectionCommentsAreLocked | PlanConnectionGeometry | CreatePlanPayload | UpdatePlanPayload | DeletePlanPayload | Tag | TagConnection | TagAggregator | TagGroupBy | TagConnectionId | TagConnection_Id | TagConnectionCreatedAt | TagConnectionUpdatedAt | TagConnectionName | CreateTagPayload | UpdateTagPayload | DeleteTagPayload | UploadFile | UploadFileConnection | UploadFileAggregator | UploadFileAggregatorSum | UploadFileAggregatorAvg | UploadFileAggregatorMin | UploadFileAggregatorMax | UploadFileGroupBy | UploadFileConnectionId | UploadFileConnection_Id | UploadFileConnectionCreatedAt | UploadFileConnectionUpdatedAt | UploadFileConnectionName | UploadFileConnectionAlternativeText | UploadFileConnectionCaption | UploadFileConnectionWidth | UploadFileConnectionHeight | UploadFileConnectionFormats | UploadFileConnectionHash | UploadFileConnectionExt | UploadFileConnectionMime | UploadFileConnectionSize | UploadFileConnectionUrl | UploadFileConnectionPreviewUrl | UploadFileConnectionProvider | UploadFileConnectionProvider_Metadata | DeleteFilePayload | UsersPermissionsPermission | UsersPermissionsRole | UsersPermissionsRoleConnection | UsersPermissionsRoleAggregator | UsersPermissionsRoleGroupBy | UsersPermissionsRoleConnectionId | UsersPermissionsRoleConnection_Id | UsersPermissionsRoleConnectionName | UsersPermissionsRoleConnectionDescription | UsersPermissionsRoleConnectionType | CreateRolePayload | UpdateRolePayload | DeleteRolePayload | UsersPermissionsUser | UsersPermissionsUserConnection | UsersPermissionsUserAggregator | UsersPermissionsUserGroupBy | UsersPermissionsUserConnectionId | UsersPermissionsUserConnection_Id | UsersPermissionsUserConnectionCreatedAt | UsersPermissionsUserConnectionUpdatedAt | UsersPermissionsUserConnectionUsername | UsersPermissionsUserConnectionEmail | UsersPermissionsUserConnectionProvider | UsersPermissionsUserConnectionConfirmed | UsersPermissionsUserConnectionBlocked | UsersPermissionsUserConnectionRole | UsersPermissionsUserConnectionFirstName | UsersPermissionsUserConnectionLastName | UsersPermissionsUserConnectionCity | UsersPermissionsUserConnectionOrganization | UsersPermissionsUserConnectionJob | UsersPermissionsUserConnectionUserImage | CreateUserPayload | UpdateUserPayload | DeleteUserPayload | ComponentMiscLocation;
+export type Morph = UsersPermissionsMe | UsersPermissionsMeRole | UsersPermissionsLoginPayload | UserPermissionsPasswordPayload | EmailMeetingPayload | Area | AreaConnection | AreaAggregator | AreaGroupBy | AreaConnectionId | AreaConnection_Id | AreaConnectionCreatedAt | AreaConnectionUpdatedAt | AreaConnectionSid | CreateAreaPayload | UpdateAreaPayload | DeleteAreaPayload | Comment | CommentConnection | CommentAggregator | CommentGroupBy | CommentConnectionId | CommentConnection_Id | CommentConnectionCreatedAt | CommentConnectionUpdatedAt | CommentConnectionTitle | CommentConnectionName | CommentConnectionContent | CommentConnectionParent | CommentConnectionUser | CommentConnectionIsHidden | CommentConnectionIsPinned | CommentConnectionPlan | CreateCommentPayload | UpdateCommentPayload | DeleteCommentPayload | Committee | CommitteeConnection | CommitteeAggregator | CommitteeGroupBy | CommitteeConnectionId | CommitteeConnection_Id | CommitteeConnectionCreatedAt | CommitteeConnectionUpdatedAt | CommitteeConnectionSid | CommitteeConnectionParent | CommitteeConnectionArea | CommitteeConnectionIsHidden | CommitteeConnectionPageUrl | CommitteeConnectionRepresentative | CreateCommitteePayload | UpdateCommitteePayload | DeleteCommitteePayload | ContactApplications | ContactApplicationsConnection | ContactApplicationsAggregator | ContactApplicationsGroupBy | ContactApplicationsConnectionId | ContactApplicationsConnection_Id | ContactApplicationsConnectionCreatedAt | ContactApplicationsConnectionUpdatedAt | ContactApplicationsConnectionName | ContactApplicationsConnectionEmail | ContactApplicationsConnectionMessage | CreateContactApplicationPayload | UpdateContactApplicationPayload | DeleteContactApplicationPayload | Meeting | MeetingConnection | MeetingAggregator | MeetingAggregatorSum | MeetingAggregatorAvg | MeetingAggregatorMin | MeetingAggregatorMax | MeetingGroupBy | MeetingConnectionId | MeetingConnection_Id | MeetingConnectionCreatedAt | MeetingConnectionUpdatedAt | MeetingConnectionDate | MeetingConnectionNumber | MeetingConnectionDecisions | MeetingConnectionProtocol | MeetingConnectionTranscript | MeetingConnectionSid | MeetingConnectionAddedManually | MeetingConnectionTitle | MeetingConnectionBackground | MeetingConnectionSummary | MeetingConnectionEmailViews | MeetingConnectionIsHidden | MeetingConnectionCommittee | CreateMeetingPayload | UpdateMeetingPayload | DeleteMeetingPayload | Municipality | MunicipalityConnection | MunicipalityAggregator | MunicipalityGroupBy | MunicipalityConnectionId | MunicipalityConnection_Id | MunicipalityConnectionCreatedAt | MunicipalityConnectionUpdatedAt | MunicipalityConnectionSid | MunicipalityConnectionIsHidden | CreateMunicipalityPayload | UpdateMunicipalityPayload | DeleteMunicipalityPayload | Parser | ParserConnection | ParserAggregator | ParserGroupBy | ParserConnectionId | ParserConnection_Id | ParserConnectionCreatedAt | ParserConnectionUpdatedAt | ParserConnectionFor | ParserConnectionUrl | ParserConnectionActive | ParserConnectionObjectSelector | ParserConnectionSidMatch | ParserConnectionFields | ParserConnectionUrlByExistingItem | ParserConnectionMethod | ParserConnectionRequestParams | ParserConnectionFileFields | ParserConnectionIsJson | CreateParserPayload | UpdateParserPayload | DeleteParserPayload | Plan | PlanConnection | PlanAggregator | PlanAggregatorSum | PlanAggregatorAvg | PlanAggregatorMin | PlanAggregatorMax | PlanGroupBy | PlanConnectionId | PlanConnection_Id | PlanConnectionCreatedAt | PlanConnectionUpdatedAt | PlanConnectionName | PlanConnectionStatus | PlanConnectionLastUpdate | PlanConnectionLocation | PlanConnectionMunicipality | PlanConnectionSettlement | PlanConnectionSections | PlanConnectionType | PlanConnectionSid | PlanConnectionTargets | PlanConnectionNumber | PlanConnectionSubmission | PlanConnectionStype | PlanConnectionAddedManually | PlanConnectionStreet | PlanConnectionHouseNumber | PlanConnectionCommentsAreLocked | PlanConnectionGeometry | CreatePlanPayload | UpdatePlanPayload | DeletePlanPayload | Tag | TagConnection | TagAggregator | TagGroupBy | TagConnectionId | TagConnection_Id | TagConnectionCreatedAt | TagConnectionUpdatedAt | TagConnectionName | CreateTagPayload | UpdateTagPayload | DeleteTagPayload | Term | TermConnection | TermAggregator | TermGroupBy | TermConnectionId | TermConnection_Id | TermConnectionCreatedAt | TermConnectionUpdatedAt | TermConnectionPhrase | TermConnectionDescription | TermConnectionPublished_At | CreateTermPayload | UpdateTermPayload | DeleteTermPayload | UploadFile | UploadFileConnection | UploadFileAggregator | UploadFileAggregatorSum | UploadFileAggregatorAvg | UploadFileAggregatorMin | UploadFileAggregatorMax | UploadFileGroupBy | UploadFileConnectionId | UploadFileConnection_Id | UploadFileConnectionCreatedAt | UploadFileConnectionUpdatedAt | UploadFileConnectionName | UploadFileConnectionAlternativeText | UploadFileConnectionCaption | UploadFileConnectionWidth | UploadFileConnectionHeight | UploadFileConnectionFormats | UploadFileConnectionHash | UploadFileConnectionExt | UploadFileConnectionMime | UploadFileConnectionSize | UploadFileConnectionUrl | UploadFileConnectionPreviewUrl | UploadFileConnectionProvider | UploadFileConnectionProvider_Metadata | DeleteFilePayload | UsersPermissionsPermission | UsersPermissionsRole | UsersPermissionsRoleConnection | UsersPermissionsRoleAggregator | UsersPermissionsRoleGroupBy | UsersPermissionsRoleConnectionId | UsersPermissionsRoleConnection_Id | UsersPermissionsRoleConnectionName | UsersPermissionsRoleConnectionDescription | UsersPermissionsRoleConnectionType | CreateRolePayload | UpdateRolePayload | DeleteRolePayload | UsersPermissionsUser | UsersPermissionsUserConnection | UsersPermissionsUserAggregator | UsersPermissionsUserGroupBy | UsersPermissionsUserConnectionId | UsersPermissionsUserConnection_Id | UsersPermissionsUserConnectionCreatedAt | UsersPermissionsUserConnectionUpdatedAt | UsersPermissionsUserConnectionUsername | UsersPermissionsUserConnectionEmail | UsersPermissionsUserConnectionProvider | UsersPermissionsUserConnectionConfirmed | UsersPermissionsUserConnectionBlocked | UsersPermissionsUserConnectionRole | UsersPermissionsUserConnectionFirstName | UsersPermissionsUserConnectionLastName | UsersPermissionsUserConnectionCity | UsersPermissionsUserConnectionOrganization | UsersPermissionsUserConnectionJob | UsersPermissionsUserConnectionUserImage | CreateUserPayload | UpdateUserPayload | DeleteUserPayload | ComponentMiscLocation;
 
 export type Municipality = {
   __typename?: 'Municipality',
@@ -1309,6 +1358,9 @@ export type Mutation = {
   createTag?: Maybe<CreateTagPayload>,
   updateTag?: Maybe<UpdateTagPayload>,
   deleteTag?: Maybe<DeleteTagPayload>,
+  createTerm?: Maybe<CreateTermPayload>,
+  updateTerm?: Maybe<UpdateTermPayload>,
+  deleteTerm?: Maybe<DeleteTermPayload>,
   /** Delete one file */
   deleteFile?: Maybe<DeleteFilePayload>,
   /** Create a new role */
@@ -1473,6 +1525,21 @@ export type MutationUpdateTagArgs = {
 
 export type MutationDeleteTagArgs = {
   input?: Maybe<DeleteTagInput>
+};
+
+
+export type MutationCreateTermArgs = {
+  input?: Maybe<CreateTermInput>
+};
+
+
+export type MutationUpdateTermArgs = {
+  input?: Maybe<UpdateTermInput>
+};
+
+
+export type MutationDeleteTermArgs = {
+  input?: Maybe<DeleteTermInput>
 };
 
 
@@ -2087,6 +2154,9 @@ export type Query = {
   tag?: Maybe<Tag>,
   tags?: Maybe<Array<Maybe<Tag>>>,
   tagsConnection?: Maybe<TagConnection>,
+  term?: Maybe<Term>,
+  terms?: Maybe<Array<Maybe<Term>>>,
+  termsConnection?: Maybe<TermConnection>,
   files?: Maybe<Array<Maybe<UploadFile>>>,
   filesConnection?: Maybe<UploadFileConnection>,
   role?: Maybe<UsersPermissionsRole>,
@@ -2307,6 +2377,29 @@ export type QueryTagsConnectionArgs = {
 };
 
 
+export type QueryTermArgs = {
+  id: Scalars['ID'],
+  publicationState?: Maybe<PublicationState>
+};
+
+
+export type QueryTermsArgs = {
+  sort?: Maybe<Scalars['String']>,
+  limit?: Maybe<Scalars['Int']>,
+  start?: Maybe<Scalars['Int']>,
+  where?: Maybe<Scalars['JSON']>,
+  publicationState?: Maybe<PublicationState>
+};
+
+
+export type QueryTermsConnectionArgs = {
+  sort?: Maybe<Scalars['String']>,
+  limit?: Maybe<Scalars['Int']>,
+  start?: Maybe<Scalars['Int']>,
+  where?: Maybe<Scalars['JSON']>
+};
+
+
 export type QueryFilesArgs = {
   sort?: Maybe<Scalars['String']>,
   limit?: Maybe<Scalars['Int']>,
@@ -2466,6 +2559,91 @@ export type TagInput = {
   updated_by?: Maybe<Scalars['ID']>,
 };
 
+export type Term = {
+  __typename?: 'Term',
+  id: Scalars['ID'],
+  _id: Scalars['ID'],
+  createdAt: Scalars['DateTime'],
+  updatedAt: Scalars['DateTime'],
+  phrase?: Maybe<Scalars['String']>,
+  description?: Maybe<Scalars['String']>,
+  published_at?: Maybe<Scalars['DateTime']>,
+};
+
+export type TermAggregator = {
+  __typename?: 'TermAggregator',
+  count?: Maybe<Scalars['Int']>,
+  totalCount?: Maybe<Scalars['Int']>,
+};
+
+export type TermConnection = {
+  __typename?: 'TermConnection',
+  values?: Maybe<Array<Maybe<Term>>>,
+  groupBy?: Maybe<TermGroupBy>,
+  aggregate?: Maybe<TermAggregator>,
+};
+
+export type TermConnection_Id = {
+  __typename?: 'TermConnection_id',
+  key?: Maybe<Scalars['ID']>,
+  connection?: Maybe<TermConnection>,
+};
+
+export type TermConnectionCreatedAt = {
+  __typename?: 'TermConnectionCreatedAt',
+  key?: Maybe<Scalars['DateTime']>,
+  connection?: Maybe<TermConnection>,
+};
+
+export type TermConnectionDescription = {
+  __typename?: 'TermConnectionDescription',
+  key?: Maybe<Scalars['String']>,
+  connection?: Maybe<TermConnection>,
+};
+
+export type TermConnectionId = {
+  __typename?: 'TermConnectionId',
+  key?: Maybe<Scalars['ID']>,
+  connection?: Maybe<TermConnection>,
+};
+
+export type TermConnectionPhrase = {
+  __typename?: 'TermConnectionPhrase',
+  key?: Maybe<Scalars['String']>,
+  connection?: Maybe<TermConnection>,
+};
+
+export type TermConnectionPublished_At = {
+  __typename?: 'TermConnectionPublished_at',
+  key?: Maybe<Scalars['DateTime']>,
+  connection?: Maybe<TermConnection>,
+};
+
+export type TermConnectionUpdatedAt = {
+  __typename?: 'TermConnectionUpdatedAt',
+  key?: Maybe<Scalars['DateTime']>,
+  connection?: Maybe<TermConnection>,
+};
+
+export type TermGroupBy = {
+  __typename?: 'TermGroupBy',
+  id?: Maybe<Array<Maybe<TermConnectionId>>>,
+  _id?: Maybe<Array<Maybe<TermConnection_Id>>>,
+  createdAt?: Maybe<Array<Maybe<TermConnectionCreatedAt>>>,
+  updatedAt?: Maybe<Array<Maybe<TermConnectionUpdatedAt>>>,
+  phrase?: Maybe<Array<Maybe<TermConnectionPhrase>>>,
+  description?: Maybe<Array<Maybe<TermConnectionDescription>>>,
+  published_at?: Maybe<Array<Maybe<TermConnectionPublished_At>>>,
+};
+
+export type TermInput = {
+  phrase?: Maybe<Scalars['String']>,
+  description?: Maybe<Scalars['String']>,
+  published_at?: Maybe<Scalars['DateTime']>,
+  created_by?: Maybe<Scalars['ID']>,
+  updated_by?: Maybe<Scalars['ID']>,
+};
+
 
 export type UpdateAreaInput = {
   where?: Maybe<InputId>,
@@ -2565,6 +2743,16 @@ export type UpdateTagInput = {
 export type UpdateTagPayload = {
   __typename?: 'updateTagPayload',
   tag?: Maybe<Tag>,
+};
+
+export type UpdateTermInput = {
+  where?: Maybe<InputId>,
+  data?: Maybe<EditTermInput>,
+};
+
+export type UpdateTermPayload = {
+  __typename?: 'updateTermPayload',
+  term?: Maybe<Term>,
 };
 
 export type UpdateUserInput = {

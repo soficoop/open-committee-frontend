@@ -35,18 +35,18 @@
             התכנית תעלה לדיון בתאריך
             {{ nextPlanMeeting.date.toLocaleDateString("he") }}
             <a
-              :href="nextPlanMeeting.committee.pageUrl"
+              :href="nextMeetingCommitteePageUrl"
               target="blank"
               tabindex="0"
-              v-if="nextPlanMeeting.committee.pageUrl"
+              v-if="nextMeetingCommitteePageUrl"
             >
               ב{{ nextPlanMeeting.committee.sid }}.
             </a>
             <span v-else>ב{{ nextPlanMeeting.committee.sid }}.</span>
           </div>
-          <div v-if="nextPlanMeeting.committee.representative" tabindex="0">
+          <div v-if="nextMeetingCommitteeRepresentative" tabindex="0">
             הנציג/ה בועדה:
-            {{ nextPlanMeeting.committee.representative }}
+            {{ nextMeetingCommitteeRepresentative }}
           </div>
           <div v-else tabindex="0">
             דיון זה יתקיים ללא נוכחות נציג/ת ארגון סביבתי בישיבה.
@@ -283,6 +283,30 @@ export default class Plan extends Vue {
       this.planData.commentsAreLocked = lock;
     }
     this.lockCommentLoader = false;
+  }
+
+  get nextMeetingCommitteePageUrl() {
+    if (!this.nextPlanMeeting) {
+      return "";
+    }
+    const nextMeetingCommittee = this.nextPlanMeeting.committee;
+    if (nextMeetingCommittee.pageUrl) {
+      return nextMeetingCommittee.pageUrl;
+    }
+    return nextMeetingCommittee.parent && nextMeetingCommittee.parent.pageUrl;
+  }
+
+  get nextMeetingCommitteeRepresentative() {
+    if (!this.nextPlanMeeting) {
+      return "";
+    }
+    const nextMeetingCommittee = this.nextPlanMeeting.committee;
+    if (nextMeetingCommittee.representative) {
+      return nextMeetingCommittee.representative;
+    }
+    return (
+      nextMeetingCommittee.parent && nextMeetingCommittee.parent.representative
+    );
   }
 
   get nextPlanMeeting() {

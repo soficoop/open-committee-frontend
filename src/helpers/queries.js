@@ -148,6 +148,10 @@ export const getPlan = `query getPlan($id: ID!) {
         id
         pageUrl
         representative
+        parent {
+          pageUrl
+          representative
+        }
         users {
           id
         }
