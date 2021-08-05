@@ -147,10 +147,10 @@ export const getPlan = `query getPlan($id: ID!) {
         sid
         id
         pageUrl
-        representative
+        planScreenText
         parent {
           pageUrl
-          representative
+          planScreenText
         }
         users {
           id

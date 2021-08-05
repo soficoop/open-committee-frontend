@@ -44,12 +44,8 @@
             </a>
             <span v-else>ב{{ nextPlanMeeting.committee.sid }}.</span>
           </div>
-          <div v-if="nextMeetingCommitteeRepresentative" tabindex="0">
-            הנציג/ה בועדה:
-            {{ nextMeetingCommitteeRepresentative }}
-          </div>
-          <div v-else tabindex="0">
-            דיון זה יתקיים ללא נוכחות נציג/ת ארגון סביבתי בישיבה.
+          <div tabindex="0">
+            {{ nextMeetingCommitteeText }}
           </div>
         </v-alert>
       </v-col>
@@ -296,16 +292,16 @@ export default class Plan extends Vue {
     return nextMeetingCommittee.parent && nextMeetingCommittee.parent.pageUrl;
   }
 
-  get nextMeetingCommitteeRepresentative() {
+  get nextMeetingCommitteeText() {
     if (!this.nextPlanMeeting) {
       return "";
     }
     const nextMeetingCommittee = this.nextPlanMeeting.committee;
-    if (nextMeetingCommittee.representative) {
-      return nextMeetingCommittee.representative;
+    if (nextMeetingCommittee.planScreenText) {
+      return nextMeetingCommittee.planScreenText;
     }
     return (
-      nextMeetingCommittee.parent && nextMeetingCommittee.parent.representative
+      nextMeetingCommittee.parent && nextMeetingCommittee.parent.planScreenText
     );
   }
 
