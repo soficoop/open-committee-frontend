@@ -3,20 +3,22 @@
     <h2 class="headline primary--text font-weight-bold my-6" tabindex="0">
       לפי נושא
     </h2>
-    <v-row>
+    <v-row dense>
       <v-col>
         <v-autocomplete
           :items="tagSuggestions"
           :menu-props="autocompleteMenuProps"
           @change="subscribeToTagBySearchString"
           @focus="handleInputFocused"
-          class="scrollable"
           hide-details
           item-text="name"
           item-value="id"
           label="חיפוש"
           outlined
         ></v-autocomplete>
+        <span class="caption">
+          בהרצה, ייתכן שלא כל התכניות יישלחו
+        </span>
       </v-col>
     </v-row>
     <v-row>
