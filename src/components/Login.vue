@@ -321,7 +321,7 @@ import {
   sendForgotPasswordEmail,
   checkIfEmailIsValid
 } from "../helpers/functions";
-import { apiEndpoint } from "../helpers/constants";
+import { apiEndpoint, lastPath } from "../helpers/constants";
 
 @Component()
 export default class Login extends Vue {
@@ -405,6 +405,7 @@ export default class Login extends Vue {
   }
 
   getLoginLink(provider) {
+    localStorage.setItem(lastPath, this.$route.path);
     return apiEndpoint + "/connect/" + provider;
   }
 

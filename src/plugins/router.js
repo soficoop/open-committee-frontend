@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Router from "vue-router";
-import { authEndpoint } from "../helpers/constants";
+import { authEndpoint, lastPath } from "../helpers/constants";
 import Home from "../views/Home.vue";
 const About = () => import("../views/About.vue");
 const Login = () => import("../views/Login.vue");
@@ -56,7 +56,11 @@ export default new Router({
               `${authEndpoint}/${to.params.providerName}/callback${window.location.search}`
             );
             const json = await res.json();
-            next({ path: "/", query: { token: json.jwt } });
+            next({
+              path: localStorage.getItem(lastPath) || "/",
+              query: { token: json.jwt }
+            });
+            localStorage.removeItem(lastPath);
           }
         }
       ]
