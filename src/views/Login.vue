@@ -7,9 +7,9 @@
       <v-flex xs12 sm5 xl4 class="text-xs-center">
         <v-layout column>
           <v-flex xs1 align-self-center>
-            <v-icon size="120px" color="primary" class="my-4"
-              >mdi-account-circle</v-icon
-            >
+            <v-icon size="120px" color="primary" class="my-4">
+              mdi-account-circle
+            </v-icon>
           </v-flex>
           <h1
             class="pa-1 headline text-center primary--text"
@@ -24,8 +24,8 @@
             v-model="tab"
             background-color="transparent"
           >
-            <v-tab @click="authenticationFailed = false" class="ma-0"
-              >הרשמה
+            <v-tab @click="authenticationFailed = false" class="ma-0">
+              הרשמה
             </v-tab>
             <v-tab @click="authenticationFailed = false" class="ma-0">
               התחברות

@@ -52,7 +52,7 @@ export default class MunicipalitySubscription extends Vue {
   @Getter jwt;
   /** @type {import("../../graphql/types").Municipality[]} */
   @Getter municipalities;
-  subscribedMunicipalities = [];
+  _subscribedMunicipalities = [];
 
   checkIfSubscribed(id) {
     return (
@@ -109,8 +109,24 @@ export default class MunicipalitySubscription extends Vue {
     return undefined;
   }
   /** @type {import("../../graphql/types").Municipality[]} */
+  get subscribedMunicipalities() {
+    if (
+      this._subscribedMunicipalities &&
+      this._subscribedMunicipalities.length
+    ) {
+      return this._subscribedMunicipalities;
+    }
+    return this.user && this.user.subscribedMunicipalities;
+  }
+
+  /** @type {import("../../graphql/types").Municipality[]} */
   get municipalitySuggestions() {
     return this.municipalities.filter(m => !this.checkIfSubscribed(m.id));
+  }
+
+  /** @type {import("../../graphql/types").Municipality[]} */
+  set subscribedMunicipalities(value) {
+    this._subscribedMunicipalities = value;
   }
 }
 </script>

@@ -60,7 +60,7 @@ export default class CommitteeSubscription extends Vue {
   @Getter jwt;
   /** @type {import("../../graphql/types").Committee[]} */
   @Getter committees;
-  subscribedCommittees = [];
+  _subscribedCommittees = [];
 
   checkIfSubscribed(committeeId) {
     return (
@@ -104,6 +104,18 @@ export default class CommitteeSubscription extends Vue {
   /** @type {import("../../graphql/types").Committee[]} */
   get committeeSuggestions() {
     return this.committees.filter(c => !this.checkIfSubscribed(c.id));
+  }
+  /** @type {import("../../graphql/types").Committee[]} */
+  get subscribedCommittees() {
+    if (this._subscribedCommittees && this._subscribedCommittees.length) {
+      return this._subscribedCommittees;
+    }
+    return this.user && this.user.subscribedCommittees;
+  }
+
+  /** @type {import("../../graphql/types").Committee[]} */
+  set subscribedCommittees(value) {
+    this._subscribedCommittees = value;
   }
 }
 </script>

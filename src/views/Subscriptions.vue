@@ -1,19 +1,7 @@
 <template>
   <v-container pa-md-12 pa-5>
-    <v-dialog v-model="showLoginDialog" persistent max-width="420px">
-      <v-card>
-        <v-card-title>
-          אינך מחובר/ת למערכת
-        </v-card-title>
-        <v-card-text>
-          על-מנת לצפות בהתראות ולהוסיף התראות חדשות, יש להתחבר למערכת
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn text @click="$router.go(-1)">ביטול</v-btn>
-          <v-btn text color="secondary" to="/login">קחו אותי להתחברות</v-btn>
-        </v-card-actions>
-      </v-card>
+    <v-dialog v-model="showLoginDialog" persistent max-width="560px">
+      <Login @login="handleLogin" />
     </v-dialog>
     <v-dialog v-model="showUnsubscribeDialog" max-width="420px">
       <v-card>
@@ -71,6 +59,7 @@ import CommitteeSubscription from "../components/CommitteeSubscription.vue";
 import TagSubscription from "../components/TagSubscription.vue";
 import MunicipalitySubscription from "../components/MunicipalitySubscription.vue";
 import LocationSubscription from "../components/LocationSubscription.vue";
+import Login from "../components/Login.vue";
 import { Action, Getter, Mutation } from "vuex-class";
 
 @Component({
@@ -78,7 +67,8 @@ import { Action, Getter, Mutation } from "vuex-class";
     CommitteeSubscription,
     LocationSubscription,
     TagSubscription,
-    MunicipalitySubscription
+    MunicipalitySubscription,
+    Login
   }
 })
 export default class Subscriptions extends Vue {
@@ -99,6 +89,10 @@ export default class Subscriptions extends Vue {
       this.showLoginDialog = true;
     }
     this.showSubscriptions = true;
+  }
+
+  async handleLogin() {
+    this.showLoginDialog = false;
   }
 }
 </script>

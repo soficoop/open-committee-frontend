@@ -56,7 +56,8 @@ export default class TagSubscription extends Vue {
   @Getter jwt;
   /** @type {import("../../graphql/types").Tag[]} */
   @Getter tags;
-  subscribedTags = [];
+  /** @type {import("../../graphql/types").Tag[]} */
+  _subscribedTags = [];
 
   checkIfSubscribed(id) {
     return this.subscribedTags && this.subscribedTags.some(tag => tag.id == id);
@@ -109,8 +110,20 @@ export default class TagSubscription extends Vue {
     return undefined;
   }
   /** @type {import("../../graphql/types").Tag[]} */
+  get subscribedTags() {
+    if (this._subscribedTags && this._subscribedTags.length) {
+      return this._subscribedTags;
+    }
+    return this.user && this.user.subscribedTags;
+  }
+  /** @type {import("../../graphql/types").Tag[]} */
   get tagSuggestions() {
     return this.tags.filter(tag => !this.checkIfSubscribed(tag.id));
+  }
+
+  /** @type {import("../../graphql/types").Tag[]} */
+  set subscribedTags(value) {
+    this._subscribedTags = value;
   }
 }
 </script>
