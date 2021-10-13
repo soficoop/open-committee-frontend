@@ -24,10 +24,16 @@
       <div v-if="showSubscriptions">
         <v-row>
           <v-col>
-            <TagSubscription class="py-6" />
-            <MunicipalitySubscription class="py-6" />
-            <LocationSubscription class="py-6" />
-            <CommitteeSubscription class="py-6" />
+            <TagSubscription :key="keyCommitteeSubscription" class="py-6" />
+            <MunicipalitySubscription
+              :key="keyLocationSubscription"
+              class="py-6"
+            />
+            <LocationSubscription
+              :key="keyMunicipalitySubscription"
+              class="py-6"
+            />
+            <CommitteeSubscription :key="keyTagSubscription" class="py-6" />
           </v-col>
         </v-row>
         <v-row dense>
@@ -76,6 +82,10 @@ export default class Subscriptions extends Vue {
   @Getter isLoading;
   @Getter user;
   @Mutation setLoading;
+  keyCommitteeSubscription = "committee";
+  keyLocationSubscription = "location";
+  keyMunicipalitySubscription = "municipality";
+  keyTagSubscription = "tag";
   showLoginDialog = false;
   showSubscriptions = false;
   showUnsubscribeDialog = false;
@@ -92,7 +102,18 @@ export default class Subscriptions extends Vue {
   }
 
   async handleLogin() {
+    this.setLoading(true);
+    await this.fetchUserSubscriptions();
     this.showLoginDialog = false;
+    this.remountChildren();
+    this.setLoading(false);
+  }
+
+  remountChildren() {
+    this.keyCommitteeSubscription += "1";
+    this.keyLocationSubscription += "1";
+    this.keyMunicipalitySubscription += "1";
+    this.keyTagSubscription += "1";
   }
 }
 </script>

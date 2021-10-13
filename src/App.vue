@@ -127,7 +127,7 @@ export default class App extends Vue {
       this.$router.push({ query: undefined });
       return;
     }
-    if (this.$route.path.startsWith("/login")) {
+    if (/^(\/login|\/subscriptions)/.test(this.$route.path)) {
       this.isLoginPromptVisible = false;
     }
   }
@@ -149,7 +149,7 @@ export default class App extends Vue {
       await this.refreshUser();
       setTimeout(() => {
         this.isLoginPromptVisible =
-          !this.$route.path.startsWith("/login") && !this.user;
+          !/^(\/login|\/subscriptions)/.test(this.$route.path) && !this.user;
       }, 5000);
     } catch (e) {
       this.signOut();

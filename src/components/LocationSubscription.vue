@@ -119,7 +119,7 @@ export default class LocationSubscription extends Vue {
   /** @type {import("leaflet-geosearch").GoogleProvider} */
   provider = null;
   query = "";
-  _subscribedLocations = [];
+  subscribedLocations = [];
   suggestedLocations = [];
 
   @Watch("query")
@@ -214,19 +214,6 @@ export default class LocationSubscription extends Vue {
       return [this.locationToAdd, ...this.subscribedLocations];
     }
     return this.subscribedLocations;
-  }
-
-  /** @type {import("../../graphql/types").ComponentMiscLocation[]} */
-  get subscribedLocations() {
-    if (this._subscribedLocations && this._subscribedLocations.length) {
-      return this._subscribedLocations;
-    }
-    return this.user && this.user.subscribedLocations;
-  }
-
-  /** @type {import("../../graphql/types").ComponentMiscLocation[]} */
-  set subscribedLocations(value) {
-    this._subscribedLocations = value;
   }
 }
 </script>
