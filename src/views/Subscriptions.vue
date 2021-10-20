@@ -1,8 +1,6 @@
 <template>
   <v-container pa-md-12 pa-5>
-    <v-dialog v-model="showLoginDialog" persistent max-width="560px">
-      <Login @login="handleLogin" />
-    </v-dialog>
+    <Login @login="handleLogin" :visible.sync="showLoginDialog" persistent />
     <v-dialog v-model="showUnsubscribeDialog" max-width="420px">
       <v-card>
         <v-card-title>להסיר הכל?</v-card-title>

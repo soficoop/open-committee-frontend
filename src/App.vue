@@ -14,10 +14,8 @@
         <v-toolbar-title @click="$router.push('/')">ועדה פתוחה</v-toolbar-title>
       </v-app-bar>
     </div>
-    <Navigation
-      :isOpen="isNavOpen"
-      @openChanged="value => (isNavOpen = value)"
-    ></Navigation>
+    <Navigation :isOpen.sync="isNavOpen" />
+    <Login :visible.sync="isLoginVisible" />
     <v-snackbar
       :timeout="-1"
       :value="isLoginPromptVisible"
@@ -43,7 +41,7 @@
             class="my-2"
             depressed
             color="secondary"
-            @click="goToLogin"
+            @click="showLogin"
           >
             התחברות
           </v-btn>
@@ -100,6 +98,7 @@ body.using-mouse :focus {
 
 <script>
 import Navigation from "./components/Navigation";
+import Login from "./components/Login";
 import Component from "vue-class-component";
 import Vue from "vue";
 import { Action, Getter, Mutation } from "vuex-class";
@@ -107,7 +106,8 @@ import { Watch } from "vue-property-decorator";
 
 @Component({
   components: {
-    Navigation
+    Navigation,
+    Login
   }
 })
 export default class App extends Vue {
@@ -119,6 +119,7 @@ export default class App extends Vue {
   @Mutation setLoading;
   isNavOpen = this.$vuetify.breakpoint.mdAndUp;
   isLoginPromptVisible = false;
+  isLoginVisible = false;
 
   @Watch("$route")
   async handleRouteChanged() {
@@ -132,14 +133,9 @@ export default class App extends Vue {
     }
   }
 
-  goToLogin() {
+  showLogin() {
     this.isLoginPromptVisible = false;
-    this.$router.push({
-      name: "login",
-      params: {
-        tab: 1
-      }
-    });
+    this.isLoginVisible = true;
   }
 
   async mounted() {
@@ -153,7 +149,7 @@ export default class App extends Vue {
       }, 5000);
     } catch (e) {
       this.signOut();
-      this.goToLogin();
+      this.showLogin();
     } finally {
       this.setLoading(false);
     }

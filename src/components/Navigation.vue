@@ -117,7 +117,7 @@ export default class Navigation extends Vue {
   }
 
   set isNavOpen(value) {
-    this.$emit("openChanged", value);
+    this.$emit("update:isOpen", value);
   }
 
   executeNavItemClick(item) {
