@@ -9,7 +9,7 @@
           התחברות
         </v-tab>
       </v-tabs>
-      <v-card-text>
+      <v-card-text class="py-0">
         <v-row class="py-3">
           <v-col>
             <v-btn
@@ -314,6 +314,15 @@
                 </v-expand-transition>
               </v-tab-item>
             </v-tabs-items>
+          </v-col>
+        </v-row>
+        <v-row dense no-gutters>
+          <v-col>
+            <p class="caption text-center text-decoration-underline">
+              <a @click="$router.go(-1)" tabindex="0">
+                לא תודה, אולי בהמשך
+              </a>
+            </p>
           </v-col>
         </v-row>
       </v-card-text>
