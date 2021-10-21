@@ -1,17 +1,6 @@
 <template>
   <div v-if="center" class="h-150px">
-    <Leaflet
-      :center="center"
-      :marker="center"
-      @fullscreenToggle="toggleDialog"
-    />
-    <v-dialog v-model="dialog" fullscreen>
-      <Leaflet
-        :center="center"
-        :marker="center"
-        @fullscreenToggle="toggleDialog"
-      />
-    </v-dialog>
+    <Leaflet :center="center" :marker="center" />
   </div>
 </template>
 <script>
@@ -28,7 +17,6 @@ import { Prop, Watch } from "vue-property-decorator";
 })
 export default class Map extends Vue {
   @Prop(String) query;
-  dialog = false;
   center = null;
   /** @type {OpenStreetMapProvider} */
   provider = null;
@@ -44,10 +32,6 @@ export default class Map extends Vue {
   async mounted() {
     this.provider = new OpenStreetMapProvider();
     this.handleQueryChanged();
-  }
-
-  toggleDialog() {
-    this.dialog = !this.dialog;
   }
 }
 </script>

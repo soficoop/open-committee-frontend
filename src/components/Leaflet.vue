@@ -1,5 +1,5 @@
 <template>
-  <l-map :zoom="zoom" :center="center" class="l-map">
+  <l-map :zoom="zoom" :center="center" class="l-map" ref="leafletMap">
     <l-marker :lat-lng="marker" v-if="marker"></l-marker>
     <l-tile-layer url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"></l-tile-layer>
     <l-circle
@@ -9,15 +9,6 @@
       :radius="circle.radius * 1000"
       color="#12cdd4"
     />
-    <l-control
-      position="bottomleft"
-      class="leaflet-bar"
-      v-if="$listeners.fullscreenToggle"
-    >
-      <a @click="$emit('fullscreenToggle')">
-        <v-icon color="primary">mdi-fullscreen</v-icon>
-      </a>
-    </l-control>
   </l-map>
 </template>
 <script>
@@ -25,21 +16,28 @@ import Component from "vue-class-component";
 import Vue from "vue";
 import { LMap, LTileLayer, LMarker, LControl, LCircle } from "vue2-leaflet";
 import { Prop } from "vue-property-decorator";
+import "leaflet-fullscreen/dist/leaflet.fullscreen.css";
+import "leaflet-fullscreen/dist/Leaflet.fullscreen";
 
 @Component({
   components: {
-    LMap,
-    LTileLayer,
-    LMarker,
+    LCircle,
     LControl,
-    LCircle
+    LMap,
+    LMarker,
+    LTileLayer
   }
 })
-export default class Map extends Vue {
+export default class Leaflet extends Vue {
   @Prop(Object) center;
   @Prop(Object) marker;
   @Prop(Array) circles;
   @Prop({ type: Number, default: 15 }) zoom;
+  mounted() {
+    this.$refs.leafletMap.mapObject.addControl(
+      new window.L.Control.Fullscreen({ position: "bottomleft" })
+    );
+  }
 }
 </script>
 <style scoped>
