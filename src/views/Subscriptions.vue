@@ -1,6 +1,11 @@
 <template>
   <v-container pa-md-12 pa-5>
-    <Login @login="handleLogin" :visible.sync="showLoginDialog" persistent />
+    <Login
+      @login="handleLogin"
+      :visible.sync="showLoginDialog"
+      persistent
+      @cancel="$router.go(-1)"
+    />
     <v-dialog v-model="showUnsubscribeDialog" max-width="420px">
       <v-card>
         <v-card-title>להסיר הכל?</v-card-title>

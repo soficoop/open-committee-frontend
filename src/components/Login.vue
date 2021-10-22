@@ -319,7 +319,7 @@
         <v-row dense no-gutters>
           <v-col>
             <p class="caption text-center text-decoration-underline">
-              <a @click="$router.go(-1)" tabindex="0">
+              <a @click="$emit('cancel')" tabindex="0">
                 לא תודה, אולי בהמשך
               </a>
             </p>

@@ -15,7 +15,7 @@
       </v-app-bar>
     </div>
     <Navigation :isOpen.sync="isNavOpen" />
-    <Login :visible.sync="isLoginVisible" />
+    <Login :visible.sync="isLoginVisible" @cancel="isLoginVisible = false" />
     <v-snackbar
       :timeout="-1"
       :value="isLoginPromptVisible"
