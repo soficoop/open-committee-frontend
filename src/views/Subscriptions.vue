@@ -95,9 +95,7 @@ export default class Subscriptions extends Vue {
   }
 
   async mounted() {
-    console.info("mounted", this.jwt);
     if (this.jwt) {
-      console.info("has jwt");
       this.setLoading(true);
       await this.fetchUserSubscriptions();
       this.setLoading(false);

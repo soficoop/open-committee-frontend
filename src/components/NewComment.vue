@@ -7,7 +7,8 @@
           hide-details
           label="נושא"
           v-model="title"
-        ></v-text-field>
+          @click="suggestLogin"
+        />
       </v-col>
       <v-col cols="12" md="6">
         <v-text-field
@@ -16,7 +17,8 @@
           hide-details
           label="שם"
           v-model="name"
-        ></v-text-field>
+          @click="suggestLogin"
+        />
       </v-col>
     </v-row>
     <v-row dense>
@@ -27,7 +29,8 @@
           maxlength="1000"
           label="תוכן ההתייחסות"
           v-model="content"
-        ></v-textarea>
+          @click="suggestLogin"
+        />
       </v-col>
     </v-row>
     <v-row dense>
@@ -75,7 +78,7 @@
 <script>
 import Component from "vue-class-component";
 import Vue from "vue";
-import { Getter } from "vuex-class";
+import { Getter, Mutation } from "vuex-class";
 import { makeGqlRequest, uploadFile } from "../helpers/functions";
 import { createComment } from "../helpers/mutations";
 import { Prop, Watch } from "vue-property-decorator";
@@ -87,6 +90,7 @@ export default class NewComment extends Vue {
   /** @type {import("../../graphql/types").UsersPermissionsUser} */
   @Getter user;
   @Prop(String) parent;
+  @Mutation setLoginDialog;
   content = "";
   isCreatingNewComment = false;
   isSubmitting = false;
@@ -94,6 +98,7 @@ export default class NewComment extends Vue {
   title = "";
   /** @type {File[]} */
   files = [];
+  wasLoginSuggested = false;
 
   @Watch("user")
   onUserChanged() {
@@ -133,6 +138,13 @@ export default class NewComment extends Vue {
     });
     this.$emit("submit");
     this.isSubmitting = false;
+  }
+
+  suggestLogin() {
+    if (!this.user && !this.wasLoginSuggested) {
+      this.setLoginDialog(true);
+      this.wasLoginSuggested = true;
+    }
   }
 
   async uploadFiles() {
