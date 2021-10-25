@@ -40,13 +40,13 @@
 <script>
 import Component from "vue-class-component";
 import Vue from "vue";
-import { Getter, Action } from "vuex-class";
+import { Getter, Action, Mutation } from "vuex-class";
 import { delayScrollToFocusedElement } from "../helpers/functions";
+import { Watch } from "vue-property-decorator";
 
 @Component()
 export default class TagSubscription extends Vue {
   @Action fetchTags;
-  @Action fetchUserSubscriptions;
   @Action updateUser;
   /**
    * @type {import("../../graphql/types").UsersPermissionsUser}
@@ -56,7 +56,13 @@ export default class TagSubscription extends Vue {
   @Getter jwt;
   /** @type {import("../../graphql/types").Tag[]} */
   @Getter tags;
+  @Mutation setLoginDialog;
   subscribedTags = [];
+
+  @Watch("user")
+  handleUserChanged() {
+    this.subscribedTags = this.user && this.user.subscribedTags;
+  }
 
   checkIfSubscribed(id) {
     return this.subscribedTags && this.subscribedTags.some(tag => tag.id == id);
@@ -79,6 +85,10 @@ export default class TagSubscription extends Vue {
   }
 
   async subscribeToTagBySearchString(value) {
+    if (!this.user) {
+      this.setLoginDialog(true);
+      return;
+    }
     const tag = this.tags.find(t => t.id === value);
     await this.subscribeToTag(tag);
   }

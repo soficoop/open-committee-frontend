@@ -62,7 +62,9 @@
  * @typedef StoreState
  * @property {import("../../graphql/types").Committee[]} committees
  * @property {boolean} isLoading
- * @property {strign} jwt
+ * @property {boolean} isLoginVisible
+ * @property {string} jwt
+ * @property {string} lastPath
  * @property {import("../../graphql/types").Meeting[]} managableMeetings
  * @property {import("../../graphql/types").Municipality[]} municipalities
  * @property {import("../../graphql/types").Plan[]} plans

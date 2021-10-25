@@ -40,11 +40,11 @@ import Component from "vue-class-component";
 import Vue from "vue";
 import { Getter, Action } from "vuex-class";
 import { delayScrollToFocusedElement } from "../helpers/functions";
+import { Watch } from "vue-property-decorator";
 
 @Component()
 export default class MunicipalitySubscription extends Vue {
   @Action fetchMunicipalities;
-  @Action fetchUserSubscriptions;
   @Action updateUser;
   /** @type {import("../../graphql/types").UsersPermissionsUser} */
   @Getter user;
@@ -53,6 +53,12 @@ export default class MunicipalitySubscription extends Vue {
   /** @type {import("../../graphql/types").Municipality[]} */
   @Getter municipalities;
   subscribedMunicipalities = [];
+
+  @Watch("user")
+  handleUserChanged() {
+    this.subscribedMunicipalities =
+      this.user && this.user.subscribedMunicipalities;
+  }
 
   checkIfSubscribed(id) {
     return (

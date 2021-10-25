@@ -1,11 +1,5 @@
 <template>
   <v-container pa-md-12 pa-5>
-    <Login
-      @login="handleLogin"
-      :visible.sync="showLoginDialog"
-      persistent
-      @cancel="$router.go(-1)"
-    />
     <v-dialog v-model="showUnsubscribeDialog" max-width="420px">
       <v-card>
         <v-card-title>להסיר הכל?</v-card-title>
@@ -24,19 +18,13 @@
       </v-col>
     </v-row>
     <v-fade-transition>
-      <div v-if="showSubscriptions">
+      <div>
         <v-row>
           <v-col>
-            <TagSubscription :key="keyCommitteeSubscription" class="py-6" />
-            <MunicipalitySubscription
-              :key="keyLocationSubscription"
-              class="py-6"
-            />
-            <LocationSubscription
-              :key="keyMunicipalitySubscription"
-              class="py-6"
-            />
-            <CommitteeSubscription :key="keyTagSubscription" class="py-6" />
+            <TagSubscription class="py-6" />
+            <MunicipalitySubscription class="py-6" />
+            <LocationSubscription class="py-6" />
+            <CommitteeSubscription class="py-6" />
           </v-col>
         </v-row>
         <v-row dense>
@@ -68,55 +56,54 @@ import CommitteeSubscription from "../components/CommitteeSubscription.vue";
 import TagSubscription from "../components/TagSubscription.vue";
 import MunicipalitySubscription from "../components/MunicipalitySubscription.vue";
 import LocationSubscription from "../components/LocationSubscription.vue";
-import Login from "../components/Login.vue";
 import { Action, Getter, Mutation } from "vuex-class";
+import { Watch } from "vue-property-decorator";
 
 @Component({
   components: {
     CommitteeSubscription,
     LocationSubscription,
     TagSubscription,
-    MunicipalitySubscription,
-    Login
+    MunicipalitySubscription
   }
 })
 export default class Subscriptions extends Vue {
   @Action fetchUserSubscriptions;
   @Getter isLoading;
-  @Getter user;
+  @Getter isLoginVisible;
+  @Getter jwt;
   @Mutation setLoading;
-  keyCommitteeSubscription = "committee";
-  keyLocationSubscription = "location";
-  keyMunicipalitySubscription = "municipality";
-  keyTagSubscription = "tag";
-  showLoginDialog = false;
-  showSubscriptions = false;
+  @Mutation setLoginDialog;
   showUnsubscribeDialog = false;
 
+  @Watch("jwt")
+  async handleUserChanged() {
+    if (!this.jwt) {
+      return;
+    }
+    this.setLoading(true);
+    await this.fetchUserSubscriptions();
+    this.setLoginDialog(false);
+    this.setLoading(false);
+  }
+
+  @Watch("isLoginVisible")
+  async handleIsLoginVisibleChanged(value) {
+    if (!value && !this.jwt) {
+      this.$router.go(-1);
+    }
+  }
+
   async mounted() {
-    if (this.user) {
+    console.info("mounted", this.jwt);
+    if (this.jwt) {
+      console.info("has jwt");
       this.setLoading(true);
       await this.fetchUserSubscriptions();
       this.setLoading(false);
     } else {
-      this.showLoginDialog = true;
+      this.setLoginDialog(true);
     }
-    this.showSubscriptions = true;
-  }
-
-  async handleLogin() {
-    this.setLoading(true);
-    await this.fetchUserSubscriptions();
-    this.showLoginDialog = false;
-    this.remountChildren();
-    this.setLoading(false);
-  }
-
-  remountChildren() {
-    this.keyCommitteeSubscription += "1";
-    this.keyLocationSubscription += "1";
-    this.keyMunicipalitySubscription += "1";
-    this.keyTagSubscription += "1";
   }
 }
 </script>

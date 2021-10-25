@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Router from "vue-router";
-import { authEndpoint, lastPath } from "../helpers/constants";
+import store from "../plugins/store";
+import { authEndpoint } from "../helpers/constants";
 import Home from "../views/Home.vue";
 const About = () => import("../views/About.vue");
 const Login = () => import("../views/Login.vue");
@@ -52,15 +53,13 @@ export default new Router({
         {
           path: ":providerName",
           async beforeEnter(to, from, next) {
+            store.commit("setLoginDialog", false);
             const res = await fetch(
               `${authEndpoint}/${to.params.providerName}/callback${window.location.search}`
             );
             const json = await res.json();
-            next({
-              path: localStorage.getItem(lastPath) || "/",
-              query: { token: json.jwt }
-            });
-            localStorage.removeItem(lastPath);
+            await store.dispatch("refreshUser", json.jwt);
+            next(store.getters.lastPath || "/");
           }
         }
       ]

@@ -15,7 +15,7 @@
       </v-app-bar>
     </div>
     <Navigation :isOpen.sync="isNavOpen" />
-    <Login :visible.sync="isLoginVisible" @cancel="isLoginVisible = false" />
+    <Login />
     <v-snackbar
       :timeout="-1"
       :value="isLoginPromptVisible"
@@ -115,15 +115,16 @@ export default class App extends Vue {
   @Action refreshUser;
   @Action signOut;
   @Getter isLoading;
-  @Getter user;
+  @Getter jwt;
   @Mutation setLoading;
+  @Mutation setLoginDialog;
   isNavOpen = this.$vuetify.breakpoint.mdAndUp;
   isLoginPromptVisible = false;
-  isLoginVisible = false;
 
   @Watch("$route")
   async handleRouteChanged() {
     if (this.$route.query.token) {
+      this.setLoginDialog(false);
       await this.refreshUser(this.$route.query.token);
       this.$router.push({ query: undefined });
       return;
@@ -135,7 +136,7 @@ export default class App extends Vue {
 
   showLogin() {
     this.isLoginPromptVisible = false;
-    this.isLoginVisible = true;
+    this.setLoginDialog(true);
   }
 
   async mounted() {
@@ -145,7 +146,7 @@ export default class App extends Vue {
       await this.refreshUser();
       setTimeout(() => {
         this.isLoginPromptVisible =
-          !/^(\/login|\/subscriptions)/.test(this.$route.path) && !this.user;
+          !/^(\/login|\/subscriptions)/.test(this.$route.path) && !this.jwt;
       }, 5000);
     } catch (e) {
       this.signOut();

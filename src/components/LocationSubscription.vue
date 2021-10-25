@@ -136,6 +136,11 @@ export default class LocationSubscription extends Vue {
     }, 200);
   }
 
+  @Watch("user")
+  handleUserChanged() {
+    this.subscribedLocations = this.user && this.user.subscribedLocations;
+  }
+
   handleInputFocused() {
     if (this.$vuetify.breakpoint.smAndDown) {
       delayScrollToFocusedElement();
@@ -213,7 +218,7 @@ export default class LocationSubscription extends Vue {
     if (this.locationToAdd) {
       return [this.locationToAdd, ...this.subscribedLocations];
     }
-    return this.subscribedLocations;
+    return this.subscribedLocations || [];
   }
 }
 </script>

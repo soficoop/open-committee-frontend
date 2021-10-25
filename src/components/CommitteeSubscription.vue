@@ -47,6 +47,7 @@
 import Component from "vue-class-component";
 import Vue from "vue";
 import { Getter, Action } from "vuex-class";
+import { Watch } from "vue-property-decorator";
 
 @Component()
 export default class CommitteeSubscription extends Vue {
@@ -61,6 +62,11 @@ export default class CommitteeSubscription extends Vue {
   /** @type {import("../../graphql/types").Committee[]} */
   @Getter committees;
   subscribedCommittees = [];
+
+  @Watch("user")
+  handleUserChanged() {
+    this.subscribedCommittees = this.user && this.user.subscribedCommittees;
+  }
 
   checkIfSubscribed(committeeId) {
     return (

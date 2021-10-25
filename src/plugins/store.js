@@ -29,7 +29,9 @@ const storeOptions = {
     /**@type {import("../../graphql/types").Committee[]} */
     committees: [],
     isLoading: false,
+    isLoginVisible: false,
     jwt: "",
+    lastPath: "",
     /** @type {import("../../graphql/types").Meeting[]} */
     managableMeetings: [],
     /** @type {import("../../graphql/types").Municipality[]} */
@@ -53,6 +55,14 @@ const storeOptions = {
      */
     setCommittees(state, committees) {
       state.committees = committees;
+    },
+    /**
+     * Sets the visibility of the login dialog
+     * @param {import("../helpers/typings").StoreState} state
+     * @param {boolean} value
+     */
+    setLoginDialog(state, value) {
+      state.isLoginVisible = value;
     },
     /**
      * Sets the current municipalities by the given ones
@@ -121,6 +131,9 @@ const storeOptions = {
     setJwt(state, jwt) {
       state.jwt = jwt;
     },
+    setLastPath(state, lastPath) {
+      state.lastPath = lastPath;
+    },
     setManagableMeetings(state, meetings) {
       state.managableMeetings = meetings;
     },
@@ -135,8 +148,14 @@ const storeOptions = {
     isLoading(state) {
       return state.isLoading;
     },
+    isLoginVisible(state) {
+      return state.isLoginVisible;
+    },
     jwt(state) {
       return state.jwt;
+    },
+    lastPath(state) {
+      return state.lastPath;
     },
     managableMeetings(state) {
       return state.managableMeetings;
