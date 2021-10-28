@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Router from "vue-router";
 import { authEndpoint } from "../helpers/constants";
-import Home from "../views/Home.vue";
+import LandingPage from "../views/LandingPage.vue";
 const About = () => import("../views/About.vue");
 const Login = () => import("../views/Login.vue");
 const Meeting = () => import("../views/Meeting.vue");
@@ -26,22 +26,22 @@ export default new Router({
     {
       path: "/",
       name: "home",
-      component: Home
+      component: LandingPage,
     },
     {
       path: "/about",
       name: "about",
-      component: About
+      component: About,
     },
     {
       path: "/meeting/:meetingId",
       name: "meeting",
-      component: Meeting
+      component: Meeting,
     },
     {
       path: "/plan/:planId",
       name: "plan",
-      component: Plan
+      component: Plan,
     },
     {
       path: "/login",
@@ -57,62 +57,62 @@ export default new Router({
             );
             const json = await res.json();
             next({ path: "/", query: { token: json.jwt } });
-          }
-        }
-      ]
+          },
+        },
+      ],
     },
     {
       path: "/manage",
       name: "manage",
-      component: Manage
+      component: Manage,
     },
     {
       path: "/manage/meeting/new",
-      component: ManageMeeting
+      component: ManageMeeting,
     },
     {
       path: "/manage/meeting/:id",
-      component: ManageMeeting
+      component: ManageMeeting,
     },
     {
       path: "/user",
       name: "user",
-      component: User
+      component: User,
     },
     {
       path: "/user/me",
-      component: User
+      component: User,
     },
     {
       path: "/subscriptions",
-      component: Subscriptions
+      component: Subscriptions,
     },
     {
       path: "/reset-password/:code",
-      component: ResetPassword
+      component: ResetPassword,
     },
     {
       path: "/contact",
-      component: Contact
+      component: Contact,
     },
     {
       path: "/search",
-      component: Search
+      component: Search,
     },
     {
       path: "/terms",
-      component: Terms
+      component: Terms,
     },
     {
       path: "/privacy-policy",
-      component: PrivacyPolicy
+      component: PrivacyPolicy,
     },
     {
       path: "/unsubscribe",
-      component: Unsubscribe
-    }
+      component: Unsubscribe,
+    },
   ],
   scrollBehavior() {
     return { x: 0, y: 0 };
-  }
+  },
 });
