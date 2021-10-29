@@ -1,5 +1,5 @@
 <template>
-  <v-toolbar height="166px" color="#C2EBF3">
+  <v-app-bar app dense height="165px" color="lightBg" elevation="20">
     <v-spacer></v-spacer>
     <div>
       <router-link to="/">
@@ -15,18 +15,34 @@
     </div>
     <v-spacer></v-spacer>
     <div>
-      <router-link to="/about"> אודות </router-link>
-      <v-divider vertical></v-divider>
-      <router-link to="/#"> ישיבות קרובות </router-link>
-      <v-divider vertical></v-divider>
-      <router-link to="/contact"> צור קשר </router-link>
-      <v-divider vertical></v-divider>
-      <router-link to="/login"> התחברות </router-link>
+      <router-link to="/about">אודות</router-link>
+      <v-divider
+        vertical
+        :color="$vuetify.theme.themes.light.primary"
+      ></v-divider>
+      <router-link to="/#">ישיבות קרובות</router-link>
+      <v-divider
+        vertical
+        :color="$vuetify.theme.themes.light.primary"
+      ></v-divider>
+      <router-link to="/contact">צור קשר</router-link>
+      <v-divider
+        vertical
+        :color="$vuetify.theme.themes.light.primary"
+      ></v-divider>
+      <router-link to="/login">התחברות</router-link>
     </div>
     <v-spacer></v-spacer>
-    <div>Picture</div>
+    <div class="align-self-end">
+      <v-img
+        max-height="151px"
+        max-width="273px"
+        src="../assets/sun-cloud.svg"
+        alt="sun"
+      />
+    </div>
     <v-spacer></v-spacer>
-  </v-toolbar>
+  </v-app-bar>
 </template>
 
 <script>
@@ -42,8 +58,8 @@ a {
 }
 
 hr {
-  height: 20px;
+  height: 15px;
   margin: 0 2rem;
-  border: solid 1px black;
+  border: solid 0.5px black;
 }
 </style>

@@ -6,11 +6,11 @@ Vue.use(Vuetify);
 
 export default new Vuetify({
   icons: {
-    iconfont: "mdi"
+    iconfont: "mdi",
   },
   theme: {
     options: {
-      customProperties: true
+      customProperties: true,
     },
     themes: {
       light: {
@@ -18,15 +18,16 @@ export default new Vuetify({
         secondary: "#47AA7C",
         success: "#47AA7C",
         accent: "#45979B",
+        lightBg: "#C2EBF3",
         info: "#99B4BD",
         background: "#F2EEEA",
-        error: "#C05246"
-      }
-    }
+        error: "#C05246",
+      },
+    },
   },
   lang: {
     locales: { he },
-    current: "he"
+    current: "he",
   },
-  rtl: true
+  rtl: true,
 });
