@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar app dense height="165px" color="lightBg" elevation="20">
+  <v-app-bar dense height="165px" color="lighterBg">
     <v-spacer></v-spacer>
     <div>
       <router-link to="/">

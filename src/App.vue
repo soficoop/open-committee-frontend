@@ -1,7 +1,7 @@
 <template>
   <v-app class="background">
     <div v-if="$vuetify.breakpoint.mdAndDown" class="py-5 background">
-      <v-app-bar color="#C2EBF3" hide-on-scroll fixed height="85">
+      <v-app-bar color="lighterBg" fixed height="85">
         <v-fab-transition>
           <v-app-bar-nav-icon
             color="primary"
