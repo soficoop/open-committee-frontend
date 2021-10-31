@@ -1,64 +1,64 @@
 <template>
-  <v-container dir="rtl" fluid class="pa-0 text-center white">
-    <div class="grass-bg"></div>
-    <v-layout
-      justify-center
-      align-center
-      column
-      class="px-3 hero"
-      tag="section"
+  <v-container dir="rtl" fluid class="pa-0 text-center landing-page">
+    <v-container
+      fluid
+      :class="$vuetify.breakpoint.mdAndDown ? 'hero-mobile' : 'hero-desktop'"
     >
-      <h1
-        :class="
-          $vuetify.breakpoint.mdAndUp
-            ? 'h1-lg font-weight-bold primary--text'
-            : 'h1-sm font-weight-bold primary--text'
-        "
-      >
-        ברוכים הבאים
-        <br v-if="$vuetify.breakpoint.mdAndDown" />
-        <span class="secondary--text">לועדה פתוחה</span>
-      </h1>
-      <h2 class="primary--text text-h6 text-md-h4 font-weight-regular">
-        המקום שלך להשפיע על תהליכי תכנון ובניה בישוב, באזור ובמדינה
-      </h2>
-    </v-layout>
-    <v-layout column class="green mx-15">
-      <h4 class="white--text text-h5 text-md-h4 font-weight-bold my-3">
-        רוצה לדעת מה בונים לידך?
-      </h4>
-      <v-text-field
-        placeholder="הזן כתובת"
-        rounded
-        color="primary"
-        background-color="white"
-        :height="$vuetify.breakpoint.mdAndDown ? 41 : 60"
-        :class="
-          $vuetify.breakpoint.mdAndDown ? 'mb-0 p-relative' : 'mb-0 input-lg'
-        "
-      >
-        <template v-slot:append v-if="$vuetify.breakpoint.mdAndUp">
-          <v-btn
-            rounded
-            depressed
-            color="primary"
-            height="60px"
-            class="p-absolute btn-lg"
-          >
-            רוצה לראות מה בונים לידי
-          </v-btn>
-        </template>
-      </v-text-field>
-      <v-btn
-        v-if="$vuetify.breakpoint.mdAndDown"
-        rounded
-        x-small
-        max-width="50%"
-        class="primary white--text mx-auto mb-5 py-4"
-      >
-        רוצה לראות מה בונים לידי
-      </v-btn>
-    </v-layout>
+      <div class="px-3 header">
+        <h1
+          :class="
+            $vuetify.breakpoint.mdAndUp
+              ? 'h1-lg font-weight-bold primary--text px-16'
+              : 'h1-sm font-weight-bold primary--text'
+          "
+        >
+          ברוכים הבאים
+          <br v-if="$vuetify.breakpoint.mdAndDown" />
+          <span class="secondary--text">לועדה פתוחה</span>
+        </h1>
+        <h2 class="primary--text text-h6 text-md-h4 font-weight-regular px-10">
+          המקום שלך להשפיע על תהליכי תכנון ובניה בישוב, באזור ובמדינה
+        </h2>
+      </div>
+      <div>
+        <h4 class="white--text text-h5 text-md-h4 font-weight-bold">
+          רוצה לדעת מה בונים לידך?
+        </h4>
+        <v-text-field
+          placeholder="הזן כתובת"
+          rounded
+          color="primary"
+          background-color="white"
+          :height="$vuetify.breakpoint.mdAndDown ? 41 : 60"
+          :class="
+            $vuetify.breakpoint.mdAndDown
+              ? 'mb-0 mx-15 p-relative'
+              : 'mb-0 input-lg'
+          "
+        >
+          <template v-slot:append v-if="$vuetify.breakpoint.mdAndUp">
+            <v-btn
+              rounded
+              depressed
+              color="primary"
+              height="60px"
+              class="p-absolute btn-lg"
+            >
+              רוצה לראות מה בונים לידי
+            </v-btn>
+          </template>
+        </v-text-field>
+        <v-btn
+          v-if="$vuetify.breakpoint.mdAndDown"
+          rounded
+          x-small
+          max-width="50%"
+          class="primary white--text mx-auto mb-5 py-4"
+        >
+          רוצה לראות מה בונים לידי
+        </v-btn>
+      </div>
+    </v-container>
     <v-container
       tag="section"
       :class="$vuetify.breakpoint.xl ? 'px-12 xlg-container' : ''"
@@ -105,7 +105,7 @@
         </div>
       </v-layout>
     </v-container>
-    <v-container fluid class="p-relative of-hidden">
+    <v-container fluid class="p-relative">
       <v-container
         tag="section"
         :class="
@@ -231,8 +231,15 @@
         class="mobile-bulb"
       />
     </v-container>
-    <v-container fluid class="pt-0 register">
-      <h4 class="white--text text-h5 text-md-h4 font-weight-bold mt-15">
+    <v-container
+      fluid
+      :class="
+        $vuetify.breakpoint.mdAndDown
+          ? 'pt-0 register register-mobile'
+          : 'pt-0 register register-desktop'
+      "
+    >
+      <h4 class="white--text text-h5 text-md-h4 font-weight-bold mt-15 px-10">
         רוצה לקבל התראות מיידיות על תכנית בינוי ופיתוח בכל מקום שמעניין אותך
       </h4>
       <v-btn
@@ -240,8 +247,8 @@
         color="secondary"
         x-large
         class="register-btn mt-6 mb-15"
-        width="20%"
-        height="17%"
+        :width="$vuetify.breakpoint.mdAndDown ? '55vw' : '20vw'"
+        to="/login"
       >
         הרשם עכשיו
       </v-btn> </v-container
@@ -294,11 +301,28 @@ export default class LandingPage extends Vue {}
 </script>
 
 <style scoped>
-.hero {
-  z-index: 2;
-  position: relative;
-  height: 45vh;
-  background-color: var(--v-lightBg-base);
+.landing-page {
+  background: url("../assets/landingPageBg.png");
+}
+.hero-mobile {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 937px;
+  padding: 10vh 0 14vh 0;
+  background-image: url("../assets/Mask-mobile.png");
+  background-position: center -50px;
+}
+.hero-desktop {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
+  width: 100vw;
+  padding: 15vh 0 20vh 0;
+  background-image: url("../assets/Mask-desktop.png");
+  background-position: center;
+  background-size: cover;
 }
 .h1-lg {
   font-size: 73px;
@@ -323,9 +347,6 @@ export default class LandingPage extends Vue {}
 .card {
   z-index: 2;
 }
-.of-hidden {
-  overflow: hidden;
-}
 .bike-img {
   position: absolute;
   bottom: -2.5%;
@@ -339,8 +360,8 @@ export default class LandingPage extends Vue {}
 }
 .mobile-bulb {
   position: absolute;
-  bottom: -50%;
-  right: -170%;
+  bottom: -10%;
+  right: 0;
   z-index: 1;
 }
 .register {
@@ -350,13 +371,18 @@ export default class LandingPage extends Vue {}
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-image: url("../assets/blue-banner.svg");
   background-position-y: top;
-  background-position-x: 60%;
+  background-position-x: 40%;
   background-size: cover;
 }
+.register-mobile {
+  background-image: url("../assets/blue-banner-mobile.svg");
+}
+.register-desktop {
+  background-image: url("../assets/blue-banner.svg");
+}
 .register-btn {
-  font-size: 30px;
+  font-size: 1.5rem;
   font-family: "Assitant", sans-serif;
   letter-spacing: 1px;
 }

@@ -1,5 +1,13 @@
 <template>
-  <v-app-bar dense height="165px" color="lighterBg">
+  <v-app-bar dense app height="130px" color="lightBg" elevation="20">
+    <v-img
+      height="100px"
+      width="100px"
+      src="../assets/cloud.svg"
+      alt="cloud"
+      contain
+      class="cloud"
+    />
     <v-spacer></v-spacer>
     <div>
       <router-link to="/">
@@ -9,7 +17,7 @@
           alt="חיים וסביבה"
           class="ma-8"
           max-width="149px"
-          max-height="117px"
+          max-height="90px"
         ></v-img>
       </router-link>
     </div>
@@ -34,12 +42,7 @@
     </div>
     <v-spacer></v-spacer>
     <div class="align-self-end">
-      <v-img
-        max-height="151px"
-        max-width="273px"
-        src="../assets/sun-cloud.svg"
-        alt="sun"
-      />
+      <v-img height="115px" src="../assets/sun-cloud.svg" alt="sun" contain />
     </div>
     <v-spacer></v-spacer>
   </v-app-bar>
@@ -56,10 +59,17 @@ export default class Header extends Vue {}
 a {
   text-decoration: none;
 }
-
+a:hover {
+  text-decoration: underline;
+}
 hr {
   height: 15px;
   margin: 0 2rem;
   border: solid 0.5px black;
+}
+.cloud {
+  position: absolute;
+  right: -2%;
+  bottom: 1%;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <v-app class="background">
     <div v-if="$vuetify.breakpoint.mdAndDown" class="py-5 background">
-      <v-app-bar color="lighterBg" fixed height="85">
+      <v-app-bar color="lightBg" fixed height="70">
         <v-fab-transition>
           <v-app-bar-nav-icon
             color="primary"
@@ -18,7 +18,7 @@
             contain
             alt="חיים וסביבה"
             class="ma-8"
-            max-height="59px"
+            max-height="50px"
           ></v-img>
         </router-link>
       </v-app-bar>
