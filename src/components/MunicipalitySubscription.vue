@@ -40,11 +40,11 @@ import Component from "vue-class-component";
 import Vue from "vue";
 import { Getter, Action } from "vuex-class";
 import { delayScrollToFocusedElement } from "../helpers/functions";
+import { Watch } from "vue-property-decorator";
 
 @Component()
 export default class MunicipalitySubscription extends Vue {
   @Action fetchMunicipalities;
-  @Action fetchUserSubscriptions;
   @Action updateUser;
   /** @type {import("../../graphql/types").UsersPermissionsUser} */
   @Getter user;
@@ -54,10 +54,16 @@ export default class MunicipalitySubscription extends Vue {
   @Getter municipalities;
   subscribedMunicipalities = [];
 
+  @Watch("user")
+  handleUserChanged() {
+    this.subscribedMunicipalities =
+      this.user && this.user.subscribedMunicipalities;
+  }
+
   checkIfSubscribed(id) {
     return (
       this.subscribedMunicipalities &&
-      this.subscribedMunicipalities.some(m => m.id == id)
+      this.subscribedMunicipalities.some((m) => m.id == id)
     );
   }
 
@@ -79,19 +85,19 @@ export default class MunicipalitySubscription extends Vue {
   }
 
   async subscribeToMunicipalityBySearchString(value) {
-    const municipality = this.municipalities.find(m => m.id === value);
+    const municipality = this.municipalities.find((m) => m.id === value);
     await this.subscribeToMunicipality(municipality);
   }
 
   async updateSubscriptions() {
     await this.updateUser({
-      subscribedMunicipalities: this.subscribedMunicipalities.map(m => m.id)
+      subscribedMunicipalities: this.subscribedMunicipalities.map((m) => m.id),
     });
   }
 
   unsubscribeFromMunicipality(id) {
     this.subscribedMunicipalities.splice(
-      this.subscribedMunicipalities.findIndex(m => m.id == id),
+      this.subscribedMunicipalities.findIndex((m) => m.id == id),
       1
     );
     this.updateSubscriptions();
@@ -103,14 +109,14 @@ export default class MunicipalitySubscription extends Vue {
         offsetY: true,
         offsetOverflow: false,
         allowOverflow: true,
-        openOnFocus: true
+        openOnFocus: true,
       };
     }
     return undefined;
   }
   /** @type {import("../../graphql/types").Municipality[]} */
   get municipalitySuggestions() {
-    return this.municipalities.filter(m => !this.checkIfSubscribed(m.id));
+    return this.municipalities.filter((m) => !this.checkIfSubscribed(m.id));
   }
 }
 </script>

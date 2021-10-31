@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Router from "vue-router";
+import store from "../plugins/store";
 import { authEndpoint } from "../helpers/constants";
 import LandingPage from "../views/LandingPage.vue";
 const About = () => import("../views/About.vue");
@@ -56,7 +57,8 @@ export default new Router({
               `${authEndpoint}/${to.params.providerName}/callback${window.location.search}`
             );
             const json = await res.json();
-            next({ path: "/", query: { token: json.jwt } });
+            await store.dispatch("refreshUser", json.jwt);
+            next(store.getters.lastPath || "/");
           },
         },
       ],

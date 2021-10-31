@@ -47,6 +47,7 @@
 import Component from "vue-class-component";
 import Vue from "vue";
 import { Getter, Action } from "vuex-class";
+import { Watch } from "vue-property-decorator";
 
 @Component()
 export default class CommitteeSubscription extends Vue {
@@ -62,10 +63,15 @@ export default class CommitteeSubscription extends Vue {
   @Getter committees;
   subscribedCommittees = [];
 
+  @Watch("user")
+  handleUserChanged() {
+    this.subscribedCommittees = this.user && this.user.subscribedCommittees;
+  }
+
   checkIfSubscribed(committeeId) {
     return (
       this.subscribedCommittees &&
-      this.subscribedCommittees.some(committee => committee.id == committeeId)
+      this.subscribedCommittees.some((committee) => committee.id == committeeId)
     );
   }
 
@@ -80,22 +86,22 @@ export default class CommitteeSubscription extends Vue {
   }
 
   async subscribeToCommitteeBySearchString(value) {
-    const committee = this.committees.find(c => c.id === value);
+    const committee = this.committees.find((c) => c.id === value);
     await this.subscribeToCommittee(committee);
   }
 
   async updateSubscriptions() {
     await this.updateUser({
       subscribedCommittees: this.subscribedCommittees.map(
-        committee => committee.id
-      )
+        (committee) => committee.id
+      ),
     });
   }
 
   unsubscribeFromCommittee(committeeId) {
     this.subscribedCommittees.splice(
       this.subscribedCommittees.findIndex(
-        committee => committee.id == committeeId
+        (committee) => committee.id == committeeId
       ),
       1
     );
@@ -103,7 +109,7 @@ export default class CommitteeSubscription extends Vue {
   }
   /** @type {import("../../graphql/types").Committee[]} */
   get committeeSuggestions() {
-    return this.committees.filter(c => !this.checkIfSubscribed(c.id));
+    return this.committees.filter((c) => !this.checkIfSubscribed(c.id));
   }
 }
 </script>

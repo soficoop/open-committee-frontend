@@ -1,20 +1,5 @@
 <template>
   <v-container pa-md-12 pa-5>
-    <v-dialog v-model="showLoginDialog" persistent max-width="420px">
-      <v-card>
-        <v-card-title>
-          אינך מחובר/ת למערכת
-        </v-card-title>
-        <v-card-text>
-          על-מנת לצפות בהתראות ולהוסיף התראות חדשות, יש להתחבר למערכת
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn text @click="$router.go(-1)">ביטול</v-btn>
-          <v-btn text color="secondary" to="/login">קחו אותי להתחברות</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
     <v-dialog v-model="showUnsubscribeDialog" max-width="420px">
       <v-card>
         <v-card-title>להסיר הכל?</v-card-title>
@@ -33,7 +18,7 @@
       </v-col>
     </v-row>
     <v-fade-transition>
-      <div v-if="showSubscriptions">
+      <div>
         <v-row>
           <v-col>
             <TagSubscription class="py-6" />
@@ -72,33 +57,51 @@ import TagSubscription from "../components/TagSubscription.vue";
 import MunicipalitySubscription from "../components/MunicipalitySubscription.vue";
 import LocationSubscription from "../components/LocationSubscription.vue";
 import { Action, Getter, Mutation } from "vuex-class";
+import { Watch } from "vue-property-decorator";
 
 @Component({
   components: {
     CommitteeSubscription,
     LocationSubscription,
     TagSubscription,
-    MunicipalitySubscription
-  }
+    MunicipalitySubscription,
+  },
 })
 export default class Subscriptions extends Vue {
   @Action fetchUserSubscriptions;
   @Getter isLoading;
-  @Getter user;
+  @Getter isLoginVisible;
+  @Getter jwt;
   @Mutation setLoading;
-  showLoginDialog = false;
-  showSubscriptions = false;
+  @Mutation setLoginDialog;
   showUnsubscribeDialog = false;
 
+  @Watch("jwt")
+  async handleUserChanged() {
+    if (!this.jwt) {
+      return;
+    }
+    this.setLoading(true);
+    await this.fetchUserSubscriptions();
+    this.setLoginDialog(false);
+    this.setLoading(false);
+  }
+
+  @Watch("isLoginVisible")
+  async handleIsLoginVisibleChanged(value) {
+    if (!value && !this.jwt) {
+      this.$router.go(-1);
+    }
+  }
+
   async mounted() {
-    if (this.user) {
+    if (this.jwt) {
       this.setLoading(true);
       await this.fetchUserSubscriptions();
       this.setLoading(false);
     } else {
-      this.showLoginDialog = true;
+      this.setLoginDialog(true);
     }
-    this.showSubscriptions = true;
   }
 }
 </script>

@@ -12,13 +12,13 @@ import {
   getAllCommittees,
   getAllMunicipalities,
   findUser,
-  getAllTags
+  getAllTags,
 } from "../helpers/queries.js";
 import {
   updateMe,
   updateMyPlan,
   tokenSignIn,
-  tagPlan
+  tagPlan,
 } from "../helpers/mutations.js";
 
 Vue.use(Vuex);
@@ -29,7 +29,9 @@ const storeOptions = {
     /**@type {import("../../graphql/types").Committee[]} */
     committees: [],
     isLoading: false,
+    isLoginVisible: false,
     jwt: "",
+    lastPath: "",
     /** @type {import("../../graphql/types").Meeting[]} */
     managableMeetings: [],
     /** @type {import("../../graphql/types").Municipality[]} */
@@ -43,7 +45,7 @@ const storeOptions = {
     /**@type {import("../../graphql/types").Meeting[]} */
     upcomingMeetigs: [],
     /**@type {import("../../graphql/types").UsersPermissionsUser} */
-    user: null
+    user: null,
   },
   mutations: {
     /**
@@ -53,6 +55,14 @@ const storeOptions = {
      */
     setCommittees(state, committees) {
       state.committees = committees;
+    },
+    /**
+     * Sets the visibility of the login dialog
+     * @param {import("../helpers/typings").StoreState} state
+     * @param {boolean} value
+     */
+    setLoginDialog(state, value) {
+      state.isLoginVisible = value;
     },
     /**
      * Sets the current municipalities by the given ones
@@ -93,7 +103,7 @@ const storeOptions = {
      */
     setSelectedMeeting(state, meeting) {
       const meetingIndexInState = state.upcomingMeetigs.findIndex(
-        m => m.id == meeting.id
+        (m) => m.id == meeting.id
       );
       if (meeting.date > new Date()) {
         if (meetingIndexInState == -1) {
@@ -110,7 +120,7 @@ const storeOptions = {
      * @param {import("../../graphql/types").Plan} plan Plan to set as the selected plan
      */
     setSelectedPlan(state, plan) {
-      const planIndexInState = state.plans.findIndex(p => p.sid == plan.sid);
+      const planIndexInState = state.plans.findIndex((p) => p.sid == plan.sid);
       if (planIndexInState == -1) {
         state.plans.push(plan);
       } else {
@@ -121,12 +131,15 @@ const storeOptions = {
     setJwt(state, jwt) {
       state.jwt = jwt;
     },
+    setLastPath(state, lastPath) {
+      state.lastPath = lastPath;
+    },
     setManagableMeetings(state, meetings) {
       state.managableMeetings = meetings;
     },
     setLoading(state, value) {
       state.isLoading = value;
-    }
+    },
   },
   getters: {
     committees(state) {
@@ -135,8 +148,14 @@ const storeOptions = {
     isLoading(state) {
       return state.isLoading;
     },
+    isLoginVisible(state) {
+      return state.isLoginVisible;
+    },
     jwt(state) {
       return state.jwt;
+    },
+    lastPath(state) {
+      return state.lastPath;
     },
     managableMeetings(state) {
       return state.managableMeetings;
@@ -158,7 +177,7 @@ const storeOptions = {
     },
     user(state) {
       return state.user;
-    }
+    },
   },
   actions: {
     /**
@@ -188,7 +207,7 @@ const storeOptions = {
       let date = new Date();
       date.setHours(0);
       const res = await makeGqlRequest(getMeetings(date));
-      let meetings = res.meetings.filter(meeting => meeting.committee);
+      let meetings = res.meetings.filter((meeting) => meeting.committee);
       context.commit(storeOptions.mutations.setUpcomingMeetings.name, meetings);
     },
     /**
@@ -208,7 +227,7 @@ const storeOptions = {
       const res = await fetch(`${authEndpoint}/local/register`, {
         method: "post",
         body: JSON.stringify(user),
-        headers: { "Content-Type": "application/json" }
+        headers: { "Content-Type": "application/json" },
       });
       const result = await res.json();
       return !!result.user;
@@ -223,9 +242,9 @@ const storeOptions = {
         method: "post",
         body: JSON.stringify({
           identifier: user.email,
-          password: user.password
+          password: user.password,
         }),
-        headers: { "Content-Type": "application/json" }
+        headers: { "Content-Type": "application/json" },
       });
       const result = await res.json();
 
@@ -276,7 +295,7 @@ const storeOptions = {
       }
       const res = await makeGqlRequest(
         getCommitteeMeetings(
-          context.state.user.committees.map(committee => committee.id)
+          context.state.user.committees.map((committee) => committee.id)
         )
       );
       /** @type {import("../../graphql/types").Meeting[]} */
@@ -322,13 +341,13 @@ const storeOptions = {
           tagPlan,
           {
             planId: selectedPlan.id,
-            tags
+            tags,
           },
           context.state.jwt
         );
         context.commit(storeOptions.mutations.setSelectedPlan.name, {
           ...selectedPlan,
-          ...res.tagPlan.plan
+          ...res.tagPlan.plan,
         });
         return true;
       } catch (e) {
@@ -346,7 +365,7 @@ const storeOptions = {
         updateMe,
         {
           id: context.state.user.id,
-          data: updatedUserFields
+          data: updatedUserFields,
         },
         context.state.jwt
       );
@@ -392,18 +411,18 @@ const storeOptions = {
         subscribedCommittees: result.user.subscribedCommittees,
         subscribedLocations: result.user.subscribedLocations,
         subscribedMunicipalities: result.user.subscribedMunicipalities,
-        subscribedTags: result.user.subscribedTags
+        subscribedTags: result.user.subscribedTags,
       });
-    }
+    },
   },
   plugins: [
     createPersistedState({
       key: "open-committee",
       arrayMerger(store, saved) {
         return JSON.parse(JSON.stringify(saved), dateTimeRevive);
-      }
-    })
-  ]
+      },
+    }),
+  ],
 };
 
 export default new Vuex.Store(storeOptions);

@@ -16,9 +16,7 @@
           label="חיפוש"
           outlined
         ></v-autocomplete>
-        <span class="caption">
-          בהרצה, ייתכן שלא כל התכניות יישלחו
-        </span>
+        <span class="caption"> בהרצה, ייתכן שלא כל התכניות יישלחו </span>
       </v-col>
     </v-row>
     <v-row>
@@ -40,13 +38,13 @@
 <script>
 import Component from "vue-class-component";
 import Vue from "vue";
-import { Getter, Action } from "vuex-class";
+import { Getter, Action, Mutation } from "vuex-class";
 import { delayScrollToFocusedElement } from "../helpers/functions";
+import { Watch } from "vue-property-decorator";
 
 @Component()
 export default class TagSubscription extends Vue {
   @Action fetchTags;
-  @Action fetchUserSubscriptions;
   @Action updateUser;
   /**
    * @type {import("../../graphql/types").UsersPermissionsUser}
@@ -56,10 +54,18 @@ export default class TagSubscription extends Vue {
   @Getter jwt;
   /** @type {import("../../graphql/types").Tag[]} */
   @Getter tags;
+  @Mutation setLoginDialog;
   subscribedTags = [];
 
+  @Watch("user")
+  handleUserChanged() {
+    this.subscribedTags = this.user && this.user.subscribedTags;
+  }
+
   checkIfSubscribed(id) {
-    return this.subscribedTags && this.subscribedTags.some(tag => tag.id == id);
+    return (
+      this.subscribedTags && this.subscribedTags.some((tag) => tag.id == id)
+    );
   }
 
   handleInputFocused() {
@@ -79,19 +85,23 @@ export default class TagSubscription extends Vue {
   }
 
   async subscribeToTagBySearchString(value) {
-    const tag = this.tags.find(t => t.id === value);
+    if (!this.user) {
+      this.setLoginDialog(true);
+      return;
+    }
+    const tag = this.tags.find((t) => t.id === value);
     await this.subscribeToTag(tag);
   }
 
   async updateSubscriptions() {
     await this.updateUser({
-      subscribedTags: this.subscribedTags.map(tag => tag.id)
+      subscribedTags: this.subscribedTags.map((tag) => tag.id),
     });
   }
 
   unsubscribeFromTag(id) {
     this.subscribedTags.splice(
-      this.subscribedTags.findIndex(tag => tag.id == id),
+      this.subscribedTags.findIndex((tag) => tag.id == id),
       1
     );
     this.updateSubscriptions();
@@ -103,14 +113,14 @@ export default class TagSubscription extends Vue {
         offsetY: true,
         offsetOverflow: false,
         allowOverflow: true,
-        openOnFocus: true
+        openOnFocus: true,
       };
     }
     return undefined;
   }
   /** @type {import("../../graphql/types").Tag[]} */
   get tagSuggestions() {
-    return this.tags.filter(tag => !this.checkIfSubscribed(tag.id));
+    return this.tags.filter((tag) => !this.checkIfSubscribed(tag.id));
   }
 }
 </script>

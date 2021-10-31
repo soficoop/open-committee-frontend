@@ -4,7 +4,6 @@
       <v-app-bar color="lightBg" fixed height="70">
         <v-fab-transition>
           <v-app-bar-nav-icon
-            color="primary"
             @click="isNavOpen = true"
             v-if="$route.path == '/'"
           ></v-app-bar-nav-icon>
@@ -23,6 +22,8 @@
         </router-link>
       </v-app-bar>
     </div>
+    <Navigation :isOpen.sync="isNavOpen" />
+    <Login />
     <Navigation
       v-if="$vuetify.breakpoint.mdAndDown"
       :isOpen="isNavOpen"
@@ -110,6 +111,7 @@ body.using-mouse :focus {
 <script>
 import Navigation from "./components/Navigation";
 import Header from "./components/Header";
+import Login from "./components/Login";
 import Component from "vue-class-component";
 import Vue from "vue";
 import { Action, Getter, Mutation } from "vuex-class";
@@ -117,8 +119,9 @@ import { Watch } from "vue-property-decorator";
 
 @Component({
   components: {
-    Header,
     Navigation,
+    Login,
+    Header,
   },
 })
 export default class App extends Vue {
@@ -128,6 +131,7 @@ export default class App extends Vue {
   @Getter isLoading;
   @Getter user;
   @Mutation setLoading;
+  @Mutation setLoginDialog;
   isNavOpen = false;
   isLoginPromptVisible = false;
 
@@ -143,14 +147,9 @@ export default class App extends Vue {
     }
   }
 
-  goToLogin() {
+  showLogin() {
     this.isLoginPromptVisible = false;
-    this.$router.push({
-      name: "login",
-      params: {
-        tab: 1,
-      },
-    });
+    this.setLoginDialog(true);
   }
 
   async mounted() {
