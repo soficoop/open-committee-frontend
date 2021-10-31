@@ -24,7 +24,7 @@
         <h4 class="white--text text-h5 text-md-h4 font-weight-bold">
           רוצה לדעת מה בונים לידך?
         </h4>
-        <v-text-field
+        <v-combobox
           placeholder="הזן כתובת"
           rounded
           color="primary"
@@ -35,6 +35,10 @@
               ? 'mb-0 mx-15 p-relative'
               : 'mb-0 input-lg'
           "
+          :search-input.sync="searchText"
+          @keydown.enter="runSearch"
+          @change="handleSuggestionClicked"
+          :items="searchSuggestions"
         >
           <template v-slot:append v-if="$vuetify.breakpoint.mdAndUp">
             <v-btn
@@ -43,17 +47,19 @@
               color="primary"
               height="60px"
               class="p-absolute btn-lg"
+              @click="runSearch"
             >
               רוצה לראות מה בונים לידי
             </v-btn>
           </template>
-        </v-text-field>
+        </v-combobox>
         <v-btn
           v-if="$vuetify.breakpoint.mdAndDown"
           rounded
           x-small
           max-width="50%"
           class="primary white--text mx-auto mb-5 py-4"
+          @click="runSearch"
         >
           רוצה לראות מה בונים לידי
         </v-btn>
@@ -295,9 +301,58 @@
 <script>
 import Component from "vue-class-component";
 import Vue from "vue";
+import { Watch } from "vue-property-decorator";
+import { debounce, makeGqlRequest } from "../helpers/functions";
+import {
+  autocompletePlansAndComments,
+  // searchPlansAndComments
+} from "../helpers/queries";
 
 @Component()
-export default class LandingPage extends Vue {}
+export default class LandingPage extends Vue {
+  loading = false;
+  searchText = "";
+  searchSuggestions = [];
+
+  handleSuggestionClicked(suggestion) {
+    if (suggestion.value) {
+      this.$router.push(`/plan/${suggestion.value}`);
+    }
+  }
+
+  @Watch("searchText")
+  handleSearchTextChanged() {
+    debounce(this.autocompletePlansAndComments.bind(this), 100);
+  }
+
+  async autocompletePlansAndComments() {
+    if (!this.searchText) {
+      return;
+    }
+    this.loading = true;
+    const result = await makeGqlRequest(autocompletePlansAndComments, {
+      text: this.searchText,
+    });
+    this.searchSuggestions = [
+      ...result.plans.map((plan) => ({
+        text: plan.name,
+        value: plan.id,
+      })),
+      ...result.comments.map((comment) => ({
+        text: comment.title,
+        value: comment.plan.id,
+      })),
+    ];
+    this.loading = false;
+  }
+
+  runSearch() {
+    this.$router.push({
+      name: "search",
+      params: { searchText: this.searchText },
+    });
+  }
+}
 </script>
 
 <style scoped>
@@ -335,6 +390,10 @@ export default class LandingPage extends Vue {}
   width: 50vw;
   margin: 0 auto;
 }
+/*.v-select__slot {*/
+/*  position: static;*/
+/*  background-color: black;*/
+/*}*/
 .btn-lg {
   left: 0;
   top: 0;

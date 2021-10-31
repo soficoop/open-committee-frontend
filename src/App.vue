@@ -53,7 +53,7 @@
             class="my-2"
             depressed
             color="secondary"
-            @click="goToLogin"
+            @click="showLogin"
           >
             התחברות
           </v-btn>
@@ -163,7 +163,7 @@ export default class App extends Vue {
       }, 5000);
     } catch (e) {
       this.signOut();
-      this.goToLogin();
+      this.showLogin();
     } finally {
       this.setLoading(false);
     }
