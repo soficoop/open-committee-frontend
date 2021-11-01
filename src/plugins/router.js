@@ -56,6 +56,8 @@ export default new Router({
               `${authEndpoint}/${to.params.providerName}/callback${window.location.search}`
             );
             const json = await res.json();
+            // eslint-disable-next-line no-undef
+            fbq("trackCustom", "SubscribedCommittee");
             next({ path: "/", query: { token: json.jwt } });
           }
         }
