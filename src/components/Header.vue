@@ -23,22 +23,26 @@
     </div>
     <v-spacer></v-spacer>
     <div>
-      <router-link to="/about">אודות</router-link>
+      <router-link to="/about" class="font-weight-medium">אודות</router-link>
       <v-divider
         vertical
         :color="$vuetify.theme.themes.light.primary"
       ></v-divider>
-      <router-link to="/#">ישיבות קרובות</router-link>
+      <router-link to="/meetings" class="font-weight-medium"
+        >ישיבות קרובות</router-link
+      >
       <v-divider
         vertical
         :color="$vuetify.theme.themes.light.primary"
       ></v-divider>
-      <router-link to="/contact">צור קשר</router-link>
+      <router-link to="/contact" class="font-weight-medium"
+        >צור קשר</router-link
+      >
       <v-divider
         vertical
         :color="$vuetify.theme.themes.light.primary"
       ></v-divider>
-      <router-link to="/login">התחברות</router-link>
+      <router-link to="/login" class="font-weight-medium">התחברות</router-link>
     </div>
     <v-spacer></v-spacer>
     <div class="align-self-end">
@@ -57,15 +61,16 @@ export default class Header extends Vue {}
 </script>
 <style scoped>
 a {
+  font-size: 22px;
   text-decoration: none;
 }
 a:hover {
   text-decoration: underline;
 }
 hr {
-  height: 15px;
+  height: 25px;
   margin: 0 2rem;
-  border: solid 0.5px black;
+  border: solid 1.3px;
 }
 .cloud {
   position: absolute;
