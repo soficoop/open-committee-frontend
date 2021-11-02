@@ -134,7 +134,7 @@ export default class NewComment extends Vue {
       parent: this.parent,
       isPinned: false,
       isHidden: false,
-      files
+      files,
     });
     this.$emit("submit");
     this.isSubmitting = false;
@@ -152,7 +152,7 @@ export default class NewComment extends Vue {
     for (const file of this.files) {
       files.push(await uploadFile(file));
     }
-    return files.map(file => file.id);
+    return files.map((file) => file.id);
   }
 }
 </script>

@@ -1,7 +1,7 @@
 <template>
   <v-app class="background">
     <div v-if="$vuetify.breakpoint.mdAndDown" class="py-5 background">
-      <v-app-bar dark color="primary" hide-on-scroll fixed>
+      <v-app-bar color="lightBg" fixed height="70">
         <v-fab-transition>
           <v-app-bar-nav-icon
             @click="isNavOpen = true"
@@ -11,11 +11,25 @@
             <v-icon>mdi-arrow-right</v-icon>
           </v-btn>
         </v-fab-transition>
-        <v-toolbar-title @click="$router.push('/')">ועדה פתוחה</v-toolbar-title>
+        <router-link to="/">
+          <v-img
+            src="/img/logo@2x.png"
+            contain
+            alt="חיים וסביבה"
+            class="ma-8"
+            max-height="50px"
+          ></v-img>
+        </router-link>
       </v-app-bar>
     </div>
     <Navigation :isOpen.sync="isNavOpen" />
     <Login />
+    <Navigation
+      v-if="$vuetify.breakpoint.mdAndDown"
+      :isOpen="isNavOpen"
+      @openChanged="(value) => (isNavOpen = value)"
+    ></Navigation>
+    <Header v-if="$vuetify.breakpoint.mdAndUp"></Header>
     <v-snackbar
       :timeout="-1"
       :value="isLoginPromptVisible"
@@ -33,9 +47,7 @@
           >
             <v-icon>mdi-close</v-icon>
           </v-btn>
-          <h3 class="text-h6 my-2" tabindex="0">
-            התחברו כדי להישאר מעודכנים!
-          </h3>
+          <h3 class="text-h6 my-2" tabindex="0">התחברו כדי להישאר מעודכנים!</h3>
           <v-btn
             block
             class="my-2"
@@ -58,7 +70,7 @@
       <v-footer padless>
         <v-container>
           <v-row>
-            <v-col class="d-flex justify-center align-center ">
+            <v-col class="d-flex justify-center align-center">
               <h4
                 class="subtitle-1 primary--text text-center mx-3"
                 tabindex="0"
@@ -98,6 +110,7 @@ body.using-mouse :focus {
 
 <script>
 import Navigation from "./components/Navigation";
+import Header from "./components/Header";
 import Login from "./components/Login";
 import Component from "vue-class-component";
 import Vue from "vue";
@@ -107,29 +120,29 @@ import { Watch } from "vue-property-decorator";
 @Component({
   components: {
     Navigation,
-    Login
-  }
+    Login,
+    Header,
+  },
 })
 export default class App extends Vue {
   @Action fetchUpcomingMeetings;
   @Action refreshUser;
   @Action signOut;
   @Getter isLoading;
-  @Getter jwt;
+  @Getter user;
   @Mutation setLoading;
   @Mutation setLoginDialog;
-  isNavOpen = this.$vuetify.breakpoint.mdAndUp;
+  isNavOpen = false;
   isLoginPromptVisible = false;
 
   @Watch("$route")
   async handleRouteChanged() {
     if (this.$route.query.token) {
-      this.setLoginDialog(false);
       await this.refreshUser(this.$route.query.token);
       this.$router.push({ query: undefined });
       return;
     }
-    if (/^(\/login|\/subscriptions)/.test(this.$route.path)) {
+    if (this.$route.path.startsWith("/login")) {
       this.isLoginPromptVisible = false;
     }
   }
@@ -146,7 +159,7 @@ export default class App extends Vue {
       await this.refreshUser();
       setTimeout(() => {
         this.isLoginPromptVisible =
-          !/^(\/login|\/subscriptions)/.test(this.$route.path) && !this.jwt;
+          !this.$route.path.startsWith("/login") && !this.user;
       }, 5000);
     } catch (e) {
       this.signOut();

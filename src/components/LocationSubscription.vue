@@ -104,8 +104,8 @@ import { delayScrollToFocusedElement } from "../helpers/functions";
 
 @Component({
   components: {
-    Leaflet
-  }
+    Leaflet,
+  },
 })
 export default class LocationSubscription extends Vue {
   @Action updateUser;
@@ -152,7 +152,7 @@ export default class LocationSubscription extends Vue {
       lng: location.x,
       lat: location.y,
       name: location.label,
-      radius: 5
+      radius: 5,
     };
   }
 
@@ -177,19 +177,19 @@ export default class LocationSubscription extends Vue {
   }
 
   async subscribeToCommitteeBySearchString(value) {
-    const committee = this.committees.find(c => c.id === value);
+    const committee = this.committees.find((c) => c.id === value);
     await this.subscribeToCommittee(committee);
   }
 
   async updateSubscriptions() {
     await this.updateUser({
-      subscribedLocations: this.subscribedLocations
+      subscribedLocations: this.subscribedLocations,
     });
   }
 
   unsubscribeFromLocation(location) {
     this.subscribedLocations.splice(
-      this.subscribedLocations.findIndex(l => l.name === location.name),
+      this.subscribedLocations.findIndex((l) => l.name === location.name),
       1
     );
     this.updateSubscriptions();
@@ -202,7 +202,7 @@ export default class LocationSubscription extends Vue {
         offsetY: true,
         offsetOverflow: false,
         allowOverflow: true,
-        openOnFocus: true
+        openOnFocus: true,
       };
     }
     return undefined;

@@ -21,7 +21,7 @@
                   <img
                     src="/img/icons/google.svg"
                     height="24"
-                    style="vertical-align:middle"
+                    style="vertical-align: middle"
                     class="me-2"
                   />
                 </v-col>
@@ -138,7 +138,7 @@
                           v-model="forgotPasswordData.email"
                           :error="
                             forgotPasswordData.email.length > 0 &&
-                              !isEmailValid(forgotPasswordData.email)
+                            !isEmailValid(forgotPasswordData.email)
                           "
                           :error-messages="
                             forgotPasswordData.email.length > 0 &&
@@ -214,7 +214,7 @@ import Vue from "vue";
 import { Action, Mutation, Getter } from "vuex-class";
 import {
   sendForgotPasswordEmail,
-  checkIfEmailIsValid
+  checkIfEmailIsValid,
 } from "../helpers/functions";
 import { apiEndpoint } from "../helpers/constants";
 
@@ -228,11 +228,11 @@ export default class Login extends Vue {
   loginData = {
     email: "",
     password: "",
-    showPassword: false
+    showPassword: false,
   };
   forgotPasswordData = {
     email: "",
-    mailSent: ""
+    mailSent: "",
   };
   authenticationFailed = false;
   userIsNotConfirmedMsg = "";

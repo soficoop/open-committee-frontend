@@ -64,8 +64,8 @@ import { Watch } from "vue-property-decorator";
     CommitteeSubscription,
     LocationSubscription,
     TagSubscription,
-    MunicipalitySubscription
-  }
+    MunicipalitySubscription,
+  },
 })
 export default class Subscriptions extends Vue {
   @Action fetchUserSubscriptions;

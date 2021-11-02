@@ -43,7 +43,7 @@ import Vue from "vue";
 import { Getter, Action } from "vuex-class";
 
 @Component({
-  props: { isOpen: Boolean }
+  props: { isOpen: Boolean },
 })
 export default class Navigation extends Vue {
   @Getter jwt;
@@ -60,7 +60,7 @@ export default class Navigation extends Vue {
         to: "/login",
         visible() {
           return !this.jwt;
-        }
+        },
       },
       {
         icon: "mdi-account",
@@ -68,7 +68,7 @@ export default class Navigation extends Vue {
         to: "/user/me",
         visible() {
           return !!this.jwt && !!this.user;
-        }
+        },
       },
       {
         icon: "mdi-bell",
@@ -76,7 +76,7 @@ export default class Navigation extends Vue {
         to: "/subscriptions",
         visible() {
           return !!this.jwt;
-        }
+        },
       },
       { icon: "mdi-school", text: "אודות", to: "/about" },
       { icon: "mdi-email-variant", text: "צרו קשר", to: "/contact" },
@@ -86,11 +86,11 @@ export default class Navigation extends Vue {
         to: "/manage",
         visible() {
           return (
-            (this.$vuetify.breakpoint.mdAndUp &&
+            this.$vuetify.breakpoint.mdAndUp &&
             this.user &&
-            this.user.role.name == "Administrator")
+            this.user.role.name == "Administrator"
           );
-        }
+        },
       },
       {
         icon: "mdi-logout",
@@ -101,14 +101,14 @@ export default class Navigation extends Vue {
         },
         click() {
           this.signOut();
-        }
-      }
+        },
+      },
     ];
   }
 
   get visibleNavItems() {
     return this.navItems.filter(
-      n => n.visible == null || n.visible.apply(this)
+      (n) => n.visible == null || n.visible.apply(this)
     );
   }
 

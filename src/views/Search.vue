@@ -1,5 +1,5 @@
 <template>
-  <v-container class="pa-md-12">
+  <v-container class="pt-10 pa-md-12">
     <v-row wrap align-content-space-around>
       <v-col cols="12">
         <h1 class="display-1 font-weight-black primary--text" tabindex="0">
@@ -26,6 +26,7 @@
           hide-no-data
           :append-icon="$vuetify.breakpoint.smAndDown ? 'mdi-magnify' : null"
           :search-input.sync="searchText"
+          v-model="searchText"
           @keydown.enter="runSearch"
           @change="handleSuggestionClicked"
           :items="searchSuggestions"
@@ -103,13 +104,13 @@ import { PlansOrComments } from "../helpers/enums";
 import { debounce, makeGqlRequest, mapApiComments } from "../helpers/functions";
 import {
   autocompletePlansAndComments,
-  searchPlansAndComments
+  searchPlansAndComments,
 } from "../helpers/queries";
 import PlanCards from "../components/PlanCards.vue";
 import Comment from "../components/Comment.vue";
 import { Watch } from "vue-property-decorator";
 @Component({
-  components: { PlanCards, Comment }
+  components: { PlanCards, Comment },
 })
 export default class Search extends Vue {
   comments = [];
@@ -122,7 +123,7 @@ export default class Search extends Vue {
   searchModes = [
     { text: "הכל", value: PlansOrComments.BOTH },
     { text: "תכניות", value: PlansOrComments.PLANS },
-    { text: "התייחסויות", value: PlansOrComments.COMMENTS }
+    { text: "התייחסויות", value: PlansOrComments.COMMENTS },
   ];
   searchSuggestions = [];
   searchText = "";
@@ -133,17 +134,17 @@ export default class Search extends Vue {
     }
     this.loading = true;
     const result = await makeGqlRequest(autocompletePlansAndComments, {
-      text: this.searchText
+      text: this.searchText,
     });
     this.searchSuggestions = [
-      ...result.plans.map(plan => ({
+      ...result.plans.map((plan) => ({
         text: plan.name,
-        value: plan.id
+        value: plan.id,
       })),
-      ...result.comments.map(comment => ({
+      ...result.comments.map((comment) => ({
         text: comment.title,
-        value: comment.plan.id
-      }))
+        value: comment.plan.id,
+      })),
     ];
     this.loading = false;
   }
@@ -153,7 +154,7 @@ export default class Search extends Vue {
     this.plansCount = null;
     const result = await makeGqlRequest(searchPlansAndComments(mode), {
       text: this.searchText || "",
-      start
+      start,
     });
     if (mode !== PlansOrComments.COMMENTS) {
       this.plans.push(...result.plans);
@@ -190,6 +191,10 @@ export default class Search extends Vue {
   }
 
   mounted() {
+    const { searchText } = this.$router.currentRoute.params;
+    if (searchText) {
+      this.searchText = searchText;
+    }
     this.runSearch();
   }
 
