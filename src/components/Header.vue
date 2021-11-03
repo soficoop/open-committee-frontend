@@ -28,8 +28,8 @@
         vertical
         :color="$vuetify.theme.themes.light.primary"
       ></v-divider>
-      <router-link to="/meetings" class="font-weight-medium"
-        >ישיבות קרובות</router-link
+      <router-link to="/subscriptions" class="font-weight-medium"
+        >ההתראות שלי</router-link
       >
       <v-divider
         vertical
@@ -42,7 +42,12 @@
         vertical
         :color="$vuetify.theme.themes.light.primary"
       ></v-divider>
-      <router-link to="/login" class="font-weight-medium">התחברות</router-link>
+      <router-link v-if="!user" to="/login" class="font-weight-medium">
+        התחברות
+      </router-link>
+      <router-link v-else @click="signOut" to="/" class="font-weight-medium">
+        התנתקות
+      </router-link>
     </div>
     <v-spacer></v-spacer>
     <div class="align-self-end">
@@ -55,9 +60,13 @@
 <script>
 import Component from "vue-class-component";
 import Vue from "vue";
+import { Action, Getter } from "vuex-class";
 
 @Component()
-export default class Header extends Vue {}
+export default class Header extends Vue {
+  @Getter user;
+  @Action signOut;
+}
 </script>
 <style scoped>
 a {

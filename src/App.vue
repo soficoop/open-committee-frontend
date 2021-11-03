@@ -31,6 +31,7 @@
     ></Navigation>
     <Header v-if="$vuetify.breakpoint.mdAndUp"></Header>
     <v-snackbar
+      v-if="this.$route.path !== '/'"
       :timeout="-1"
       :value="isLoginPromptVisible"
       bottom
@@ -159,7 +160,9 @@ export default class App extends Vue {
       await this.refreshUser();
       setTimeout(() => {
         this.isLoginPromptVisible =
-          !this.$route.path.startsWith("/login") && !this.user;
+          this.$route.path !== "/" &&
+          !this.$route.path.startsWith("/login") &&
+          !this.user;
       }, 5000);
     } catch (e) {
       this.signOut();
