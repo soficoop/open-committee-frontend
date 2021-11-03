@@ -45,7 +45,9 @@
       <router-link v-if="!user" to="/login" class="font-weight-medium">
         התחברות
       </router-link>
-      <router-link v-else @click="signOut" to="/"> התנתקות </router-link>
+      <router-link v-else @click="signOut" to="/" class="font-weight-medium">
+        התנתקות
+      </router-link>
     </div>
     <v-spacer></v-spacer>
     <div class="align-self-end">
