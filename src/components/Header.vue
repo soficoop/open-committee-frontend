@@ -42,12 +42,12 @@
         vertical
         :color="$vuetify.theme.themes.light.primary"
       ></v-divider>
-      <router-link v-if="!user" to="/login" class="font-weight-medium">
+      <router-link v-if="!isSignedIn" to="/login" class="font-weight-medium">
         התחברות
       </router-link>
-      <router-link v-else @click="signOut" to="/" class="font-weight-medium">
-        התנתקות
-      </router-link>
+      <span v-else @click="clickSignOut()">
+        <router-link to="/" class="font-weight-medium"> התנתקות </router-link>
+      </span>
     </div>
     <v-spacer></v-spacer>
     <div class="align-self-end">
@@ -66,6 +66,14 @@ import { Action, Getter } from "vuex-class";
 export default class Header extends Vue {
   @Getter user;
   @Action signOut;
+
+  get isSignedIn() {
+    return this.user !== null;
+  }
+
+  clickSignOut() {
+    this.signOut();
+  }
 }
 </script>
 <style scoped>
