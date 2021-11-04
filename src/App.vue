@@ -160,9 +160,7 @@ export default class App extends Vue {
       await this.refreshUser();
       setTimeout(() => {
         this.isLoginPromptVisible =
-          this.$route.path !== "/" &&
-          !this.$route.path.startsWith("/login") &&
-          !this.user;
+          !this.$route.path.startsWith("/login") && !this.user;
       }, 5000);
     } catch (e) {
       this.signOut();
