@@ -175,6 +175,25 @@ export const updateMe = `mutation UpdateMe(
         id
         sid
       }
+      subscribedCommittees {
+        id
+        sid
+      }
+      subscribedTags {
+        id
+        name
+      }
+      subscribedMunicipalities {
+        id
+        sid
+      }
+      subscribedLocations {
+        id
+        name
+        lat
+        lng
+        radius
+      }
     }
   }
 }`;
