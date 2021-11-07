@@ -27,7 +27,7 @@
     <Navigation
       v-if="$vuetify.breakpoint.mdAndDown"
       :isOpen="isNavOpen"
-      @openChanged="(value) => (isNavOpen = value)"
+      @openChanged="value => (isNavOpen = value)"
     ></Navigation>
     <Header v-if="$vuetify.breakpoint.mdAndUp"></Header>
     <v-snackbar
@@ -122,8 +122,8 @@ import { Watch } from "vue-property-decorator";
   components: {
     Navigation,
     Login,
-    Header,
-  },
+    Header
+  }
 })
 export default class App extends Vue {
   @Action fetchUpcomingMeetings;

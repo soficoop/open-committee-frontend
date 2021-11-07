@@ -97,7 +97,7 @@
                   v-model="signupData.email"
                   :error="
                     signupData.email.length > 0 &&
-                    !isEmailValid(signupData.email)
+                      !isEmailValid(signupData.email)
                   "
                   autocomplete="email"
                   :error-messages="
@@ -127,7 +127,7 @@
                     v-model="signupData.firstName"
                     name="fname"
                     class="pl-1"
-                    :rules="[(value) => !!value || 'שדה חובה']"
+                    :rules="[value => !!value || 'שדה חובה']"
                   >
                   </v-text-field>
                   <v-text-field
@@ -135,7 +135,7 @@
                     label="שם משפחה"
                     v-model="signupData.lastName"
                     name="lname"
-                    :rules="[(value) => !!value || 'שדה חובה']"
+                    :rules="[value => !!value || 'שדה חובה']"
                   ></v-text-field>
                 </v-layout>
                 <v-text-field
@@ -266,7 +266,7 @@
                               v-model="forgotPasswordData.email"
                               :error="
                                 forgotPasswordData.email.length > 0 &&
-                                !isEmailValid(forgotPasswordData.email)
+                                  !isEmailValid(forgotPasswordData.email)
                               "
                               :error-messages="
                                 forgotPasswordData.email.length > 0 &&
@@ -333,7 +333,7 @@ import Vue from "vue";
 import { Action, Mutation, Getter } from "vuex-class";
 import {
   sendForgotPasswordEmail,
-  checkIfEmailIsValid,
+  checkIfEmailIsValid
 } from "../helpers/functions";
 import { apiEndpoint } from "../helpers/constants";
 
@@ -343,7 +343,7 @@ export default class Login extends Vue {
   loginData = {
     email: "",
     password: "",
-    showPassword: false,
+    showPassword: false
   };
   signupData = {
     email: "",
@@ -353,11 +353,11 @@ export default class Login extends Vue {
     lastName: "",
     city: "",
     organization: "",
-    job: "",
+    job: ""
   };
   forgotPasswordData = {
     email: "",
-    mailSent: "",
+    mailSent: ""
   };
   tab = 0;
   authenticationFailed = false;
