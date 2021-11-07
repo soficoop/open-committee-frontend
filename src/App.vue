@@ -1,7 +1,7 @@
 <template>
   <v-app class="background">
-    <div v-if="$vuetify.breakpoint.mdAndDown" class="py-5 background">
-      <v-app-bar color="lightBg" fixed height="70">
+    <div v-if="$vuetify.breakpoint.mdAndDown" class="background">
+      <v-app-bar app color="lightBg" fixed height="70">
         <v-fab-transition>
           <v-app-bar-nav-icon
             @click="isNavOpen = true"

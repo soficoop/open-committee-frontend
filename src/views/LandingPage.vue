@@ -132,8 +132,8 @@
         "
       >
         <h4 class="text-h5 text-md-h4 font-weight-bold primary--text my-8">
-          מה היתרונות של ועדה
-          <span class="secondary--text">פתוחה</span>
+          מה היתרונות של
+          <span class="secondary--text">ועדה פתוחה</span>
         </h4>
         <v-row :class="$vuetify.breakpoint.mdAndDown ? '' : 'mb-16'">
           <v-col cols="6" md="3" v-for="card in cards" :key="card.text">
@@ -194,7 +194,7 @@
         x-large
         class="register-btn mt-6 mb-15"
         :width="$vuetify.breakpoint.mdAndDown ? '55vw' : '20vw'"
-        to="/login"
+        to="/subscriptions"
       >
         הרשם עכשיו
       </v-btn> </v-container
