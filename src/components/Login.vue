@@ -51,7 +51,7 @@
             <v-btn block large color="accent" @click="signUp">
               הרשמה באמצעות אימייל
             </v-btn>
-            <v-row class="my-1">
+            <!-- <v-row class="my-1">
               <v-col class="d-flex align-center"><v-divider /></v-col>
               <v-col class="d-flex shrink">
                 <span>או</span>
@@ -187,7 +187,7 @@
               :disabled="!canLogin"
             >
               התחברות
-            </v-btn>
+            </v-btn> -->
             <v-expand-transition>
               <v-col v-if="authenticationFailed">
                 <p class="error--text my-1">

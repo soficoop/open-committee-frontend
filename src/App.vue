@@ -30,7 +30,7 @@
       @openChanged="value => (isNavOpen = value)"
     ></Navigation>
     <Header v-if="$vuetify.breakpoint.mdAndUp"></Header>
-    <v-snackbar
+    <!-- <v-snackbar
       v-if="this.$route.path !== '/'"
       :timeout="-1"
       :value="isLoginPromptVisible"
@@ -60,7 +60,7 @@
           </v-btn>
         </div>
       </v-row>
-    </v-snackbar>
+    </v-snackbar> -->
     <v-main class="background">
       <v-overlay v-model="isLoading" z-index="99999999">
         <v-progress-circular indeterminate size="64"></v-progress-circular>
