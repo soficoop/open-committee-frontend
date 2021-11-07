@@ -48,6 +48,9 @@
                 <v-col cols="3" />
               </v-row>
             </v-btn>
+            <v-btn block large color="accent" @click="signUp">
+              הרשמה באמצעות אימייל
+            </v-btn>
             <v-row class="my-1">
               <v-col class="d-flex align-center"><v-divider /></v-col>
               <v-col class="d-flex shrink">
@@ -138,7 +141,7 @@
                           v-model="forgotPasswordData.email"
                           :error="
                             forgotPasswordData.email.length > 0 &&
-                            !isEmailValid(forgotPasswordData.email)
+                              !isEmailValid(forgotPasswordData.email)
                           "
                           :error-messages="
                             forgotPasswordData.email.length > 0 &&
@@ -214,7 +217,7 @@ import Vue from "vue";
 import { Action, Mutation, Getter } from "vuex-class";
 import {
   sendForgotPasswordEmail,
-  checkIfEmailIsValid,
+  checkIfEmailIsValid
 } from "../helpers/functions";
 import { apiEndpoint } from "../helpers/constants";
 
@@ -228,11 +231,11 @@ export default class Login extends Vue {
   loginData = {
     email: "",
     password: "",
-    showPassword: false,
+    showPassword: false
   };
   forgotPasswordData = {
     email: "",
-    mailSent: "",
+    mailSent: ""
   };
   authenticationFailed = false;
   userIsNotConfirmedMsg = "";
@@ -281,6 +284,11 @@ export default class Login extends Vue {
     this.dialog = false;
     this.forgotPasswordData.mailSent = "";
     this.forgotPasswordData.email = "";
+  }
+
+  signUp() {
+    this.setLoginDialog(false);
+    this.$router.push("/login");
   }
 
   get canLogin() {

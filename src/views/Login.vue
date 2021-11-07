@@ -93,7 +93,8 @@
               </div>
               <div v-else>
                 <v-text-field
-                  label="אימייל"
+                  label="אימייל *"
+                  required
                   v-model="signupData.email"
                   :error="
                     signupData.email.length > 0 &&
@@ -108,7 +109,7 @@
                   "
                 ></v-text-field>
                 <v-text-field
-                  label="סיסמה"
+                  label="סיסמה *"
                   hint="לפחות 8 תווים"
                   v-model="signupData.password"
                   autocomplete="new-password"
@@ -123,7 +124,7 @@
                 ></v-text-field>
                 <v-layout>
                   <v-text-field
-                    label="שם פרטי"
+                    label="שם פרטי *"
                     v-model="signupData.firstName"
                     name="fname"
                     class="pl-1"
@@ -132,24 +133,24 @@
                   </v-text-field>
                   <v-text-field
                     class="pr-1"
-                    label="שם משפחה"
+                    label="שם משפחה *"
                     v-model="signupData.lastName"
                     name="lname"
                     :rules="[value => !!value || 'שדה חובה']"
                   ></v-text-field>
                 </v-layout>
                 <v-text-field
-                  label="עיר מגורים"
+                  label="עיר מגורים (רשות)"
                   v-model="signupData.city"
                   name="city"
                 ></v-text-field>
                 <v-text-field
-                  label="ארגון"
+                  label="ארגון (רשות)"
                   v-model="signupData.organization"
                   name="organization"
                 ></v-text-field>
                 <v-text-field
-                  label="תפקיד"
+                  label="תפקיד (רשות)"
                   v-model="signupData.job"
                   name="job"
                 ></v-text-field>
