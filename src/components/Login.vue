@@ -200,7 +200,7 @@
         <v-row dense no-gutters>
           <v-col>
             <p class="caption text-center text-decoration-underline">
-              <a @click="setLoginDialog(false)" tabindex="0">
+              <a @click="closeLoginDialog" tabindex="0">
                 לא תודה, אולי בהמשך
               </a>
             </p>
@@ -284,6 +284,13 @@ export default class Login extends Vue {
     this.dialog = false;
     this.forgotPasswordData.mailSent = "";
     this.forgotPasswordData.email = "";
+  }
+
+  closeLoginDialog() {
+    this.setLoginDialog(false);
+    if (this.$route.meta.isUserArea === true) {
+      this.$router.go(-1);
+    }
   }
 
   signUp() {

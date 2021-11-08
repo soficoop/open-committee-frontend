@@ -96,7 +96,10 @@ export default new Router({
     },
     {
       path: "/subscriptions",
-      component: Subscriptions
+      component: Subscriptions,
+      meta: {
+        isUserArea: true
+      }
     },
     {
       path: "/reset-password/:code",
