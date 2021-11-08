@@ -53,11 +53,14 @@ export default new Router({
         {
           path: ":providerName",
           async beforeEnter(to, from, next) {
+            store.commit("setLoginDialog", false);
+            store.commit("setLoading", true);
             const res = await fetch(
               `${authEndpoint}/${to.params.providerName}/callback${window.location.search}`
             );
             const json = await res.json();
             await store.dispatch("refreshUser", json.jwt);
+            store.commit("setLoading", false);
             next(store.getters.lastPath || "/");
           }
         }
