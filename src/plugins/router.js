@@ -61,6 +61,12 @@ export default new Router({
             const json = await res.json();
             await store.dispatch("refreshUser", json.jwt);
             store.commit("setLoading", false);
+            // eslint-disable-next-line no-undef
+            fbq("trackCustom", "SubscribedCommittee");
+            // eslint-disable-next-line no-undef
+            gtag("event", "conversion", {
+              send_to: "AW-731165849/dlbWCKDpmf4CEJnp0twC"
+            });
             next(store.getters.lastPath || "/");
           }
         }

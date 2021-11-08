@@ -397,6 +397,10 @@ export default class Login extends Vue {
       try {
         // eslint-disable-next-line no-undef
         fbq("trackCustom", "SubscribedCommittee");
+        // eslint-disable-next-line no-undef
+        gtag("event", "conversion", {
+          send_to: "AW-731165849/dlbWCKDpmf4CEJnp0twC"
+        });
       } catch (e) {
         console.warn(e);
       }
