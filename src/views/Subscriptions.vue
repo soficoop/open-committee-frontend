@@ -64,8 +64,8 @@ import { Watch } from "vue-property-decorator";
     CommitteeSubscription,
     LocationSubscription,
     TagSubscription,
-    MunicipalitySubscription,
-  },
+    MunicipalitySubscription
+  }
 })
 export default class Subscriptions extends Vue {
   @Action fetchUserSubscriptions;
@@ -85,13 +85,6 @@ export default class Subscriptions extends Vue {
     await this.fetchUserSubscriptions();
     this.setLoginDialog(false);
     this.setLoading(false);
-  }
-
-  @Watch("isLoginVisible")
-  async handleIsLoginVisibleChanged(value) {
-    if (!value && !this.jwt) {
-      this.$router.go(-1);
-    }
   }
 
   async mounted() {
