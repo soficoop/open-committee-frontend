@@ -55,7 +55,7 @@
       <v-fade-transition mode="out-in">
         <router-view class="flex-grow-1"></router-view>
       </v-fade-transition>
-      <v-footer padless>
+      <v-footer padless v-if="!organizationMode">
         <v-container>
           <v-row>
             <v-col class="d-flex justify-center align-center ">
@@ -103,6 +103,7 @@ import Component from "vue-class-component";
 import Vue from "vue";
 import { Action, Getter, Mutation } from "vuex-class";
 import { Watch } from "vue-property-decorator";
+import { isOrganizationMode } from "./helpers/constants";
 
 @Component({
   components: {
@@ -120,6 +121,7 @@ export default class App extends Vue {
   @Mutation setLoginDialog;
   isNavOpen = this.$vuetify.breakpoint.mdAndUp;
   isLoginPromptVisible = false;
+  organizationMode = isOrganizationMode;
 
   @Watch("$route")
   async handleRouteChanged() {

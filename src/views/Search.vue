@@ -108,6 +108,8 @@ import {
 import PlanCards from "../components/PlanCards.vue";
 import Comment from "../components/Comment.vue";
 import { Watch } from "vue-property-decorator";
+import { Getter } from "vuex-class";
+
 @Component({
   components: { PlanCards, Comment }
 })
@@ -126,6 +128,7 @@ export default class Search extends Vue {
   ];
   searchSuggestions = [];
   searchText = "";
+  @Getter jwt;
 
   async autocompletePlansAndComments() {
     if (!this.searchText) {
@@ -151,10 +154,14 @@ export default class Search extends Vue {
   async fetchPlansAndComments(mode, start) {
     this.commentsCount = null;
     this.plansCount = null;
-    const result = await makeGqlRequest(searchPlansAndComments(mode), {
-      text: this.searchText || "",
-      start
-    });
+    const result = await makeGqlRequest(
+      searchPlansAndComments(mode),
+      {
+        text: this.searchText || "",
+        start
+      },
+      this.jwt
+    );
     if (mode !== PlansOrComments.COMMENTS) {
       this.plans.push(...result.plans);
       this.plansCount = this.searchText

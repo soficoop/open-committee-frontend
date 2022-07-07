@@ -22,8 +22,8 @@
         <v-row>
           <v-col>
             <TagSubscription class="py-6" />
-            <MunicipalitySubscription class="py-6" />
-            <LocationSubscription class="py-6" />
+            <MunicipalitySubscription v-if="!organizationMode" class="py-6" />
+            <LocationSubscription v-if="!organizationMode" class="py-6" />
             <CommitteeSubscription class="py-6" />
           </v-col>
         </v-row>
@@ -58,6 +58,7 @@ import MunicipalitySubscription from "../components/MunicipalitySubscription.vue
 import LocationSubscription from "../components/LocationSubscription.vue";
 import { Action, Getter, Mutation } from "vuex-class";
 import { Watch } from "vue-property-decorator";
+import { isOrganizationMode } from "../helpers/constants";
 
 @Component({
   components: {
@@ -75,6 +76,7 @@ export default class Subscriptions extends Vue {
   @Mutation setLoading;
   @Mutation setLoginDialog;
   showUnsubscribeDialog = false;
+  organizationMode = isOrganizationMode;
 
   @Watch("jwt")
   async handleUserChanged() {

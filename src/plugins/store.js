@@ -185,7 +185,11 @@ const storeOptions = {
      * @param {import("vuex").Store} context the store object
      */
     async fetchCommittees(context) {
-      const { committees } = await makeGqlRequest(getAllCommittees);
+      const { committees } = await makeGqlRequest(
+        getAllCommittees,
+        {},
+        context.state.jwt
+      );
       context.commit(storeOptions.mutations.setCommittees.name, committees);
     },
     /**
@@ -193,7 +197,11 @@ const storeOptions = {
      * @param {import("vuex").Store<import("../helpers/typings").StoreState>} context
      */
     async fetchMunicipalities(context) {
-      const { municipalities } = await makeGqlRequest(getAllMunicipalities);
+      const { municipalities } = await makeGqlRequest(
+        getAllMunicipalities,
+        {},
+        context.state.jwt
+      );
       context.commit(
         storeOptions.mutations.setMunicipalities.name,
         municipalities
@@ -206,7 +214,11 @@ const storeOptions = {
     async fetchUpcomingMeetings(context) {
       let date = new Date();
       date.setHours(0);
-      const res = await makeGqlRequest(getMeetings(date));
+      const res = await makeGqlRequest(
+        getMeetings(date),
+        undefined,
+        context.state.jwt
+      );
       let meetings = res.meetings.filter(meeting => meeting.committee);
       context.commit(storeOptions.mutations.setUpcomingMeetings.name, meetings);
     },
@@ -215,7 +227,11 @@ const storeOptions = {
      * @param {import("vuex").Store<import("../helpers/typings").StoreState>} context
      */
     async fetchTags(context) {
-      const { tags } = await makeGqlRequest(getAllTags);
+      const { tags } = await makeGqlRequest(
+        getAllTags,
+        undefined,
+        context.state.jwt
+      );
       context.commit(storeOptions.mutations.setTags.name, tags);
     },
     /**
@@ -269,7 +285,11 @@ const storeOptions = {
      * @param {stirng} id ID of meeting to fetch
      */
     async fetchMeeting(context, id) {
-      const { meeting } = await makeGqlRequest(getMeeting(id));
+      const { meeting } = await makeGqlRequest(
+        getMeeting(id),
+        undefined,
+        context.state.jwt
+      );
       context.commit(storeOptions.mutations.setSelectedMeeting.name, meeting);
     },
     /**
@@ -278,7 +298,11 @@ const storeOptions = {
      * @param {string} id ID of plan to fetch
      */
     async fetchPlan(context, id) {
-      const { plan } = await makeGqlRequest(getPlan, { id: id });
+      const { plan } = await makeGqlRequest(
+        getPlan,
+        { id: id },
+        context.state.jwt
+      );
       context.commit(storeOptions.mutations.setSelectedPlan.name, plan);
     },
     /**
@@ -296,7 +320,9 @@ const storeOptions = {
       const res = await makeGqlRequest(
         getCommitteeMeetings(
           context.state.user.committees.map(committee => committee.id)
-        )
+        ),
+        undefined,
+        context.state.jwt
       );
       /** @type {import("../../graphql/types").Meeting[]} */
       const meetings = res.meetings;
@@ -420,7 +446,8 @@ const storeOptions = {
       key: "open-committee",
       arrayMerger(store, saved) {
         return JSON.parse(JSON.stringify(saved), dateTimeRevive);
-      }
+      },
+      storage: window.localStorage
     })
   ]
 };

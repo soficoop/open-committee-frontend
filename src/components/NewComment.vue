@@ -85,6 +85,7 @@ import { Prop, Watch } from "vue-property-decorator";
 
 @Component
 export default class NewComment extends Vue {
+  @Getter jwt;
   /** @type {import("../../graphql/types").Plan} */
   @Getter selectedPlan;
   /** @type {import("../../graphql/types").UsersPermissionsUser} */
@@ -125,17 +126,21 @@ export default class NewComment extends Vue {
   async submit() {
     this.isSubmitting = true;
     const files = await this.uploadFiles();
-    await makeGqlRequest(createComment, {
-      plan: this.selectedPlan.id,
-      name: this.name,
-      title: this.title,
-      content: this.content,
-      user: this.user && this.user.id,
-      parent: this.parent,
-      isPinned: false,
-      isHidden: false,
-      files
-    });
+    await makeGqlRequest(
+      createComment,
+      {
+        plan: this.selectedPlan.id,
+        name: this.name,
+        title: this.title,
+        content: this.content,
+        user: this.user && this.user.id,
+        parent: this.parent,
+        isPinned: false,
+        isHidden: false,
+        files
+      },
+      this.jwt
+    );
     this.$emit("submit");
     this.isSubmitting = false;
   }
