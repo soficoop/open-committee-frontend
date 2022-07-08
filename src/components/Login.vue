@@ -32,6 +32,7 @@
               </v-row>
             </v-btn>
             <v-btn
+              v-if="!organizationMode"
               class="my-1"
               large
               block
@@ -216,7 +217,7 @@ import {
   sendForgotPasswordEmail,
   checkIfEmailIsValid
 } from "../helpers/functions";
-import { apiEndpoint } from "../helpers/constants";
+import { apiEndpoint, isOrganizationMode } from "../helpers/constants";
 
 @Component()
 export default class Login extends Vue {
@@ -235,6 +236,7 @@ export default class Login extends Vue {
     mailSent: ""
   };
   authenticationFailed = false;
+  organizationMode = isOrganizationMode;
   userIsNotConfirmedMsg = "";
   dialog = false;
   isEmailValid = checkIfEmailIsValid;
