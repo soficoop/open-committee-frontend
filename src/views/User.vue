@@ -37,18 +37,17 @@
                               </span>
                             </v-col>
                           </v-row>
-
-                          <input
-                            @change="updateUserImage()"
-                            id="userImage"
-                            type="file"
-                            name="file"
-                            ref="file"
-                            class="screen-reader-input"
-                            accept="image/jpeg, image/png"
-                          />
                         </v-btn>
                       </v-expand-transition>
+                      <input
+                        @change="updateUserImage"
+                        id="userImage"
+                        type="file"
+                        name="file"
+                        ref="file"
+                        class="screen-reader-input"
+                        accept="image/jpeg, image/png"
+                      />
                       <v-expand-transition v-if="hasImage">
                         <v-btn
                           v-if="hover"
