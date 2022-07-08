@@ -421,7 +421,11 @@ export default class ManageMeeting extends Vue {
    */
   async loadMeeting(meetingId) {
     /** @type {import("../../graphql/types").Meeting} */
-    const { meeting } = await makeGqlRequest(getMeeting(meetingId));
+    const { meeting } = await makeGqlRequest(
+      getMeeting(meetingId),
+      undefined,
+      this.jwt
+    );
     if (meeting) {
       this.existingMeeting = meeting;
       this.addedManually = !!meeting.addedManually;
