@@ -39,10 +39,7 @@
                           </v-row>
 
                           <input
-                            @change="
-                              removeUserImage();
-                              updateUserImage();
-                            "
+                            @change="updateUserImage()"
                             id="userImage"
                             type="file"
                             name="file"
