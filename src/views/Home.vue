@@ -45,10 +45,20 @@
     </div>
     <v-row>
       <v-col cols="12">
-        <h2 class="headline primary--text font-weight-bold my-3" tabindex="0">
+        <h2
+          class="headline primary--text font-weight-bold my-3"
+          tabindex="0"
+          v-if="upcomingMeetings.length"
+        >
           הישיבות הקרובות במערכת
         </h2>
         <MeetingCards :meetings="upcomingMeetingCards"></MeetingCards>
+        <div v-if="organizationMode">
+          <h2 class="headline primary--text font-weight-bold my-3" tabindex="0">
+            ישיבות עבר
+          </h2>
+          <MeetingCards :meetings="pastMeetingCards"></MeetingCards>
+        </div>
       </v-col>
     </v-row>
   </v-container>
@@ -66,6 +76,8 @@ import { isOrganizationMode } from "../helpers/constants";
 export default class Home extends Vue {
   @Action fetchManagableMeetings;
   /** @type {import("../../graphql/types").Meeting[]} */
+  @Getter pastMeetings;
+  /** @type {import("../../graphql/types").Meeting[]} */
   @Getter upcomingMeetings;
   /** @type {import("../../graphql/types").Meeting[]} */
   @Getter managableMeetings;
@@ -74,6 +86,20 @@ export default class Home extends Vue {
   async mounted() {
     await this.fetchManagableMeetings();
   }
+  /** @type {import("../helpers/typings").MeetingCard[]} */
+  get pastMeetingCards() {
+    return this.pastMeetings.map(meeting => ({
+      id: meeting.id,
+      headline: meeting.committee.sid,
+      date: meeting.date,
+      isEditable:
+        this.$vuetify.breakpoint.mdAndUp &&
+        this.managableMeetings.some(
+          managableMeeting => managableMeeting.id == meeting.id
+        )
+    }));
+  }
+
   /** @type {import("../helpers/typings").MeetingCard[]} */
   get upcomingMeetingCards() {
     return this.upcomingMeetings.map(meeting => ({

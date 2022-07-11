@@ -67,6 +67,7 @@
  * @property {string} lastPath
  * @property {import("../../graphql/types").Meeting[]} managableMeetings
  * @property {import("../../graphql/types").Municipality[]} municipalities
+ * @property {import("../../graphql/types").Meeting[]} pastMeetigs
  * @property {import("../../graphql/types").Plan[]} plans
  * @property {import("../../graphql/types").Meeting | null} selectedMeeting
  * @property {import("../../graphql/types").Plan | null} selectedPlan

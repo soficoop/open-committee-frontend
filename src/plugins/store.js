@@ -36,6 +36,8 @@ const storeOptions = {
     managableMeetings: [],
     /** @type {import("../../graphql/types").Municipality[]} */
     municipalities: [],
+    /**@type {import("../../graphql/types").Meeting[]} */
+    pastMeetings: [],
     plans: [],
     /**@type {import("../../graphql/types").Meeting} */
     selectedMeeting: null,
@@ -71,6 +73,9 @@ const storeOptions = {
      */
     setMunicipalities(state, municipalities) {
       state.municipalities = municipalities;
+    },
+    setPastMeetings(state, meetings) {
+      state.pastMeetings = meetings;
     },
     /**
      * Sets the current tags by the given ones
@@ -163,6 +168,9 @@ const storeOptions = {
     municipalities(state) {
       return state.municipalities;
     },
+    pastMeetings(state) {
+      return state.pastMeetings;
+    },
     selectedMeeting(state) {
       return state.selectedMeeting;
     },
@@ -207,16 +215,26 @@ const storeOptions = {
         municipalities
       );
     },
+    async fetchPastMeetings(context) {
+      const to = new Date();
+      to.setHours(0, 0, 0, 0);
+      const { meetings } = await makeGqlRequest(
+        getMeetings,
+        { to, sort: "date:desc" },
+        context.state.jwt
+      );
+      context.commit(storeOptions.mutations.setPastMeetings.name, meetings);
+    },
     /**
      * Fetches upcoming meeting (partial)
      * @param {import("vuex").Store} context The store object
      */
     async fetchUpcomingMeetings(context) {
-      let date = new Date();
-      date.setHours(0);
+      let from = new Date();
+      from.setHours(0, 0, 0, 0);
       const res = await makeGqlRequest(
-        getMeetings(date),
-        undefined,
+        getMeetings,
+        { from, sort: "date:asc" },
         context.state.jwt
       );
       let meetings = res.meetings.filter(meeting => meeting.committee);

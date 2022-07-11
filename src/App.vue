@@ -112,6 +112,7 @@ import { isOrganizationMode } from "./helpers/constants";
   }
 })
 export default class App extends Vue {
+  @Action fetchPastMeetings;
   @Action fetchUpcomingMeetings;
   @Action refreshUser;
   @Action signOut;
@@ -144,6 +145,9 @@ export default class App extends Vue {
   async mounted() {
     this.setKeyboardAccessibility();
     this.fetchUpcomingMeetings();
+    if (isOrganizationMode) {
+      this.fetchPastMeetings();
+    }
     try {
       await this.refreshUser();
       setTimeout(() => {

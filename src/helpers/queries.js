@@ -6,9 +6,12 @@ import { PlansOrComments } from "./enums";
  * @param {Date} date meetings start date
  * @returns {string} getMeetings query
  */
-export function getMeetings(date) {
-  return `query getMeetings{
-  meetings(where: {date_gt: "${date.toISOString()}", isHidden_ne: true} sort: "date"){
+export const getMeetings = `query getMeetings(
+    $from: DateTime
+    $to: DateTime
+    $sort: String
+  ){
+  meetings(where: {date_gt: $from, date_lt: $to, isHidden_ne: true} sort: $sort){
     id
     date
     committee {
@@ -16,7 +19,6 @@ export function getMeetings(date) {
     }
   }
 }`;
-}
 
 /**
  * Gets a single meeting
