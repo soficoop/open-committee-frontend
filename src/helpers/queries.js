@@ -1,3 +1,4 @@
+import { isOrganizationMode } from "./constants";
 import { PlansOrComments } from "./enums";
 
 /**
@@ -242,9 +243,11 @@ export function getCommitteeMeetings(committeeIds) {
   }`;
 }
 
-export function getPlans(number) {
+export function getPlans(value) {
   return `query plans {
-    plans(where: { number_contains: "${number}" }) {
+    plans(where: { ${
+      isOrganizationMode ? "name" : "number"
+    }_contains: "${value}" }) {
       id
       number
       name

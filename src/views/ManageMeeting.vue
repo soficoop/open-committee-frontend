@@ -85,7 +85,7 @@
           hide-details
           v-model="selectedPlan"
           :items="plans"
-          item-text="number"
+          :item-text="organizationMode ? 'name' : 'number'"
           item-value="id"
           hint="יש להזין מספר תכנית"
           :loading="isSearchingPlans"
@@ -305,6 +305,7 @@ import {
 } from "../helpers/mutations";
 import { getPlans, getPlan, getMeeting } from "../helpers/queries";
 import { makeGqlRequest, uploadFile } from "../helpers/functions";
+import { isOrganizationMode } from "../helpers/constants";
 
 @Component({ components: { AgendaCards } })
 export default class ManageMeeting extends Vue {
@@ -345,6 +346,7 @@ export default class ManageMeeting extends Vue {
   /** @type {File[]} */
   additionalFiles = [];
   errorOccurred = false;
+  organizationMode = isOrganizationMode;
 
   handleAgendaItemEditClicked(itemId) {
     let item = this.addedPlans
@@ -402,7 +404,7 @@ export default class ManageMeeting extends Vue {
    */
   async addPlan(planId) {
     /** @type {import("../../graphql/types").Plan} */
-    const { plan } = await makeGqlRequest(getPlan, { id: planId });
+    const { plan } = await makeGqlRequest(getPlan, { id: planId }, this.jwt);
     if (plan) {
       this.addedPlans.push(plan);
     }
@@ -590,7 +592,7 @@ export default class ManageMeeting extends Vue {
   set planSearch(value) {
     if (value) {
       this.isSearchingPlans = true;
-      makeGqlRequest(getPlans(value)).then(result => {
+      makeGqlRequest(getPlans(value), undefined, this.jwt).then(result => {
         this.plans = result.plans.filter(
           plan =>
             !this.agendaItems.some(agendaItem => agendaItem.id === plan.id)
