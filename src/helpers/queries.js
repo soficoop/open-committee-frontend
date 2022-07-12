@@ -14,6 +14,8 @@ export const getMeetings = `query getMeetings(
   meetings(where: {date_gt: $from, date_lt: $to, isHidden_ne: true} sort: $sort){
     id
     date
+    title
+    number
     committee {
       sid
     }
