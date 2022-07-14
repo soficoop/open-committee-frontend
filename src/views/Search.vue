@@ -135,9 +135,13 @@ export default class Search extends Vue {
       return;
     }
     this.loading = true;
-    const result = await makeGqlRequest(autocompletePlansAndComments, {
-      text: this.searchText
-    });
+    const result = await makeGqlRequest(
+      autocompletePlansAndComments,
+      {
+        text: this.searchText
+      },
+      this.jwt
+    );
     this.searchSuggestions = [
       ...result.plans.map(plan => ({
         text: plan.name,
