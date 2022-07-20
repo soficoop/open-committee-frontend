@@ -61,7 +61,7 @@
     </v-row>
     <v-row>
       <v-col v-if="meeting.background">
-        <p>{{ meeting.background }}</p>
+        <p class="whitespace-preline">{{ meeting.background }}</p>
       </v-col>
     </v-row>
     <v-row v-if="agendaItems.length">
@@ -84,7 +84,7 @@
     <v-row v-if="meeting.summary">
       <v-col>
         <h4 class="title primary--text" tabindex="0">סיכום הישיבה</h4>
-        <p>{{ meeting.summary }}</p>
+        <p class="whitespace-preline">{{ meeting.summary }}</p>
       </v-col>
     </v-row>
     <v-row v-if="otherMeetingsOfCommittee.length">
